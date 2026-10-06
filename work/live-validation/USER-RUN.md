@@ -20,7 +20,7 @@ Only run where that provider's outbound access is permitted. A denied provider/n
 
 - Creates a new private run directory and a new isolated business DB/checkpoint pair each time; process overrides replace only the two DB paths. Existing `.env`, databases, checkpoints and services are never edited, reused or deleted.
 - Seeds 65 static catalog products, 65 simulated Offers and one store. Verifies no prior owners/carts/orders/applications/memory.
-- Runs at most five guide turns and one Mercury query, stopping immediately if a required stage fails. Each guide turn retains the application's existing 15-second/five-tool-round protection; Mercury retains its own 15-second/five-round budget. Ordinary explanation may invoke the app's additional same-model claim checker. These are application-level bounds, not an exact invoice/network-request count; SDK transport behavior is not replaced or instrumented.
+- Runs at most five guide turns and one Mercury query, stopping immediately if a required stage fails. Each guide turn retains the application's existing 15-second/five-tool-round protection; Mercury retains its own 15-second/five-round budget. Ordinary explanation may invoke the app's additional same-model claim checker. These are application-level bounds, not an exact invoice/network-request count. A narrow Pi fetch observer retains only safe status/class/code evidence; SDK transport behavior is otherwise unchanged.
 - The worker has a 240-second total wall-clock cap. Normal background extraction/Dream is enabled throughout that window, including during shutdown; its calls use the application's 20-second timeout and zero SDK retries. Memory observation itself waits at most 35 seconds, then reports pending/missing work. The supervisor terminates only its own process group, including any surviving Pi child. Ctrl-C cancels that owned group. Cleanup does not delete any DB or evidence.
 - No installation, build, dependency modification or service restart is performed. Uses this project's existing `.venv` and compiled Pi worker.
 
@@ -62,4 +62,12 @@ env -i PATH=/usr/bin:/bin HOME=/tmp .venv/bin/python work/live-validation/test_l
 
 This is synthetic harness validation, never real-model evidence. Agents must not execute the user command above, directly or indirectly.
 
-Redirect note: the initial provider URL is pinned. Redirect handling remains that of the existing application SDKs/default fetch; this harness does not instrument each transport hop or claim redirects are disabled. No redirect/security workaround is added. Installed Python httpx strips Authorization across origins; the Pi OpenAI SDK uses default fetch.
+Redirect note: the initial provider URL is pinned. Redirect handling remains that of the existing application SDKs/default fetch; this harness does not instrument each transport hop or claim redirects are disabled. No redirect/security workaround is added. Installed Python httpx strips Authorization across origins; the Pi observer delegates unchanged to default fetch.
+
+## Diagnostic update after the first manual run
+
+The first manual run stopped during Pi comparison with `PI_PROVIDER_ERROR` before any purchase/refund stage. Its evidence remains unchanged. That generic result does not establish an authentication, provider-availability, network or model-compatibility cause.
+
+The updated Pi adapter retains a safe `diagnostic` object in public error events/receipts. `upstream_http_status` is taken only from an actual HTTP Response and is separate from the app's `http_status` (often 502). `transport_phase` distinguishes `not_started`, `request`, `response` and `fetch_error`; known transport class/cause codes are finite allowlisted values. Missing status is null, never guessed from error prose. No headers, response bodies, URLs, exception messages or credentials are added to evidence. Request, cancellation, retry and redirect behavior are unchanged.
+
+These diagnostics apply to errors passing through the Pi runtime failure adapter. General-explanation validation rejections retain their existing public envelope; Mercury and memory diagnostics are unchanged. Stream-body/parser failures retain the observed HTTP response status but may lack an internal exception class/cause after the SDK has discarded it. This update improves observability; it does not claim the original provider failure is repaired or that a live retry passed. Another real run must still be launched personally with the same one-line command.

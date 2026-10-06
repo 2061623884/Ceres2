@@ -40,6 +40,10 @@ class HarnessTests(unittest.TestCase):
         coverage = {'purchase_refund_replay':'passed','extraction':'blocked_no_matching_automatic_record','browser':'untested','historical_repurchase':'untested','memory_correction_deletion_restart':'untested','independent_second_run':'untested'}
         self.assertEqual(batch.sanitize({'coverage':coverage}),{'coverage':coverage})
 
+    def test_provider_diagnostic_retains_actual_status_separate_from_app_status(self):
+        payload = {'http_status':502,'diagnostic':{'upstream_http_status':401,'transport_phase':'response','transport_error_class':None,'transport_error_code':None,'code':'HTTP_401','kind':'ProviderError'}}
+        self.assertEqual(batch.sanitize(payload), payload)
+
     def test_allowlist_omits_headers_unknown_keys_and_reflected_secret(self):
         result = batch.sanitize({'message':'provider echoed synthetic-secret-value', 'headers':{'Authorization':'Bearer synthetic-secret-value'}, 'unexpected':'synthetic-secret-value', 'content':'api_key=secret-other-value', 'events':[{'type':'completed','payload':{'status':'ok'}}]}, ['synthetic-secret-value'])
         encoded = json.dumps(result)

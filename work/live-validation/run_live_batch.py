@@ -27,6 +27,7 @@ TERMINAL = {'completed', 'waiting_clarification', 'waiting_confirmation', 'prote
 # Positive field allowlist: unknown fields are counted, never serialized by name/value.
 FIELDS = set('''stage status reason code error error_code diagnostic_id http_status result results
 request response method path elapsed_seconds first_event_seconds utc type event events payload
+upstream_http_status transport_phase transport_error_class transport_error_code
 protocol_version sequence run_id request_id session_id task_id target_task_id owner_id store_id
 delivery_zone_id session_version state_version expected_session_version expected_state_version
 expected_task_id message messages content role kind text final_text answer_status answer_kind

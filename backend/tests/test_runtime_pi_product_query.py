@@ -30,6 +30,16 @@ def pi_client(tmp_path, monkeypatch):
             body = json.loads(self.rfile.read(int(self.headers['Content-Length'])))
             requests.append(body)
             prompt_text = json.dumps([m['content'] for m in body['messages'] if m['role'] == 'user'], ensure_ascii=False)
+            if '模型连接中断' in prompt_text:
+                self.close_connection = True
+                self.connection.close()
+                return
+            if '模型伪造状态文本' in prompt_text:
+                self.send_response(200)
+                self.send_header('Content-Type', 'text/event-stream')
+                self.end_headers()
+                self.wfile.write(b'data: {"error":{"message":"401 offline-fixture-key private provider message"}}\n\ndata: [DONE]\n\n')
+                return
             if '模型认证失败' in prompt_text:
                 self.send_response(401)
                 self.send_header('Content-Type', 'application/json')
@@ -310,6 +320,35 @@ def test_provider_failure_has_safe_diagnostic_correlation_without_secret_text(pi
     assert events[-1]['payload']['code'] == 'PI_PROVIDER_ERROR'
     assert 'HTTP_401' in events[-1]['payload']['message']
     assert 'pi-' in events[-1]['payload']['message']
+    assert 'offline-fixture-key' not in response.text
+    assert 'private provider message' not in response.text
+    assert len(requests) == 1
+    diagnostic = events[-1]['payload']['diagnostic']
+    assert diagnostic['upstream_http_status'] == 401
+    assert diagnostic['transport_phase'] == 'response'
+    assert diagnostic['code'] == 'HTTP_401'
+    assert diagnostic['kind'] == 'ProviderError'
+    assert len(diagnostic['fingerprint']) == 64
+    receipt = client.get('/api/v1/guide/sessions/pi-session-a/turns/pi-provider-failure').json()
+    assert receipt['result']['diagnostic'] == diagnostic
+
+
+@pytest.mark.parametrize('prompt, expected_phase, expected_status', [
+    ('模型连接中断', 'fetch_error', None),
+    ('模型伪造状态文本', 'response', 200),
+])
+def test_provider_transport_diagnostic_uses_observed_facts_not_error_prose(pi_client, prompt, expected_phase, expected_status):
+    client, requests = pi_client
+    response = client.post('/api/v1/guide/sessions/pi-session-a/turns/stream', json={'request_id':'transport-facts', 'message':prompt, 'expected_state_version':0, 'expected_session_version':0})
+    events = [json.loads(line[6:]) for line in response.text.splitlines() if line.startswith('data: ')]
+    assert events[-1]['type'] == 'error', events
+    diagnostic = events[-1]['payload']['diagnostic']
+    assert diagnostic['transport_phase'] == expected_phase
+    assert diagnostic['upstream_http_status'] == expected_status
+    assert diagnostic['code'] != 'HTTP_401'
+    if expected_phase == 'fetch_error':
+        assert diagnostic['transport_error_class'] == 'TypeError'
+        assert diagnostic['transport_error_code'] in ('UND_ERR_SOCKET', 'ECONNRESET')
     assert 'offline-fixture-key' not in response.text
     assert 'private provider message' not in response.text
     assert len(requests) == 1

@@ -254,12 +254,31 @@ class PiProductRuntime:
             child.stdout.close()
             child.stderr.close()
 
-    def _fail(self, code: str, diagnostic: dict[str, str]) -> None:
-        # Only SDK-sanitized structured fields or allowlisted startup markers
-        # reach this logger; raw provider/stderr text is never retained.
-        LOGGER.error("Pi failure %s %s", self.diagnostic_id, diagnostic)
-        cause = RuntimeError(json.dumps({'diagnostic_id': self.diagnostic_id, **diagnostic}))
-        raise AppError(502, code, f"Pi 运行失败 [{self.diagnostic_id}; {diagnostic['code']}]") from cause
+    def _fail(self, code: str, diagnostic: dict[str, Any]) -> None:
+        # This structured diagnostic is now public in SSE/receipts. Re-project
+        # finite fields at the Python trust boundary; never expose raw text.
+        kinds = {'Error', 'TypeError', 'SyntaxError', 'AbortError', 'ProviderError', 'WorkerProcessError'}
+        codes = kinds | {'ECONNRESET', 'ECONNREFUSED', 'ENOTFOUND', 'EAI_AGAIN', 'ETIMEDOUT', 'CERT_HAS_EXPIRED', 'UNABLE_TO_VERIFY_LEAF_SIGNATURE', 'UND_ERR_CONNECT_TIMEOUT', 'UND_ERR_HEADERS_TIMEOUT', 'UND_ERR_BODY_TIMEOUT', 'UND_ERR_SOCKET', 'ERR_MODULE_NOT_FOUND', 'MODULE_NOT_FOUND', 'EACCES', 'ENOENT', 'WORKER_EXIT'}
+        kind = diagnostic.get('kind')
+        safe = {'diagnostic_id': self.diagnostic_id, 'kind': kind if isinstance(kind, str) and kind in kinds else 'Error'}
+        supplied_code = diagnostic.get('code')
+        safe['code'] = supplied_code if isinstance(supplied_code, str) and (supplied_code in codes or re.fullmatch(r'HTTP_[45]\d\d', supplied_code)) else 'Error'
+        fingerprint = diagnostic.get('fingerprint')
+        if isinstance(fingerprint, str) and re.fullmatch(r'[a-f0-9]{64}', fingerprint):
+            safe['fingerprint'] = fingerprint
+        status = diagnostic.get('upstream_http_status')
+        safe['upstream_http_status'] = status if type(status) is int and 100 <= status <= 599 else None
+        phase = diagnostic.get('transport_phase')
+        safe['transport_phase'] = phase if isinstance(phase, str) and phase in {'not_started', 'request', 'response', 'fetch_error'} else 'not_started'
+        error_class = diagnostic.get('transport_error_class')
+        safe['transport_error_class'] = error_class if isinstance(error_class, str) and error_class in kinds else None
+        error_code = diagnostic.get('transport_error_code')
+        safe['transport_error_code'] = error_code if isinstance(error_code, str) and error_code in codes else None
+        LOGGER.error("Pi failure %s %s", self.diagnostic_id, safe)
+        cause = RuntimeError(json.dumps(safe))
+        error = AppError(502, code, f"Pi 运行失败 [{self.diagnostic_id}; {safe['code']}]")
+        error.detail['error']['diagnostic'] = safe
+        raise error from cause
 
     @staticmethod
     def _stderr_diagnostic(raw: bytes) -> dict[str, str]:
