@@ -3,7 +3,7 @@
 ## 本次交付与精确版本
 
 - **当前已完成受控验证、待外部验收的源码：`0c752a2b252d797297b4b073883571884ff6855a`**，集成分支 `ceres2/next-experience-20261006`。冻结目录：`Ceres-workspace/worktrees/next-final-fixture`。后续文档提交不改变该源码候选；任何产品修复都必须换版本并重验。
-- 用户已明确授权整理并推送至独立 `2061623884/Ceres2`；**当前是授权后待发布状态，尚未声明推送或部署完成**。发布采用经独立审查的最终 tracked 文件树，在远程 main 基线 `64ca7b6b9a7aa113aa42d54270604913f6c19d58` 上形成集成提交，保留公开历史、不修改原 Ceres。上述 `0c752a2` 是云端测试来源 SHA，不保证在 GitHub 可 checkout；公开发布 commit 与测试来源的映射在推送后记录。接手前核对实际公开分支／commit 和 `git status --short`，保留原工程、配置和业务数据库。
+- **已按用户授权推送至独立 `2061623884/Ceres2` 的 main**：[公开实现发布 `8d6d758228a5b9da50bf76ef7480e5cf517e6eed`](https://github.com/2061623884/Ceres2/commit/8d6d758228a5b9da50bf76ef7480e5cf517e6eed)。已核对其完整文件树为 `a4b3a9ee1d5db556f999ccd65cfcab166a0f4f88`，与经审查的本地发布候选 `358feb7589f5f8200c46a44de8365f2d88ae6c47` 一致；父提交仍为原远程 main 基线 `64ca7b6b9a7aa113aa42d54270604913f6c19d58`，原 Ceres 未修改。上述 `0c752a2` 是云端冻结测试来源，`358feb7` 是其文档后继本地发布候选；公开历史采用保留远程历史的集成发布，故这些本地 SHA 不保证可在 GitHub checkout。公开 main 已包含本轮全部代码与经审查文档，之后可有仅文档更新；发布不等于部署或外部验收。接手前核对实际公开分支／commit 和 `git status --short`，保留原工程、配置和业务数据库。
 - 当前状态以[总 TASK](../tasks/ceres2-next-experience.md)及[TASK10](../tasks/ceres2-next-10-candidate-evidence.md)为准。本说明不建立另一份实时进度表。
 
 已实现：真实模拟供给驱动的零食／饮品选类与筛选、稳定问题／选项身份、明确加购；单次 Kev 职责／能力判断和用户控制跳转；两角色无订单政策；已有活动的成品选购；结果先出现、随后受校验的增量介绍；售后结果／失败保存及回购物；按需 Prompt 模块。共70个模拟SKU／Offer，沿用Python业务权威、实际Pi／LangGraph与原事务／记忆／人工保护。
