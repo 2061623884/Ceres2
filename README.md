@@ -86,18 +86,96 @@ Pi 和 LangGraph 是采用的外部运行框架。Ceres2 的工程重点在于�
 | `logs/`（按需建立） | 关键变化及原因 | 不维护第二套最新进度，不替代 TASK |
 | `GLOSSARY.md`、`AGENTS.md` | 领域术语、协作与修改约定 | 实施前阅读；前端另有 `frontend/AGENTS.md` |
 
-### 运行代码、静态输入与本地状态分开
+### 仓库目录结构
 
-| 目录 | 内容与职责 |
-| --- | --- |
-| `frontend/` | React 页面、交互组件、HTTP/SSE 客户端；不持有权威业务事实 |
-| `runtime/pi/` | TypeScript Pi worker、运行协议及其独立 npm 锁文件 |
-| `backend/app/` | API、身份与配置、模型与迁移、购物服务、Mercury 图和人工工单 |
-| `backend/tests/` | 受控 API、业务事务、runtime 与恢复验证 |
-| `data/fixtures/`、`data/images/` | 可重复导入的静态商品／Offer／菜谱输入与已核验图片 |
-| `data/runtime/` | 本机生成的业务数据库与 checkpoint；不提交、不从旧项目复制 |
-| `evals/` | 评测用例入口；目录存在不表示真实评测已经全部完成 |
-| `scripts/` | 项目辅助脚本；任务专用脚本优先留在对应 `work/` 子目录 |
+下面按当前公开文件清单列出主要入口，省略同类业务文件和测试文件；注释说明职责，不表示该目录下所有场景均已验收。
+
+```text
+Ceres2/
+|-- README.md                         # 项目介绍、规划与阅读入口
+|-- PROJECT.md                        # 当前阶段目标与已确认的产品取舍
+|-- prd.md                            # 长期产品需求与业务边界
+|-- GLOSSARY.md                       # 领域术语
+|-- AGENTS.md                         # 协作、修改与验证约定
+|-- .env.example                      # 无凭据配置模板；用户自行创建 .env
+|-- .gitignore                        # 排除凭据、依赖、运行状态与构建产物
+|-- backend/
+|   |-- pyproject.toml                # Python 项目与依赖声明
+|   |-- requirements.lock             # 固定 Python 依赖版本
+|   |-- app/
+|   |   |-- main.py                   # FastAPI 入口、路由挂载与应用生命周期
+|   |   |-- core/                     # 配置、可信身份、数据库与公共错误
+|   |   |-- api/                      # 商品、导购、购物车和订单等 HTTP/SSE 接口
+|   |   |-- models/                   # 共享业务数据模型
+|   |   |-- schemas/                  # 历史与记忆等请求/响应结构
+|   |   |-- migrations/               # 业务 schema 初始化与版本迁移
+|   |   |-- services/                 # 购物、供给、确认、记忆等业务服务
+|   |   |   |-- seed_service.py        # 显式、幂等导入静态商品/门店/Offer
+|   |   |   |-- pi_product_runtime.py  # Python 与 Node/Pi 的运行接缝
+|   |   |   `-- memory_background.py   # 后台记忆提取与 Dream 作业
+|   |   |-- mercury/                  # 墨墨售后；与可可保持独立入口
+|   |   |   |-- router.py             # 售后 HTTP/SSE 接口
+|   |   |   |-- graph.py              # LangGraph 查询编排
+|   |   |   `-- aftersales_graph.py   # 售后确认与恢复流程
+|   |   `-- human/                    # 异步人工工单的模型、路由和服务
+|   `-- tests/                        # 受控 API、事务、runtime 与恢复测试
+|       |-- conftest.py               # 测试 fixture 与真实配置隔离
+|       `-- test_integrated_lifecycle.py # 跨模块完整生命周期受控验证
+|-- runtime/
+|   `-- pi/
+|       |-- package.json              # Pi SDK 依赖及 build/typecheck 命令
+|       |-- package-lock.json         # 固定 Node 依赖解析
+|       |-- tsconfig.json             # TypeScript 编译配置
+|       `-- src/worker.ts             # 实际 Pi Agent、工具循环与进程协议
+|-- frontend/
+|   |-- AGENTS.md                     # 前端专属修改约定
+|   |-- package.json                  # React/Vite 依赖与开发构建命令
+|   |-- package-lock.json             # 固定前端依赖解析
+|   |-- vite.config.ts                # 开发端口与后端 API/media 代理
+|   `-- src/
+|       |-- main.tsx                  # React 启动入口
+|       |-- App.tsx                   # 购物页面与可可交互
+|       |-- MercuryChat.tsx           # 墨墨售后聊天
+|       |-- HumanOperatorPage.tsx     # 人工工单处理页面
+|       |-- components/               # 可复用界面组件
+|       `-- lib/                      # HTTP/SSE 客户端与业务接口适配
+|-- data/
+|   |-- fixtures/                     # products/offers/recipes 与图片映射 JSON
+|   `-- images/                       # 已恢复并核验的静态商品图片
+|-- docs/
+|   |-- HANDOFF-UBUNTU.md              # Ubuntu 安装、运行、验证与接力步骤
+|   |-- REFERENCES.md                  # 参考项目链接及采用边界，不携带整仓源码
+|   |-- plans/                        # 实施规格、拆分方案与技术研究
+|   |-- adr/                          # 架构决策及原因
+|   `-- agents/                       # 本项目任务管理与领域文档约定
+|-- tasks/
+|   |-- ceres2-upgrade.md              # 16 项正式任务的总索引
+|   `-- ceres2-runtime-upgrade-*.md    # 各项范围、依赖、状态、验收和证据
+`-- work/
+    |-- clean-rebuild/                # 按任务组织的交付说明、迁移来源与验证脚本
+    `-- live-validation/
+        |-- USER-RUN.md               # 用户亲自启动 live 批次的范围与步骤
+        |-- run_live_batch.py         # 有界真实模型 API 旅程；不等于浏览器测试
+        |-- test_live_batch.py        # 不调用 provider 的 harness 验证
+        |-- TEST-ISOLATION-REVIEW.md   # 受控测试隔离范围与复验结论
+        `-- DIAGNOSTICS-20261006.md    # 首次 live 失败与诊断补丁说明
+```
+
+以下是安装或运行后生成的**本地内容，不属于公开源码树**，也不能从旧项目复制：
+
+```text
+Ceres2/
+|-- .env                              # 用户本地凭据与配置
+|-- .venv/                            # Python 虚拟环境
+|-- data/runtime/                     # 业务数据库与 LangGraph checkpoint
+|-- runtime/pi/node_modules/          # Pi 的本地依赖
+|-- runtime/pi/dist/                  # 编译后的 Pi worker
+|-- frontend/node_modules/            # 前端本地依赖
+|-- frontend/dist/                    # 前端构建产物
+`-- work/live-validation/tmp/         # 每次 live 批次的隔离状态与 evidence
+```
+
+`logs/`、`evals/`、`scripts/` 是按需要组织变更记录、评测和辅助脚本的约定位置；当前公开清单不包含这些目录，不将空目录列成已交付能力。任务专用脚本优先放在对应 `work/` 子目录。
 
 新工程保留原前端，并选择性重建业务契约；静态输入通过显式 seed 导入。来源见 [迁移记录](work/clean-rebuild/migration-ledger.md)。公开仓库不携带整套外部 reference 源码：需要了解参考项目时使用 [来源清单](docs/REFERENCES.md)，运行和构建不得依赖相邻 `reference/` 或 `archive/`。
 
