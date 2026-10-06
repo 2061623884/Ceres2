@@ -1,0 +1,49 @@
+/** Isolated retained App DOM, not real browser or provider acceptance. */
+import assert from 'node:assert/strict';
+import path from 'node:path';
+import {createRequire} from 'node:module';
+const cwd=process.cwd(),support=createRequire(path.join(cwd,'work/clean-rebuild/02/test-support/package.json'));
+const {JSDOM}=support('jsdom'),dom=new JSDOM('<div id="root"></div>',{url:'http://localhost/'});
+Object.assign(globalThis,{window:dom.window,document:dom.window.document,sessionStorage:dom.window.sessionStorage,localStorage:dom.window.localStorage,HTMLElement:dom.window.HTMLElement,MouseEvent:dom.window.MouseEvent,IS_REACT_ACT_ENVIRONMENT:true});
+dom.window.HTMLElement.prototype.scrollIntoView=function(){};
+const frontend=createRequire(path.join(cwd,'frontend/package.json')),compiled=createRequire(path.join(cwd,'work/clean-rebuild/04-purchase/compiled/package.json'));
+const {act,createElement}=frontend('react'),{createRoot}=frontend('react-dom/client'),App=compiled('./App.js').default,container=document.getElementById('root');
+const state={session_id:'guide-one',task_id:'task-one',state_version:1,session_version:1,task_status:'active',entry_context:{page:'home'},available_actions:['send_message','modify','confirm'],messages:[],product_cards:[],plan:{plan_id:'plan-one',plan_version:1,mode:'bundle',dish:{dish_id:'tomato-egg',name:'番茄炒蛋',base_people:2,people:2,people_source:'default'},items:[{sku_id:'tomato',ingredient_id:'tomato',available_specs:[{sku_id:'tomato',name:'番茄500克',spec_quantity:500,spec_unit:'g'},{sku_id:'tomato-1000',name:'番茄1千克',spec_quantity:1000,spec_unit:'g'}],name:'番茄500克',quantity:1,selected:true,role:'required',added_quantity:0,remaining_quantity:1,unit_price_fen:600,line_total_fen:600,spec_quantity:500,spec_unit:'g',requirement:{quantity:300,unit:'g'}},{sku_id:'salt',ingredient_id:'salt',name:'盐500克',quantity:1,selected:false,role:'pantry',added_quantity:0,remaining_quantity:1,unit_price_fen:300,line_total_fen:300,spec_quantity:500,spec_unit:'g',requirement:{quantity:null,unit:null}}],total_price_fen:600,expires_at:null,validation_status:'valid',can_confirm:true}};
+delete state.plan.dish;
+state.plan.groups=[{group_id:'group-a',dish_id:'tomato-egg',name:'番茄炒蛋',base_people:2,people:2,people_source:'default'},{group_id:'group-b',dish_id:'rice-egg',name:'蛋炒饭',base_people:2,people:3,people_source:'explicit'}];
+state.plan.targets=state.plan.groups.map(g=>({group_id:g.group_id,name:g.name}));
+state.plan.items[0].contributions=[{group_id:'group-a',ingredient_id:'tomato',sku_id:'tomato',selected:true,quantity:1,requirement:{quantity:300,unit:'g'}}];
+state.plan.items[1].contributions=[{group_id:'group-a',ingredient_id:'salt',sku_id:'salt',selected:false,quantity:1,requirement:{quantity:null,unit:null}},{group_id:'group-b',ingredient_id:'salt',sku_id:'salt',selected:false,quantity:1,requirement:{quantity:null,unit:null}}];
+let revisions=[];
+const response=value=>new Response(JSON.stringify(value),{headers:{'Content-Type':'application/json'}});
+globalThis.fetch=async(input,options={})=>{
+ const url=String(input),body=options.body?JSON.parse(options.body):null;
+ if(url.endsWith('/bootstrap'))return response({owner_id:'owner',store_id:'store',delivery_zone_id:'zone'});
+ if(url.endsWith('/cart'))return response({version:1,items:[],total_price_fen:0});
+ if(url.includes('/categories'))return response([]);
+ if(url.includes('/products'))return response({items:[]});
+ if(url.endsWith('/plan-revisions')){revisions.push(body);state.state_version++;state.plan.plan_version++;if(body.people){const g=state.plan.groups.find(g=>g.group_id===body.group_id);g.people=body.people;g.people_source='explicit';}if(body.coverage_intent==='group_remove')state.plan.groups=state.plan.groups.filter(g=>g.group_id!==body.group_id);return response({...state.plan,state_version:state.state_version,session_version:1});}
+ if(url.endsWith('/status'))return response({...state,runs:[]});
+ if(url.includes('/guide/sessions'))return response(state);
+ throw new Error('Unexpected fetch '+url);
+};
+const root=createRoot(container);
+async function click(element){assert.ok(element);await act(async()=>element.dispatchEvent(new dom.window.MouseEvent('click',{bubbles:true})));}
+await act(async()=>root.render(createElement(App)));
+await click([...container.querySelectorAll('button')].find(b=>b.textContent==='商品'));
+await click([...container.querySelectorAll('button')].find(b=>b.textContent==='问问可可'));
+if(!container.querySelector('[aria-label="加购 番茄500克"]'))await click(container.querySelector('[aria-label="采购清单 2 件"]'));
+assert.match(container.textContent,/番茄炒蛋/);
+assert.match(container.textContent,/蛋炒饭/);
+const input=container.querySelector('[aria-label="分组人数 group-a"]');assert.ok(input,'Every group exposes its own people control');
+await act(async()=>{Object.getOwnPropertyDescriptor(dom.window.HTMLInputElement.prototype,'value').set.call(input,'4');input.dispatchEvent(new dom.window.Event('input',{bubbles:true}));});
+await click(container.querySelector('[aria-label="更新分组人数 group-a"]'));
+assert.equal(revisions.length,1);assert.equal(revisions[0].people,4);assert.equal(revisions[0].group_id,'group-a');assert.equal(revisions[0].coverage_intent,'group_update');
+const specification=container.querySelector('[aria-label="分组规格 group-a tomato"]');assert.ok(specification,'SKU controls target their specific source group');
+await act(async()=>{specification.value='tomato-1000';specification.dispatchEvent(new dom.window.Event('change',{bubbles:true}));});
+assert.equal(revisions.length,2);assert.deepEqual(revisions[1].selections,{tomato:'tomato-1000'});assert.equal(revisions[1].group_id,'group-a');
+await click(container.querySelector('[aria-label="移除分组 group-b"]'));
+assert.equal(revisions.length,3);assert.equal(revisions[2].coverage_intent,'group_remove');assert.equal(revisions[2].group_id,'group-b');
+assert.ok(!container.querySelector('[aria-label="分组人数 group-b"]'));
+await act(async()=>root.unmount());dom.window.close();
+console.log(JSON.stringify({ok:true,level:'DOM-only',checks:['source groups','targeted people revision','targeted SKU revision','group removal']}));

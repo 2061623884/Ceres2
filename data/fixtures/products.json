@@ -1,0 +1,1623 @@
+{
+  "products": [
+    {
+      "brand": "演示品牌",
+      "category_id": "baking",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "flour"
+      ],
+      "name": "All-Purpose Flour 500g",
+      "name_zh": "中筋面粉 500克",
+      "product_type": "flour",
+      "review_status": "approved",
+      "sku_id": "demo:flour-all-purpose-500g",
+      "source": "demo",
+      "spec_quantity": 500,
+      "spec_unit": "g",
+      "usage_tags": [
+        "蛋糕",
+        "面包",
+        "通用"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "baking",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "flour"
+      ],
+      "name": "Cake Flour 250g",
+      "name_zh": "低筋面粉 250克（小包装）",
+      "product_type": "flour",
+      "review_status": "approved",
+      "sku_id": "demo:cake-flour-250g",
+      "source": "demo",
+      "spec_quantity": 250,
+      "spec_unit": "g",
+      "usage_tags": [
+        "蛋糕",
+        "小包装"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "baking",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "butter"
+      ],
+      "name": "Unsalted Butter 200g",
+      "name_zh": "无盐黄油 200克",
+      "review_status": "approved",
+      "sku_id": "demo:butter-200g",
+      "source": "demo",
+      "spec_quantity": 200,
+      "spec_unit": "g",
+      "usage_tags": [
+        "烘焙",
+        "蛋糕"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "baking",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "sugar"
+      ],
+      "name": "White Sugar 500g",
+      "name_zh": "白砂糖 500克",
+      "review_status": "approved",
+      "sku_id": "demo:sugar-white-500g",
+      "source": "demo",
+      "spec_quantity": 500,
+      "spec_unit": "g",
+      "usage_tags": [
+        "烘焙",
+        "甜味"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "baking",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "egg"
+      ],
+      "name": "Fresh Eggs 10 pack",
+      "name_zh": "鲜鸡蛋 10枚装",
+      "review_status": "approved",
+      "sku_id": "demo:eggs-10pack",
+      "source": "demo",
+      "spec_quantity": 10,
+      "spec_unit": "pc",
+      "usage_tags": [
+        "烘焙",
+        "蛋糕"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "dairy",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "milk"
+      ],
+      "name": "Whole Milk 1L",
+      "name_zh": "全脂牛奶 1升",
+      "review_status": "approved",
+      "sku_id": "demo:milk-1l",
+      "source": "demo",
+      "spec_quantity": 1000,
+      "spec_unit": "ml",
+      "usage_tags": [
+        "烘焙",
+        "饮品"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "baking",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "yeast"
+      ],
+      "name": "Dry Yeast 7g",
+      "name_zh": "干酵母 7克",
+      "review_status": "approved",
+      "sku_id": "demo:yeast-dry-7g",
+      "source": "demo",
+      "spec_quantity": 7,
+      "spec_unit": "g",
+      "usage_tags": [
+        "面包",
+        "发酵"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "baking",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "baking_powder"
+      ],
+      "name": "Baking Powder 100g",
+      "name_zh": "泡打粉 100克",
+      "product_type": "leavening",
+      "review_status": "approved",
+      "sku_id": "demo:baking-powder-100g",
+      "source": "demo",
+      "spec_quantity": 100,
+      "spec_unit": "g",
+      "usage_tags": [
+        "蛋糕",
+        "膨松"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "baking",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "cream_cheese"
+      ],
+      "name": "Cream Cheese 200g",
+      "name_zh": "奶油奶酪 200克",
+      "review_status": "approved",
+      "sku_id": "demo:cream-cheese-200g",
+      "source": "demo",
+      "spec_quantity": 200,
+      "spec_unit": "g",
+      "usage_tags": [
+        "芝士蛋糕"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "baking",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "vanilla"
+      ],
+      "name": "Vanilla Extract 30ml",
+      "name_zh": "香草精 30毫升",
+      "review_status": "approved",
+      "sku_id": "demo:vanilla-extract-30ml",
+      "source": "demo",
+      "spec_quantity": 30,
+      "spec_unit": "ml",
+      "usage_tags": [
+        "调味",
+        "蛋糕"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "meat",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "pork"
+      ],
+      "name": "Pork Shoulder 500g",
+      "name_zh": "猪肩肉 500克",
+      "review_status": "approved",
+      "sku_id": "demo:pork-500g",
+      "source": "demo",
+      "spec_quantity": 500,
+      "spec_unit": "g",
+      "usage_tags": [
+        "家常",
+        "小炒肉"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "vegetable",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "bell_pepper"
+      ],
+      "name": "Bell Pepper 300g",
+      "name_zh": "青椒 300克",
+      "review_status": "approved",
+      "sku_id": "demo:bell-pepper-300g",
+      "source": "demo",
+      "spec_quantity": 300,
+      "spec_unit": "g",
+      "usage_tags": [
+        "炒菜",
+        "小炒肉"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "condiment",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "salt"
+      ],
+      "name": "Table Salt 500g",
+      "name_zh": "食用盐 500克",
+      "review_status": "approved",
+      "sku_id": "demo:salt-500g",
+      "source": "demo",
+      "spec_quantity": 500,
+      "spec_unit": "g",
+      "usage_tags": [
+        "调味",
+        "家常"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "condiment",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "soy_sauce"
+      ],
+      "name": "Soy Sauce 500ml",
+      "name_zh": "生抽酱油 500毫升",
+      "review_status": "approved",
+      "sku_id": "demo:soy-sauce-500ml",
+      "source": "demo",
+      "spec_quantity": 500,
+      "spec_unit": "ml",
+      "usage_tags": [
+        "调味",
+        "炒菜"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "meat",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "chicken_breast"
+      ],
+      "name": "Chicken Breast 500g",
+      "name_zh": "鸡胸肉 500克",
+      "review_status": "approved",
+      "sku_id": "demo:chicken-breast-500g",
+      "source": "demo",
+      "spec_quantity": 500,
+      "spec_unit": "g",
+      "usage_tags": [
+        "清淡",
+        "晚餐"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "vegetable",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "tofu"
+      ],
+      "name": "Firm Tofu 400g",
+      "name_zh": "老豆腐 400克",
+      "review_status": "approved",
+      "sku_id": "demo:tofu-firm-400g",
+      "source": "demo",
+      "spec_quantity": 400,
+      "spec_unit": "g",
+      "usage_tags": [
+        "清淡",
+        "素食"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "vegetable",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "tomato"
+      ],
+      "name": "Fresh Tomato 500g",
+      "name_zh": "新鲜番茄 500克",
+      "review_status": "approved",
+      "sku_id": "demo:tomato-fresh-500g",
+      "source": "demo",
+      "spec_quantity": 500,
+      "spec_unit": "g",
+      "usage_tags": [
+        "家常菜",
+        "番茄炒蛋"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "vegetable",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "egg"
+      ],
+      "name": "Fresh Eggs 6 pack",
+      "name_zh": "鲜鸡蛋 6枚装",
+      "review_status": "approved",
+      "sku_id": "demo:eggs-fresh-6pack",
+      "source": "demo",
+      "spec_quantity": 6,
+      "spec_unit": "pc",
+      "usage_tags": [
+        "家常菜",
+        "炒蛋",
+        "番茄炒蛋"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "staple",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "rice"
+      ],
+      "name": "Jasmine Rice 2kg",
+      "name_zh": "大米 2公斤",
+      "review_status": "approved",
+      "sku_id": "demo:rice-2kg",
+      "source": "demo",
+      "spec_quantity": 2000,
+      "spec_unit": "g",
+      "usage_tags": [
+        "主食",
+        "炒饭",
+        "蛋炒饭"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "vegetable",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "scallion"
+      ],
+      "name": "Green Onion 200g",
+      "name_zh": "小葱 200克",
+      "review_status": "approved",
+      "sku_id": "demo:scallion-200g",
+      "source": "demo",
+      "spec_quantity": 200,
+      "spec_unit": "g",
+      "usage_tags": [
+        "调味",
+        "家常菜",
+        "葱香"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "staple",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "oil"
+      ],
+      "name": "Cooking Oil 500ml",
+      "name_zh": "食用油 500毫升",
+      "review_status": "approved",
+      "sku_id": "demo:cooking-oil-500ml",
+      "source": "demo",
+      "spec_quantity": 500,
+      "spec_unit": "ml",
+      "usage_tags": [
+        "炒菜",
+        "家常"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "staple",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "noodle"
+      ],
+      "name": "Dried Noodles 500g",
+      "name_zh": "挂面 500克",
+      "review_status": "approved",
+      "sku_id": "demo:noodles-500g",
+      "source": "demo",
+      "spec_quantity": 500,
+      "spec_unit": "g",
+      "usage_tags": [
+        "主食",
+        "面条"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "dairy",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "soy_milk"
+      ],
+      "name": "Soy Milk 1L",
+      "name_zh": "豆浆 1升",
+      "review_status": "approved",
+      "sku_id": "demo:soy-milk-1l",
+      "source": "demo",
+      "spec_quantity": 1000,
+      "spec_unit": "ml",
+      "usage_tags": [
+        "早餐",
+        "饮品"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "beverage",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [],
+      "name": "Sparkling Water 500ml",
+      "name_zh": "苏打水 500毫升",
+      "review_status": "approved",
+      "sku_id": "demo:sparkling-water-500ml",
+      "source": "demo",
+      "spec_quantity": 500,
+      "spec_unit": "ml",
+      "usage_tags": [
+        "饮料",
+        "无糖"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "staple",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "peanut"
+      ],
+      "name": "Roasted Peanuts 200g",
+      "name_zh": "花生米 200克",
+      "review_status": "approved",
+      "sku_id": "demo:peanut-200g",
+      "source": "demo",
+      "spec_quantity": 200,
+      "spec_unit": "g",
+      "usage_tags": [
+        "家常菜",
+        "宫保鸡丁"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "beverage",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [],
+      "name": "Green Tea 500ml",
+      "name_zh": "绿茶饮料 500毫升",
+      "review_status": "approved",
+      "sku_id": "demo:green-tea-500ml",
+      "source": "demo",
+      "spec_quantity": 500,
+      "spec_unit": "ml",
+      "usage_tags": [
+        "饮料",
+        "茶"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "condiment",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [
+        "hotpot_base"
+      ],
+      "name": "Hot Pot Soup Base 200g",
+      "name_zh": "川渝火锅底料 200克",
+      "review_status": "approved",
+      "sku_id": "demo:hotpot-base-200g",
+      "source": "demo",
+      "spec_quantity": 200,
+      "spec_unit": "g",
+      "usage_tags": [
+        "火锅",
+        "火锅锅底",
+        "麻辣"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "meat",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [
+        "hotpot_beef_roll"
+      ],
+      "name": "Sliced Beef Roll 300g",
+      "name_zh": "肥牛卷 300克",
+      "review_status": "approved",
+      "sku_id": "demo:beef-roll-300g",
+      "source": "demo",
+      "spec_quantity": 300,
+      "spec_unit": "g",
+      "usage_tags": [
+        "火锅",
+        "火锅肥牛"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "meat",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [
+        "lamb_slice"
+      ],
+      "name": "Sliced Lamb Roll 300g",
+      "name_zh": "羊肉卷 300克",
+      "review_status": "approved",
+      "sku_id": "demo:lamb-roll-300g",
+      "source": "demo",
+      "spec_quantity": 300,
+      "spec_unit": "g",
+      "usage_tags": [
+        "火锅",
+        "火锅肥牛"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "meat",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [
+        "beef_neck"
+      ],
+      "name": "Diaolong Beef 300g",
+      "name_zh": "吊龙牛肉 300克",
+      "review_status": "approved",
+      "sku_id": "demo:beef-neck-300g",
+      "source": "demo",
+      "spec_quantity": 300,
+      "spec_unit": "g",
+      "usage_tags": [
+        "火锅",
+        "火锅肥牛"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "meat",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [
+        "tripe"
+      ],
+      "name": "Beef Tripe 250g",
+      "name_zh": "毛肚 250克",
+      "review_status": "approved",
+      "sku_id": "demo:tripe-250g",
+      "source": "demo",
+      "spec_quantity": 250,
+      "spec_unit": "g",
+      "usage_tags": [
+        "火锅",
+        "火锅荤菜"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "seafood",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [
+        "shrimp_paste"
+      ],
+      "name": "Shrimp Paste 200g",
+      "name_zh": "虾滑 200克",
+      "review_status": "approved",
+      "sku_id": "demo:shrimp-paste-200g",
+      "source": "demo",
+      "spec_quantity": 200,
+      "spec_unit": "g",
+      "usage_tags": [
+        "火锅",
+        "火锅荤菜"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "vegetable",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "mushroom"
+      ],
+      "name": "White Mushrooms 200g",
+      "name_zh": "白蘑菇 200克",
+      "review_status": "approved",
+      "sku_id": "demo:mushroom-white-200g",
+      "source": "demo",
+      "spec_quantity": 200,
+      "spec_unit": "g",
+      "usage_tags": [
+        "火锅",
+        "火锅素菜"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "vegetable",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "cabbage"
+      ],
+      "name": "Green Cabbage 500g",
+      "name_zh": "卷心菜 500克",
+      "review_status": "approved",
+      "sku_id": "demo:cabbage-500g",
+      "source": "demo",
+      "spec_quantity": 500,
+      "spec_unit": "g",
+      "usage_tags": [
+        "火锅",
+        "火锅素菜"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "vegetable",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "potato"
+      ],
+      "name": "Potato 500g",
+      "name_zh": "土豆 500克",
+      "review_status": "approved",
+      "sku_id": "demo:potato-500g",
+      "source": "demo",
+      "spec_quantity": 500,
+      "spec_unit": "g",
+      "usage_tags": [
+        "火锅",
+        "火锅素菜"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "condiment",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "sesame_oil"
+      ],
+      "name": "Pure Sesame Oil 200ml",
+      "name_zh": "芝麻香油 200毫升",
+      "review_status": "approved",
+      "sku_id": "demo:sesame-oil-200ml",
+      "source": "demo",
+      "spec_quantity": 200,
+      "spec_unit": "ml",
+      "usage_tags": [
+        "火锅",
+        "火锅蘸料"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "beverage",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [
+        "cola"
+      ],
+      "name": "Cola 330ml",
+      "name_zh": "可乐 330毫升",
+      "review_status": "approved",
+      "sku_id": "demo:cola-330ml",
+      "source": "demo",
+      "spec_quantity": 330,
+      "spec_unit": "ml",
+      "usage_tags": [
+        "饮料",
+        "可乐",
+        "汽水"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "beverage",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [],
+      "name": "Drinking Water 550ml",
+      "name_zh": "天然饮用水 550毫升",
+      "review_status": "approved",
+      "sku_id": "demo:water-550ml",
+      "source": "demo",
+      "spec_quantity": 550,
+      "spec_unit": "ml",
+      "usage_tags": [
+        "饮料",
+        "水",
+        "饮用水",
+        "矿泉水"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "condiment",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [
+        "sour_soup_base"
+      ],
+      "name": "Guizhou Sour Soup Hot Pot Base 200g",
+      "name_zh": "贵州酸汤火锅底料 200克",
+      "review_status": "approved",
+      "sku_id": "demo:sour-soup-base-200g",
+      "source": "demo",
+      "spec_quantity": 200,
+      "spec_unit": "g",
+      "usage_tags": [
+        "火锅",
+        "火锅锅底",
+        "酸汤"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "condiment",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [
+        "clear_soup_base"
+      ],
+      "name": "Clear Soup Hot Pot Base 200g",
+      "name_zh": "清汤火锅底料 200克",
+      "review_status": "approved",
+      "sku_id": "demo:clear-soup-base-200g",
+      "source": "demo",
+      "spec_quantity": 200,
+      "spec_unit": "g",
+      "usage_tags": [
+        "火锅",
+        "火锅锅底"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "vegetable",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [
+        "wood_ear"
+      ],
+      "name": "Dried Wood Ear Mushrooms 150g",
+      "name_zh": "干木耳 150克",
+      "review_status": "approved",
+      "sku_id": "demo:wood-ear-150g",
+      "source": "demo",
+      "spec_quantity": 150,
+      "spec_unit": "g",
+      "usage_tags": [
+        "炒菜",
+        "凉拌"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "meat",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [
+        "chicken_wing"
+      ],
+      "name": "Chicken Wings 500g",
+      "name_zh": "鸡翅 500克",
+      "review_status": "approved",
+      "sku_id": "demo:chicken-wing-500g",
+      "source": "demo",
+      "spec_quantity": 500,
+      "spec_unit": "g",
+      "usage_tags": [
+        "家常",
+        "红烧"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "vegetable",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "ginger"
+      ],
+      "metadata": {
+        "allergens": {
+          "evidence": null,
+          "status": "unknown",
+          "values": []
+        },
+        "image_status": {
+          "file_verified": null,
+          "kind": "photo",
+          "semantic_match": "unknown",
+          "source_url": "https://images.openfoodfacts.org/images/products/000/046/12/front_en.1.400.jpg"
+        },
+        "ingredient_mapping": [
+          {
+            "evidence": "fixture:demo-products.json",
+            "evidence_status": "demo_declared",
+            "ingredient_id": "ginger",
+            "relation": "declared"
+          }
+        ],
+        "provenance": {
+          "is_demo": true,
+          "source": "off_image",
+          "source_barcode": "00004612"
+        }
+      },
+      "name": "Fresh Ginger 200g",
+      "name_zh": "新鲜姜 200克",
+      "review_status": "approved",
+      "sku_id": "demo:ginger-200g",
+      "source": "demo",
+      "spec_quantity": 200,
+      "spec_unit": "g",
+      "usage_tags": [
+        "炒菜",
+        "调味"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "vegetable",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "carrot"
+      ],
+      "metadata": {
+        "allergens": {
+          "evidence": null,
+          "status": "unknown",
+          "values": []
+        },
+        "image_status": {
+          "file_verified": null,
+          "kind": "photo",
+          "semantic_match": "unknown",
+          "source_url": "https://images.openfoodfacts.org/images/products/001/599/44/front_en.1.400.jpg"
+        },
+        "ingredient_mapping": [
+          {
+            "evidence": "fixture:demo-products.json",
+            "evidence_status": "demo_declared",
+            "ingredient_id": "carrot",
+            "relation": "declared"
+          }
+        ],
+        "provenance": {
+          "is_demo": true,
+          "source": "off_image",
+          "source_barcode": "00159944"
+        }
+      },
+      "name": "Fresh Carrots 500g",
+      "name_zh": "胡萝卜 500克",
+      "review_status": "approved",
+      "sku_id": "demo:carrot-500g",
+      "source": "demo",
+      "spec_quantity": 500,
+      "spec_unit": "g",
+      "usage_tags": [
+        "炒菜",
+        "炖汤"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "condiment",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [
+        "vinegar"
+      ],
+      "name": "Rice Vinegar 500ml",
+      "name_zh": "米醋 500毫升",
+      "review_status": "approved",
+      "sku_id": "demo:vinegar-500ml",
+      "source": "demo",
+      "spec_quantity": 500,
+      "spec_unit": "ml",
+      "usage_tags": [
+        "调味",
+        "凉拌"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "condiment",
+      "image_path": null,
+      "image_status": "unavailable_lfs_object",
+      "ingredient_ids": [
+        "oyster_sauce"
+      ],
+      "metadata": {
+        "allergens": {
+          "evidence": null,
+          "status": "unknown",
+          "values": []
+        },
+        "image_status": {
+          "file_verified": null,
+          "kind": "photo",
+          "semantic_match": "unknown",
+          "source_url": "https://images.openfoodfacts.org/images/products/001/115/209/4564/front_en.1.400.jpg"
+        },
+        "ingredient_mapping": [
+          {
+            "evidence": "fixture:demo-products.json",
+            "evidence_status": "demo_declared",
+            "ingredient_id": "oyster_sauce",
+            "relation": "declared"
+          }
+        ],
+        "provenance": {
+          "is_demo": true,
+          "source": "off_image",
+          "source_barcode": "0011152094564"
+        }
+      },
+      "name": "Oyster Flavored Sauce 500g",
+      "name_zh": "蚝油 500克",
+      "review_status": "approved",
+      "sku_id": "demo:oyster-sauce-500g",
+      "source": "demo",
+      "spec_quantity": 500,
+      "spec_unit": "g",
+      "usage_tags": [
+        "调味",
+        "炒菜"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "vegetable",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [
+        "green_pea"
+      ],
+      "name": "Frozen Green Peas 300g",
+      "name_zh": "青豌豆 300克",
+      "review_status": "approved",
+      "sku_id": "demo:green-pea-300g",
+      "source": "demo",
+      "spec_quantity": 300,
+      "spec_unit": "g",
+      "usage_tags": [
+        "炒饭",
+        "家常"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "vegetable",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [
+        "shiitake"
+      ],
+      "name": "Fresh Shiitake Mushrooms 200g",
+      "name_zh": "鲜香菇 200克",
+      "review_status": "approved",
+      "sku_id": "demo:shiitake-200g",
+      "source": "demo",
+      "spec_quantity": 200,
+      "spec_unit": "g",
+      "usage_tags": [
+        "炒菜",
+        "炖汤"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "meat",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [
+        "beef_slice"
+      ],
+      "name": "Beef Slices 300g",
+      "name_zh": "牛肉片 300克",
+      "review_status": "approved",
+      "sku_id": "demo:beef-slice-300g",
+      "source": "demo",
+      "spec_quantity": 300,
+      "spec_unit": "g",
+      "usage_tags": [
+        "火锅",
+        "小炒"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "meat",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [
+        "pork_ribs"
+      ],
+      "name": "Pork Ribs 500g",
+      "name_zh": "猪排骨 500克",
+      "review_status": "approved",
+      "sku_id": "demo:pork-ribs-500g",
+      "source": "demo",
+      "spec_quantity": 500,
+      "spec_unit": "g",
+      "usage_tags": [
+        "红烧",
+        "糖醋"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "vegetable",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [
+        "garlic"
+      ],
+      "name": "Fresh Garlic 200g",
+      "name_zh": "大蒜 200克",
+      "review_status": "approved",
+      "sku_id": "demo:garlic-200g",
+      "source": "demo",
+      "spec_quantity": 200,
+      "spec_unit": "g",
+      "usage_tags": [
+        "炒菜",
+        "调味"
+      ]
+    },
+    {
+      "brand": "可口可乐",
+      "category_id": "beverage",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [
+        "cola"
+      ],
+      "metadata": {
+        "catalog_batch": "catalog-expansion-v2",
+        "family_id": "cola",
+        "item_quantity": 330,
+        "item_unit": "ml",
+        "pack_count": 1,
+        "packaging": "can",
+        "simulation": {
+          "inventory": true,
+          "price": true,
+          "product_combination": true
+        },
+        "sugar_type": "original"
+      },
+      "name": "Coca-Cola Original 330ml Can",
+      "name_zh": "可口可乐经典原味汽水330ml罐装",
+      "review_status": "approved",
+      "sku_id": "demo:cn-coke-original-330ml-can",
+      "source": "demo",
+      "spec_quantity": 330,
+      "spec_unit": "ml",
+      "usage_tags": [
+        "饮料",
+        "可乐",
+        "汽水",
+        "原味",
+        "罐装"
+      ]
+    },
+    {
+      "brand": "可口可乐",
+      "category_id": "beverage",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [
+        "cola"
+      ],
+      "metadata": {
+        "catalog_batch": "catalog-expansion-v2",
+        "family_id": "cola",
+        "item_quantity": 500,
+        "item_unit": "ml",
+        "pack_count": 1,
+        "packaging": "bottle",
+        "simulation": {
+          "inventory": true,
+          "price": true,
+          "product_combination": true
+        },
+        "sugar_type": "original"
+      },
+      "name": "Coca-Cola Original 500ml Bottle",
+      "name_zh": "可口可乐经典原味汽水500ml瓶装",
+      "review_status": "approved",
+      "sku_id": "demo:cn-coke-original-500ml-bottle",
+      "source": "demo",
+      "spec_quantity": 500,
+      "spec_unit": "ml",
+      "usage_tags": [
+        "饮料",
+        "可乐",
+        "汽水",
+        "原味",
+        "瓶装"
+      ]
+    },
+    {
+      "brand": "可口可乐",
+      "category_id": "beverage",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [
+        "cola"
+      ],
+      "metadata": {
+        "catalog_batch": "catalog-expansion-v2",
+        "family_id": "cola",
+        "item_quantity": 500,
+        "item_unit": "ml",
+        "pack_count": 1,
+        "packaging": "bottle",
+        "simulation": {
+          "inventory": true,
+          "price": true,
+          "product_combination": true
+        },
+        "sugar_type": "zero"
+      },
+      "name": "Coca-Cola Zero Sugar 500ml Bottle",
+      "name_zh": "可口可乐零度无糖汽水500ml瓶装",
+      "review_status": "approved",
+      "sku_id": "demo:cn-coke-zero-500ml-bottle",
+      "source": "demo",
+      "spec_quantity": 500,
+      "spec_unit": "ml",
+      "usage_tags": [
+        "饮料",
+        "可乐",
+        "汽水",
+        "无糖",
+        "瓶装"
+      ]
+    },
+    {
+      "brand": "百事可乐",
+      "category_id": "beverage",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [
+        "cola"
+      ],
+      "metadata": {
+        "catalog_batch": "catalog-expansion-v2",
+        "family_id": "cola",
+        "item_quantity": 330,
+        "item_unit": "ml",
+        "pack_count": 1,
+        "packaging": "can",
+        "simulation": {
+          "inventory": true,
+          "price": true,
+          "product_combination": true
+        },
+        "sugar_type": "original"
+      },
+      "name": "Pepsi Original 330ml Can",
+      "name_zh": "百事可乐原味汽水330ml罐装",
+      "review_status": "approved",
+      "sku_id": "demo:cn-pepsi-original-330ml-can",
+      "source": "demo",
+      "spec_quantity": 330,
+      "spec_unit": "ml",
+      "usage_tags": [
+        "饮料",
+        "可乐",
+        "汽水",
+        "原味",
+        "罐装"
+      ]
+    },
+    {
+      "brand": "可口可乐",
+      "category_id": "beverage",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [
+        "cola"
+      ],
+      "metadata": {
+        "catalog_batch": "catalog-expansion-v2",
+        "family_id": "cola",
+        "item_quantity": 330,
+        "item_unit": "ml",
+        "pack_count": 6,
+        "packaging": "can",
+        "simulation": {
+          "inventory": true,
+          "price": true,
+          "product_combination": true
+        },
+        "sugar_type": "original"
+      },
+      "name": "Coca-Cola Original 330ml x 6 Cans",
+      "name_zh": "可口可乐经典原味汽水330ml×6罐",
+      "review_status": "approved",
+      "sku_id": "demo:cn-coke-original-330ml-6can",
+      "source": "demo",
+      "spec_quantity": 1980,
+      "spec_unit": "ml",
+      "usage_tags": [
+        "饮料",
+        "可乐",
+        "汽水",
+        "原味",
+        "罐装",
+        "多件装"
+      ]
+    },
+    {
+      "brand": "伊利",
+      "category_id": "dairy",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [
+        "milk"
+      ],
+      "metadata": {
+        "catalog_batch": "catalog-expansion-v2",
+        "family_id": "milk",
+        "fat_type": "whole",
+        "item_quantity": 250,
+        "item_unit": "ml",
+        "pack_count": 1,
+        "packaging": "carton",
+        "simulation": {
+          "inventory": true,
+          "price": true,
+          "product_combination": true
+        }
+      },
+      "name": "Yili Whole Milk 250ml Carton",
+      "name_zh": "伊利全脂纯牛奶250ml盒装",
+      "review_status": "approved",
+      "sku_id": "demo:cn-yili-whole-250ml-carton",
+      "source": "demo",
+      "spec_quantity": 250,
+      "spec_unit": "ml",
+      "usage_tags": [
+        "牛奶",
+        "早餐",
+        "全脂",
+        "盒装"
+      ]
+    },
+    {
+      "brand": "伊利",
+      "category_id": "dairy",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [
+        "milk"
+      ],
+      "metadata": {
+        "catalog_batch": "catalog-expansion-v2",
+        "family_id": "milk",
+        "fat_type": "whole",
+        "item_quantity": 250,
+        "item_unit": "ml",
+        "pack_count": 12,
+        "packaging": "carton",
+        "simulation": {
+          "inventory": true,
+          "price": true,
+          "product_combination": true
+        }
+      },
+      "name": "Yili Whole Milk 250ml x 12 Cartons",
+      "name_zh": "伊利全脂纯牛奶250ml×12盒",
+      "review_status": "approved",
+      "sku_id": "demo:cn-yili-whole-250ml-12carton",
+      "source": "demo",
+      "spec_quantity": 3000,
+      "spec_unit": "ml",
+      "usage_tags": [
+        "牛奶",
+        "早餐",
+        "全脂",
+        "盒装",
+        "多件装"
+      ]
+    },
+    {
+      "brand": "蒙牛",
+      "category_id": "dairy",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [
+        "milk"
+      ],
+      "metadata": {
+        "catalog_batch": "catalog-expansion-v2",
+        "family_id": "milk",
+        "fat_type": "lowfat",
+        "item_quantity": 250,
+        "item_unit": "ml",
+        "pack_count": 1,
+        "packaging": "carton",
+        "simulation": {
+          "inventory": true,
+          "price": true,
+          "product_combination": true
+        }
+      },
+      "name": "Mengniu Low Fat Milk 250ml Carton",
+      "name_zh": "蒙牛低脂牛奶250ml盒装",
+      "review_status": "approved",
+      "sku_id": "demo:cn-mengniu-lowfat-250ml-carton",
+      "source": "demo",
+      "spec_quantity": 250,
+      "spec_unit": "ml",
+      "usage_tags": [
+        "牛奶",
+        "早餐",
+        "低脂",
+        "盒装"
+      ]
+    },
+    {
+      "brand": "农夫山泉",
+      "category_id": "beverage",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [],
+      "metadata": {
+        "catalog_batch": "catalog-expansion-v2",
+        "family_id": "water",
+        "item_quantity": 550,
+        "item_unit": "ml",
+        "pack_count": 1,
+        "packaging": "bottle",
+        "simulation": {
+          "inventory": true,
+          "price": true,
+          "product_combination": true
+        }
+      },
+      "name": "Nongfu Spring Natural Drinking Water 550ml Bottle",
+      "name_zh": "农夫山泉饮用天然水550ml瓶装",
+      "review_status": "approved",
+      "sku_id": "demo:cn-nongfu-water-550ml-bottle",
+      "source": "demo",
+      "spec_quantity": 550,
+      "spec_unit": "ml",
+      "usage_tags": [
+        "饮料",
+        "饮用水",
+        "天然水",
+        "瓶装"
+      ]
+    },
+    {
+      "brand": "怡宝",
+      "category_id": "beverage",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [],
+      "metadata": {
+        "catalog_batch": "catalog-expansion-v2",
+        "family_id": "water",
+        "item_quantity": 555,
+        "item_unit": "ml",
+        "pack_count": 1,
+        "packaging": "bottle",
+        "simulation": {
+          "inventory": true,
+          "price": true,
+          "product_combination": true
+        }
+      },
+      "name": "Cestbon Purified Drinking Water 555ml Bottle",
+      "name_zh": "怡宝饮用纯净水555ml瓶装",
+      "review_status": "approved",
+      "sku_id": "demo:cn-cestbon-water-555ml-bottle",
+      "source": "demo",
+      "spec_quantity": 555,
+      "spec_unit": "ml",
+      "usage_tags": [
+        "饮料",
+        "饮用水",
+        "纯净水",
+        "瓶装"
+      ]
+    },
+    {
+      "brand": "农夫山泉",
+      "category_id": "beverage",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [],
+      "metadata": {
+        "catalog_batch": "catalog-expansion-v2",
+        "family_id": "water",
+        "item_quantity": 550,
+        "item_unit": "ml",
+        "pack_count": 12,
+        "packaging": "bottle",
+        "simulation": {
+          "inventory": true,
+          "price": true,
+          "product_combination": true
+        }
+      },
+      "name": "Nongfu Spring Natural Drinking Water 550ml x 12 Bottles",
+      "name_zh": "农夫山泉饮用天然水550ml×12瓶",
+      "review_status": "approved",
+      "sku_id": "demo:cn-nongfu-water-550ml-12bottle",
+      "source": "demo",
+      "spec_quantity": 6600,
+      "spec_unit": "ml",
+      "usage_tags": [
+        "饮料",
+        "饮用水",
+        "天然水",
+        "瓶装",
+        "多件装"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "snack",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [
+        "potato"
+      ],
+      "metadata": {
+        "catalog_batch": "snack-selection-v1",
+        "family_id": "potato_chips",
+        "item_quantity": 70,
+        "item_unit": "g",
+        "pack_count": 1,
+        "packaging": "bag",
+        "simulation": {
+          "inventory": true,
+          "price": true,
+          "product_combination": true
+        }
+      },
+      "name": "Demo Original Potato Chips 70g Bag",
+      "name_zh": "原味薯片70克袋装",
+      "product_type": "potato_chips",
+      "review_status": "approved",
+      "sku_id": "demo:snack-original-potato-chips-70g-bag",
+      "source": "demo",
+      "spec_quantity": 70,
+      "spec_unit": "g",
+      "usage_tags": [
+        "零食",
+        "薯片",
+        "原味",
+        "即食",
+        "袋装"
+      ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "snack",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [
+        "flour"
+      ],
+      "metadata": {
+        "catalog_batch": "snack-selection-v1",
+        "family_id": "soda_crackers",
+        "item_quantity": 100,
+        "item_unit": "g",
+        "pack_count": 1,
+        "packaging": "box",
+        "simulation": {
+          "inventory": true,
+          "price": true,
+          "product_combination": true
+        }
+      },
+      "name": "Demo Soda Crackers 100g Box",
+      "name_zh": "苏打饼干100克盒装",
+      "product_type": "soda_crackers",
+      "review_status": "approved",
+      "sku_id": "demo:snack-soda-crackers-100g-box",
+      "source": "demo",
+      "spec_quantity": 100,
+      "spec_unit": "g",
+      "usage_tags": [
+        "零食",
+        "饼干",
+        "苏打饼干",
+        "即食",
+        "盒装"
+      ]
+    },
+    {
+      "brand": "美汁源",
+      "category_id": "beverage",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [],
+      "metadata": {
+        "catalog_batch": "ceres-v1-fixture",
+        "family_id": "peach_juice_drink",
+        "item_quantity": 450,
+        "item_unit": "ml",
+        "pack_count": 1,
+        "packaging": "bottle",
+        "provenance": {
+          "checked_on": "2026-10-04",
+          "is_demo": true,
+          "source": "official_product_information",
+          "source_barcode": null,
+          "sources": [
+            "https://www.coca-cola.com/cn/zh/brands/minute-maid",
+            "https://www.coca-cola.com/content/dam/onexp/cn/zh/minute-maid-orange/peachset.png",
+            "https://www.cofco.com/zljt/1/files/2025/0923/17586089059691089.pdf"
+          ]
+        },
+        "simulation": {
+          "inventory": true,
+          "price": true
+        }
+      },
+      "name": "Minute Maid Peach Juice Drink 450ml Bottle",
+      "name_zh": "美汁源汁汁桃桃桃汁饮料450毫升瓶装",
+      "product_type": "juice_drink",
+      "review_status": "approved",
+      "sku_id": "demo:cn-minute-maid-peach-450ml-bottle",
+      "source": "demo",
+      "spec_quantity": 450,
+      "spec_unit": "ml",
+      "usage_tags": [
+        "果汁",
+        "桃汁饮料",
+        "汁汁桃桃",
+        "甜味",
+        "甜而不腻",
+        "瓶装"
+      ]
+    }
+  ],
+  "version": "v1"
+}

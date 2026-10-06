@@ -1,0 +1,357 @@
+"""Pi stdio boundary. Python alone owns catalog facts and scoped references."""
+from __future__ import annotations
+
+import json
+import hashlib
+import logging
+import re
+import os
+from pathlib import Path
+import selectors
+import subprocess
+import time
+from typing import Any, Callable
+from uuid import uuid4
+
+from app.core.config import get_settings
+from app.core.errors import AppError
+from app.services.catalog_service import CatalogService
+
+MAX_TOOL_ROUNDS = 5
+EXPLORATION_SECONDS = 15.0
+LOGGER = logging.getLogger(__name__)
+WORKER = Path(__file__).resolve().parents[3] / 'runtime' / 'pi' / 'dist' / 'worker.js'
+
+
+class PiProductRuntime:
+    def __init__(self, catalog: CatalogService, assert_current: Callable[[], None], *, run_id: str, route_request: Callable[[dict], dict], context: dict, memory_command: Callable[[dict], dict], comparison_search: Callable[[dict], tuple], candidate_resolve: Callable[[str], dict], history_command: Callable[[dict], dict]):
+        self.history_command = history_command
+        self.history_results = {}
+        self.run_id = run_id
+        self.route_request = route_request
+        self.memory_command = memory_command
+        self.comparison_search = comparison_search
+        self.candidate_resolve = candidate_resolve
+        self.persisted_candidate_refs = set()
+        self.comparison_requested = False
+        self.comparison_refs = set()
+        self.memory_results = {}
+        self.context = context
+        self.route_result = None
+        self.general_candidates = {}
+        self.approved_general = set()
+        self.catalog = catalog
+        self.assert_current = assert_current
+        self.products: dict[str, dict[str, Any]] = {}
+        self.proposals = {}
+        self.dishes = {}
+        self.dishes_searched = False
+        self.events: list[dict[str, Any]] = []
+        self.tool_rounds = 0
+        self.searched = False
+        self.diagnostic_id = f"pi-{uuid4().hex[:16]}"
+
+    def _tool(self, name: str, arguments: dict[str, Any]) -> dict[str, Any]:
+        self.assert_current()
+        if name == 'history_command':
+            result = self.history_command(arguments)
+            self.history_results[result['history_ref']] = result
+            return result
+        if name == 'memory_command':
+            result = self.memory_command(arguments)
+            self.memory_results[result['memory_ref']] = result
+            return result
+        if name == 'guide_request':
+            if self.route_result is not None or self.searched:
+                raise AppError(422, 'PI_ROUTE_INVALID', '消息相关性只能在查询前登记一次')
+            self.route_result = self.route_request(arguments)
+            return self.route_result
+        if name == 'validate_general_text':
+            if not self.route_result or self.route_result['kind'] != 'question' or self.searched:
+                raise AppError(422, 'PI_GENERAL_CHANNEL_FORBIDDEN', '普通解释不能承载商家查询上下文')
+            messages = arguments['messages']
+            if not isinstance(messages, list) or not messages or any(not isinstance(text, str) or not text.strip() for text in messages):
+                raise AppError(422, 'PI_ANSWER_INVALID', '普通解释内容无效')
+            ref = f'general-{uuid4().hex}'
+            self.general_candidates[ref] = messages
+            return {'general_ref': ref}
+        if name == 'search_products':
+            products, total = self.catalog.search_products(q=arguments.get('query'), category_id=arguments.get('category_id'), page_size=5)
+            self.searched = True
+            rows = []
+            for product in products:
+                ref = f'product-{uuid4().hex[:16]}'
+                self.products[ref] = {**product, 'ref': ref}
+                rows.append(self.products[ref])
+            return {'products': rows, 'total': total, 'is_demo': True}
+        if name == 'compare_products':
+            self.comparison_requested = True
+            products, total = self.comparison_search(arguments)
+            self.searched = True
+            self.products = {}
+            for product in products:
+                ref = f'product-{uuid4().hex[:16]}'
+                self.products[ref] = {**product, 'ref':ref}
+            self.comparison_refs = set(self.products)
+            return {'products':list(self.products.values()), 'total':total, 'is_demo':True}
+        if name == 'search_dishes':
+            self.dishes_searched = True
+            from app.services.dish_service import DishService
+            service = DishService(self.catalog)
+            rows = []
+            for dish in service.search(arguments['query'])[:5]:
+                ref = f'dish-{uuid4().hex}'
+                self.dishes[ref] = dish
+                rows.append({**dish, 'ref':ref, 'candidates':service.candidates(dish)})
+            self.searched = True
+            return {'dishes':rows, 'is_demo':True}
+        if name == 'propose_dish':
+            ref = arguments['dish_ref']
+            people = arguments.get('people')
+            if ref not in self.dishes or (people is not None and (type(people) is not int or people <= 0)):
+                raise AppError(422, 'PI_UNKNOWN_REFERENCE', '菜谱必须来自本次查询，人数必须为正整数')
+            if not self.route_result or self.route_result['kind'] not in ('new_goal', 'continue', 'amend'):
+                raise AppError(422, 'PI_ROUTE_INVALID', '请先明确当前购买目标')
+            proposal_ref = f'proposal-{uuid4().hex}'
+            self.proposals[proposal_ref] = {'dish_id':self.dishes[ref]['dish_id'], 'people':people, 'selections':arguments.get('selections', {}), 'operation':arguments.get('operation', 'update'), 'group_id':arguments.get('group_id')}
+            return {'proposal_ref':proposal_ref, 'message':'宿主将核对供给并准备完整方案或供给预览，尚未加购。'}
+        if name == 'propose_purchase':
+            ref, quantity = arguments['ref'], arguments['quantity']
+            persisted_candidate = ref not in self.products
+            if persisted_candidate:
+                self.products[ref] = {**self.candidate_resolve(ref), 'ref':ref}
+                self.persisted_candidate_refs.add(ref)
+            if ref not in self.products or type(quantity) is not int or quantity <= 0:
+                raise AppError(422, 'PI_UNKNOWN_REFERENCE', '清单必须引用本次已查询商品和正整数件数')
+            if not self.route_result or self.route_result['kind'] not in ('new_goal', 'continue', 'amend'):
+                raise AppError(422, 'PI_ROUTE_INVALID', '请先明确当前购买目标')
+            proposal_ref = f'proposal-{uuid4().hex}'
+            self.proposals[proposal_ref] = {'sku_id':self.products[ref]['sku_id'], 'quantity':quantity}
+            if ref in self.persisted_candidate_refs:
+                self.proposals[proposal_ref]['comparison_ref'] = ref
+            return {'proposal_ref':proposal_ref, 'message':'选定商品仅准备清单，尚未加购。'}
+        if name == 'product_details':
+            ref = arguments['ref']
+            if ref not in self.products:
+                raise AppError(422, 'PI_UNKNOWN_REFERENCE', '商品引用不属于本次查询')
+            product = self.catalog.get_product(self.products[ref]['sku_id'])
+            if product is None:
+                raise AppError(409, 'PI_PRODUCT_UNAVAILABLE', '商品已不再可查询')
+            self.products[ref] = {**product, 'ref': ref}
+            return {'product': self.products[ref], 'is_demo': True}
+        raise AppError(422, 'PI_TOOL_FORBIDDEN', '本次运行仅允许查询商品')
+
+    def run(self, message: str, *, should_stop: Callable[[], bool], on_phase: Callable[[str], None], deadline: float) -> dict[str, Any]:
+        if should_stop():
+            return self._close('stopped')
+        if time.monotonic() >= deadline:
+            return self._close('deadline')
+        settings = get_settings()
+        if not settings.openai_base_url or not settings.openai_api_key or not settings.llm_model:
+            raise AppError(503, 'PI_PROVIDER_UNCONFIGURED', 'Pi 模型配置不完整')
+        if not WORKER.is_file():
+            raise AppError(503, 'PI_WORKER_UNBUILT', 'Pi runtime 尚未构建')
+        categories = self.catalog.get_categories()
+        if time.monotonic() >= deadline:
+            return self._close('deadline')
+        # The child gets no inherited API keys or database configuration.
+        env = {key: os.environ[key] for key in ('PATH', 'SYSTEMROOT', 'HOME', 'HTTP_PROXY', 'HTTPS_PROXY', 'NO_PROXY', 'http_proxy', 'https_proxy', 'no_proxy', 'NODE_EXTRA_CA_CERTS') if key in os.environ}
+        try:
+            child = subprocess.Popen(['node', str(WORKER)], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
+        except OSError as exc:
+            raise AppError(503, 'PI_WORKER_UNAVAILABLE', '无法启动 Pi runtime') from exc
+        selector = selectors.DefaultSelector()
+        selector.register(child.stdout, selectors.EVENT_READ, 'stdout')
+        selector.register(child.stderr, selectors.EVENT_READ, 'stderr')
+        stderr_tail = b''
+        pending = b''
+        input_sequence = 0
+        output_sequence = 0
+        def send(frame):
+            nonlocal input_sequence
+            input_sequence += 1
+            frame = {**frame, 'run_id': self.run_id, 'sequence': input_sequence}
+            child.stdin.write((json.dumps(frame, ensure_ascii=False) + '\n').encode())
+            child.stdin.flush()
+        try:
+            if should_stop():
+                return self._close('stopped')
+            if time.monotonic() >= deadline:
+                return self._close('deadline')
+            send({'type': 'start', 'message': message, 'categories': categories, 'context': self.context, 'model': {'baseUrl': settings.openai_base_url, 'apiKey': settings.openai_api_key, 'id': settings.llm_model}, 'maxToolRounds': MAX_TOOL_ROUNDS, 'timeoutMs': max(1, int((deadline - time.monotonic()) * 1000))})
+            while True:
+                if should_stop():
+                    return self._close('stopped')
+                if time.monotonic() >= deadline:
+                    return self._close('deadline')
+                self.assert_current()
+                ready = selector.select(timeout=min(0.05, max(0, deadline - time.monotonic())))
+                if not ready:
+                    if child.poll() is not None:
+                        self._fail('PI_WORKER_EXITED', self._stderr_diagnostic(stderr_tail))
+                    continue
+                for key, _mask in sorted(ready, key=lambda item: item[0].data != 'stderr'):
+                    chunk = os.read(key.fileobj.fileno(), 65536)
+                    if key.data == 'stderr':
+                        stderr_tail = (stderr_tail + chunk)[-4096:]
+                        if not chunk:
+                            selector.unregister(key.fileobj)
+                    elif not chunk:
+                        self._fail('PI_PROTOCOL_EOF', self._stderr_diagnostic(stderr_tail))
+                    else:
+                        pending += chunk
+                        if len(pending) > 262144:
+                            raise AppError(502, 'PI_PROTOCOL_INVALID', 'Pi runtime 帧超出上限')
+                while b'\n' in pending:
+                    line, pending = pending.split(b'\n', 1)
+                    try:
+                        frame = json.loads(line)
+                    except json.JSONDecodeError as exc:
+                        raise AppError(502, 'PI_PROTOCOL_INVALID', 'Pi runtime 协议错误') from exc
+                    output_sequence += 1
+                    if not isinstance(frame, dict) or frame.get('run_id') != self.run_id or frame.get('sequence') != output_sequence:
+                        raise AppError(502, 'PI_PROTOCOL_INVALID', 'Pi runtime 运行关联或帧序号错误')
+                    if frame['type'] == 'event':
+                        self.events.append(frame['event'])
+                        self.events = self.events[-256:]
+                    elif frame['type'] == 'tool_call':
+                        if should_stop():
+                            return self._close('stopped')
+                        if time.monotonic() >= deadline:
+                            return self._close('deadline')
+                        if frame['round'] > MAX_TOOL_ROUNDS:
+                            return self._close('tool_budget')
+                        self.tool_rounds = max(self.tool_rounds, frame['round'])
+                        on_phase('speaking' if frame['name'] == 'validate_general_text' else 'understanding' if frame['name'] == 'guide_request' else 'retrieve')
+                        result = self._tool(frame['name'], frame['arguments'])
+                        if should_stop():
+                            return self._close('stopped')
+                        if time.monotonic() >= deadline:
+                            return self._close('deadline')
+                        send({'type': 'tool_result', 'id': frame['id'], 'result': result})
+                    elif frame['type'] == 'general_validation':
+                        ref = frame['general_ref']
+                        if ref not in self.general_candidates or type(frame['approved']) is not bool:
+                            raise AppError(502, 'PI_PROTOCOL_INVALID', '普通解释校验关联错误')
+                        if not frame['approved']:
+                            code = 'PI_GENERAL_VALIDATION_UNCERTAIN' if frame['reason'] == 'uncertain' else 'PI_UNGROUNDED_BUSINESS_TEXT'
+                            raise AppError(422, code, '这段解释未通过事实边界核对，本次未展示。商家信息需要通过业务查询确认。')
+                        self.approved_general.add(ref)
+                    elif frame['type'] == 'result':
+                        if frame['status'] in ('tool_budget', 'deadline', 'stopped'):
+                            return self._close(frame['status'])
+                        return self._answer(frame['answer'])
+                    elif frame['type'] == 'error':
+                        self._fail(frame['code'], frame['diagnostic'])
+                    else:
+                        raise AppError(502, 'PI_PROTOCOL_INVALID', 'Pi runtime 协议错误')
+        finally:
+            selector.close()
+            if child.poll() is None:
+                child.kill()
+            child.wait()
+            child.stdin.close()
+            child.stdout.close()
+            child.stderr.close()
+
+    def _fail(self, code: str, diagnostic: dict[str, str]) -> None:
+        # Only SDK-sanitized structured fields or allowlisted startup markers
+        # reach this logger; raw provider/stderr text is never retained.
+        LOGGER.error("Pi failure %s %s", self.diagnostic_id, diagnostic)
+        cause = RuntimeError(json.dumps({'diagnostic_id': self.diagnostic_id, **diagnostic}))
+        raise AppError(502, code, f"Pi 运行失败 [{self.diagnostic_id}; {diagnostic['code']}]") from cause
+
+    @staticmethod
+    def _stderr_diagnostic(raw: bytes) -> dict[str, str]:
+        text = raw.decode('utf-8', errors='replace')
+        marker = re.search(r'\b(ERR_MODULE_NOT_FOUND|MODULE_NOT_FOUND|SyntaxError|TypeError|EACCES|ENOENT)\b', text)
+        return {'kind': 'WorkerProcessError', 'code': marker.group(1) if marker else 'WORKER_EXIT', 'fingerprint': hashlib.sha256(raw).hexdigest()}
+
+    def _answer(self, raw: str) -> dict[str, Any]:
+        try:
+            answer = json.loads(raw)
+        except json.JSONDecodeError as exc:
+            raise AppError(502, 'PI_ANSWER_INVALID', 'Pi 回复不符合事实引用契约') from exc
+        if not isinstance(answer, dict):
+            raise AppError(502, 'PI_ANSWER_INVALID', 'Pi 回复必须为结构化对象')
+        kind = answer.get('answer_kind')
+        if kind == 'history_result':
+            ref = answer.get('history_ref')
+            if not isinstance(ref, str) or not self.history_results or ref != next(reversed(self.history_results)):
+                raise AppError(422, 'PI_UNKNOWN_REFERENCE', '历史结果引用不属于本次请求')
+            return {'status':'completed', 'message':self.history_results[ref]['message'], 'products':[], 'history_result':self.history_results[ref]}
+        if kind == 'memory_result':
+            ref = answer.get('memory_ref')
+            if not isinstance(ref, str) or not self.memory_results or ref != next(reversed(self.memory_results)):
+                raise AppError(422, 'PI_UNKNOWN_REFERENCE', '记忆结果引用不属于本次请求')
+            return {'status':'completed', 'message':self.memory_results[ref]['message'], 'products':[], 'memory_result':self.memory_results[ref]}
+        if kind == 'dish_candidates':
+            refs = answer.get('dish_refs')
+            if not isinstance(refs, list) or any(not isinstance(ref, str) or ref not in self.dishes for ref in refs):
+                raise AppError(422, 'PI_UNKNOWN_REFERENCE', '菜品建议必须引用本次实际查询的菜谱')
+            if not self.dishes_searched:
+                raise AppError(422, 'PI_EVIDENCE_MISSING', '请先查询真实菜谱')
+            dishes = [self.dishes[ref] for ref in dict.fromkeys(refs)][:5]
+            candidates = [{'dish_id': dish['dish_id'], 'name': dish['name']} for dish in dishes]
+            lines = ['可以考虑以下菜品，请选一道后再准备采购清单：'] if dishes else ['已查询到菜谱，但本次没有选定展示结果。' if self.dishes else '本次没有查到匹配菜谱。']
+            lines.extend(f"{index + 1}. {dish['name']}" for index, dish in enumerate(dishes))
+            if dishes:
+                lines.append('尚未选定或加购；食材供给会在准备清单时核对，价格和库存为模拟数据。')
+            return {'status': 'completed', 'message': '\n'.join(lines), 'products': [], 'dish_candidates': candidates}
+        if kind == 'purchase_plan':
+            if self.comparison_requested:
+                raise AppError(422, 'COMPARISON_SELECTION_REQUIRED', '请先展示比较候选并由用户选定')
+            ref = answer.get('proposal_ref')
+            if not isinstance(ref, str) or ref not in self.proposals:
+                raise AppError(422, 'PI_UNKNOWN_REFERENCE', '清单引用不属于本次提案')
+            return {'status':'completed', 'message':'清单已准备好，请核对后确认加购。价格、库存和配送为模拟数据。', 'products':[], 'purchase_proposal':self.proposals[ref]}
+        if kind == 'conversation':
+            raise AppError(422, 'PI_GENERAL_VALIDATION_REQUIRED', '普通解释必须先核对再引用')
+        if kind == 'general_explanation':
+            ref = answer.get('general_ref')
+            if not isinstance(ref, str) or ref not in self.approved_general:
+                raise AppError(422, 'PI_UNKNOWN_REFERENCE', '普通解释引用未通过本次校验')
+            messages = self.general_candidates[ref]
+            return {'status': 'completed', 'answer_kind': 'general_explanation', 'message': '\n\n'.join(messages), 'messages': messages, 'products': []}
+        if kind == 'status':
+            if not self.route_result or self.route_result['kind'] not in ('progress', 'stop', 'abandon'):
+                raise AppError(502, 'PI_ANSWER_INVALID', '状态回复没有可信操作结果')
+            text = self.route_result['message']
+            return {'status': 'completed', 'message': text, 'products': []}
+        if answer.get('status') == 'waiting':
+            questions = {
+                'target': '你想查询哪种商品或品类？',
+                'packaging': '你想看罐装还是瓶装，还是其他包装？',
+                'brand': '你有偏好的品牌吗？',
+                'budget': '你的预算上限是多少？',
+            }
+            slot = answer.get('clarification_slot')
+            if not isinstance(slot, str) or slot not in questions:
+                raise AppError(502, 'PI_ANSWER_INVALID', '等待回复缺少受支持的澄清项')
+            return {'status': 'waiting', 'message': questions[slot], 'clarification_slot': slot, 'products': []}
+        if kind == 'comparison' and not self.comparison_requested:
+            raise AppError(422, 'PI_EVIDENCE_MISSING', '尚未执行品类比较')
+        refs = answer.get('product_refs')
+        if answer.get('status') != 'completed' or not isinstance(refs, list) or any(not isinstance(ref, str) or ref not in self.products or (self.comparison_requested and ref not in self.comparison_refs) for ref in refs):
+            raise AppError(422, 'PI_UNKNOWN_REFERENCE', 'Pi 回复包含未经查询验证的商品引用')
+        products = [self.products[ref] for ref in dict.fromkeys(refs)]
+        if not products and not self.searched:
+            raise AppError(502, 'PI_EVIDENCE_MISSING', '尚未执行商品查询，不能确认无匹配结果')
+        message = '已查询到商品，但本次没有选定展示结果。' if not products and self.products else self._facts(products)
+        return {'status': 'completed', 'message': message, 'products': products, 'comparison':self.comparison_requested}
+
+    def _facts(self, products: list[dict[str, Any]]) -> str:
+        if not products:
+            return '本次没有查到匹配商品。价格、库存为模拟数据。'
+        lines = ['查询到以下商品（价格、库存为模拟数据）：']
+        for product in products:
+            price = '暂无报价' if product['price_fen'] is None else f"¥{product['price_fen'] / 100:.2f}"
+            spec = '' if product['spec_quantity'] is None else f"，{product['spec_quantity']:g}{product['spec_unit'] or ''}"
+            stock = f"库存 {product['available_qty']}" if product['sellable'] else '当前不可售'
+            lines.append(f"{product['name_zh'] or product['name']}{spec}，{price}，{stock}")
+        return '\n'.join(lines)
+
+    def _close(self, status: str) -> dict[str, Any]:
+        explanation = {'stopped': '已停止本次查询。', 'deadline': '已达到 15 秒查询时限，未继续探索。', 'tool_budget': '已达到 5 轮工具查询上限，未继续探索。'}[status]
+        products = list(self.products.values())[:5]
+        return {'status': status, 'message': explanation + ('\n' + self._facts(products) if products else ''), 'products': products}

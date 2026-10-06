@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import path from 'node:path';
+import {createRequire} from 'node:module';
+const root=process.cwd(),support=createRequire(path.join(root,'work/clean-rebuild/02/test-support/package.json'));
+const {JSDOM}=support('jsdom'),dom=new JSDOM('<div id="root"></div>',{url:'http://localhost/operator/human-cases'});
+Object.assign(globalThis,{window:dom.window,document:dom.window.document,sessionStorage:dom.window.sessionStorage,HTMLElement:dom.window.HTMLElement,IS_REACT_ACT_ENVIRONMENT:true});
+const frontend=createRequire(path.join(root,'frontend/package.json')),compiled=createRequire(path.join(root,'work/clean-rebuild/03/compiled/package.json'));
+const {act,createElement}=frontend('react'),{createRoot}=frontend('react-dom/client');
+let calls=0;globalThis.fetch=async()=>{calls++;return new Response('{}',{status:403});};
+const container=document.getElementById('root'),app=createRoot(container);
+await act(async()=>app.render(createElement(compiled('./App.js').default)));
+assert.match(container.textContent,/异步人工工单/);assert.ok(container.querySelector('input[type=password]'));assert.equal(calls,0,'Operator route must not bootstrap shopper or query tickets before credentials');
+await act(async()=>app.unmount());dom.window.close();console.log(JSON.stringify({ok:true,level:'DOM-only',route:'/operator/human-cases'}));

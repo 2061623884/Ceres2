@@ -1,0 +1,1290 @@
+[
+  {
+    "path": "frontend/.figma/make/analyze-routes",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/.figma/make/analyze-routes",
+    "origin_sha256": "7a81578bcfa5ba5f2105d7165e0cd2d8d1c6151d2a0c5ba766b3ef1c824ee788",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "7a81578bcfa5ba5f2105d7165e0cd2d8d1c6151d2a0c5ba766b3ef1c824ee788"
+  },
+  {
+    "path": "frontend/.figma/make/deploy",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/.figma/make/deploy",
+    "origin_sha256": "fe35b0aff744f5aa8bb16eb1590c720ff6b0ff4bce9ede78f73e02bbfd7e7f3f",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "fe35b0aff744f5aa8bb16eb1590c720ff6b0ff4bce9ede78f73e02bbfd7e7f3f"
+  },
+  {
+    "path": "frontend/.figma/make/deploy-preview",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/.figma/make/deploy-preview",
+    "origin_sha256": "3b82ce85bad03ce7b0e4e288a6e40e5caf119c41a392de3d3420ff17c42d0e8b",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "3b82ce85bad03ce7b0e4e288a6e40e5caf119c41a392de3d3420ff17c42d0e8b"
+  },
+  {
+    "path": "frontend/.figma/make/dev",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/.figma/make/dev",
+    "origin_sha256": "91f795e632539988b0fe3de57084839f41a827ba5c274590388f7d0650ec2314",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "91f795e632539988b0fe3de57084839f41a827ba5c274590388f7d0650ec2314"
+  },
+  {
+    "path": "frontend/.figma/make/dev.json",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/.figma/make/dev.json",
+    "origin_sha256": "e78b91a2a63456a6eab9756c3fb6d767dfe3673adcef1dcfe4f52c010238c3e7",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "e78b91a2a63456a6eab9756c3fb6d767dfe3673adcef1dcfe4f52c010238c3e7"
+  },
+  {
+    "path": "frontend/.figma/make/format",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/.figma/make/format",
+    "origin_sha256": "254598ef0d1a61c3abc2a426c7065487ca140c8f9b90e4d66ea05dff20832335",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "254598ef0d1a61c3abc2a426c7065487ca140c8f9b90e4d66ea05dff20832335"
+  },
+  {
+    "path": "frontend/.figma/make/import-assets.mjs",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/.figma/make/import-assets.mjs",
+    "origin_sha256": "19832cfcff92cdb381cee823ca4b41213f4128d82a6c7a0465040cb48dd717c1",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "19832cfcff92cdb381cee823ca4b41213f4128d82a6c7a0465040cb48dd717c1"
+  },
+  {
+    "path": "frontend/.figma/make/install",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/.figma/make/install",
+    "origin_sha256": "90705d33ffd6b0700def7f2f304fd24ae04e17af5fc7d8437df44cf546d64891",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "90705d33ffd6b0700def7f2f304fd24ae04e17af5fc7d8437df44cf546d64891"
+  },
+  {
+    "path": "frontend/.figma/make/langserver",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/.figma/make/langserver",
+    "origin_sha256": "e6b9034d28bbc82e6333a3b77f8d5fd593ac54eeed7e4e76569329fdbb534fff",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "e6b9034d28bbc82e6333a3b77f8d5fd593ac54eeed7e4e76569329fdbb534fff"
+  },
+  {
+    "path": "frontend/.figma/make/site.json",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/.figma/make/site.json",
+    "origin_sha256": "eebd873b80b274ba227831f6e444cbaf4d08b189df2a2a94a79cf9f4fa161147",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "eebd873b80b274ba227831f6e444cbaf4d08b189df2a2a94a79cf9f4fa161147"
+  },
+  {
+    "path": "frontend/.mise.toml",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/.mise.toml",
+    "origin_sha256": "6d2834ef5f78a7dc4c384570a62b895137fdf63df171d237f0747932bd001435",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "6d2834ef5f78a7dc4c384570a62b895137fdf63df171d237f0747932bd001435"
+  },
+  {
+    "path": "frontend/AGENTS.md",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/AGENTS.md",
+    "origin_sha256": "977113fedb2fecd71bc0301f758281d9b05a36ddaaf642920df77797432e027a",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "30fbf4f8a42c6d84ad832cd0c57bb7d5e5b5630a427537c85b4203fa89200056"
+  },
+  {
+    "path": "frontend/index.html",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/index.html",
+    "origin_sha256": "768eac67e6271681de61c23f1c94a6bf688607bbad2d0bccafd8f4bfe789a079",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "768eac67e6271681de61c23f1c94a6bf688607bbad2d0bccafd8f4bfe789a079"
+  },
+  {
+    "path": "frontend/package-lock.json",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/package-lock.json",
+    "origin_sha256": "9b31e7427564ebb34499cf9adddb5eac2986a6913db66d24d868e644d496e7b7",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "9b31e7427564ebb34499cf9adddb5eac2986a6913db66d24d868e644d496e7b7"
+  },
+  {
+    "path": "frontend/package.json",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/package.json",
+    "origin_sha256": "2e6f3ba99dbd8a4d567d2f058699451326aa73e3d95fb6a9e555654a99d4f7f2",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "2e6f3ba99dbd8a4d567d2f058699451326aa73e3d95fb6a9e555654a99d4f7f2"
+  },
+  {
+    "path": "frontend/pnpm-lock.yaml",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/pnpm-lock.yaml",
+    "origin_sha256": "811aecd91f12d4f77c1b88c0ea1edd5127b6bf2150e668e62659cadaac366460",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "811aecd91f12d4f77c1b88c0ea1edd5127b6bf2150e668e62659cadaac366460"
+  },
+  {
+    "path": "frontend/public/assets/a49bc.svg",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/public/assets/a49bc.svg",
+    "origin_sha256": "d74de112979c2704639c2eaa10ebd0965570bb931dfbf955e1534505a3f312d4",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "d74de112979c2704639c2eaa10ebd0965570bb931dfbf955e1534505a3f312d4"
+  },
+  {
+    "path": "frontend/public/placeholder-product.svg",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/public/placeholder-product.svg",
+    "origin_sha256": "c681952f871bd814f056659613e6604e5e034cad1b2908802d957c668d5112e8",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "c681952f871bd814f056659613e6604e5e034cad1b2908802d957c668d5112e8"
+  },
+  {
+    "path": "frontend/src/App.tsx",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/App.tsx",
+    "origin_sha256": "76a9d6d7e3d9c4d7c9207eba4ad1a88f99a9672c7293ab2bb2312efd38a0bc3f",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "76a9d6d7e3d9c4d7c9207eba4ad1a88f99a9672c7293ab2bb2312efd38a0bc3f"
+  },
+  {
+    "path": "frontend/src/HumanCasePanel.tsx",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/HumanCasePanel.tsx",
+    "origin_sha256": "7ea0e8235e56b0ee2410a9b1758458b9c46b957384312c80bdda20297a921562",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "7ea0e8235e56b0ee2410a9b1758458b9c46b957384312c80bdda20297a921562"
+  },
+  {
+    "path": "frontend/src/HumanOperatorPage.tsx",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/HumanOperatorPage.tsx",
+    "origin_sha256": "8e61e0e4a6b3fd1a33e3e08ef9e3c801fc8510561ba7e3cce47448472cc5bb41",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "8e61e0e4a6b3fd1a33e3e08ef9e3c801fc8510561ba7e3cce47448472cc5bb41"
+  },
+  {
+    "path": "frontend/src/MercuryChat.tsx",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/MercuryChat.tsx",
+    "origin_sha256": "64db0c0b06b2d6d6c7aaaf29ea248b0e69f9eb361075aa1de20b40be74b05899",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "64db0c0b06b2d6d6c7aaaf29ea248b0e69f9eb361075aa1de20b40be74b05899"
+  },
+  {
+    "path": "frontend/src/SimulatedOrders.tsx",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/SimulatedOrders.tsx",
+    "origin_sha256": "8095ddb5f94e0bfd78f485f7ed0a2c8e1c670196ac4cc2c5d4a3d5d60b1c34ed",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "8095ddb5f94e0bfd78f485f7ed0a2c8e1c670196ac4cc2c5d4a3d5d60b1c34ed"
+  },
+  {
+    "path": "frontend/src/components/MomoToast.tsx",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/components/MomoToast.tsx",
+    "origin_sha256": "877a4e7ba9c23e27e33c656871da2cebe1dad0c532db372341072bcd93c7e9e2",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "877a4e7ba9c23e27e33c656871da2cebe1dad0c532db372341072bcd93c7e9e2"
+  },
+  {
+    "path": "frontend/src/imports/669aa416af91760e129b45ea0639c249.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/669aa416af91760e129b45ea0639c249.png",
+    "origin_sha256": "0d8de91506fb4f443b9564a3d654f7956a764a3d94a000865d5ea60843265d27",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "0d8de91506fb4f443b9564a3d654f7956a764a3d94a000865d5ea60843265d27"
+  },
+  {
+    "path": "frontend/src/imports/bottom-nav-reference.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/bottom-nav-reference.png",
+    "origin_sha256": "30ef1d6bcbd1338c14e4d35a54822d09cdbbd2f64872e02f5f2f364c8127b463",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "30ef1d6bcbd1338c14e4d35a54822d09cdbbd2f64872e02f5f2f364c8127b463"
+  },
+  {
+    "path": "frontend/src/imports/greeting-overlap.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/greeting-overlap.png",
+    "origin_sha256": "3bb500846dc7221b4d865dabaa5013ebfeefeba6e897a235f1e1349ba259ff6a",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "3bb500846dc7221b4d865dabaa5013ebfeefeba6e897a235f1e1349ba259ff6a"
+  },
+  {
+    "path": "frontend/src/imports/greeting-spacing-reference.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/greeting-spacing-reference.png",
+    "origin_sha256": "034d3eee80efdc3e3e9a9ec342adc235b467fed546966b047015b66c9f080d7a",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "034d3eee80efdc3e3e9a9ec342adc235b467fed546966b047015b66c9f080d7a"
+  },
+  {
+    "path": "frontend/src/imports/home-art-direction.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/home-art-direction.png",
+    "origin_sha256": "ca206c93505e96c88cc040c7611190b4351b065529ead0960ecea158768818e3",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "ca206c93505e96c88cc040c7611190b4351b065529ead0960ecea158768818e3"
+  },
+  {
+    "path": "frontend/src/imports/home-layout-issue.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/home-layout-issue.png",
+    "origin_sha256": "f4161bc9586be37454983e271adb0596eccc9ae84f5b7731e6a5b251cee9e4da",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "f4161bc9586be37454983e271adb0596eccc9ae84f5b7731e6a5b251cee9e4da"
+  },
+  {
+    "path": "frontend/src/imports/home-position-1.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/home-position-1.png",
+    "origin_sha256": "0ecdb2acec81855c3342242e793429f54198140203ff9110acbd7cdbfab425fb",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "0ecdb2acec81855c3342242e793429f54198140203ff9110acbd7cdbfab425fb"
+  },
+  {
+    "path": "frontend/src/imports/home-position-2.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/home-position-2.png",
+    "origin_sha256": "d1f9ee3ae8b949c93c559015b26e51a47e8f13e92d08875dc5a5c45e792c06c3",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "d1f9ee3ae8b949c93c559015b26e51a47e8f13e92d08875dc5a5c45e792c06c3"
+  },
+  {
+    "path": "frontend/src/imports/home-quality-reference.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/home-quality-reference.png",
+    "origin_sha256": "8d3cef9b300498d5ab167384d2f494f9c3557ebd2e6af58a71d0f1d939e43238",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "8d3cef9b300498d5ab167384d2f494f9c3557ebd2e6af58a71d0f1d939e43238"
+  },
+  {
+    "path": "frontend/src/imports/home-simplify-reference.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/home-simplify-reference.png",
+    "origin_sha256": "da9bce34c1ce8e6e58b317a3402c3e3439b778e47ddbfc3543797461954b2a9f",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "da9bce34c1ce8e6e58b317a3402c3e3439b778e47ddbfc3543797461954b2a9f"
+  },
+  {
+    "path": "frontend/src/imports/home-style-reference.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/home-style-reference.png",
+    "origin_sha256": "e4504b53827feb3d0ff3356ecc72419f420057d8e41ab02be8db1d01f143d2f1",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "e4504b53827feb3d0ff3356ecc72419f420057d8e41ab02be8db1d01f143d2f1"
+  },
+  {
+    "path": "frontend/src/imports/image-1.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-1.png",
+    "origin_sha256": "0d449fdf0cfefb765287525847fe1c34652a955fcd36ea60e5feed97d2b24090",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "0d449fdf0cfefb765287525847fe1c34652a955fcd36ea60e5feed97d2b24090"
+  },
+  {
+    "path": "frontend/src/imports/image-10.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-10.png",
+    "origin_sha256": "0758c194517a33b2e64eed698df35332283333dfb468134ccf2b2d3ebe42e3b0",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "0758c194517a33b2e64eed698df35332283333dfb468134ccf2b2d3ebe42e3b0"
+  },
+  {
+    "path": "frontend/src/imports/image-11.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-11.png",
+    "origin_sha256": "517d9dae6fb8d90403d93d84a83d0f343439e4a1fae006c39fcfe48b2368ffbc",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "517d9dae6fb8d90403d93d84a83d0f343439e4a1fae006c39fcfe48b2368ffbc"
+  },
+  {
+    "path": "frontend/src/imports/image-12.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-12.png",
+    "origin_sha256": "8d3cef9b300498d5ab167384d2f494f9c3557ebd2e6af58a71d0f1d939e43238",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "8d3cef9b300498d5ab167384d2f494f9c3557ebd2e6af58a71d0f1d939e43238"
+  },
+  {
+    "path": "frontend/src/imports/image-13.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-13.png",
+    "origin_sha256": "ca206c93505e96c88cc040c7611190b4351b065529ead0960ecea158768818e3",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "ca206c93505e96c88cc040c7611190b4351b065529ead0960ecea158768818e3"
+  },
+  {
+    "path": "frontend/src/imports/image-14.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-14.png",
+    "origin_sha256": "556fccbadf55535a802d96b931133062af8d46b9b2d7313dbfe42ae72b6c5b9a",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "556fccbadf55535a802d96b931133062af8d46b9b2d7313dbfe42ae72b6c5b9a"
+  },
+  {
+    "path": "frontend/src/imports/image-15.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-15.png",
+    "origin_sha256": "30ef1d6bcbd1338c14e4d35a54822d09cdbbd2f64872e02f5f2f364c8127b463",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "30ef1d6bcbd1338c14e4d35a54822d09cdbbd2f64872e02f5f2f364c8127b463"
+  },
+  {
+    "path": "frontend/src/imports/image-16.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-16.png",
+    "origin_sha256": "91c7f3b3d49d0f5e69b7945de31a0a8f031023910d33059b5800e21a7d5fe112",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "91c7f3b3d49d0f5e69b7945de31a0a8f031023910d33059b5800e21a7d5fe112"
+  },
+  {
+    "path": "frontend/src/imports/image-17.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-17.png",
+    "origin_sha256": "da9bce34c1ce8e6e58b317a3402c3e3439b778e47ddbfc3543797461954b2a9f",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "da9bce34c1ce8e6e58b317a3402c3e3439b778e47ddbfc3543797461954b2a9f"
+  },
+  {
+    "path": "frontend/src/imports/image-18.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-18.png",
+    "origin_sha256": "f4161bc9586be37454983e271adb0596eccc9ae84f5b7731e6a5b251cee9e4da",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "f4161bc9586be37454983e271adb0596eccc9ae84f5b7731e6a5b251cee9e4da"
+  },
+  {
+    "path": "frontend/src/imports/image-19.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-19.png",
+    "origin_sha256": "0ecdb2acec81855c3342242e793429f54198140203ff9110acbd7cdbfab425fb",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "0ecdb2acec81855c3342242e793429f54198140203ff9110acbd7cdbfab425fb"
+  },
+  {
+    "path": "frontend/src/imports/image-2.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-2.png",
+    "origin_sha256": "7a04d5d725bbaead7abca7f81f08e6489971f1aa274a974d276d79b0673151fe",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "7a04d5d725bbaead7abca7f81f08e6489971f1aa274a974d276d79b0673151fe"
+  },
+  {
+    "path": "frontend/src/imports/image-20.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-20.png",
+    "origin_sha256": "d1f9ee3ae8b949c93c559015b26e51a47e8f13e92d08875dc5a5c45e792c06c3",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "d1f9ee3ae8b949c93c559015b26e51a47e8f13e92d08875dc5a5c45e792c06c3"
+  },
+  {
+    "path": "frontend/src/imports/image-21.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-21.png",
+    "origin_sha256": "034d3eee80efdc3e3e9a9ec342adc235b467fed546966b047015b66c9f080d7a",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "034d3eee80efdc3e3e9a9ec342adc235b467fed546966b047015b66c9f080d7a"
+  },
+  {
+    "path": "frontend/src/imports/image-22.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-22.png",
+    "origin_sha256": "3bb500846dc7221b4d865dabaa5013ebfeefeba6e897a235f1e1349ba259ff6a",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "3bb500846dc7221b4d865dabaa5013ebfeefeba6e897a235f1e1349ba259ff6a"
+  },
+  {
+    "path": "frontend/src/imports/image-23.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-23.png",
+    "origin_sha256": "e4504b53827feb3d0ff3356ecc72419f420057d8e41ab02be8db1d01f143d2f1",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "e4504b53827feb3d0ff3356ecc72419f420057d8e41ab02be8db1d01f143d2f1"
+  },
+  {
+    "path": "frontend/src/imports/image-24.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-24.png",
+    "origin_sha256": "60ce5524f61478ad34a9326c973297b447927b407ab2ec94ec9d370bab16ba34",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "60ce5524f61478ad34a9326c973297b447927b407ab2ec94ec9d370bab16ba34"
+  },
+  {
+    "path": "frontend/src/imports/image-25.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-25.png",
+    "origin_sha256": "60ce5524f61478ad34a9326c973297b447927b407ab2ec94ec9d370bab16ba34",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "60ce5524f61478ad34a9326c973297b447927b407ab2ec94ec9d370bab16ba34"
+  },
+  {
+    "path": "frontend/src/imports/image-26.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-26.png",
+    "origin_sha256": "cb1b6fc70c9607f5310b08bf5db1558eaab8037c8676fdf9158318aace32d618",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "cb1b6fc70c9607f5310b08bf5db1558eaab8037c8676fdf9158318aace32d618"
+  },
+  {
+    "path": "frontend/src/imports/image-27.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-27.png",
+    "origin_sha256": "80ea606e783ca7fbecc3afd53270263d0ab0b248edac6a25f19f99d46f349f0e",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "80ea606e783ca7fbecc3afd53270263d0ab0b248edac6a25f19f99d46f349f0e"
+  },
+  {
+    "path": "frontend/src/imports/image-28.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-28.png",
+    "origin_sha256": "603604b0ab5a14c80af758670928bdc5df4f2cf5511a9c3854519064c4513326",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "603604b0ab5a14c80af758670928bdc5df4f2cf5511a9c3854519064c4513326"
+  },
+  {
+    "path": "frontend/src/imports/image-29.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-29.png",
+    "origin_sha256": "68529ef6b2666eac79f726941674018494a29ff7b63bb2e0e676f5c1335330f6",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "68529ef6b2666eac79f726941674018494a29ff7b63bb2e0e676f5c1335330f6"
+  },
+  {
+    "path": "frontend/src/imports/image-3.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-3.png",
+    "origin_sha256": "bde786cbe9d5d55b82568d4596aa516666a5f123859ba052c51f536a73e17b10",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "bde786cbe9d5d55b82568d4596aa516666a5f123859ba052c51f536a73e17b10"
+  },
+  {
+    "path": "frontend/src/imports/image-30.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-30.png",
+    "origin_sha256": "d5591d842ea89615ecf898cb228da98a40d16397ae769902e288df8032ab3bdc",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "d5591d842ea89615ecf898cb228da98a40d16397ae769902e288df8032ab3bdc"
+  },
+  {
+    "path": "frontend/src/imports/image-31.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-31.png",
+    "origin_sha256": "fe11bb988f67671c09b9ff52747ed2464c02f4657453a6ab59331667549eb6f8",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "fe11bb988f67671c09b9ff52747ed2464c02f4657453a6ab59331667549eb6f8"
+  },
+  {
+    "path": "frontend/src/imports/image-32.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-32.png",
+    "origin_sha256": "67fa94ed7f83ec2c9bdeca1f56d57e7356b4e85f11c841f6b06a2bb8857b262f",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "67fa94ed7f83ec2c9bdeca1f56d57e7356b4e85f11c841f6b06a2bb8857b262f"
+  },
+  {
+    "path": "frontend/src/imports/image-33.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-33.png",
+    "origin_sha256": "d6847d7498c432524f2500e36e02cbcdf45f624077c2fb9999119f4d19eb9cd3",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "d6847d7498c432524f2500e36e02cbcdf45f624077c2fb9999119f4d19eb9cd3"
+  },
+  {
+    "path": "frontend/src/imports/image-34.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-34.png",
+    "origin_sha256": "c12867a812ce615d472f5df143d991c3de0fd95a0aee8f7c9cc80821749810f8",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "c12867a812ce615d472f5df143d991c3de0fd95a0aee8f7c9cc80821749810f8"
+  },
+  {
+    "path": "frontend/src/imports/image-35.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-35.png",
+    "origin_sha256": "0a28770bd5bec1abf0ecbac0561a4b6449be8e9d9e8ee7177dc993d925c5e728",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "0a28770bd5bec1abf0ecbac0561a4b6449be8e9d9e8ee7177dc993d925c5e728"
+  },
+  {
+    "path": "frontend/src/imports/image-36.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-36.png",
+    "origin_sha256": "801a22cd53072a09a18e5d8ead8fd823f6bc187208a8a7a5b703c09df8bbef76",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "801a22cd53072a09a18e5d8ead8fd823f6bc187208a8a7a5b703c09df8bbef76"
+  },
+  {
+    "path": "frontend/src/imports/image-37.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-37.png",
+    "origin_sha256": "ce1c37de35689053e6ccdc45831c851d82310cae2201afb6284ead905dc65932",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "ce1c37de35689053e6ccdc45831c851d82310cae2201afb6284ead905dc65932"
+  },
+  {
+    "path": "frontend/src/imports/image-38.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-38.png",
+    "origin_sha256": "cdecd6e0fe64757403222231a0ffaceef32e07bde230bfd9cd97138c2c4ca331",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "cdecd6e0fe64757403222231a0ffaceef32e07bde230bfd9cd97138c2c4ca331"
+  },
+  {
+    "path": "frontend/src/imports/image-39.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-39.png",
+    "origin_sha256": "9886ed462e1bf7e6cc25efa624a3c9ed588764e9d86bfb9bfdb8b1d3eb623db4",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "9886ed462e1bf7e6cc25efa624a3c9ed588764e9d86bfb9bfdb8b1d3eb623db4"
+  },
+  {
+    "path": "frontend/src/imports/image-4.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-4.png",
+    "origin_sha256": "2a84c14777219c25c092a60c1ba048b77028339b2e3eac16cf17468c894d3a8c",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "2a84c14777219c25c092a60c1ba048b77028339b2e3eac16cf17468c894d3a8c"
+  },
+  {
+    "path": "frontend/src/imports/image-40.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-40.png",
+    "origin_sha256": "96d89cc739560982694a7366dc12ed33a4981a46efb612d8698b7e23ab5d0cf6",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "96d89cc739560982694a7366dc12ed33a4981a46efb612d8698b7e23ab5d0cf6"
+  },
+  {
+    "path": "frontend/src/imports/image-41.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-41.png",
+    "origin_sha256": "2d5d5f9d0ff15e5fb6726e691404e8a4f1cf1028323abd735fb5143580286641",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "2d5d5f9d0ff15e5fb6726e691404e8a4f1cf1028323abd735fb5143580286641"
+  },
+  {
+    "path": "frontend/src/imports/image-42.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-42.png",
+    "origin_sha256": "9afa0e5d13704d8892f7aba30726b932854c71109275871abdffbd0485788619",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "9afa0e5d13704d8892f7aba30726b932854c71109275871abdffbd0485788619"
+  },
+  {
+    "path": "frontend/src/imports/image-43.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-43.png",
+    "origin_sha256": "61d6661d9912bbaa76b131a099122a8135109c369377e098b20a21cfe4bc9544",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "61d6661d9912bbaa76b131a099122a8135109c369377e098b20a21cfe4bc9544"
+  },
+  {
+    "path": "frontend/src/imports/image-44.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-44.png",
+    "origin_sha256": "f05cbb8df5a2163f636756d89253aef62b91d0b33b2967ec27abc7bf2f4e4426",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "f05cbb8df5a2163f636756d89253aef62b91d0b33b2967ec27abc7bf2f4e4426"
+  },
+  {
+    "path": "frontend/src/imports/image-45.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-45.png",
+    "origin_sha256": "1de088efe10b648f7fcabe480f22d7dac29331c21e76868be7f561b4bbf6bb4e",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "1de088efe10b648f7fcabe480f22d7dac29331c21e76868be7f561b4bbf6bb4e"
+  },
+  {
+    "path": "frontend/src/imports/image-46.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-46.png",
+    "origin_sha256": "e4b481201970fa3569ab40c8402e98642c3ac8e9b47b07e25e8b4ca20977828a",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "e4b481201970fa3569ab40c8402e98642c3ac8e9b47b07e25e8b4ca20977828a"
+  },
+  {
+    "path": "frontend/src/imports/image-47.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-47.png",
+    "origin_sha256": "86fd55c3a68843c09c9d31318b679c2cbb445925cfedbb233de14d6940eb1d5a",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "86fd55c3a68843c09c9d31318b679c2cbb445925cfedbb233de14d6940eb1d5a"
+  },
+  {
+    "path": "frontend/src/imports/image-48.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-48.png",
+    "origin_sha256": "e06cd4271140dde787dd2572d846e4128ef619d41503dc017a96fa2938bc2ea3",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "e06cd4271140dde787dd2572d846e4128ef619d41503dc017a96fa2938bc2ea3"
+  },
+  {
+    "path": "frontend/src/imports/image-49.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-49.png",
+    "origin_sha256": "62fe684a2ce5d76ef8b1c5f9465d9df82fd9da99058abb7b0472a1864a331c20",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "62fe684a2ce5d76ef8b1c5f9465d9df82fd9da99058abb7b0472a1864a331c20"
+  },
+  {
+    "path": "frontend/src/imports/image-5.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-5.png",
+    "origin_sha256": "317a261c0d58c111df7186606950007dc0d8251a2aa1c892071d4d3705c68686",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "317a261c0d58c111df7186606950007dc0d8251a2aa1c892071d4d3705c68686"
+  },
+  {
+    "path": "frontend/src/imports/image-50.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-50.png",
+    "origin_sha256": "62ca17fad0af59e69c3e672841ff5c5b15a6211a46d42a4e269a2bf1fb0fe1ac",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "62ca17fad0af59e69c3e672841ff5c5b15a6211a46d42a4e269a2bf1fb0fe1ac"
+  },
+  {
+    "path": "frontend/src/imports/image-51.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-51.png",
+    "origin_sha256": "a22eb71c30aac691b7985fd5228cf3387d9660622d951688814e711876a377a8",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "a22eb71c30aac691b7985fd5228cf3387d9660622d951688814e711876a377a8"
+  },
+  {
+    "path": "frontend/src/imports/image-52.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-52.png",
+    "origin_sha256": "4fa77b6dd368bae6d1453398080af93be0a9151aed840801e39acc3c6b2658b4",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "4fa77b6dd368bae6d1453398080af93be0a9151aed840801e39acc3c6b2658b4"
+  },
+  {
+    "path": "frontend/src/imports/image-53.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-53.png",
+    "origin_sha256": "9d65f581a061c08a3cbced875ea0a341616810b03f292f2c021d960f10578c66",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "9d65f581a061c08a3cbced875ea0a341616810b03f292f2c021d960f10578c66"
+  },
+  {
+    "path": "frontend/src/imports/image-54.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-54.png",
+    "origin_sha256": "34b5cba46c037a81e9c5964c024b99b8a4b3fa24dae721b2e27c62dc79b085df",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "34b5cba46c037a81e9c5964c024b99b8a4b3fa24dae721b2e27c62dc79b085df"
+  },
+  {
+    "path": "frontend/src/imports/image-55.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-55.png",
+    "origin_sha256": "16d511e98add1ef873088510adb36472d7cabe83033ea95f168b3494ebd1cc9b",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "16d511e98add1ef873088510adb36472d7cabe83033ea95f168b3494ebd1cc9b"
+  },
+  {
+    "path": "frontend/src/imports/image-56.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-56.png",
+    "origin_sha256": "7baa82e5e9662ef32bfb586d3432fe9d3709343a9874d6fecee18018ed2d5701",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "7baa82e5e9662ef32bfb586d3432fe9d3709343a9874d6fecee18018ed2d5701"
+  },
+  {
+    "path": "frontend/src/imports/image-57.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-57.png",
+    "origin_sha256": "549f1b21b13f22b29ef2318730e96879e560bd7895db85102af88ab3d9432f39",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "549f1b21b13f22b29ef2318730e96879e560bd7895db85102af88ab3d9432f39"
+  },
+  {
+    "path": "frontend/src/imports/image-58.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-58.png",
+    "origin_sha256": "b16c0549c403576e7e135a817429c0079463d6db93092985c1f9adfc31b0b9b9",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "b16c0549c403576e7e135a817429c0079463d6db93092985c1f9adfc31b0b9b9"
+  },
+  {
+    "path": "frontend/src/imports/image-59.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-59.png",
+    "origin_sha256": "65cb7941660f08b9296d2c342144a406975f44b36a226b749b0602379750985e",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "65cb7941660f08b9296d2c342144a406975f44b36a226b749b0602379750985e"
+  },
+  {
+    "path": "frontend/src/imports/image-6.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-6.png",
+    "origin_sha256": "e3dc05f3bbb4c6a380ecc52e1d6eebac0246ab560dae2f63aa7118c81fde1640",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "e3dc05f3bbb4c6a380ecc52e1d6eebac0246ab560dae2f63aa7118c81fde1640"
+  },
+  {
+    "path": "frontend/src/imports/image-60.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-60.png",
+    "origin_sha256": "b63238f7ec3d6da6696bd5a93a790014fca0143dff356ccf0f86777bba83cb21",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "b63238f7ec3d6da6696bd5a93a790014fca0143dff356ccf0f86777bba83cb21"
+  },
+  {
+    "path": "frontend/src/imports/image-61.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-61.png",
+    "origin_sha256": "6584ea67aa4af47d738187ce976653d385d723dc49aec76541d24432761ea892",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "6584ea67aa4af47d738187ce976653d385d723dc49aec76541d24432761ea892"
+  },
+  {
+    "path": "frontend/src/imports/image-62.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-62.png",
+    "origin_sha256": "7e9a843fc3734d6c5abdff0d037bafbf00b71cc89f13333830e9a57aaf172704",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "7e9a843fc3734d6c5abdff0d037bafbf00b71cc89f13333830e9a57aaf172704"
+  },
+  {
+    "path": "frontend/src/imports/image-63.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-63.png",
+    "origin_sha256": "1e8c9141f0c531b8964f1ec8cd501b9a7f308f85c4c7e54ee3691d255b6d0cf5",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "1e8c9141f0c531b8964f1ec8cd501b9a7f308f85c4c7e54ee3691d255b6d0cf5"
+  },
+  {
+    "path": "frontend/src/imports/image-64-latest.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-64-latest.png",
+    "origin_sha256": "e150ebfe59c93c042f8664af1fa1333e9fadee252902656d7b0a5a59c039deed",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "e150ebfe59c93c042f8664af1fa1333e9fadee252902656d7b0a5a59c039deed"
+  },
+  {
+    "path": "frontend/src/imports/image-64.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-64.png",
+    "origin_sha256": "e150ebfe59c93c042f8664af1fa1333e9fadee252902656d7b0a5a59c039deed",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "e150ebfe59c93c042f8664af1fa1333e9fadee252902656d7b0a5a59c039deed"
+  },
+  {
+    "path": "frontend/src/imports/image-65-latest.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-65-latest.png",
+    "origin_sha256": "e3aeaa01c26b52166ce5e97ed0b8741222afc62c06cfcf8f8b3a72bea83d3aeb",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "e3aeaa01c26b52166ce5e97ed0b8741222afc62c06cfcf8f8b3a72bea83d3aeb"
+  },
+  {
+    "path": "frontend/src/imports/image-65.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-65.png",
+    "origin_sha256": "e3aeaa01c26b52166ce5e97ed0b8741222afc62c06cfcf8f8b3a72bea83d3aeb",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "e3aeaa01c26b52166ce5e97ed0b8741222afc62c06cfcf8f8b3a72bea83d3aeb"
+  },
+  {
+    "path": "frontend/src/imports/image-66.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-66.png",
+    "origin_sha256": "a980deb665dd3e731617623d26274cececca502e68f9fb3855f400f12648e3e4",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "a980deb665dd3e731617623d26274cececca502e68f9fb3855f400f12648e3e4"
+  },
+  {
+    "path": "frontend/src/imports/image-67.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-67.png",
+    "origin_sha256": "19cd8031d4e9e942647e5388e1a7e2d8f02fa069f6ee37ca593157e5c8f55c45",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "19cd8031d4e9e942647e5388e1a7e2d8f02fa069f6ee37ca593157e5c8f55c45"
+  },
+  {
+    "path": "frontend/src/imports/image-68.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-68.png",
+    "origin_sha256": "264b84f86faf703d0f1c8f83f360a9fda33cec14d2f0c27897b1631c1c19c869",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "264b84f86faf703d0f1c8f83f360a9fda33cec14d2f0c27897b1631c1c19c869"
+  },
+  {
+    "path": "frontend/src/imports/image-69.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-69.png",
+    "origin_sha256": "4a886b1c570c27aa8deec2ebbf1a98211ec4d57f1aac07e2bc8434e4a3df0917",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "4a886b1c570c27aa8deec2ebbf1a98211ec4d57f1aac07e2bc8434e4a3df0917"
+  },
+  {
+    "path": "frontend/src/imports/image-7.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-7.png",
+    "origin_sha256": "d125bee2a4d75afe48b2a2e10cbe223cafd3904309aa2c337cd11ee39903146a",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "d125bee2a4d75afe48b2a2e10cbe223cafd3904309aa2c337cd11ee39903146a"
+  },
+  {
+    "path": "frontend/src/imports/image-70.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-70.png",
+    "origin_sha256": "13fccd49a7d39d2ac6737cb3af77d3b0cab1e15747570136756355eb87a2adb0",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "13fccd49a7d39d2ac6737cb3af77d3b0cab1e15747570136756355eb87a2adb0"
+  },
+  {
+    "path": "frontend/src/imports/image-71.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-71.png",
+    "origin_sha256": "7d446707ae6d6a1a3e93520f4491cb46c2666f9e89bdb521e9ab4294d7885c0e",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "7d446707ae6d6a1a3e93520f4491cb46c2666f9e89bdb521e9ab4294d7885c0e"
+  },
+  {
+    "path": "frontend/src/imports/image-72.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-72.png",
+    "origin_sha256": "67dcc1ddfc61be6dfee11c7a1908e6bb1f50e1a2ec5c4409c7a5471f981b4962",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "67dcc1ddfc61be6dfee11c7a1908e6bb1f50e1a2ec5c4409c7a5471f981b4962"
+  },
+  {
+    "path": "frontend/src/imports/image-73.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-73.png",
+    "origin_sha256": "dfba4bdd88abd93cd70abdc960a554ffd5cd4779d1b134181829760ae134a09a",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "dfba4bdd88abd93cd70abdc960a554ffd5cd4779d1b134181829760ae134a09a"
+  },
+  {
+    "path": "frontend/src/imports/image-74.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-74.png",
+    "origin_sha256": "e7d83974697a025c02fbcb7e498b71232f377bda6aa733b29a1105ecd3647f97",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "e7d83974697a025c02fbcb7e498b71232f377bda6aa733b29a1105ecd3647f97"
+  },
+  {
+    "path": "frontend/src/imports/image-8.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-8.png",
+    "origin_sha256": "4e3a1e531edb5da0519a8462f8ffe25f278a06332096239fae9c442b7b48acf0",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "4e3a1e531edb5da0519a8462f8ffe25f278a06332096239fae9c442b7b48acf0"
+  },
+  {
+    "path": "frontend/src/imports/image-9.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image-9.png",
+    "origin_sha256": "d785a30a5e89057af4b381b7b64f015e000c07b3a703be76233e1c48fc38ae0b",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "d785a30a5e89057af4b381b7b64f015e000c07b3a703be76233e1c48fc38ae0b"
+  },
+  {
+    "path": "frontend/src/imports/image.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/image.png",
+    "origin_sha256": "7f5866248de9becd2aac8c89ea117dfa599dad5b4b608c3f75eadfae9ff4dab3",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "7f5866248de9becd2aac8c89ea117dfa599dad5b4b608c3f75eadfae9ff4dab3"
+  },
+  {
+    "path": "frontend/src/imports/keke-panel-reference.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/keke-panel-reference.png",
+    "origin_sha256": "91c7f3b3d49d0f5e69b7945de31a0a8f031023910d33059b5800e21a7d5fe112",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "91c7f3b3d49d0f5e69b7945de31a0a8f031023910d33059b5800e21a7d5fe112"
+  },
+  {
+    "path": "frontend/src/imports/mood-emoji-reference.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/mood-emoji-reference.png",
+    "origin_sha256": "cb1b6fc70c9607f5310b08bf5db1558eaab8037c8676fdf9158318aace32d618",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "cb1b6fc70c9607f5310b08bf5db1558eaab8037c8676fdf9158318aace32d618"
+  },
+  {
+    "path": "frontend/src/imports/mood-large-reference.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/mood-large-reference.png",
+    "origin_sha256": "60ce5524f61478ad34a9326c973297b447927b407ab2ec94ec9d370bab16ba34",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "60ce5524f61478ad34a9326c973297b447927b407ab2ec94ec9d370bab16ba34"
+  },
+  {
+    "path": "frontend/src/imports/mood-simple-reference.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/mood-simple-reference.png",
+    "origin_sha256": "60ce5524f61478ad34a9326c973297b447927b407ab2ec94ec9d370bab16ba34",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "60ce5524f61478ad34a9326c973297b447927b407ab2ec94ec9d370bab16ba34"
+  },
+  {
+    "path": "frontend/src/imports/organic-grocery-reference.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/organic-grocery-reference.png",
+    "origin_sha256": "517d9dae6fb8d90403d93d84a83d0f343439e4a1fae006c39fcfe48b2368ffbc",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "517d9dae6fb8d90403d93d84a83d0f343439e4a1fae006c39fcfe48b2368ffbc"
+  },
+  {
+    "path": "frontend/src/imports/shelf-current-reference.png",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/imports/shelf-current-reference.png",
+    "origin_sha256": "556fccbadf55535a802d96b931133062af8d46b9b2d7313dbfe42ae72b6c5b9a",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "556fccbadf55535a802d96b931133062af8d46b9b2d7313dbfe42ae72b6c5b9a"
+  },
+  {
+    "path": "frontend/src/index.css",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/index.css",
+    "origin_sha256": "39b6d7385d3c90ec7b615f4d1ed6de5217e242433a4051cb927b436c514f5a01",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "39b6d7385d3c90ec7b615f4d1ed6de5217e242433a4051cb927b436c514f5a01"
+  },
+  {
+    "path": "frontend/src/lib/humanCases.ts",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/lib/humanCases.ts",
+    "origin_sha256": "e4a4f5de21ca865464925edf1e0b2d3b8c1b67f1588e0342580a69261dcd3eec",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "e4a4f5de21ca865464925edf1e0b2d3b8c1b67f1588e0342580a69261dcd3eec"
+  },
+  {
+    "path": "frontend/src/lib/mercury.ts",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/lib/mercury.ts",
+    "origin_sha256": "d0bae48c8e0f2aa9b8d524b8056e2f3dcc2bbb8b559362b7b75cf91002021479",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "d0bae48c8e0f2aa9b8d524b8056e2f3dcc2bbb8b559362b7b75cf91002021479"
+  },
+  {
+    "path": "frontend/src/lib/orders.ts",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/lib/orders.ts",
+    "origin_sha256": "59f3b0be36132ecfe6f43f2b02a01a39454dcea5b595aae3c04723193a93b159",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "59f3b0be36132ecfe6f43f2b02a01a39454dcea5b595aae3c04723193a93b159"
+  },
+  {
+    "path": "frontend/src/lib/saleGuide.ts",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/lib/saleGuide.ts",
+    "origin_sha256": "1cf803ab57199a90d9d44b4658f2c1899b5916fc2ab5daeb5ccc6bd0922a6c95",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "1cf803ab57199a90d9d44b4658f2c1899b5916fc2ab5daeb5ccc6bd0922a6c95"
+  },
+  {
+    "path": "frontend/src/main.tsx",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/main.tsx",
+    "origin_sha256": "5f49dce6e6cc4b5d678cf529ef892af0ab7dfa6afb300b11ad559224019b8b05",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "5f49dce6e6cc4b5d678cf529ef892af0ab7dfa6afb300b11ad559224019b8b05"
+  },
+  {
+    "path": "frontend/src/vite-env.d.ts",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/src/vite-env.d.ts",
+    "origin_sha256": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5"
+  },
+  {
+    "path": "frontend/tsconfig.json",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/tsconfig.json",
+    "origin_sha256": "9a1e96d63eaccd5416b2f78ecaccf2b3a27ca71e213fa5859cf5349c66123bf9",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "9a1e96d63eaccd5416b2f78ecaccf2b3a27ca71e213fa5859cf5349c66123bf9"
+  },
+  {
+    "path": "frontend/vite.config.ts",
+    "origin": "archive/ceres2-before-clean-20261005/frontend/vite.config.ts",
+    "origin_sha256": "d844a09588b1b2d236bb705c6039ab2adb0319f91835e74b3929b22be64af113",
+    "reason": "Preserve existing frontend UI/source/assets/config/tests; no new backend validation inherited",
+    "operation": "copy",
+    "new_sha256": "d844a09588b1b2d236bb705c6039ab2adb0319f91835e74b3929b22be64af113"
+  },
+  {
+    "path": "AGENTS.md",
+    "origin": "archive/ceres2-before-clean-20261005/AGENTS.md",
+    "origin_sha256": "ad543261270707fc44347df4967fefbf63c4fd2d5ba07527c08c4619bc3b0f5a",
+    "reason": "Approved product/architecture/16-ticket continuity; historical links redirected to archive",
+    "operation": "copy",
+    "new_sha256": "64ba807ce507d8e9bb582494798c0776b42250724ef911e287aa979fbde88680"
+  },
+  {
+    "path": "GLOSSARY.md",
+    "origin": "archive/ceres2-before-clean-20261005/GLOSSARY.md",
+    "origin_sha256": "6ea1d11dc288f97f63794545bb524fbb599dfdd53e029b8758376ff6c78fc2bd",
+    "reason": "Approved product/architecture/16-ticket continuity; historical links redirected to archive",
+    "operation": "copy",
+    "new_sha256": "6ea1d11dc288f97f63794545bb524fbb599dfdd53e029b8758376ff6c78fc2bd"
+  },
+  {
+    "path": "PROJECT.md",
+    "origin": "archive/ceres2-before-clean-20261005/PROJECT.md",
+    "origin_sha256": "a5481549b502f095239c804609d622bead928fcb91986ff16b4df5bcdfbbb0c8",
+    "reason": "Approved product/architecture/16-ticket continuity; historical links redirected to archive",
+    "operation": "copy",
+    "new_sha256": "1a112cef859e7c18d150a95a45bd433832e357a0e3c95d9ae7e78eb53ae502d8"
+  },
+  {
+    "path": "prd.md",
+    "origin": "archive/ceres2-before-clean-20261005/prd.md",
+    "origin_sha256": "6a0bdb845bae9bdcf4009e85e221dc818fd933ad0e486c064535791c3f525736",
+    "reason": "Approved product/architecture/16-ticket continuity; historical links redirected to archive",
+    "operation": "copy",
+    "new_sha256": "6a0bdb845bae9bdcf4009e85e221dc818fd933ad0e486c064535791c3f525736"
+  },
+  {
+    "path": "docs/agents/issue-tracker.md",
+    "origin": "archive/ceres2-before-clean-20261005/docs/agents/issue-tracker.md",
+    "origin_sha256": "72cd07f952143aa3d6a75c1886838a79f613ce142f54c5afe254901981191330",
+    "reason": "Approved product/architecture/16-ticket continuity; historical links redirected to archive",
+    "operation": "copy",
+    "new_sha256": "72cd07f952143aa3d6a75c1886838a79f613ce142f54c5afe254901981191330"
+  },
+  {
+    "path": "docs/agents/domain.md",
+    "origin": "archive/ceres2-before-clean-20261005/docs/agents/domain.md",
+    "origin_sha256": "505c40abfe58a1340ec745e3ec9f2323a426031aa850263e1dde6d3905272d2a",
+    "reason": "Approved product/architecture/16-ticket continuity; historical links redirected to archive",
+    "operation": "copy",
+    "new_sha256": "3a3e7e7f13229bc7e295b8af550c6f239533e29eca23df21ae7a459f389955d0"
+  },
+  {
+    "path": "docs/adr/0001-canonical-shopping-authority.md",
+    "origin": "archive/ceres2-before-clean-20261005/docs/adr/0001-canonical-shopping-authority.md",
+    "origin_sha256": "d08c4f8186a9b926f68daed594dcddddf738bcffd94a4cfa5982ae9b512de965",
+    "reason": "Approved product/architecture/16-ticket continuity; historical links redirected to archive",
+    "operation": "copy",
+    "new_sha256": "d08c4f8186a9b926f68daed594dcddddf738bcffd94a4cfa5982ae9b512de965"
+  },
+  {
+    "path": "docs/adr/0002-python-business-pi-langgraph-runtime.md",
+    "origin": "archive/ceres2-before-clean-20261005/docs/adr/0002-python-business-pi-langgraph-runtime.md",
+    "origin_sha256": "681803bda5af617e8b41326611153b7857920eea0d665734e96955c888046fe9",
+    "reason": "Approved product/architecture/16-ticket continuity; historical links redirected to archive",
+    "operation": "copy",
+    "new_sha256": "22a6750be9a07d6aaec3d639a44a5fb9d97567af5ec1572d9b8fceccdb7b0ede"
+  },
+  {
+    "path": "docs/plans/ceres2-proactive-upgrade-spec.md",
+    "origin": "archive/ceres2-before-clean-20261005/docs/plans/ceres2-proactive-upgrade-spec.md",
+    "origin_sha256": "0dcbee036b9f5e0bb41a6e9089737ac4be9dff29c35f9934951db33f754f312b",
+    "reason": "Approved product/architecture/16-ticket continuity; historical links redirected to archive",
+    "operation": "copy",
+    "new_sha256": "83cd0e28541c6e2ec8619d429d80977b7b16e045daa0cd77d7517cf2facdb3a3"
+  },
+  {
+    "path": "docs/plans/ceres2-ticket-breakdown-proposal.md",
+    "origin": "archive/ceres2-before-clean-20261005/docs/plans/ceres2-ticket-breakdown-proposal.md",
+    "origin_sha256": "468daa9b2cce2b53849b83c4f4839dc88c1c6bdccc69ece6d31968a4ec7c7bb7",
+    "reason": "Approved product/architecture/16-ticket continuity; historical links redirected to archive",
+    "operation": "copy",
+    "new_sha256": "9622c22fe804cf35952a7202c8e8285c173457445af3d7148501b0e923242aad"
+  },
+  {
+    "path": "docs/plans/ceres2-service-map.md",
+    "origin": "archive/ceres2-before-clean-20261005/docs/plans/ceres2-service-map.md",
+    "origin_sha256": "50a7ccbff5462b207491b2b33b3d16eb2ee8b6ce433a503cea193082c019d7fc",
+    "reason": "Approved product/architecture/16-ticket continuity; historical links redirected to archive",
+    "operation": "copy",
+    "new_sha256": "d7da5120afafc659298b84b7b629109e6118f8ef4afa7863a7a63bc7061ac05a"
+  },
+  {
+    "path": "docs/plans/ceres2-runtime-options.md",
+    "origin": "archive/ceres2-before-clean-20261005/docs/plans/ceres2-runtime-options.md",
+    "origin_sha256": "80049e9600cf9958794c5e6ecf32da88db3e478f893b911de13d08b3bad139d8",
+    "reason": "Approved product/architecture/16-ticket continuity; historical links redirected to archive",
+    "operation": "copy",
+    "new_sha256": "80049e9600cf9958794c5e6ecf32da88db3e478f893b911de13d08b3bad139d8"
+  },
+  {
+    "path": "tasks/ceres2-runtime-upgrade-01-pi-product-query.md",
+    "origin": "archive/ceres2-before-clean-20261005/tasks/ceres2-runtime-upgrade-01-pi-product-query.md",
+    "origin_sha256": "c0e84b8176bc5924d769ed5e479ae3ccc3e2141531b8b60e3bc2d7df1106d1eb",
+    "reason": "Approved 16-ticket goals and dependency DAG; reset all execution and acceptance state",
+    "operation": "copy",
+    "new_sha256": "93e2a982e251fac85b7231d46d08cd6c85cd714f267feeb1eda29b8cd698a6f7"
+  },
+  {
+    "path": "tasks/ceres2-runtime-upgrade-02-langgraph-aftersales-query.md",
+    "origin": "archive/ceres2-before-clean-20261005/tasks/ceres2-runtime-upgrade-02-langgraph-aftersales-query.md",
+    "origin_sha256": "2ab3def5fa34a1508c2a281e68f3691e4f362bf3b6b1107d3c535ff3c4ce1bc5",
+    "reason": "Approved 16-ticket goals and dependency DAG; reset all execution and acceptance state",
+    "operation": "copy",
+    "new_sha256": "3313b080a5a8121bf35736ae37ca3f2de0e60f00b1596ebf26b6d18659b11450"
+  },
+  {
+    "path": "tasks/ceres2-runtime-upgrade-03-persistent-responsive-runs.md",
+    "origin": "archive/ceres2-before-clean-20261005/tasks/ceres2-runtime-upgrade-03-persistent-responsive-runs.md",
+    "origin_sha256": "c9c650e8bd064522bbea3a153097f9dab181f7e6de47ad0d2395b8d58f469aba",
+    "reason": "Approved 16-ticket goals and dependency DAG; reset all execution and acceptance state",
+    "operation": "copy",
+    "new_sha256": "37f65396f5a49551441d2d6d14ec37760dc28b51268fc13a9869eead5fa60e27"
+  },
+  {
+    "path": "tasks/ceres2-runtime-upgrade-04-explicit-cart-confirmation.md",
+    "origin": "archive/ceres2-before-clean-20261005/tasks/ceres2-runtime-upgrade-04-explicit-cart-confirmation.md",
+    "origin_sha256": "4f2a68458948b46c0b3c3801ff18b5cc912ad00e93452b656fcf03662d51b4d0",
+    "reason": "Approved 16-ticket goals and dependency DAG; reset all execution and acceptance state",
+    "operation": "copy",
+    "new_sha256": "de06d5bde2eed5a1cc6728607a8ecad600e21eb872cb52cda8be35a1e5b36a03"
+  },
+  {
+    "path": "tasks/ceres2-runtime-upgrade-05-single-dish-servings.md",
+    "origin": "archive/ceres2-before-clean-20261005/tasks/ceres2-runtime-upgrade-05-single-dish-servings.md",
+    "origin_sha256": "45495bd4dc9a0fe867a6aa3f0c5a07a44d4933a6c723ba4025f972de41027152",
+    "reason": "Approved 16-ticket goals and dependency DAG; reset all execution and acceptance state",
+    "operation": "copy",
+    "new_sha256": "053896a8f9a33d98ec56a2fc95affc275263bd02b25469667788688ca0af9f37"
+  },
+  {
+    "path": "tasks/ceres2-runtime-upgrade-06-multi-dish-demand.md",
+    "origin": "archive/ceres2-before-clean-20261005/tasks/ceres2-runtime-upgrade-06-multi-dish-demand.md",
+    "origin_sha256": "b14081e5c8e0266b7e41cfad2315e3529363f68c79c59238b0bbb25813024864",
+    "reason": "Approved 16-ticket goals and dependency DAG; reset all execution and acceptance state",
+    "operation": "copy",
+    "new_sha256": "f84afcdb369b9eee355d52665e2d46917917a28833d6fa0913ddfbe420d738e1"
+  },
+  {
+    "path": "tasks/ceres2-runtime-upgrade-07-supply-partial-purchase.md",
+    "origin": "archive/ceres2-before-clean-20261005/tasks/ceres2-runtime-upgrade-07-supply-partial-purchase.md",
+    "origin_sha256": "fdafe83d65539456e9bf094b054295b21599b943091abc1e31796f186136fb6a",
+    "reason": "Approved 16-ticket goals and dependency DAG; reset all execution and acceptance state",
+    "operation": "copy",
+    "new_sha256": "b0cce2b6be923d83e189d054db835e4f9f2c64963578911a23d296ead39e7738"
+  },
+  {
+    "path": "tasks/ceres2-runtime-upgrade-08-category-comparison.md",
+    "origin": "archive/ceres2-before-clean-20261005/tasks/ceres2-runtime-upgrade-08-category-comparison.md",
+    "origin_sha256": "d76d8288588749b252e6b9debd0c8463c04bde1b99a1c3df37bddfd243ef092f",
+    "reason": "Approved 16-ticket goals and dependency DAG; reset all execution and acceptance state",
+    "operation": "copy",
+    "new_sha256": "44460d6f585559024e6943a50e10b8f1aeeab4071b069a000e2c3813f8f561fc"
+  },
+  {
+    "path": "tasks/ceres2-runtime-upgrade-09-explicit-role-memory.md",
+    "origin": "archive/ceres2-before-clean-20261005/tasks/ceres2-runtime-upgrade-09-explicit-role-memory.md",
+    "origin_sha256": "e983134ec43c3e053a45747e3f43ae5556e0efe78232cde254a3cdf97c625523",
+    "reason": "Approved 16-ticket goals and dependency DAG; reset all execution and acceptance state",
+    "operation": "copy",
+    "new_sha256": "7660dff2d04012c7e45c522034b85eb0df42abaf6c2e3bd13ccfdc2917c75204"
+  },
+  {
+    "path": "tasks/ceres2-runtime-upgrade-10-recoverable-memory-dream.md",
+    "origin": "archive/ceres2-before-clean-20261005/tasks/ceres2-runtime-upgrade-10-recoverable-memory-dream.md",
+    "origin_sha256": "53d4b70fecb04e5cc467cea31e3aa5cc0185f1ddef3af8b34eb2bd8515ebff39",
+    "reason": "Approved 16-ticket goals and dependency DAG; reset all execution and acceptance state",
+    "operation": "copy",
+    "new_sha256": "002d3a0e632201de04f462a9db7363ddb2402ba10b18139cad942c2631510ebe"
+  },
+  {
+    "path": "tasks/ceres2-runtime-upgrade-11-historical-repurchase.md",
+    "origin": "archive/ceres2-before-clean-20261005/tasks/ceres2-runtime-upgrade-11-historical-repurchase.md",
+    "origin_sha256": "df877c98b7e287aa1816e65ae7ad963ed31a90b2f97dd913367c6041744bf083",
+    "reason": "Approved 16-ticket goals and dependency DAG; reset all execution and acceptance state",
+    "operation": "copy",
+    "new_sha256": "250714f60f91530a9e935524b0559c7de72ce7761ad4e8c778f95d04923cd328"
+  },
+  {
+    "path": "tasks/ceres2-runtime-upgrade-12-persistent-simulated-orders.md",
+    "origin": "archive/ceres2-before-clean-20261005/tasks/ceres2-runtime-upgrade-12-persistent-simulated-orders.md",
+    "origin_sha256": "01e9545653b62ec75c3471824b6c5f02fd1b12be65c20cdc56f1cb607f07ec0a",
+    "reason": "Approved 16-ticket goals and dependency DAG; reset all execution and acceptance state",
+    "operation": "copy",
+    "new_sha256": "b818952820b8b7234c0b217ee026abad4510633140612c090b341700d30b2458"
+  },
+  {
+    "path": "tasks/ceres2-runtime-upgrade-13-canonical-order-aftersales.md",
+    "origin": "archive/ceres2-before-clean-20261005/tasks/ceres2-runtime-upgrade-13-canonical-order-aftersales.md",
+    "origin_sha256": "6dbbcfb399758e2c6208a358f3fea63f25eed320c2c2d224c4b9edee0354f0c3",
+    "reason": "Approved 16-ticket goals and dependency DAG; reset all execution and acceptance state",
+    "operation": "copy",
+    "new_sha256": "1c5abb2fa851b01b587fcae670907ac38176cc1adbd4190a58c4dd4d913b6d9b"
+  },
+  {
+    "path": "tasks/ceres2-runtime-upgrade-14-confirmed-aftersales-receipts.md",
+    "origin": "archive/ceres2-before-clean-20261005/tasks/ceres2-runtime-upgrade-14-confirmed-aftersales-receipts.md",
+    "origin_sha256": "bee3d3d381523c1eeefc0178494bcde388d5a3d36cf7971e417ff89aca33c8d1",
+    "reason": "Approved 16-ticket goals and dependency DAG; reset all execution and acceptance state",
+    "operation": "copy",
+    "new_sha256": "5ce9381409f677a15860f1f83e806d2adf3133e441bd1924b4fc762832bcd902"
+  },
+  {
+    "path": "tasks/ceres2-runtime-upgrade-15-async-human-cases.md",
+    "origin": "archive/ceres2-before-clean-20261005/tasks/ceres2-runtime-upgrade-15-async-human-cases.md",
+    "origin_sha256": "1134d6f03185cf1b3ef188af52743aa24e73e4243eaad64d8ffd104fecd508d3",
+    "reason": "Approved 16-ticket goals and dependency DAG; reset all execution and acceptance state",
+    "operation": "copy",
+    "new_sha256": "018032c48a7f2c817c824bd37fc7d64cffc52e33fad4dc37e0a38f0050ba7d1c"
+  },
+  {
+    "path": "tasks/ceres2-runtime-upgrade-16-integrated-verification.md",
+    "origin": "archive/ceres2-before-clean-20261005/tasks/ceres2-runtime-upgrade-16-integrated-verification.md",
+    "origin_sha256": "c1c2504567139195143ebdee54504d48ec005e6da6429e24db04a930b7863164",
+    "reason": "Approved 16-ticket goals and dependency DAG; reset all execution and acceptance state",
+    "operation": "copy",
+    "new_sha256": "52cc4e277dcf803c85f3669a59508f0a881fea54800a9f4df70df4cab3deea94"
+  },
+  {
+    "path": "tasks/ceres2-upgrade.md",
+    "origin": "new clean rebuild authorization 2026-10-05 15:42 UTC",
+    "origin_sha256": null,
+    "reason": "Current 16-ticket master with zero inherited acceptance",
+    "operation": "create",
+    "new_sha256": "8a639dc7c02493592dd592fb3520d0d09daf1c2bb2d9d77626dd0f665d6a4448"
+  },
+  {
+    "path": "backend/.gitkeep",
+    "origin": "new clean rebuild authorization 2026-10-05 15:42 UTC",
+    "origin_sha256": null,
+    "reason": "Empty Python backend scaffold; no copied implementation",
+    "operation": "create",
+    "new_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "runtime/.gitkeep",
+    "origin": "new clean rebuild authorization 2026-10-05 15:42 UTC",
+    "origin_sha256": null,
+    "reason": "Empty Node/TypeScript runtime scaffold; no copied implementation",
+    "operation": "create",
+    "new_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": ".gitignore",
+    "origin": "new clean rebuild authorization 2026-10-05 15:42 UTC",
+    "origin_sha256": null,
+    "reason": "clean rebuild metadata",
+    "operation": "create",
+    "new_sha256": "df533127233f7ffd7f3af3c8bcf2960583a5f07097132743bbd903b9342a8b3b"
+  },
+  {
+    "path": "README.md",
+    "origin": "new clean rebuild authorization 2026-10-05 15:42 UTC",
+    "origin_sha256": null,
+    "reason": "clean rebuild metadata",
+    "operation": "create",
+    "new_sha256": "ba43022b2a4f0844bcfe582490b917ca25cbb23d927ba5c5979c08c7ad2e1cab"
+  },
+  {
+    "path": "work/clean-rebuild/README.md",
+    "origin": "new clean rebuild authorization 2026-10-05 15:42 UTC",
+    "origin_sha256": null,
+    "reason": "clean rebuild metadata",
+    "operation": "create",
+    "new_sha256": "f6f0ad0b2985767058103e96e795d446589b1029621972176e9f703e8ea962f2"
+  }
+]

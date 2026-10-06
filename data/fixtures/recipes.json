@@ -1,0 +1,55 @@
+{
+  "version": "v1",
+  "dishes": [
+    {
+      "aliases": [
+        "西红柿炒鸡蛋",
+        "番茄鸡蛋"
+      ],
+      "base_people": 2,
+      "dish_id": "dish-fanqie-chao-dan",
+      "name": "番茄炒蛋",
+      "optional_items": [],
+      "pantry_items": [
+        "oil",
+        "salt",
+        "sugar"
+      ],
+      "required_items": [
+        {
+          "ingredient_id": "tomato",
+          "quantity_g": 300
+        },
+        {
+          "ingredient_id": "egg",
+          "quantity_pc": 3
+        }
+      ]
+    },
+    {
+      "aliases": [
+        "鸡蛋炒饭",
+        "炒饭"
+      ],
+      "base_people": 2,
+      "dish_id": "dish-dan-chao-fan",
+      "name": "蛋炒饭",
+      "optional_items": [],
+      "pantry_items": [
+        "oil",
+        "salt",
+        "scallion"
+      ],
+      "required_items": [
+        {
+          "ingredient_id": "rice",
+          "quantity_g": 300
+        },
+        {
+          "ingredient_id": "egg",
+          "quantity_pc": 2
+        }
+      ]
+    }
+  ]
+}

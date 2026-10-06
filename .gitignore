@@ -1,0 +1,46 @@
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+*.pem
+*.key
+*credentials*.json
+*cookie*.txt
+# Dependencies and caches
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.vite/
+.cache/
+dist/
+build/
+coverage/
+# Generated runtime state; static fixtures remain eligible
+*.sqlite
+*.sqlite3
+*.sqlite3-*
+*.db
+*.db-*
+data/runtime*/
+data/index*/
+data/generated/
+# Raw temporary runs; reviewed evidence is selectively staged outside these folders
+work/**/tmp/
+work/**/node_modules/
+work/**/.venv/
+work/**/test-results/
+work/**/playwright-report/
+*.log
+.DS_Store
+
+*.sqlite-*
+**/compiled/
+work/**/pytest-tmp/

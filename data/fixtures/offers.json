@@ -1,0 +1,666 @@
+{
+  "delivery": {
+    "eta_minutes": 45,
+    "reachable": true,
+    "zone_id": "zone-default"
+  },
+  "offers": [
+    {
+      "available_qty": 50,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 890,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:flour-all-purpose-500g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 30,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 680,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:cake-flour-250g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 40,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 1580,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:butter-200g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 60,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 650,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:sugar-white-500g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 25,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 1280,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:eggs-10pack",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 35,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 980,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:milk-1l",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 80,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 350,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:yeast-dry-7g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 45,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 480,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:baking-powder-100g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 20,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 1680,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:cream-cheese-200g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 15,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 1280,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:vanilla-extract-30ml",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 35,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 1980,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:pork-500g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 40,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 580,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:bell-pepper-300g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 80,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 320,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:salt-500g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 50,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 890,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:soy-sauce-500ml",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 30,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 1800,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:chicken-breast-500g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 40,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 680,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:tofu-firm-400g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 45,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 680,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:tomato-fresh-500g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 40,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 980,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:eggs-fresh-6pack",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 35,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 2280,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:rice-2kg",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 50,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 380,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:scallion-200g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 40,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 1280,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:cooking-oil-500ml",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 50,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 680,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:noodles-500g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 30,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 880,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:soy-milk-1l",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 60,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 450,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:sparkling-water-500ml",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 50,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 680,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:peanut-200g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 55,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 520,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:green-tea-500ml",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 20,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 1280,
+      "provenance": "data/fixtures/default-offer-prices.json:sku_prices",
+      "sellable": true,
+      "sku_id": "demo:hotpot-base-200g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 20,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 2980,
+      "provenance": "data/fixtures/default-offer-prices.json:sku_prices",
+      "sellable": true,
+      "sku_id": "demo:beef-roll-300g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 20,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 3280,
+      "provenance": "data/fixtures/default-offer-prices.json:sku_prices",
+      "sellable": true,
+      "sku_id": "demo:lamb-roll-300g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 20,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 3880,
+      "provenance": "data/fixtures/default-offer-prices.json:sku_prices",
+      "sellable": true,
+      "sku_id": "demo:beef-neck-300g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 20,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 2680,
+      "provenance": "data/fixtures/default-offer-prices.json:sku_prices",
+      "sellable": true,
+      "sku_id": "demo:tripe-250g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 20,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 1980,
+      "provenance": "data/fixtures/default-offer-prices.json:sku_prices",
+      "sellable": true,
+      "sku_id": "demo:shrimp-paste-200g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 40,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 880,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:mushroom-white-200g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 40,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 580,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:cabbage-500g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 60,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 580,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:potato-500g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 30,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 1280,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:sesame-oil-200ml",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 60,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 450,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:cola-330ml",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 20,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 200,
+      "provenance": "data/fixtures/default-offer-prices.json:sku_prices",
+      "sellable": true,
+      "sku_id": "demo:water-550ml",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 20,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 1480,
+      "provenance": "data/fixtures/default-offer-prices.json:sku_prices",
+      "sellable": true,
+      "sku_id": "demo:sour-soup-base-200g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 20,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 1748,
+      "provenance": "scripts/seed_runtime.py:deterministic_price_fen + data/fixtures/default-offer-prices.json",
+      "sellable": true,
+      "sku_id": "demo:clear-soup-base-200g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 40,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 880,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:wood-ear-150g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 30,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 2280,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:chicken-wing-500g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 50,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 480,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:ginger-200g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 45,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 580,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:carrot-500g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 40,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 680,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:vinegar-500ml",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 35,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 980,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:oyster-sauce-500g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 40,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 680,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:green-pea-300g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 35,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 980,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:shiitake-200g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 25,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 2880,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:beef-slice-300g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 30,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 2680,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:pork-ribs-500g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 50,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 480,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:garlic-200g",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 48,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 350,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:cn-coke-original-330ml-can",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 36,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 400,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:cn-coke-original-500ml-bottle",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 30,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 400,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:cn-coke-zero-500ml-bottle",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 36,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 300,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:cn-pepsi-original-330ml-can",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 18,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 1800,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:cn-coke-original-330ml-6can",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 48,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 350,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:cn-yili-whole-250ml-carton",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 16,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 3780,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:cn-yili-whole-250ml-12carton",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 30,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 400,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:cn-mengniu-lowfat-250ml-carton",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 72,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 200,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:cn-nongfu-water-550ml-bottle",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 60,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 220,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:cn-cestbon-water-555ml-bottle",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 20,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 2160,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:cn-nongfu-water-550ml-12bottle",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 30,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 590,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:snack-original-potato-chips-70g-bag",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 20,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 690,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:snack-soda-crackers-100g-box",
+      "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 30,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 450,
+      "provenance": "data/fixtures/store-offers.json",
+      "sellable": true,
+      "sku_id": "demo:cn-minute-maid-peach-450ml-bottle",
+      "store_id": "store-demo-01"
+    }
+  ],
+  "store": {
+    "delivery_zone_id": "zone-default",
+    "is_demo": true,
+    "name": "演示超市（模拟数据）",
+    "store_id": "store-demo-01"
+  },
+  "version": "v1"
+}
