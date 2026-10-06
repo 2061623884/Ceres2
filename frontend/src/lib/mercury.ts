@@ -99,15 +99,16 @@ export async function sendMercuryTurn(
   sessionId: string,
   message: string,
   callbacks: MercuryTurnCallbacks = {},
+  routingRequestId?: string,
 ): Promise<void> {
   await ensureIdentity()
-  const requestId = `req_${Date.now()}`
+  const requestId = routingRequestId ?? crypto.randomUUID()
 
   const resp = await fetch(`/api/v1/mercury/sessions/${sessionId}/turns/stream`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
-    body: JSON.stringify({ message, request_id: requestId }),
+    body: JSON.stringify({ message, request_id: requestId, routing_request_id: routingRequestId ?? null }),
   })
 
   if (!resp.ok) {

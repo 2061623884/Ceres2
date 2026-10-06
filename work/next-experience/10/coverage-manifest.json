@@ -1,0 +1,1022 @@
+{
+  "planning_tip": "c3747dd1148edc850e090d45b6bbb0f58aa96aa1",
+  "basis": [
+    "tasks/ceres2-next-10-candidate-evidence.md",
+    "docs/plans/ceres2-next-experience-spec.md"
+  ],
+  "not_a_final_pass": true,
+  "requirements": [
+    {
+      "id": "shopping-selection",
+      "requirement": "Snacks: supply-derived type choice, text/button continuation, quantities, multi-selection, no cart before explicit confirmation",
+      "evidence_level": "Public HTTP/SSE with actual Pi controlled transport; fixture supply; query readbacks.",
+      "final_status": "pending final frozen candidate execution",
+      "sources": [
+        {
+          "file": "backend/tests/test_next_snack_public.py",
+          "sha256_at_planning": "b08b09f8c10b9d2c6cbd2892d23dd106e7b5cca56b6611f78f2a9af40ff6e468",
+          "node_functions": [
+            "backend/tests/test_next_snack_public.py::test_generic_snack_opens_one_supply_derived_question_without_purchase",
+            "backend/tests/test_next_snack_public.py::test_category_and_multiple_product_choices_prepare_plan_then_explicit_idempotent_cart",
+            "backend/tests/test_next_snack_public.py::test_free_text_answers_displayed_type_after_cart_aside_and_preserves_history",
+            "backend/tests/test_next_snack_public.py::test_supply_change_invalidates_restored_question_and_rejects_old_choice",
+            "backend/tests/test_next_snack_public.py::test_unknown_allergens_never_satisfy_explicit_safety_constraint",
+            "backend/tests/test_next_snack_public.py::test_allergen_evidence_change_blocks_plan_confirmation_without_cart_write",
+            "backend/tests/test_next_snack_public.py::test_text_product_choice_asks_only_missing_quantity_then_prepares_without_cart",
+            "backend/tests/test_next_snack_public.py::test_repeatable_released_catalog_supports_real_snack_types_and_package_choices",
+            "backend/tests/test_next_snack_public.py::test_existing_packaging_constraint_is_not_silently_dropped_during_exploration"
+          ]
+        },
+        {
+          "file": "backend/tests/test_next_snack_safety_public.py",
+          "sha256_at_planning": "2c6f47864942ea1369d198be5c33947f4410aa6d54c1e56e4cf03116b2df17fc",
+          "node_functions": [
+            "backend/tests/test_next_snack_safety_public.py::test_typed_choice_replay_and_cross_owner_are_bound_to_original_question",
+            "backend/tests/test_next_snack_safety_public.py::test_changed_condition_cancel_and_same_label_new_task_retire_old_identity",
+            "backend/tests/test_next_snack_safety_public.py::test_competing_category_clicks_have_one_authoritative_choice",
+            "backend/tests/test_next_snack_safety_public.py::test_inflight_text_cannot_replace_a_newer_typed_choice",
+            "backend/tests/test_next_snack_safety_public.py::test_product_quantity_and_membership_errors_leave_question_and_cart_unchanged"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "drinks-facets",
+      "requirement": "Drink types, direct products, brand/flavor/spec filters, clearing/text amendments, unknown safety, low budget, stale facts",
+      "evidence_level": "Current synthetic Offer/catalog data, typed identity and confirmation fences.",
+      "final_status": "pending final frozen candidate execution",
+      "sources": [
+        {
+          "file": "backend/tests/test_next_drinks_public.py",
+          "sha256_at_planning": "29c346b5ce05bc3d4c4890a67245ba5459a80bcc91e41151c1a1ce92d1e26795",
+          "node_functions": [
+            "backend/tests/test_next_drinks_public.py::test_drink_type_then_factual_flavor_filter_preserves_constraints_and_requires_cart_consent",
+            "backend/tests/test_next_drinks_public.py::test_changed_drink_flavor_after_plan_is_rechecked_before_confirmation",
+            "backend/tests/test_next_drinks_public.py::test_released_drink_fixture_supports_types_flavor_packages_and_preserves_mutable_offer",
+            "backend/tests/test_next_drinks_public.py::test_direct_drinks_filters_clear_text_revision_and_stock_changes_preserve_identity",
+            "backend/tests/test_next_drinks_public.py::test_unknown_drink_attributes_do_not_satisfy_hard_safety_or_low_budget"
+          ]
+        },
+        {
+          "file": "backend/tests/test_comparison_public.py",
+          "sha256_at_planning": "ea4e3642eaaed4981e830cc8d58e2b053886961f3c91fbddf3f690c592a431f7",
+          "node_functions": [
+            "backend/tests/test_comparison_public.py::test_comparison_projects_real_multipack_and_unknown_metadata_without_plan_or_cart",
+            "backend/tests/test_comparison_public.py::test_displayed_current_candidate_selected_in_later_pi_turn_prepares_then_confirms",
+            "backend/tests/test_comparison_public.py::test_task_filters_and_page_category_are_preserved_and_empty_retires_refs",
+            "backend/tests/test_comparison_public.py::test_comparison_exploration_cannot_turn_unselected_recommendation_into_plan",
+            "backend/tests/test_comparison_public.py::test_finite_candidates_honor_exclusions_and_do_not_compare_mass_as_volume"
+          ]
+        },
+        {
+          "file": "backend/tests/test_comparison_safety.py",
+          "sha256_at_planning": "de3427dca350ab0ac10cd181e4990d18a541ee399b526f8a179d9428f266a9b6",
+          "node_functions": [
+            "backend/tests/test_comparison_safety.py::test_candidate_evidence_cannot_cross_display_owner_task_version_or_page",
+            "backend/tests/test_comparison_safety.py::test_provider_failure_before_any_tool_retires_prior_displayed_candidates",
+            "backend/tests/test_comparison_safety.py::test_repeated_proposal_keeps_display_fence_and_late_failure_preserves_new_cards",
+            "backend/tests/test_comparison_safety.py::test_comparison_cannot_publish_products_from_a_later_unfiltered_search",
+            "backend/tests/test_comparison_safety.py::test_reentry_in_different_page_does_not_restore_other_category_cards",
+            "backend/tests/test_comparison_safety.py::test_protected_comparison_close_retires_old_snapshot",
+            "backend/tests/test_comparison_safety.py::test_late_protected_comparison_does_not_retire_newer_display"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "policy",
+      "requirement": "Both roles without order; sources/conditions/unknowns; policy versus eligibility/authorization; visible provider failure",
+      "evidence_level": "Controlled model output cannot substitute for canonical policy/business facts.",
+      "final_status": "pending final frozen candidate execution",
+      "sources": [
+        {
+          "file": "backend/tests/test_next_shared_policy_public.py",
+          "sha256_at_planning": "90e726d06341868646f63369b40ee44b71c3806ee4224f11d56c7c65a3ed9c76",
+          "node_functions": [
+            "backend/tests/test_next_shared_policy_public.py::test_mercury_general_return_policy_without_order_has_conditions_and_source",
+            "backend/tests/test_next_shared_policy_public.py::test_keke_general_policy_without_order_uses_same_traceable_rules_without_shopping_write",
+            "backend/tests/test_next_shared_policy_public.py::test_general_return_policy_keeps_unknown_and_unsatisfied_conditions_explicit",
+            "backend/tests/test_next_shared_policy_public.py::test_missing_policy_without_order_preserves_inherited_human_fallback",
+            "backend/tests/test_next_shared_policy_public.py::test_policy_does_not_authorize_concrete_eligibility_without_order",
+            "backend/tests/test_next_shared_policy_public.py::test_policy_provider_failure_is_not_missing_rule_or_approval"
+          ]
+        },
+        {
+          "file": "backend/tests/test_mercury_public.py",
+          "sha256_at_planning": "40adec030cca4521d84ac2a61c3b254eb57a780396eec33bfd50a4dcbfefc6ba",
+          "node_functions": [
+            "backend/tests/test_mercury_public.py::test_case_owner_selection_clarification_and_restart",
+            "backend/tests/test_mercury_public.py::test_schema_repeat_preserves_synthetic_existing_business_facts",
+            "backend/tests/test_mercury_public.py::test_five_rounds_close_only_with_verified_facts",
+            "backend/tests/test_mercury_public.py::test_model_cannot_expand_read_authority",
+            "backend/tests/test_mercury_public.py::test_provider_failure_is_truthful_and_logs_hide_secret",
+            "backend/tests/test_mercury_public.py::test_fifteen_second_deadline_releases_case_and_fences_late_response",
+            "backend/tests/test_mercury_public.py::test_unverified_model_claim_is_not_published_as_business_fact",
+            "backend/tests/test_mercury_public.py::test_post_read_clarification_persists_slot_and_resumes"
+          ]
+        },
+        {
+          "file": "backend/tests/test_human_public.py",
+          "sha256_at_planning": "7a3f5bb99d9d023fd0849ee36da0806ea7f9930507cafbe00e230dbf6a84228c",
+          "node_functions": [
+            "backend/tests/test_human_public.py::test_explicit_ticket_operator_progress_isolation_and_fence",
+            "backend/tests/test_human_public.py::test_policy_unknown_and_repeated_service_failure_trigger_from_actual_graph",
+            "backend/tests/test_human_public.py::test_operator_requires_separate_credential_and_rejects_stale_actions",
+            "backend/tests/test_human_public.py::test_ineligibility_clarification_and_invalid_model_arguments_do_not_handoff",
+            "backend/tests/test_human_public.py::test_handoff_fences_inflight_query_publication_and_survives_restart",
+            "backend/tests/test_human_public.py::test_additive_schema_repeat_preserves_old_synthetic_facts",
+            "backend/tests/test_human_public.py::test_provider_failure_does_not_auto_escalate_and_application_routes_exist",
+            "backend/tests/test_human_public.py::test_concurrent_duplicate_requests_have_one_open_ticket",
+            "backend/tests/test_human_public.py::test_malformed_policy_lookup_does_not_claim_policy_uncertainty",
+            "backend/tests/test_human_public.py::test_old_user_draft_cannot_reply_into_replacement_ticket"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "navigation",
+      "requirement": "One joint Kev call, Coco-only capabilities, replay, opening ACK/quota, close/reopen, stale handoff and order/intent races",
+      "evidence_level": "Production Kev adapter/parser via MockTransport; not real classifier quality.",
+      "final_status": "pending final frozen candidate execution",
+      "sources": [
+        {
+          "file": "backend/tests/test_next_navigation_public.py",
+          "sha256_at_planning": "8634be59b8cea5b4e6d0b41d6a3c0ca3a1ac5713fe554840acd3d9817f3cff27",
+          "node_functions": [
+            "backend/tests/test_next_navigation_public.py::test_opening_refresh_preserves_quota_and_only_close_reopens",
+            "backend/tests/test_next_navigation_public.py::test_one_judgment_replay_ack_decline_manual_and_new_opening",
+            "backend/tests/test_next_navigation_public.py::test_pending_handoff_survives_refresh_and_duplicate_accept",
+            "backend/tests/test_next_navigation_public.py::test_new_text_invalidates_old_switch_and_failure_stays_visible",
+            "backend/tests/test_next_navigation_public.py::test_ack_quota_survives_switch_and_close_is_the_only_reset",
+            "backend/tests/test_next_navigation_public.py::test_coco_only_capability_and_original_complex_text_preserved",
+            "backend/tests/test_next_navigation_public.py::test_explicit_return_navigates_without_confirmation",
+            "backend/tests/test_next_navigation_public.py::test_route_id_cannot_reuse_new_body_or_other_owner",
+            "backend/tests/test_next_navigation_public.py::test_mercury_replay_returns_same_result_without_rerouting_or_reexecution",
+            "backend/tests/test_next_navigation_public.py::test_closed_opening_cannot_execute_previously_accepted_unadmitted_handoff",
+            "backend/tests/test_next_navigation_public.py::test_new_text_invalidates_accepted_but_unadmitted_handoff",
+            "backend/tests/test_next_navigation_public.py::test_new_intent_between_authorization_and_case_reservation_fences_handoff",
+            "backend/tests/test_next_navigation_public.py::test_order_changed_before_query_admission_cannot_retarget_original_handoff",
+            "backend/tests/test_next_navigation_public.py::test_task_changed_after_switch_invalidates_unadmitted_handoff",
+            "backend/tests/test_next_navigation_public.py::test_manual_retry_can_resume_still_valid_unadmitted_accepted_request",
+            "backend/tests/test_next_navigation_public.py::test_visible_prompt_ack_after_decline_still_consumes_opening_quota",
+            "backend/tests/test_next_navigation_public.py::test_explicit_return_with_goal_preserves_original_intent_without_new_prompt"
+          ]
+        },
+        {
+          "file": "backend/tests/test_next_kev_wire.py",
+          "sha256_at_planning": "649f2295b33186aae803e7ed13c09a1e22e71a841a0d756492b374804069d812",
+          "node_functions": [
+            "backend/tests/test_next_kev_wire.py::test_joint_route_uses_one_systemone_choice_question",
+            "backend/tests/test_next_kev_wire.py::test_invalid_external_contract_is_visible_failure_without_fallback",
+            "backend/tests/test_next_kev_wire.py::test_old_three_choice_response_fails_explicitly_without_label_guessing"
+          ]
+        },
+        {
+          "file": "backend/tests/test_next_guide_gate_public.py",
+          "sha256_at_planning": "16e177a7a7edd377e5a08d7323a5d015f07fb07e99a6315aeb7f949b1a6b2132",
+          "node_functions": [
+            "backend/tests/test_next_guide_gate_public.py::test_direct_guide_text_is_judged_once_and_replay_reuses_decision"
+          ]
+        },
+        {
+          "file": "backend/tests/test_next_explicit_return_public.py",
+          "sha256_at_planning": "18775b82211a0a30c91669da8f597e36c8ae27a53d7837283cfb7927c1b2c021",
+          "node_functions": [
+            "backend/tests/test_next_explicit_return_public.py::test_explicit_return_and_buy_reaches_guide_without_second_kev"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "context",
+      "requirement": "Four capability behaviors, narrower-label recovery, mixed requests, read-only recipe facts, role-specific contexts",
+      "evidence_level": "Controlled behavior preservation; supplemental full-prompt byte equivalence exists, no live semantic equivalence claim.",
+      "final_status": "pending final frozen candidate execution",
+      "sources": [
+        {
+          "file": "backend/tests/test_next_context_public.py",
+          "sha256_at_planning": "c0b9fc73b293e9e1828edf96b0d1d18ef9472c33b17890c2dca9f86730e8fd86",
+          "node_functions": [
+            "backend/tests/test_next_context_public.py::test_four_capabilities_preserve_public_business_semantics",
+            "backend/tests/test_next_context_public.py::test_chat_uses_relevant_context_while_preserving_pending_shopping",
+            "backend/tests/test_next_context_public.py::test_narrow_label_preserves_mixed_request_and_restores_shopping_after_pi_understanding",
+            "backend/tests/test_next_context_public.py::test_factual_recipe_question_keeps_read_only_dish_facts_without_purchase_task"
+          ]
+        },
+        {
+          "file": "backend/tests/test_guide_clarification_context.py",
+          "sha256_at_planning": "360c76b4edb7dab4ff9219dd952721eee0da9714264de81a770e08beeaf3e415",
+          "node_functions": [
+            "backend/tests/test_guide_clarification_context.py::test_clarification_is_durable_bounded_and_resolves_elliptical_answer",
+            "backend/tests/test_guide_clarification_context.py::test_new_task_does_not_inherit_pending_question",
+            "backend/tests/test_guide_clarification_context.py::test_pending_context_is_retired_by_task_change_or_explicit_stop",
+            "backend/tests/test_guide_clarification_context.py::test_pending_question_survives_unrelated_or_progress_turn",
+            "backend/tests/test_guide_clarification_context.py::test_unrelated_inflight_run_does_not_hide_current_question"
+          ]
+        },
+        {
+          "file": "backend/tests/test_guide_dish_suggestions.py",
+          "sha256_at_planning": "941b998788a932a29c103943e0d575e1c833a097a2c2b699439ae2280c3e418b",
+          "node_functions": [
+            "backend/tests/test_guide_dish_suggestions.py::test_suggestions_then_first_choice_requeries_recipe_and_waits_for_confirmation",
+            "backend/tests/test_guide_dish_suggestions.py::test_forged_dish_reference_is_not_rendered",
+            "backend/tests/test_guide_dish_suggestions.py::test_product_search_cannot_ground_empty_recipe_claim",
+            "backend/tests/test_guide_dish_suggestions.py::test_omitting_found_dishes_does_not_claim_no_recipe_matches"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "streaming",
+      "requirement": "Result before validated introduction; first client unit before generation end; real socket reconnect; no tools; forged facts/unknown refs; receipt replay; deadline/lock/role fences; usage provenance",
+      "evidence_level": "Real loopback HTTP/SSE and actual Pi SDK with controlled provider; includes null/missing/explicit-zero usage. No actual-provider token/latency benefit claim.",
+      "final_status": "pending final frozen candidate execution",
+      "sources": [
+        {
+          "file": "backend/tests/test_next_result_stream_public.py",
+          "sha256_at_planning": "a50f1674554f8599a06b680c02e9b5aef3d2f6845f7bfa77c6ed8a9ba62dab3d",
+          "node_functions": [
+            "backend/tests/test_next_result_stream_public.py::test_cards_arrive_before_validated_introduction_while_provider_is_generating",
+            "backend/tests/test_next_result_stream_public.py::test_confirmed_cart_receipt_survives_rejected_expression_without_repeating_write",
+            "backend/tests/test_next_result_stream_public.py::test_unsupported_or_ungrounded_units_never_reach_client",
+            "backend/tests/test_next_result_stream_public.py::test_late_expression_is_fenced_without_changing_committed_cards",
+            "backend/tests/test_next_result_stream_public.py::test_expression_timeout_retains_results_and_closes_run",
+            "backend/tests/test_next_result_stream_public.py::test_text_turn_source_reuses_grounded_result_without_semantic_reexecution",
+            "backend/tests/test_next_result_stream_public.py::test_aftersales_receipt_introduction_rejects_refund_claim_and_keeps_one_application",
+            "backend/tests/test_next_result_stream_public.py::test_expression_result_and_events_are_owner_bound",
+            "backend/tests/test_next_result_stream_public.py::test_no_match_introduction_uses_confirmed_empty_query_result",
+            "backend/tests/test_next_result_stream_public.py::test_expression_source_cannot_replay_an_ordinary_turn_with_colliding_id",
+            "backend/tests/test_next_result_stream_public.py::test_database_wait_past_deadline_cannot_publish_late_introduction",
+            "backend/tests/test_next_result_stream_public.py::test_pre_authorized_momo_query_completed_before_unit_fences_old_receipt_text"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "activity",
+      "requirement": "Existing card, finished-product scope, no recipe expansion, raw-tool scope, hard constraints, explicit exit, stale supply, confirmation replay",
+      "evidence_level": "Public HTTP/SSE; 70-SKU integrated synthetic catalog. No health-effect/date/discount claims authorized.",
+      "final_status": "pending final frozen candidate execution",
+      "sources": [
+        {
+          "file": "backend/tests/test_next_activity_public.py",
+          "sha256_at_planning": "9e530d1a84af19e659d21ef7a49725785478624df081ffcb7ab5ecaccd8ee3a7",
+          "node_functions": [
+            "backend/tests/test_next_activity_public.py::test_existing_activity_entry_returns_only_finished_demo_products_without_model_or_cart",
+            "backend/tests/test_next_activity_public.py::test_activity_raw_model_search_cannot_escape_finished_pool_without_routing",
+            "backend/tests/test_next_activity_public.py::test_activity_comparison_preserves_hard_dietary_constraints",
+            "backend/tests/test_next_activity_public.py::test_activity_scope_is_host_owned_and_explicit_new_goal_exits",
+            "backend/tests/test_next_activity_public.py::test_activity_model_composes_selected_finished_skus_then_separate_confirmation",
+            "backend/tests/test_next_activity_public.py::test_activity_confirmation_rechecks_current_offer_and_membership",
+            "backend/tests/test_next_activity_public.py::test_activity_entry_retains_current_hard_constraints",
+            "backend/tests/test_next_activity_public.py::test_activity_recipe_request_cannot_expand_finished_products_into_ingredients",
+            "backend/tests/test_next_activity_public.py::test_activity_seed_never_resets_mutable_offer_and_old_supply_choice_stales"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shopping-return",
+      "requirement": "Fresh purchase and independent checkout, same order inquiry, separate proposal/confirmation, durable failure and receipt, explicit shopping return, human protection",
+      "evidence_level": "Public query readbacks; controlled Pi+LangGraph; simulated commerce only.",
+      "final_status": "pending final frozen candidate execution",
+      "sources": [
+        {
+          "file": "backend/tests/test_next_shopping_return_public.py",
+          "sha256_at_planning": "8bbb9eb546faeed8b13545b197d6931c5cd84ca77c204ca4d72f56828c465b37",
+          "node_functions": [
+            "backend/tests/test_next_shopping_return_public.py::test_denied_application_survives_user_chosen_shopping_return",
+            "backend/tests/test_next_shopping_return_public.py::test_purchase_checkout_application_then_explicit_compound_return_requeries_goods",
+            "backend/tests/test_next_shopping_return_public.py::test_precommit_failure_is_retained_without_erasing_valid_proposal_or_retrying",
+            "backend/tests/test_next_shopping_return_public.py::test_postcommit_response_loss_records_receipt_truth_and_replays_once",
+            "backend/tests/test_next_shopping_return_public.py::test_foreign_invalid_and_stale_requests_do_not_write_failure_history",
+            "backend/tests/test_next_shopping_return_public.py::test_human_responsibility_survives_shopping_and_blocks_application"
+          ]
+        },
+        {
+          "file": "backend/tests/test_checkout_public.py",
+          "sha256_at_planning": "0c81f7a47403838f6e18767058b82549c54fd627a7e6b26185ef3369dda0d4ab",
+          "node_functions": [
+            "backend/tests/test_checkout_public.py::test_shelf_checkout_explicit_confirm_replay_owner_and_snapshot",
+            "backend/tests/test_checkout_public.py::test_changed_cart_and_offer_require_new_preview",
+            "backend/tests/test_checkout_public.py::test_shopping_write_hold_preserves_reads_and_facts",
+            "backend/tests/test_checkout_public.py::test_precommit_failure_rolls_back_and_postcommit_loss_replays",
+            "backend/tests/test_checkout_public.py::test_concurrent_same_key_and_cart_add_never_lose_items",
+            "backend/tests/test_checkout_public.py::test_key_is_bound_to_preview_and_order_survives_new_app",
+            "backend/tests/test_checkout_public.py::test_nonempty_p02_snapshot_migrates_to_complete_public_projection_without_rewriting"
+          ]
+        },
+        {
+          "file": "backend/tests/test_order_case_journey.py",
+          "sha256_at_planning": "e1a6b025ab58358222bead48a497ad2e0c17757986187151b410db8abd469abb",
+          "node_functions": [
+            "backend/tests/test_order_case_journey.py::test_checkout_metadata_selection_read_and_restart",
+            "backend/tests/test_order_case_journey.py::test_empty_and_cross_owner_order_case_boundaries"
+          ]
+        },
+        {
+          "file": "backend/tests/test_integrated_lifecycle.py",
+          "sha256_at_planning": "47b57725ae7c2cd3738e229d86bcd9232c078df8b00df0b67ea5fb81c89304c3",
+          "node_functions": [
+            "backend/tests/test_integrated_lifecycle.py::test_comparison_checkout_same_order_graph_receipt_survives_loss_and_restart",
+            "backend/tests/test_integrated_lifecycle.py::test_human_acquisition_vs_inflight_confirmation_then_close"
+          ]
+        },
+        {
+          "file": "backend/tests/test_aftersales_public.py",
+          "sha256_at_planning": "33f2890096b941d2f06086977913d88efa1b5135b956672d25b242fec8efd056",
+          "node_functions": [
+            "backend/tests/test_aftersales_public.py::test_preview_confirmation_and_replay",
+            "backend/tests/test_aftersales_public.py::test_old_proposal_selection_and_key_conflicts",
+            "backend/tests/test_aftersales_public.py::test_return_policy_whole_line_only",
+            "backend/tests/test_aftersales_public.py::test_owner_human_and_late_facts_fences",
+            "backend/tests/test_aftersales_public.py::test_real_graph_interrupt_model_proposal_never_submits",
+            "backend/tests/test_aftersales_public.py::test_atomic_precommit_failure_then_retry",
+            "backend/tests/test_aftersales_public.py::test_committed_receipt_survives_response_and_checkpoint_loss",
+            "backend/tests/test_aftersales_public.py::test_simultaneous_confirmation_has_one_receipt",
+            "backend/tests/test_aftersales_public.py::test_return_window_expires_between_preview_and_confirmation",
+            "backend/tests/test_aftersales_public.py::test_application_read_eligibility_and_immutable_order_snapshot",
+            "backend/tests/test_aftersales_public.py::test_no_partial_quantity_unknown_item_or_foreign_proposal",
+            "backend/tests/test_aftersales_public.py::test_already_refunded_and_unknown_return_policy_do_not_submit",
+            "backend/tests/test_aftersales_public.py::test_late_model_proposal_cannot_cross_human_generation",
+            "backend/tests/test_aftersales_public.py::test_maintenance_readonly_preserves_new_applications_receipts_and_orders",
+            "backend/tests/test_aftersales_public.py::test_proposal_service_failure_uses_existing_human_handoff",
+            "backend/tests/test_aftersales_public.py::test_pending_proposal_checkpoint_loss_requires_explicit_confirmation",
+            "backend/tests/test_aftersales_public.py::test_rejected_replacement_intent_invalidates_previous_proposal",
+            "backend/tests/test_aftersales_public.py::test_earlier_inflight_proposal_cannot_survive_newer_denied_intent"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "inherited-planning",
+      "requirement": "Single/multiple dishes, people/spec preservation, merged demand before package rounding, pantry unknown, budget quote versus cart consent",
+      "evidence_level": "Explicit selections and canonical plan/cart readbacks; no earlier baseline pass carried forward.",
+      "final_status": "pending final frozen candidate execution",
+      "sources": [
+        {
+          "file": "backend/tests/test_dish_public.py",
+          "sha256_at_planning": "704de55b9a5afa111974684541410108bacb3d510d6ecb0c57a128b8f5afb7b3",
+          "node_functions": [
+            "backend/tests/test_dish_public.py::test_single_dish_baseline_is_not_explicit_people_and_pantry_amount_is_unknown",
+            "backend/tests/test_dish_public.py::test_people_revision_retains_selected_egg_spec_and_requires_new_confirmation",
+            "backend/tests/test_dish_public.py::test_pantry_selection_and_added_ledger_survive_people_revision_without_rebuying",
+            "backend/tests/test_dish_public.py::test_unselected_pantry_exclusion_does_not_block_recipe_but_selecting_it_does",
+            "backend/tests/test_dish_public.py::test_budget_acceptance_and_chat_people_change_preserve_spec_without_cart_write",
+            "backend/tests/test_dish_public.py::test_incompatible_selected_spec_is_not_converted_and_quantity_revision_keeps_recipe_facts",
+            "backend/tests/test_dish_public.py::test_dish_plan_exposes_compatible_specs_for_explicit_user_selection",
+            "backend/tests/test_dish_public.py::test_single_dish_json_facts_survive_repeat_upgrade_and_hold",
+            "backend/tests/test_dish_public.py::test_unselected_pantry_supply_changes_do_not_block_selected_confirmation"
+          ]
+        },
+        {
+          "file": "backend/tests/test_multidish_public.py",
+          "sha256_at_planning": "09e30f35929ad30faf2296d693cf98cd3e918ef7e9b081917c63f3a67c49a117",
+          "node_functions": [
+            "backend/tests/test_multidish_public.py::test_explicit_append_keeps_groups_and_merges_before_package_rounding",
+            "backend/tests/test_multidish_public.py::test_group_people_and_remove_preserve_other_target_and_bought_shared_row",
+            "backend/tests/test_multidish_public.py::test_group_purchase_evidence_survives_removal_and_replay_without_double_count",
+            "backend/tests/test_multidish_public.py::test_selected_second_recipe_shares_five_eggs_and_retains_unknown_pantry_sources",
+            "backend/tests/test_multidish_public.py::test_generic_conditions_cannot_rewrite_host_owned_group_selection"
+          ]
+        },
+        {
+          "file": "backend/tests/test_multidish_edges.py",
+          "sha256_at_planning": "345602045db0c865a3b7fe7a77c8ea26812b008fb4175b20a2af9e040e720d79",
+          "node_functions": [
+            "backend/tests/test_multidish_edges.py::test_fractional_source_demands_are_summed_before_rounding_and_pantry_stays_unknown",
+            "backend/tests/test_multidish_edges.py::test_explicit_different_specs_remain_separate_and_survive_group_people_change",
+            "backend/tests/test_multidish_edges.py::test_second_group_obeys_shared_budget_and_exclusions_without_partial_mutation",
+            "backend/tests/test_multidish_edges.py::test_searching_an_unselected_second_recipe_does_not_add_a_target",
+            "backend/tests/test_multidish_edges.py::test_group_selection_and_receipts_remain_owner_scoped"
+          ]
+        },
+        {
+          "file": "backend/tests/test_multidish_selection.py",
+          "sha256_at_planning": "9578041c66a8d8cab859b0016bcebd788d1c706903ca1d2980e9403b9f75cb86",
+          "node_functions": [
+            "backend/tests/test_multidish_selection.py::test_unrelated_checkbox_keeps_excluded_group_demand_and_receipt_sources",
+            "backend/tests/test_multidish_selection.py::test_deliberate_shared_row_toggle_recomputes_all_group_demand_before_reconfirmation",
+            "backend/tests/test_multidish_selection.py::test_shared_toggle_preserves_a_separately_chosen_package_quantity",
+            "backend/tests/test_multidish_selection.py::test_shared_toggle_rechecks_budget_after_recomputed_demand"
+          ]
+        },
+        {
+          "file": "backend/tests/test_multidish_removed_target.py",
+          "sha256_at_planning": "1e642de2d6824ce618a79ec859dbc8b505a37a3d9ee52a8e87a61bf88a8a434e",
+          "node_functions": [
+            "backend/tests/test_multidish_removed_target.py::test_removed_last_group_is_not_recreated_by_its_old_update_reference"
+          ]
+        },
+        {
+          "file": "backend/tests/test_multidish_compatibility.py",
+          "sha256_at_planning": "2a06b34021d4a5468a274567fb9f66a8dd976844148e95cce2dae47923280e11",
+          "node_functions": [
+            "backend/tests/test_multidish_compatibility.py::test_budget_amend_reconstructs_all_groups_and_selected_specs_without_cart_approval",
+            "backend/tests/test_multidish_compatibility.py::test_synthetic_single_dish_json_upgrades_without_inventing_old_group_purchase_facts"
+          ]
+        },
+        {
+          "file": "backend/tests/test_budget_quote_public.py",
+          "sha256_at_planning": "549882622088b5be14a55a449504d09f4791b6b4bc99935a0c03f708d461d2e5",
+          "node_functions": [
+            "backend/tests/test_budget_quote_public.py::test_factual_over_budget_quote_requires_separate_acceptance_and_cart_confirmation",
+            "backend/tests/test_budget_quote_public.py::test_changed_supply_rejects_old_quote_without_relaxing_budget",
+            "backend/tests/test_budget_quote_public.py::test_quote_acceptance_keeps_supply_choice_and_later_budget_checks_separate"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "supply-history",
+      "requirement": "Shortage, alternatives, partial procurement, whole-task budget/exclusions, current-cart coverage, historical repurchase with fresh facts/authorization",
+      "evidence_level": "Public behavior and deterministic authority boundaries, fixture mutations only.",
+      "final_status": "pending final frozen candidate execution",
+      "sources": [
+        {
+          "file": "backend/tests/test_supply_public.py",
+          "sha256_at_planning": "57213aa0636d8a2a84a4b8c4de1222fa246c97d2368cf46a82a507ecae462b4d",
+          "node_functions": [
+            "backend/tests/test_supply_public.py::test_chosen_spec_shortage_is_preview_and_never_confirmation",
+            "backend/tests/test_supply_public.py::test_partial_purchase_is_explicit_then_independently_confirmed_and_idempotent",
+            "backend/tests/test_supply_public.py::test_missing_ingredient_and_unknown_offer_remain_distinct_supply_gaps",
+            "backend/tests/test_supply_public.py::test_whole_demand_mixed_packs_require_explicit_alternative_choice",
+            "backend/tests/test_supply_public.py::test_alternative_selection_retains_spec_after_people_revision",
+            "backend/tests/test_supply_public.py::test_mixed_alternative_specs_survive_people_change_without_silent_replacement"
+          ]
+        },
+        {
+          "file": "backend/tests/test_supply_edges.py",
+          "sha256_at_planning": "7e95f54b2030ede9698bbcbb883f7361c859d2150b128e5b732a5742c237823a",
+          "node_functions": [
+            "backend/tests/test_supply_edges.py::test_partial_low_stock_reports_uncovered_amount_instead_of_old_remainder",
+            "backend/tests/test_supply_edges.py::test_unknown_package_quantity_and_missing_pantry_are_not_service_failure",
+            "backend/tests/test_supply_edges.py::test_catalog_query_failure_is_error_not_out_of_stock",
+            "backend/tests/test_supply_edges.py::test_alternatives_respect_whole_task_budget_and_exclusions",
+            "backend/tests/test_supply_edges.py::test_existing_cart_quantity_is_subtracted_from_available_sale_packs",
+            "backend/tests/test_supply_edges.py::test_changed_supply_requires_refresh_display_and_new_confirmation",
+            "backend/tests/test_supply_edges.py::test_alternative_merges_existing_same_sku_before_pack_rounding",
+            "backend/tests/test_supply_edges.py::test_previously_chosen_spec_quantity_becoming_unknown_is_preview",
+            "backend/tests/test_supply_edges.py::test_alternative_budget_uses_merged_entire_plan_not_duplicate_pack_cost",
+            "backend/tests/test_supply_edges.py::test_replacing_one_mixed_gap_preserves_untouched_group_allocation"
+          ]
+        },
+        {
+          "file": "backend/tests/test_history_public.py",
+          "sha256_at_planning": "5b41f88a5cf28cb4ad7374e0ec41675cc6a08ad8e06338560e0514a194f3d91f",
+          "node_functions": [
+            "backend/tests/test_history_public.py::test_history_rebuilds_current_multidish_supply_then_requires_new_confirmation",
+            "backend/tests/test_history_public.py::test_related_reminder_is_once_only_checks_cart_and_ignoring_never_restores",
+            "backend/tests/test_history_public.py::test_pi_lists_ambiguous_history_then_applies_prose_memory_to_selected_source"
+          ]
+        },
+        {
+          "file": "backend/tests/test_history_edges.py",
+          "sha256_at_planning": "3d973e6c70748598b05fe06b9db5581e866b63866e1159892ec80f0f3456b567",
+          "node_functions": [
+            "backend/tests/test_history_edges.py::test_cart_coverage_suppresses_reminder_and_other_owner_cannot_access_source",
+            "backend/tests/test_history_edges.py::test_prior_ledger_and_approval_never_transfer_and_same_request_replays_after_upgrade",
+            "backend/tests/test_history_edges.py::test_current_explicit_constraints_override_prose_memory_and_exclusions_block_repurchase",
+            "backend/tests/test_history_edges.py::test_history_provenance_survives_people_revision",
+            "backend/tests/test_history_edges.py::test_cart_check_does_not_double_count_old_partial_ledger_as_remaining_coverage",
+            "backend/tests/test_history_edges.py::test_ambiguous_model_selection_cannot_silently_restore_a_source",
+            "backend/tests/test_history_edges.py::test_unresolved_missing_ingredient_remains_incomplete_when_known_rows_are_in_cart",
+            "backend/tests/test_history_edges.py::test_direct_product_history_uses_current_stock_preview_before_partial_confirmation",
+            "backend/tests/test_history_edges.py::test_deleted_remembered_default_does_not_become_an_explicit_condition_on_next_repurchase",
+            "backend/tests/test_history_edges.py::test_confirmed_partial_history_reminds_known_unavailable_gap_but_not_removed_target",
+            "backend/tests/test_history_edges.py::test_current_explicit_people_revision_survives_selecting_same_history_again",
+            "backend/tests/test_history_edges.py::test_current_group_people_are_preserved_by_source_target_not_flattened",
+            "backend/tests/test_history_edges.py::test_latest_explicit_task_people_override_supersedes_prior_group_people",
+            "backend/tests/test_history_edges.py::test_abandoned_source_is_only_available_for_deliberate_selection_not_reminded",
+            "backend/tests/test_history_edges.py::test_history_people_differences_follow_source_target_after_group_removal",
+            "backend/tests/test_history_edges.py::test_history_preserves_selected_mixed_specs_but_recomputes_current_people_and_supply"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "transactions-human",
+      "requirement": "Atomic precommit failure/postcommit response loss, owner/version/idempotency, simultaneous confirmations, human acquisition versus inflight application, operator responsibility generation",
+      "evidence_level": "Existing transaction boundary concurrency tests; no real money/payment.",
+      "final_status": "pending final frozen candidate execution",
+      "sources": [
+        {
+          "file": "backend/tests/test_purchase_confirmations.py",
+          "sha256_at_planning": "2e1bb06a8957d8a323f80a449f73b6a03419dde4106d361f4a0a31e9ceab072b",
+          "node_functions": [
+            "backend/tests/test_purchase_confirmations.py::test_explicit_text_uses_same_real_cart_and_durable_receipt",
+            "backend/tests/test_purchase_confirmations.py::test_ack_or_quoted_old_confirmation_never_authorizes_write",
+            "backend/tests/test_purchase_confirmations.py::test_selection_revision_invalidates_old_confirmation_and_persists_ui_state",
+            "backend/tests/test_purchase_confirmations.py::test_stale_displayed_anchor_cannot_confirm_newer_plan_by_text",
+            "backend/tests/test_purchase_confirmations.py::test_purchase_reply_displays_actual_sku_count_and_price_before_confirmation",
+            "backend/tests/test_purchase_confirmations.py::test_fresh_run_anchor_never_substitutes_for_unseen_displayed_plan"
+          ]
+        },
+        {
+          "file": "backend/tests/test_purchase_safety.py",
+          "sha256_at_planning": "768eaee12c5a8b25f575eaacb3f2aa834a2b343a3992f10667d84ac079ede0d1",
+          "node_functions": [
+            "backend/tests/test_purchase_safety.py::test_supply_or_task_changes_prevent_old_confirmation_without_cart_write",
+            "backend/tests/test_purchase_safety.py::test_other_owner_cannot_confirm_and_changed_idempotency_body_conflicts",
+            "backend/tests/test_purchase_safety.py::test_parallel_distinct_confirmations_increment_only_once",
+            "backend/tests/test_purchase_safety.py::test_failure_before_commit_rolls_back_cart_ledger_receipt_and_retry_succeeds",
+            "backend/tests/test_purchase_safety.py::test_existing_cart_count_is_included_in_confirmation_stock_check",
+            "backend/tests/test_purchase_safety.py::test_explicit_row_add_then_full_confirmation_adds_only_remaining",
+            "backend/tests/test_purchase_safety.py::test_stop_after_committed_text_preserves_factual_receipt",
+            "backend/tests/test_purchase_safety.py::test_shopping_write_hold_blocks_new_button_and_text_confirmation",
+            "backend/tests/test_purchase_safety.py::test_stopped_run_cannot_claim_confirmation_uow",
+            "backend/tests/test_purchase_safety.py::test_plan_preparation_applies_budget_and_exclusions_before_display",
+            "backend/tests/test_purchase_safety.py::test_text_confirmation_without_current_displayed_plan_does_not_write",
+            "backend/tests/test_purchase_safety.py::test_parallel_button_and_text_share_exactly_one_cart_increment"
+          ]
+        },
+        {
+          "file": "backend/tests/test_human_public.py",
+          "sha256_at_planning": "7a3f5bb99d9d023fd0849ee36da0806ea7f9930507cafbe00e230dbf6a84228c",
+          "node_functions": [
+            "backend/tests/test_human_public.py::test_explicit_ticket_operator_progress_isolation_and_fence",
+            "backend/tests/test_human_public.py::test_policy_unknown_and_repeated_service_failure_trigger_from_actual_graph",
+            "backend/tests/test_human_public.py::test_operator_requires_separate_credential_and_rejects_stale_actions",
+            "backend/tests/test_human_public.py::test_ineligibility_clarification_and_invalid_model_arguments_do_not_handoff",
+            "backend/tests/test_human_public.py::test_handoff_fences_inflight_query_publication_and_survives_restart",
+            "backend/tests/test_human_public.py::test_additive_schema_repeat_preserves_old_synthetic_facts",
+            "backend/tests/test_human_public.py::test_provider_failure_does_not_auto_escalate_and_application_routes_exist",
+            "backend/tests/test_human_public.py::test_concurrent_duplicate_requests_have_one_open_ticket",
+            "backend/tests/test_human_public.py::test_malformed_policy_lookup_does_not_claim_policy_uncertainty",
+            "backend/tests/test_human_public.py::test_old_user_draft_cannot_reply_into_replacement_ticket"
+          ]
+        },
+        {
+          "file": "backend/tests/test_integrated_lifecycle.py",
+          "sha256_at_planning": "47b57725ae7c2cd3738e229d86bcd9232c078df8b00df0b67ea5fb81c89304c3",
+          "node_functions": [
+            "backend/tests/test_integrated_lifecycle.py::test_comparison_checkout_same_order_graph_receipt_survives_loss_and_restart",
+            "backend/tests/test_integrated_lifecycle.py::test_human_acquisition_vs_inflight_confirmation_then_close"
+          ]
+        },
+        {
+          "file": "backend/tests/test_aftersales_public.py",
+          "sha256_at_planning": "33f2890096b941d2f06086977913d88efa1b5135b956672d25b242fec8efd056",
+          "node_functions": [
+            "backend/tests/test_aftersales_public.py::test_preview_confirmation_and_replay",
+            "backend/tests/test_aftersales_public.py::test_old_proposal_selection_and_key_conflicts",
+            "backend/tests/test_aftersales_public.py::test_return_policy_whole_line_only",
+            "backend/tests/test_aftersales_public.py::test_owner_human_and_late_facts_fences",
+            "backend/tests/test_aftersales_public.py::test_real_graph_interrupt_model_proposal_never_submits",
+            "backend/tests/test_aftersales_public.py::test_atomic_precommit_failure_then_retry",
+            "backend/tests/test_aftersales_public.py::test_committed_receipt_survives_response_and_checkpoint_loss",
+            "backend/tests/test_aftersales_public.py::test_simultaneous_confirmation_has_one_receipt",
+            "backend/tests/test_aftersales_public.py::test_return_window_expires_between_preview_and_confirmation",
+            "backend/tests/test_aftersales_public.py::test_application_read_eligibility_and_immutable_order_snapshot",
+            "backend/tests/test_aftersales_public.py::test_no_partial_quantity_unknown_item_or_foreign_proposal",
+            "backend/tests/test_aftersales_public.py::test_already_refunded_and_unknown_return_policy_do_not_submit",
+            "backend/tests/test_aftersales_public.py::test_late_model_proposal_cannot_cross_human_generation",
+            "backend/tests/test_aftersales_public.py::test_maintenance_readonly_preserves_new_applications_receipts_and_orders",
+            "backend/tests/test_aftersales_public.py::test_proposal_service_failure_uses_existing_human_handoff",
+            "backend/tests/test_aftersales_public.py::test_pending_proposal_checkpoint_loss_requires_explicit_confirmation",
+            "backend/tests/test_aftersales_public.py::test_rejected_replacement_intent_invalidates_previous_proposal",
+            "backend/tests/test_aftersales_public.py::test_earlier_inflight_proposal_cannot_survive_newer_denied_intent"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "memory-explicit",
+      "requirement": "Four categories, source/owner/role fences, full list, ordinal corrections, delete tombstones, explicit versus automatic precedence",
+      "evidence_level": "Public chat memory operations plus necessary deterministic transaction seams.",
+      "final_status": "pending final frozen candidate execution",
+      "sources": [
+        {
+          "file": "backend/tests/test_memory_public.py",
+          "sha256_at_planning": "dfb2013f9afaf0c532de43c4321140f480d8d8a6f0589b6161179694dcbb7e6b",
+          "node_functions": [
+            "backend/tests/test_memory_public.py::test_chat_explicit_save_and_full_list_have_authoritative_receipts",
+            "backend/tests/test_memory_public.py::test_four_categories_correction_delete_and_cross_owner_are_visible_in_chat",
+            "backend/tests/test_memory_public.py::test_expiry_current_conditions_and_role_context_do_not_leak_into_recall",
+            "backend/tests/test_memory_public.py::test_forged_source_or_owner_fields_never_create_memory",
+            "backend/tests/test_memory_public.py::test_full_list_is_not_bounded_recall"
+          ]
+        },
+        {
+          "file": "backend/tests/test_memory_lookup.py",
+          "sha256_at_planning": "901d5289526292841365ba3dcd13ed940b2a93eb0381b6d9ddae7858681803b2",
+          "node_functions": [
+            "backend/tests/test_memory_lookup.py::test_keke_can_resolve_then_correct_memory_in_one_natural_turn",
+            "backend/tests/test_memory_lookup.py::test_momo_can_resolve_then_correct_memory_in_one_natural_turn",
+            "backend/tests/test_memory_lookup.py::test_reference_source_can_be_explicitly_cleared_in_both_runtimes"
+          ]
+        },
+        {
+          "file": "backend/tests/test_memory_cross_role.py",
+          "sha256_at_planning": "dcb6016b3ddf14b2b6001ec294f86b58953da57b5c8ba8db4f951e3d8e48179e",
+          "node_functions": [
+            "backend/tests/test_memory_cross_role.py::test_same_user_keke_memory_is_need_to_know_in_actual_momo_query",
+            "backend/tests/test_memory_cross_role.py::test_explicit_preference_beats_newer_automatic_seed_at_actual_provider_boundary"
+          ]
+        },
+        {
+          "file": "backend/tests/test_memory_review_regressions.py",
+          "sha256_at_planning": "ef802f3a6a27e0bb109ef0582b62f641f51083a43f252003bb1f669af8e2fbbf",
+          "node_functions": [
+            "backend/tests/test_memory_review_regressions.py::test_automatic_never_replaces_explicit_key_filtered_by_relevance_or_size",
+            "backend/tests/test_memory_review_regressions.py::test_keke_ordinal_followup_uses_prior_list_ids_without_restoring_prose",
+            "backend/tests/test_memory_review_regressions.py::test_momo_ordinal_followup_uses_prior_successful_list_receipt"
+          ]
+        },
+        {
+          "file": "backend/tests/test_memory_deletion_fence.py",
+          "sha256_at_planning": "8b2010a20703e797ecc78e28171d2fdd66e63a980d5287b98434424721be009d",
+          "node_functions": [
+            "backend/tests/test_memory_deletion_fence.py::test_explicit_tombstone_blocks_automatic_predecessor_but_new_explicit_save_wins"
+          ]
+        },
+        {
+          "file": "backend/tests/test_memory_atomic.py",
+          "sha256_at_planning": "fbe9fa8b6aefd27f92f29726dc0deb806cb0a6c3f9482bf6bc563ae9f5aba95d",
+          "node_functions": [
+            "backend/tests/test_memory_atomic.py::test_stop_after_memory_prepare_never_commits_or_claims_saved",
+            "backend/tests/test_memory_atomic.py::test_expired_memory_is_not_returned_by_late_full_list_reply"
+          ]
+        },
+        {
+          "file": "backend/tests/test_memory_mutation_flag.py",
+          "sha256_at_planning": "425daa4beaaa65276ba4c3d75fe45e5a0872226d189981dce722134033c4540b",
+          "node_functions": [
+            "backend/tests/test_memory_mutation_flag.py::test_only_committed_memory_writes_set_mutation_flag"
+          ]
+        },
+        {
+          "file": "backend/tests/test_memory_wire.py",
+          "sha256_at_planning": "b7fa8706291346dd1314a4d8a2caa4c71e8e0bf3088f0c62a8fa5751a249d4c0",
+          "node_functions": [
+            "backend/tests/test_memory_wire.py::test_actual_provider_wire_memory_tool_commits_truthful_receipt"
+          ]
+        },
+        {
+          "file": "backend/tests/test_memory_mercury.py",
+          "sha256_at_planning": "c14628d8f3c147e4b088524c656c9c89701541e3a58180716c706b6e23eb7a85",
+          "node_functions": [
+            "backend/tests/test_memory_mercury.py::test_momo_memory_without_order_is_committed_with_chat_and_used_only_when_relevant"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "memory-background",
+      "requirement": "Postreply extraction, independent configured SDK calls, source bounds, leases/reclaim, failure/recovery, app-lifecycle restart, deletion/correction races",
+      "evidence_level": "Controlled extraction/Dream callbacks plus installed SDK loopback tests. App recreation is not OS-process restart.",
+      "final_status": "pending final frozen candidate execution",
+      "sources": [
+        {
+          "file": "backend/tests/test_memory_background_public.py",
+          "sha256_at_planning": "e09753b113b1476b447052c09be9c02eeec69963733eb60bdb21844630c9c337",
+          "node_functions": [
+            "backend/tests/test_memory_background_public.py::test_completed_chat_recovers_extraction_and_lists_automatic_memory",
+            "backend/tests/test_memory_background_public.py::test_dream_waits_for_ten_valid_automatic_records_and_twenty_four_hours",
+            "backend/tests/test_memory_background_public.py::test_application_worker_does_not_hold_main_reply_while_extraction_is_running",
+            "backend/tests/test_memory_background_public.py::test_late_extraction_cannot_recreate_deleted_fact_under_another_key",
+            "backend/tests/test_memory_background_public.py::test_application_restart_drains_preexisting_pending_source_without_duplicate_save"
+          ]
+        },
+        {
+          "file": "backend/tests/test_memory_background_recovery.py",
+          "sha256_at_planning": "c3cb3901455c5fb5e0ce5b8ca6f51d470a7e02ecf59c80bf850605562c0b6bf4",
+          "node_functions": [
+            "backend/tests/test_memory_background_recovery.py::test_duplicate_source_and_crash_recover_once_after_expired_lease",
+            "backend/tests/test_memory_background_recovery.py::test_stale_worker_cannot_publish_after_an_expired_lease_is_reclaimed",
+            "backend/tests/test_memory_background_recovery.py::test_model_failure_does_not_report_saved_or_retry_unchanged_failed_source",
+            "backend/tests/test_memory_background_recovery.py::test_four_categories_reject_assistant_claims_current_conditions_and_foreign_domains",
+            "backend/tests/test_memory_background_recovery.py::test_unchanged_reextraction_does_not_renew_ttl_or_revision"
+          ]
+        },
+        {
+          "file": "backend/tests/test_memory_background_review.py",
+          "sha256_at_planning": "811582cf7e68ba8f162dfaa2425686893bdbcd9329a2577c0c5abeb8364638f6",
+          "node_functions": [
+            "backend/tests/test_memory_background_review.py::test_full_accepted_user_source_keeps_the_trailing_correction",
+            "backend/tests/test_memory_background_review.py::test_publication_sql_fault_propagates_and_remains_recoverable_without_fake_save"
+          ]
+        },
+        {
+          "file": "backend/tests/test_memory_background_models.py",
+          "sha256_at_planning": "2c8a383f37f1c74ab30798267f04e5637821feb0f73570e4821a0dce6c83076a",
+          "node_functions": [
+            "backend/tests/test_memory_background_models.py::test_independently_configured_extraction_and_dream_models_publish_only_sql_results",
+            "backend/tests/test_memory_background_models.py::test_missing_extraction_model_never_falls_back_to_working_chat_model",
+            "backend/tests/test_memory_background_models.py::test_additive_job_upgrade_preserves_preexisting_memory_and_repeats_safely",
+            "backend/tests/test_memory_background_models.py::test_installed_openai_sdk_uses_two_independent_nonstreaming_memory_calls"
+          ]
+        },
+        {
+          "file": "backend/tests/test_memory_background_mercury.py",
+          "sha256_at_planning": "8f16854ffb8b2c3062390cc172af24235303600e5d1604a80e3f96a9be8656e5",
+          "node_functions": [
+            "backend/tests/test_memory_background_mercury.py::test_only_completed_mercury_chat_enqueues_its_user_source_and_keeps_role_boundary",
+            "backend/tests/test_memory_background_mercury.py::test_oversized_mercury_source_is_not_silently_prefix_extracted"
+          ]
+        },
+        {
+          "file": "backend/tests/test_memory_background_cross_role.py",
+          "sha256_at_planning": "f4ac5f7184640f301c4a6e1fb72b794728858ca465a81218e9c590ccbda9509d",
+          "node_functions": [
+            "backend/tests/test_memory_background_cross_role.py::test_actual_role_same_key_keeps_domain_fence_and_truthful_origin"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dream",
+      "requirement": "9-versus10 effective automatic records, 24h cooldown, 30-day expiry, one active Dream, explicit corrections/tombstones, lease recovery and recaptured-fact validation",
+      "evidence_level": "Explicit simulated clocks; tests actually trigger controlled Dream. Does not establish live Dream/model lifecycle.",
+      "final_status": "pending final frozen candidate execution",
+      "sources": [
+        {
+          "file": "backend/tests/test_memory_background_public.py",
+          "sha256_at_planning": "e09753b113b1476b447052c09be9c02eeec69963733eb60bdb21844630c9c337",
+          "node_functions": [
+            "backend/tests/test_memory_background_public.py::test_completed_chat_recovers_extraction_and_lists_automatic_memory",
+            "backend/tests/test_memory_background_public.py::test_dream_waits_for_ten_valid_automatic_records_and_twenty_four_hours",
+            "backend/tests/test_memory_background_public.py::test_application_worker_does_not_hold_main_reply_while_extraction_is_running",
+            "backend/tests/test_memory_background_public.py::test_late_extraction_cannot_recreate_deleted_fact_under_another_key",
+            "backend/tests/test_memory_background_public.py::test_application_restart_drains_preexisting_pending_source_without_duplicate_save"
+          ]
+        },
+        {
+          "file": "backend/tests/test_memory_background_dream.py",
+          "sha256_at_planning": "75755599cad56482cc5e0d414f11d9a2c59cf36056c685cfb8ed954c0ef43788",
+          "node_functions": [
+            "backend/tests/test_memory_background_dream.py::test_one_active_dream_and_explicit_correction_win_over_late_organized_result",
+            "backend/tests/test_memory_background_dream.py::test_interrupted_dream_recovers_only_after_lease_expiry",
+            "backend/tests/test_memory_background_dream.py::test_failed_dream_does_not_mutate_memories_or_busy_retry_after_restart",
+            "backend/tests/test_memory_background_dream.py::test_expired_automatic_memories_are_not_counted_for_dream_or_listed",
+            "backend/tests/test_memory_background_dream.py::test_unchanged_successful_dream_can_run_again_after_durable_cooldown",
+            "backend/tests/test_memory_background_dream.py::test_explicit_tombstone_shadow_is_excluded_from_dream_threshold_and_model_input",
+            "backend/tests/test_memory_background_dream.py::test_reclaimed_dream_validates_captured_facts_before_sending_any_source_to_model",
+            "backend/tests/test_memory_background_dream.py::test_recovered_bounded_dream_rechecks_ten_gate_when_an_omitted_record_expires"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "recovery",
+      "requirement": "Detached guide execution/SSE replay, stop/shutdown, synthetic dead-incarnation recovery, persistent result and proposal/checkpoint restoration",
+      "evidence_level": "Loopback disconnect tests and app recreation; actual service process stop/relaunch remains a separately identified gap.",
+      "final_status": "pending final frozen candidate execution",
+      "sources": [
+        {
+          "file": "backend/tests/test_guide_disconnect.py",
+          "sha256_at_planning": "2e96e5a875b370435d848aed86c0484af01e8892362c4b87adf91f5fec434bcd",
+          "node_functions": [
+            "backend/tests/test_guide_disconnect.py::test_connected_sse_disconnect_keeps_bounded_work_and_replays_original_events"
+          ]
+        },
+        {
+          "file": "backend/tests/test_guide_lifecycle.py",
+          "sha256_at_planning": "1c5ff8af73316cc7d04edb82222319fbbf3f1316b7980c6f057bd1823ea0f75f",
+          "node_functions": [
+            "backend/tests/test_guide_lifecycle.py::test_owner_reenters_one_canonical_session_preserving_history",
+            "backend/tests/test_guide_lifecycle.py::test_new_goal_amend_abandon_are_versioned_and_do_not_touch_cart",
+            "backend/tests/test_guide_lifecycle.py::test_command_replay_does_not_create_second_task_and_rejects_body_conflict",
+            "backend/tests/test_guide_lifecycle.py::test_owner_cannot_read_or_change_other_task_lifecycle",
+            "backend/tests/test_guide_lifecycle.py::test_run_admission_is_durable_before_stop_and_status_does_not_cancel",
+            "backend/tests/test_guide_lifecycle.py::test_detached_run_finishes_and_replay_does_not_reexecute_model",
+            "backend/tests/test_guide_lifecycle.py::test_amendment_keeps_original_run_anchor_and_fences_stale_result",
+            "backend/tests/test_guide_lifecycle.py::test_message_pagination_and_completed_stop_return_actual_receipt",
+            "backend/tests/test_guide_lifecycle.py::test_legacy_session_is_readable_but_cannot_create_second_active_task",
+            "backend/tests/test_guide_lifecycle.py::test_host_failure_logs_safe_locations_and_cause_chain_not_provider_text"
+          ]
+        },
+        {
+          "file": "backend/tests/test_guide_recovery.py",
+          "sha256_at_planning": "163239ffe8132ba1a06580fce1821ca0af2f04f5ea7466cf61ea1dd3c59edfe3",
+          "node_functions": [
+            "backend/tests/test_guide_recovery.py::test_restart_marks_dead_process_only_and_preserves_committed_result",
+            "backend/tests/test_guide_recovery.py::test_waiting_run_has_distinct_durable_status_and_task_stays_active",
+            "backend/tests/test_guide_recovery.py::test_app_shutdown_fences_and_drains_its_own_inflight_run",
+            "backend/tests/test_guide_recovery.py::test_shutdown_rejects_new_admission_without_orphan_running_receipt",
+            "backend/tests/test_guide_recovery.py::test_shutdown_cancels_even_when_sqlite_writer_blocks_interruption_record"
+          ]
+        },
+        {
+          "file": "backend/tests/test_checkout_public.py",
+          "sha256_at_planning": "0c81f7a47403838f6e18767058b82549c54fd627a7e6b26185ef3369dda0d4ab",
+          "node_functions": [
+            "backend/tests/test_checkout_public.py::test_shelf_checkout_explicit_confirm_replay_owner_and_snapshot",
+            "backend/tests/test_checkout_public.py::test_changed_cart_and_offer_require_new_preview",
+            "backend/tests/test_checkout_public.py::test_shopping_write_hold_preserves_reads_and_facts",
+            "backend/tests/test_checkout_public.py::test_precommit_failure_rolls_back_and_postcommit_loss_replays",
+            "backend/tests/test_checkout_public.py::test_concurrent_same_key_and_cart_add_never_lose_items",
+            "backend/tests/test_checkout_public.py::test_key_is_bound_to_preview_and_order_survives_new_app",
+            "backend/tests/test_checkout_public.py::test_nonempty_p02_snapshot_migrates_to_complete_public_projection_without_rewriting"
+          ]
+        },
+        {
+          "file": "backend/tests/test_aftersales_public.py",
+          "sha256_at_planning": "33f2890096b941d2f06086977913d88efa1b5135b956672d25b242fec8efd056",
+          "node_functions": [
+            "backend/tests/test_aftersales_public.py::test_preview_confirmation_and_replay",
+            "backend/tests/test_aftersales_public.py::test_old_proposal_selection_and_key_conflicts",
+            "backend/tests/test_aftersales_public.py::test_return_policy_whole_line_only",
+            "backend/tests/test_aftersales_public.py::test_owner_human_and_late_facts_fences",
+            "backend/tests/test_aftersales_public.py::test_real_graph_interrupt_model_proposal_never_submits",
+            "backend/tests/test_aftersales_public.py::test_atomic_precommit_failure_then_retry",
+            "backend/tests/test_aftersales_public.py::test_committed_receipt_survives_response_and_checkpoint_loss",
+            "backend/tests/test_aftersales_public.py::test_simultaneous_confirmation_has_one_receipt",
+            "backend/tests/test_aftersales_public.py::test_return_window_expires_between_preview_and_confirmation",
+            "backend/tests/test_aftersales_public.py::test_application_read_eligibility_and_immutable_order_snapshot",
+            "backend/tests/test_aftersales_public.py::test_no_partial_quantity_unknown_item_or_foreign_proposal",
+            "backend/tests/test_aftersales_public.py::test_already_refunded_and_unknown_return_policy_do_not_submit",
+            "backend/tests/test_aftersales_public.py::test_late_model_proposal_cannot_cross_human_generation",
+            "backend/tests/test_aftersales_public.py::test_maintenance_readonly_preserves_new_applications_receipts_and_orders",
+            "backend/tests/test_aftersales_public.py::test_proposal_service_failure_uses_existing_human_handoff",
+            "backend/tests/test_aftersales_public.py::test_pending_proposal_checkpoint_loss_requires_explicit_confirmation",
+            "backend/tests/test_aftersales_public.py::test_rejected_replacement_intent_invalidates_previous_proposal",
+            "backend/tests/test_aftersales_public.py::test_earlier_inflight_proposal_cannot_survive_newer_denied_intent"
+          ]
+        },
+        {
+          "file": "backend/tests/test_order_case_journey.py",
+          "sha256_at_planning": "e1a6b025ab58358222bead48a497ad2e0c17757986187151b410db8abd469abb",
+          "node_functions": [
+            "backend/tests/test_order_case_journey.py::test_checkout_metadata_selection_read_and_restart",
+            "backend/tests/test_order_case_journey.py::test_empty_and_cross_owner_order_case_boundaries"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "migrations-runtime",
+      "requirement": "Additive/repeatable schema and seeds, preservation of synthetic old facts, controlled configuration isolation, actual Pi stdio event/frame contract",
+      "evidence_level": "Fresh dependencies and generated runtime; never import old runtime state or credentials.",
+      "final_status": "pending final frozen candidate execution",
+      "sources": [
+        {
+          "file": "backend/tests/test_foundation_http.py",
+          "sha256_at_planning": "ed99901ae11305f28f6a05a07c9af5d8e5ae280339eb048acd989c32e59b9127",
+          "node_functions": [
+            "backend/tests/test_foundation_http.py::test_bootstrap_uses_persistent_server_identity",
+            "backend/tests/test_foundation_http.py::test_catalog_returns_real_seeded_products_and_current_offer",
+            "backend/tests/test_foundation_http.py::test_schema_initialization_is_repeatable",
+            "backend/tests/test_foundation_http.py::test_schema_initialization_preserves_unrelated_existing_facts"
+          ]
+        },
+        {
+          "file": "backend/tests/test_runtime_pi_product_query.py",
+          "sha256_at_planning": "536babf61c3d32c26e84b81a6b42d7799e1faa230ad5bc517566345648a6bc49",
+          "node_functions": [
+            "backend/tests/test_runtime_pi_product_query.py::test_product_query_uses_pi_search_then_details_and_persists_grounded_reply",
+            "backend/tests/test_runtime_pi_product_query.py::test_pi_can_finish_early_waiting_for_the_users_packaging_choice",
+            "backend/tests/test_runtime_pi_product_query.py::test_pi_stops_at_five_tool_rounds_without_a_summary_model_call",
+            "backend/tests/test_runtime_pi_product_query.py::test_pi_can_query_a_product_category_without_a_name_keyword",
+            "backend/tests/test_runtime_pi_product_query.py::test_untrusted_model_output_cannot_escape_read_only_contract",
+            "backend/tests/test_runtime_pi_product_query.py::test_pi_receipts_replay_only_for_the_same_owner_session_and_body",
+            "backend/tests/test_runtime_pi_product_query.py::test_explicit_stop_kills_inflight_pi_query_without_a_late_product_reply",
+            "backend/tests/test_runtime_pi_product_query.py::test_pi_deadline_closes_inflight_provider_at_thirty_seconds_without_retry",
+            "backend/tests/test_runtime_pi_product_query.py::test_provider_failure_has_safe_diagnostic_correlation_without_secret_text",
+            "backend/tests/test_runtime_pi_product_query.py::test_provider_transport_diagnostic_uses_observed_facts_not_error_prose",
+            "backend/tests/test_runtime_pi_product_query.py::test_waiting_cannot_publish_model_fabricated_price_or_completed_cart_claim",
+            "backend/tests/test_runtime_pi_product_query.py::test_empty_model_selection_is_not_misreported_as_empty_catalog_evidence",
+            "backend/tests/test_runtime_pi_product_query.py::test_spent_http_admission_budget_cannot_start_a_fresh_pi_exploration",
+            "backend/tests/test_runtime_pi_product_query.py::test_changed_session_revision_fences_a_slow_pi_reply",
+            "backend/tests/test_runtime_pi_product_query.py::test_competing_revision_at_first_history_write_cannot_commit_stale_pi_answer",
+            "backend/tests/test_runtime_pi_product_query.py::test_actual_pi_stdio_contract_emits_sdk_events_and_scoped_tool_requests",
+            "backend/tests/test_runtime_pi_product_query.py::test_unexpected_host_failure_preserves_safe_correlation_without_raw_cause"
+          ]
+        },
+        {
+          "file": "backend/tests/test_controlled_test_isolation.py",
+          "sha256_at_planning": "1b9f268780c0532d477494d072c340ec57443a2744394a4bdd6953d71700b933",
+          "node_functions": [
+            "backend/tests/test_controlled_test_isolation.py::test_collection_ignores_parent_credentials_and_dotenv"
+          ]
+        },
+        {
+          "file": "backend/tests/test_aftersales_migration.py",
+          "sha256_at_planning": "b78893b939a41aa3891f8b62dddd9636282840ab4282de2ae3f64b3e3fef2945",
+          "node_functions": [
+            "backend/tests/test_aftersales_migration.py::test_additive_upgrade_repeat_and_safe_backup_rollback"
+          ]
+        },
+        {
+          "file": "backend/tests/test_checkout_migration.py",
+          "sha256_at_planning": "75c66733f934b9d910ade8cb70f8a76ab48e4a674bef21c7c5acf779184b9465",
+          "node_functions": [
+            "backend/tests/test_checkout_migration.py::test_existing_query_order_gets_no_invented_store_and_keeps_snapshot"
+          ]
+        },
+        {
+          "file": "backend/tests/test_comparison_migration.py",
+          "sha256_at_planning": "b5c868a32eef09d9f9eef693c9366b2bbddc2562c41b385fae67a9a11d9bfcdd",
+          "node_functions": [
+            "backend/tests/test_comparison_migration.py::test_comparison_schema_is_additive_and_repeatable",
+            "backend/tests/test_comparison_migration.py::test_comparison_and_existing_plan_cart_receipt_survive_upgrade"
+          ]
+        },
+        {
+          "file": "backend/tests/test_guide_migration.py",
+          "sha256_at_planning": "a3f66a4dfe90d9377ff665a1646b61f0af74a61a5ef94578515f3443a43b8faf",
+          "node_functions": [
+            "backend/tests/test_guide_migration.py::test_guide_upgrade_is_additive_repeatable_and_old_readers_keep_history"
+          ]
+        },
+        {
+          "file": "backend/tests/test_memory_migration.py",
+          "sha256_at_planning": "0815bfef125c52fbaa2eac1ebdf393e50e422aa6693696200a98515c333db301",
+          "node_functions": [
+            "backend/tests/test_memory_migration.py::test_memory_upgrade_is_additive_repeatable_and_safe_for_old_readers"
+          ]
+        },
+        {
+          "file": "backend/tests/test_purchase_migration.py",
+          "sha256_at_planning": "b307a7188b5157e3e484c95576b4003cd66022506841e2e6ca9ccd0f92fd56e2",
+          "node_functions": [
+            "backend/tests/test_purchase_migration.py::test_synthetic_old_delivery_stays_unknown_and_upgrade_is_repeatable",
+            "backend/tests/test_purchase_migration.py::test_fresh_seed_delivery_is_explicit_and_repeated_seed_preserves_changes",
+            "backend/tests/test_purchase_migration.py::test_confirmed_cart_ledger_receipt_survive_repeated_upgrade_and_hold"
+          ]
+        },
+        {
+          "file": "backend/tests/test_aftersales_proposal_migration.py",
+          "sha256_at_planning": "16c982727f75f971626b170750158e8639a45b9515e203c890ef1a193725c557",
+          "node_functions": [
+            "backend/tests/test_aftersales_proposal_migration.py::test_existing_proposal_gets_default_lifecycle_without_payload_rewrite",
+            "backend/tests/test_aftersales_proposal_migration.py::test_existing_case_gets_intent_anchor_without_changing_history"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "natural-expression",
+      "requirement": "Shared role expression instructions and frozen before/after public scenario groups; business facts/receipts/validator preserved",
+      "evidence_level": "Two-role delivered-instruction contract and scripted public regressions; not real naturalness/adherence/token/latency benefit",
+      "final_status": "scoped baseline37 and candidate2+37 passed; final frozen integrated execution pending",
+      "sources": [
+        {
+          "file": "backend/tests/test_next_expression_public.py",
+          "sha256_at_planning": "90328e0a4d0d9ccefe6eb7961202d1a37a7c069531cc693f684b398feed314e8",
+          "node_functions": [
+            "backend/tests/test_next_expression_public.py::test_two_role_expression_preserves_facts_and_receipts_with_relevant_brief_instructions"
+          ]
+        }
+      ]
+    }
+  ],
+  "gates": [
+    {
+      "gate": "TASK07 final shared-expression candidate",
+      "status": "Scoped2-role contract plus identical37-case baseline/candidate set passed; production prompt-only candidate1349186 awaiting final integration/full verification; no real-model benefit claim"
+    },
+    {
+      "gate": "Final same-candidate backend/build/UI suite",
+      "status": "not run; wait for TASK07 release then detached frozen snapshot"
+    },
+    {
+      "gate": "Actual service OS-process restart",
+      "status": "Bounded probe passed initially on c3747dd and again on1349186; own-process SIGKILL/relaunch, checkout replay, interrupted run and explicit continuation. Final frozen integration rerun still pending; not background-memory OS restart."
+    },
+    {
+      "gate": "Real Kev and main/extraction/Dream provider samples",
+      "status": "unrun; no credentials read or transmitted; user-run handoff required"
+    },
+    {
+      "gate": "Real browser layout/click/reload/back-forward/close-reopen",
+      "status": "unrun; known browser restriction; controlled DOM is separate"
+    },
+    {
+      "gate": "Human natural-language review and actual model performance",
+      "status": "unrun; scripted output and fixed usage are not quality/performance improvements"
+    },
+    {
+      "gate": "Private unseen holdout",
+      "status": "unrun; not opened or exposed to implementers; availability and execution authority not established"
+    },
+    {
+      "gate": "Frozen V3 independent business comparison",
+      "status": "unrun; historical reports and inherited test coverage are not a current V3 comparison"
+    },
+    {
+      "gate": "User acceptance",
+      "status": "pending user; agent cannot sign off"
+    },
+    {
+      "gate": "Final independent Standards and Spec review",
+      "status": "pending exact final source after TASK07"
+    }
+  ],
+  "runner": {
+    "backend": "run_controlled.py <frozen-root> final-full -q tests",
+    "runtime": "npm run typecheck && npm run build in runtime/pi, fresh output per snapshot",
+    "frontend": "npm run build && node_modules/.bin/tsc --noEmit in frontend",
+    "ui": "run_all_dom.py plus both06 stream harnesses and07 harnesses if supplied",
+    "isolation": "Clean synthetic environment before imports; dotenv reads denied; loopback-only Python networking; distinct temporary DB/checkpoints; real provider calls prohibited",
+    "evidence": "Before/after source manifest including all generated runtime JS, exact commands/exits/durations, raw controlled logs, data/Prompt/dependency hashes; no credentials/headers"
+  },
+  "restart_probe": {
+    "path": "work/next-experience/10/test_os_process_restart.py",
+    "sha256": "3beb48532eb17ffb8533235e6b32c3ecf09b8ff9f644e44a02cc1d0fb8f4b747",
+    "initial_evidence": "runs/process-restart-probe-initial",
+    "final_status": "not run on final07 candidate yet",
+    "candidate_evidence": "runs/next07-process-restart"
+  },
+  "test_only_holdout_policy": "Private holdout remains unread/unrun and is not represented by public development tests."
+}

@@ -1,5 +1,6 @@
 """Public owner/version/supply and approved confirmation UoW fault seam."""
 from concurrent.futures import ThreadPoolExecutor
+import json
 import pytest
 from sqlalchemy import update
 from sqlalchemy.orm import Session
@@ -151,27 +152,73 @@ def test_stopped_run_cannot_claim_confirmation_uow(pi_client):
     assert client.get('/api/v1/cart').json()['items'] == []
 
 
-@pytest.mark.parametrize('conditions,code', [({'budget_fen':699},'BUDGET_EXCEEDED'),({'exclusions':['pi-cola']},'EXCLUSION_CONFLICT')])
-def test_plan_preparation_applies_budget_and_exclusions_before_display(pi_client, conditions, code):
+def test_plan_preparation_preserves_budget_quote_before_display(pi_client):
     from app.models.store import Store
     from test_purchase_public import purchase_hook
     client, requests = pi_client
     with Session(requests.engine) as db:
         db.execute(update(Store).values(delivery_reachable=True))
         db.commit()
-    command(client,'new_goal',goal='买两件测试可乐',conditions=conditions)
+    command(client,'new_goal',goal='买两件测试可乐',conditions={'budget_fen':699})
     requests.answer_hook = purchase_hook
     events = turn(client,'选定测试可乐，两件，先给我清单','constrained-prepare')
-    if code == 'BUDGET_EXCEEDED':
-        assert events[-1]['type'] == 'turn.completed', events
-        state = client.get(BASE).json()
-        assert state['plan']['budget_quote'] == {'budget_fen':699,'total_fen':700}
-        assert state['plan']['can_confirm'] is False
-        assert state['conditions']['budget_fen'] == 699
-    else:
-        assert events[-1]['type'] == 'error'
-        assert events[-1]['payload']['code'] == code
-        assert client.get(BASE).json()['plan'] is None
+    assert events[-1]['type'] == 'turn.completed', events
+    state = client.get(BASE).json()
+    assert state['plan']['budget_quote'] == {'budget_fen':699,'total_fen':700}
+    assert state['plan']['can_confirm'] is False
+    assert state['conditions']['budget_fen'] == 699
+    assert client.get('/api/v1/cart').json()['items'] == []
+
+
+def test_excluded_sku_is_filtered_before_recommendation_or_plan(pi_client):
+    from test_purchase_public import purchase_hook
+    client, requests = pi_client
+    command(client,'new_goal',goal='按排除条件找可乐',conditions={'exclusions':['pi-cola']})
+    def empty_search_hook(body):
+        outputs = [json.loads(m['content']) for m in body['messages'] if m['role'] == 'tool']
+        if len(outputs) == 2:
+            assert outputs[-1]['products'] == [], 'The banned SKU must not become a recommendation reference'
+            return {'role':'assistant','content':json.dumps({'status':'completed','answer_kind':'products','product_refs':[]})}, 'stop'
+        return purchase_hook(body)
+    requests.answer_hook = empty_search_hook
+    events = turn(client,'保留排除条件查可乐，先别加购','excluded-search')
+    assert events[-1]['type'] == 'turn.completed', events
+    assert events[-1]['payload']['no_matches'] is True
+    assert events[-1]['payload']['product_evidence'] == []
+    state = client.get(BASE).json()
+    assert state['conditions'] == {'exclusions':['pi-cola']}
+    assert state['plan'] is None
+    assert client.get('/api/v1/cart').json()['items'] == []
+
+
+def test_plan_preparation_rechecks_excluded_identity_changed_after_search(pi_client):
+    from app.models.catalog import CatalogProduct
+    from app.models.store import Store
+    from test_purchase_public import purchase_hook
+    client, requests = pi_client
+    with Session(requests.engine) as db:
+        db.execute(update(Store).values(delivery_reachable=True))
+        db.commit()
+    conditions = {'exclusions':['受限品牌']}
+    command(client,'new_goal',goal='买两件测试可乐',conditions=conditions)
+    def catalog_changes_after_search(body):
+        outputs = [json.loads(m['content']) for m in body['messages'] if m['role'] == 'tool']
+        if len(outputs) == 2:
+            assert [p['sku_id'] for p in outputs[-1]['products']] == ['pi-cola']
+            # The real safe search has already returned a scoped ref. Update
+            # authoritative catalog facts before the scripted model proposes it,
+            # so preparation must revalidate rather than trust earlier evidence.
+            with Session(requests.engine) as db:
+                db.get(CatalogProduct, 'pi-cola').brand = '受限品牌'
+                db.commit()
+        return purchase_hook(body)
+    requests.answer_hook = catalog_changes_after_search
+    events = turn(client,'选定测试可乐，两件，先给我清单','changed-catalog-prepare')
+    assert events[-1]['type'] == 'error', events
+    assert events[-1]['payload']['code'] == 'EXCLUSION_CONFLICT'
+    state = client.get(BASE).json()
+    assert state['conditions'] == conditions
+    assert state['plan'] is None
     assert client.get('/api/v1/cart').json()['items'] == []
 
 

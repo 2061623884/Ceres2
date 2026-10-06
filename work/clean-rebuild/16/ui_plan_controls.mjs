@@ -1,3 +1,4 @@
+import {withLegacyNavigationTransport} from '../../next-experience/03/legacy_navigation_transport.mjs';
 /** Isolated retained App DOM, not real browser or provider acceptance. */
 import assert from 'node:assert/strict';
 import path from 'node:path';
@@ -25,11 +26,12 @@ globalThis.fetch=async(input,options={})=>{
  if(url.includes('/guide/sessions'))return response(state);
  throw new Error('Unexpected fetch '+url);
 };
+globalThis.fetch=withLegacyNavigationTransport(globalThis.fetch);
 const root=createRoot(container);
 async function click(element){assert.ok(element);await act(async()=>element.dispatchEvent(new dom.window.MouseEvent('click',{bubbles:true})));}
 await act(async()=>root.render(createElement(App)));
-await click([...container.querySelectorAll('button')].find(b=>b.textContent==='商品'));
-await click([...container.querySelectorAll('button')].find(b=>b.textContent==='问问可可'));
+if(sessionStorage.getItem('ceres-chat-visible') !== 'keke'){await click([...container.querySelectorAll('button')].find(b=>b.textContent==='商品'));
+await click([...container.querySelectorAll('button')].find(b=>b.textContent==='问问可可'));}else{assert.ok(container.querySelector('[aria-label="角色导航"]'),'Reload restores the explicitly open chat shell');}
 if(mode==='budget') {
  assert.match(container.textContent,/当前预算.*10.00/);
  const accept=[...container.querySelectorAll('button')].find(b=>b.textContent==='接受报价 14.00 元，更新预算');

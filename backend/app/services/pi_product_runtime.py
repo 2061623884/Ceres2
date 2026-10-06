@@ -16,6 +16,7 @@ from uuid import uuid4
 from app.core.config import get_settings
 from app.core.errors import AppError
 from app.services.catalog_service import CatalogService
+from app.prompts.experience import keke_modules
 
 MAX_TOOL_ROUNDS = 5
 EXPLORATION_SECONDS = 30.0
@@ -24,12 +25,19 @@ WORKER = Path(__file__).resolve().parents[3] / 'runtime' / 'pi' / 'dist' / 'work
 
 
 class PiProductRuntime:
-    def __init__(self, catalog: CatalogService, assert_current: Callable[[], None], *, run_id: str, route_request: Callable[[dict], dict], context: dict, memory_command: Callable[[dict], dict], comparison_search: Callable[[dict], tuple], candidate_resolve: Callable[[str], dict], history_command: Callable[[dict], dict]):
+    def __init__(self, catalog: CatalogService, assert_current: Callable[[], None], *, run_id: str, route_request: Callable[[dict], dict], context: dict, memory_command: Callable[[dict], dict], product_search: Callable[[dict], tuple], comparison_search: Callable[[dict], tuple], candidate_resolve: Callable[[str], dict], history_command: Callable[[dict], dict], explore_products: Callable[[dict], dict], select_question_products: Callable[[dict], dict], activity_active: Callable[[], bool]):
+        self.activity_active = activity_active
+        self.select_question_products = select_question_products
+        self.question_selections = {}
+        self.explore_products = explore_products
+        self.explorations = {}
         self.history_command = history_command
         self.history_results = {}
+        self.policy_results = {}
         self.run_id = run_id
         self.route_request = route_request
         self.memory_command = memory_command
+        self.product_search = product_search
         self.comparison_search = comparison_search
         self.candidate_resolve = candidate_resolve
         self.persisted_candidate_refs = set()
@@ -53,6 +61,26 @@ class PiProductRuntime:
 
     def _tool(self, name: str, arguments: dict[str, Any]) -> dict[str, Any]:
         self.assert_current()
+        if name == 'select_question_products':
+            if not self.route_result or self.route_result['kind'] not in ('new_goal', 'continue', 'amend'):
+                raise AppError(422, 'PI_ROUTE_INVALID', '请先明确当前购买目标')
+            result = self.select_question_products(arguments)
+            ref = f'selection-{uuid4().hex}'
+            self.question_selections[ref] = (arguments, result)
+            return {**result, 'selection_ref':ref}
+        if name == 'explore_products':
+            if not self.route_result or self.route_result['kind'] not in ('new_goal', 'continue', 'amend'):
+                raise AppError(422, 'PI_ROUTE_INVALID', '请先明确当前购买目标')
+            result = self.explore_products(arguments)
+            ref = f'exploration-{uuid4().hex}'
+            self.explorations[ref] = result
+            return {**result, 'exploration_ref':ref}
+        if name == 'search_after_sales_policy':
+            from app.mercury.policy import search_policies
+            result = search_policies(arguments['query'], arguments.get('category'))
+            ref = f'policy-{uuid4().hex}'
+            self.policy_results[ref] = result
+            return {**result, 'policy_ref':ref}
         if name == 'history_command':
             result = self.history_command(arguments)
             self.history_results[result['history_ref']] = result
@@ -76,7 +104,7 @@ class PiProductRuntime:
             self.general_candidates[ref] = messages
             return {'general_ref': ref}
         if name == 'search_products':
-            products, total = self.catalog.search_products(q=arguments.get('query'), category_id=arguments.get('category_id'), page_size=5)
+            products, total = self.product_search(arguments)
             self.searched = True
             rows = []
             for product in products:
@@ -95,6 +123,8 @@ class PiProductRuntime:
             self.comparison_refs = set(self.products)
             return {'products':list(self.products.values()), 'total':total, 'is_demo':True}
         if name == 'search_dishes':
+            if self.activity_active():
+                raise AppError(422, 'ACTIVITY_SCOPE_CONFLICT', '当前活动只选购成品；如需菜谱食材，请明确开始新的购买目标。')
             self.dishes_searched = True
             from app.services.dish_service import DishService
             service = DishService(self.catalog)
@@ -106,6 +136,8 @@ class PiProductRuntime:
             self.searched = True
             return {'dishes':rows, 'is_demo':True}
         if name == 'propose_dish':
+            if self.activity_active():
+                raise AppError(422, 'ACTIVITY_SCOPE_CONFLICT', '当前活动只选购成品；如需菜谱食材，请明确开始新的购买目标。')
             ref = arguments['dish_ref']
             people = arguments.get('people')
             if ref not in self.dishes or (people is not None and (type(people) is not int or people <= 0)):
@@ -137,6 +169,8 @@ class PiProductRuntime:
             product = self.catalog.get_product(self.products[ref]['sku_id'])
             if product is None:
                 raise AppError(409, 'PI_PRODUCT_UNAVAILABLE', '商品已不再可查询')
+            if self.activity_active() and not any(row['sku_id'] == product['sku_id'] for row in self.explore_products({})['products']):
+                raise AppError(409, 'ACTIVITY_SCOPE_CONFLICT', '商品已不符合当前活动与购买条件，请重新查询。')
             self.products[ref] = {**product, 'ref': ref}
             return {'product': self.products[ref], 'is_demo': True}
         raise AppError(422, 'PI_TOOL_FORBIDDEN', '本次运行仅允许查询商品')
@@ -178,7 +212,7 @@ class PiProductRuntime:
                 return self._close('stopped')
             if time.monotonic() >= deadline:
                 return self._close('deadline')
-            send({'type': 'start', 'message': message, 'categories': categories, 'context': self.context, 'model': {'baseUrl': settings.openai_base_url, 'apiKey': settings.openai_api_key, 'id': settings.llm_model}, 'maxToolRounds': MAX_TOOL_ROUNDS, 'timeoutMs': max(1, int((deadline - time.monotonic()) * 1000))})
+            send({'type': 'start', 'message': message, 'categories': categories, 'context': self.context, 'promptModules': keke_modules(), 'model': {'baseUrl': settings.openai_base_url, 'apiKey': settings.openai_api_key, 'id': settings.llm_model}, 'maxToolRounds': MAX_TOOL_ROUNDS, 'timeoutMs': max(1, int((deadline - time.monotonic()) * 1000))})
             while True:
                 if should_stop():
                     return self._close('stopped')
@@ -293,7 +327,37 @@ class PiProductRuntime:
             raise AppError(502, 'PI_ANSWER_INVALID', 'Pi 回复不符合事实引用契约') from exc
         if not isinstance(answer, dict):
             raise AppError(502, 'PI_ANSWER_INVALID', 'Pi 回复必须为结构化对象')
+        outcome = self._answer_value(answer)
+        # A shopping result may carry one independently queried policy. Each
+        # reference is validated before the host publishes either result.
+        if answer.get('answer_kind') in ('exploration', 'question_selection', 'products', 'comparison', 'purchase_plan') and 'policy_ref' in answer:
+            outcome['policy_message'] = self._policy_message(answer['policy_ref'])
+        return outcome
+
+    def _policy_message(self, ref):
+        from app.mercury.policy import policy_summary
+        if not isinstance(ref, str) or not self.policy_results or ref != next(reversed(self.policy_results)):
+            raise AppError(422, 'PI_UNKNOWN_REFERENCE', '政策必须引用本次实际查询的规则')
+        return policy_summary(self.policy_results[ref]['data'])
+
+    def _answer_value(self, answer):
         kind = answer.get('answer_kind')
+        if kind == 'question_selection':
+            ref = answer.get('selection_ref')
+            if not isinstance(ref, str) or ref not in self.question_selections:
+                raise AppError(422, 'PI_UNKNOWN_REFERENCE', '选品必须引用本次核对结果')
+            arguments, result = self.question_selections[ref]
+            if result.get('exploration'):
+                return {'status':'completed', 'message':result['exploration']['question'], 'products':[], 'exploration':result['exploration']}
+            return {'status':'completed', 'message':'清单已准备好，请核对后明确确认加购。', 'products':[], 'purchase_proposal':{'question_selection':arguments}}
+        if kind == 'exploration':
+            ref = answer.get('exploration_ref')
+            if not isinstance(ref, str) or ref not in self.explorations:
+                raise AppError(422, 'PI_UNKNOWN_REFERENCE', '选择问题必须引用本次真实供给')
+            result = self.explorations[ref]
+            return {'status':'completed', 'message':result['question'], 'products':[], 'exploration':result}
+        if kind == 'policy_result':
+            return {'status':'completed', 'message':self._policy_message(answer.get('policy_ref')), 'products':[]}
         if kind == 'history_result':
             ref = answer.get('history_ref')
             if not isinstance(ref, str) or not self.history_results or ref != next(reversed(self.history_results)):
@@ -357,7 +421,7 @@ class PiProductRuntime:
         if not products and not self.searched:
             raise AppError(502, 'PI_EVIDENCE_MISSING', '尚未执行商品查询，不能确认无匹配结果')
         message = '已查询到商品，但本次没有选定展示结果。' if not products and self.products else self._facts(products)
-        return {'status': 'completed', 'message': message, 'products': products, 'comparison':self.comparison_requested}
+        return {'status': 'completed', 'message': message, 'products': products, 'comparison':self.comparison_requested, 'no_matches':not self.products}
 
     def _facts(self, products: list[dict[str, Any]]) -> str:
         if not products:

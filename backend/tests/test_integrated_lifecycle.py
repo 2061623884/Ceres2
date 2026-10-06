@@ -24,6 +24,7 @@ from test_guide_lifecycle import BASE, command
 from test_guide_semantics import turn
 from test_multidish_public import confirm_body
 from test_aftersales_public import confirm, proposal
+from public_role_navigation import choose_public_role
 
 NOW = datetime(2026, 10, 5, 12, tzinfo=timezone.utc)
 
@@ -95,6 +96,7 @@ def compared_order(client, requests):
     url = '/api/v1/mercury/sessions/' + sid
     selected_order = client.put(url + '/order', json={'order_id': order['order_id'], 'selection_version': 0})
     assert selected_order.status_code == 200, selected_order.text
+    choose_public_role(client, BASE, 'momo')
     return order, url
 
 

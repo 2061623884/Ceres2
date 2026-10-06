@@ -4,6 +4,7 @@ from uuid import uuid4
 from app.models.comparison import ComparisonDisplay
 from app.services.catalog_service import CatalogService
 from app.core.errors import AppError
+from app.services.product_constraints import safety_mismatch, drink_filter_mismatch
 
 
 def comparison_card(product):
@@ -34,20 +35,28 @@ class ComparisonService:
         context['delivery_zone_id'] = session.delivery_zone_id or entry['delivery_zone_id']
         return session_anchor(self.db, session), context
 
-    def search(self, session_id, arguments, view_context=None):
+    def search(self, session_id, arguments, view_context=None, *, scope_to_page=True):
         from app.models.guide import GuideTask
         anchor, context = self._scope(session_id, view_context)
         task = self.db.get(GuideTask, anchor[1]) if anchor[1] else None
         conditions = json.loads(task.conditions_json) if task else {}
         filters = {**arguments, **{key: conditions[key] for key in ('query', 'category_id', 'brand', 'packaging', 'pack_count_mode') if conditions.get(key) is not None}}
-        category = context['category_id'] or filters.get('category_id')
-        if context['category_id'] and filters.get('category_id') and context['category_id'] != filters['category_id']:
+        category = (context['category_id'] if scope_to_page else None) or filters.get('category_id')
+        if scope_to_page and context['category_id'] and filters.get('category_id') and context['category_id'] != filters['category_id']:
             return [], 0
+        if conditions.get('activity_id'):
+            from app.services.product_question_service import ProductQuestionService
+            products = ProductQuestionService(self.db, self.owner_id).explore(session_id, {'category_id':category, 'query':filters.get('query')})['products']
+            return products[:5], len(products)
         catalog = CatalogService(self.db, context['store_id'])
         matched, count, page = [], 0, 1
         while True:
             products, total = catalog.search_products(q=filters.get('query'), category_id=category, page=page, page_size=100)
             for product in products:
+                if safety_mismatch(product, conditions) or drink_filter_mismatch(product, conditions):
+                    continue
+                if conditions.get('product_type') is not None and product['product_type'] != conditions['product_type']:
+                    continue
                 metadata = product['metadata']
                 if filters.get('brand') is not None and product['brand'] != filters['brand']:
                     continue

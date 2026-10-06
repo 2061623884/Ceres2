@@ -1,5 +1,7 @@
 # Ceres2 · 智能导购与受控售后
 
+> 2026-10-06 本轮：下一阶段体验更新（10 票）。受控技术验证通过，真实模型、浏览器与用户验收仍开放。先看下方更新摘要，再读[接手与剩余验收](docs/NEXT-EXPERIENCE-HANDOFF.md)和[当前十票总 TASK](tasks/ceres2-next-experience.md)。
+
 Ceres2 是一个面向商超购物场景的 AI 应用原型：帮助用户把“想做什么、有什么要求”转化为可检查、可修改、可明确确认的购买清单，并将模拟订单衔接到独立的售后流程。
 
 项目围绕两类核心问题展开：
@@ -9,12 +11,26 @@ Ceres2 是一个面向商超购物场景的 AI 应用原型：帮助用户把“
 
 普通商品浏览与搜索仍然保留。AI 负责理解需求、必要追问和解释；价格、库存、数量、订单与写入结果由业务服务提供和校验。**当前商品供给、结算、支付、配送和售后均为模拟业务，不涉及真实交易、资金执行或履约。**
 
+## 本轮更新：评审时先看这些
+
+本轮在原有模拟购物生命周期上改进选购、角色导航和结果呈现，没有改变 Python 业务权威或明确确认要求：
+
+- **零食与饮品选购**：按实际模拟供给先选类、再筛选；问题和选项使用稳定身份，旧选项不能误用于新问题。支持预算、饮食限制、已知数量与跨货架明确搜索，选择商品不等于确认加购。
+- **角色导航与政策**：一次 Kev 请求联合判断职责和能力；跨角色跳转由用户选择。可可、墨墨均可回答无订单的一般政策；购物＋政策复合请求保留两部分结果。
+- **已有活动成品选购**：复用首页活动入口及限定商品关联；修改或退出时清理旧条件，不延续旧写入授权。当前静态数据共 **70 个模拟 SKU／Offer**。
+- **结果先行与按需上下文**：业务结果先可用，再增量展示经校验的介绍；公共、角色和能力 Prompt 分模块按需组合。表达优化已有受控验证，但尚未证明真实语言品质、token、费用或时延改善。
+- **售后回到购物**：保存售后回执或失败状态，再明确返回购物；保留原有幂等、记忆与人工负责期间的写入保护。售后申请提交不能表述为退款已完成。
+
+最终审查发现的条件丢失、已知数量、跨品类搜索、复合结果与表达诊断问题已经修复，具体证据见 [Standards 审查](work/next-experience/10/standards-review.md)、[Spec 审查](work/next-experience/10/spec-review.md)及[修复记录](work/next-experience/10/review-fixes.md)。这表示具体实现问题闭合，不代表全部产品验收完成。
+
 ## 从哪里开始
 
-- **想了解产品与规划**：先读本页，再看 [PROJECT](PROJECT.md) 与 [产品定义](prd.md)。
-- **准备在 Ubuntu 运行或接手开发**：读 [本地接力指南](docs/HANDOFF-UBUNTU.md)，其中包含安装、配置、启动、体验步骤和剩余验收项。
-- **想了解技术来源**：读 [参考项目与采用边界](docs/REFERENCES.md)，区分实际依赖、架构参考与仅做研究的项目。
-- **准备处理具体工作**：从 [16 项任务总索引](tasks/ceres2-upgrade.md) 进入对应 TASK，再读它链接的规格、实现与证据。
+- **审查本轮**：[10 票总索引](tasks/ceres2-next-experience.md) → [规格](docs/plans/ceres2-next-experience-spec.md)／[决策](docs/plans/ceres2-next-experience-decisions.md) → 对应实现和证据；[TASK10](tasks/ceres2-next-10-candidate-evidence.md)集中列出验收边界。
+- **核对验证**：[最终 Tester 报告](work/next-experience/10/final-controlled-verification.md)、[源码等价记录](work/next-experience/10/final-controlled-equality.json)、[覆盖清单](work/next-experience/10/coverage-manifest.json)。
+- **本地运行或接手**：以[本轮接手指南](docs/NEXT-EXPERIENCE-HANDOFF.md)为当前入口；[旧 Ubuntu 指南](docs/HANDOFF-UBUNTU.md)仅补充安装背景，旧模型、65 商品与 41 项 live 记录不能套用本轮。
+- **了解产品与来源**：[PROJECT](PROJECT.md)、[产品定义](prd.md)、[参考项目与采用边界](docs/REFERENCES.md)。[原 16 票索引](tasks/ceres2-upgrade.md)保留原阶段范围与历史证据。
+
+部分 TASK 中的历史／中间执行证据链接指向仅保留在云端的未跟踪文件，未随公开仓库发布。最终候选的公开依据是上述最终报告、两轴审查，以及报告链接的四组 `fixture-final-*` 记录与日志；不将未发布的中间链接视为公开可访问证据。
 
 ## 系统如何分工
 
@@ -64,17 +80,17 @@ Pi 和 LangGraph 是采用的外部运行框架。Ceres2 的工程重点在于�
 
 ## 当前进展与已知限制
 
-**第一阶段已有实现和受控技术验证，整体仍待验收。** 01–15 的受控技术范围及 TASK16 的受控集成已有通过记录；它们不能代替真实模型、真实浏览器和用户本人体验。
+**同一云端冻结测试源码 `0c752a2b252d797297b4b073883571884ff6855a` 的受控技术验证通过，整体仍待验收。** 该 SHA 是本地测试来源标识，不保证可在 GitHub checkout。公开发布将保留远程历史、以经审查的最终文件树形成集成提交；发布 commit 与测试来源映射在推送后记录。后续为文档提交，不将这些提交冒称重新执行过产品验证。最终报告记录：
 
-2026-10-06 首次真实模型批次通过配置与隔离数据检查，但在 Pi 比较阶段返回 `PI_PROVIDER_ERROR`；记录中的 502 是应用状态，上游原因未知。随后诊断补丁补充了安全的传输诊断字段。
+- 后端全量 **426/426** 通过，pytest 645.95 秒。
+- **37 个受控 DOM/client 场景**通过；这是受控 React DOM／客户端验证，不是真实浏览器。
+- Pi runtime typecheck/build、前端 production build／严格 TypeScript 通过；仓库未配置 lint 脚本，不记为 lint 通过。
+- **1/1 隔离 OS 进程终止／重启探针**通过：已提交的结算回执保留、中断 Pi 不自动重放、用户可明确继续。它不证明任意断电、磁盘故障或多机恢复。
+- 四次 capture 的源文件未变；等价记录确认 238 个 backend 源文件、280 个 build/UI 源与文档后继集成一致。两轴独立审查及 fixture 窄复核闭合。
 
-同日 03:42 UTC，在 commit `3283e28` 上执行的一次有界真实 API 批次通过配置、seed 和 live health 检查，但 Pi 比较在原 15 秒保护上限处以 `runtime_status=deadline` 结束；4 轮工具交互后第 5 轮模型调用尚未完成。没有观察到上游 HTTP 状态或传输原因，购买、结算与售后阶段未运行。[脱敏证据](work/live-validation/tmp/live-20261006T034233Z-d66f017a40aa/evidence)。
+**仍未完成**：真实配置的 provider／Kev 与浏览器旅程、自然中文品质、真实 usage／时延、独立未见 holdout、冻结 V3 业务比较、真实记忆／Dream 长周期观察及用户本人验收。Prompt 指令长度实际增加，不能宣称成本优化。非阻塞 Vite 配置警告和受控 `ShelfScreen` render 期间更新 `ShoppingApp` 的 React 警告仍有记录，真实页面验收需关注。
 
-用户随后明确将导购保护上限调到 30 秒。04:40 UTC 的单次复测通过配置、隔离、seed 和 health gates，但约 9.87 秒时在 Pi 比较阶段失败：应用返回 `422 PI_UNKNOWN_REFERENCE`。它不是 30 秒截止；证据没有记录 provider 上游 HTTP 状态、传输原因、runtime status 或工具轮数。购买、结算和 Mercury 阶段未运行。[脱敏证据](work/live-validation/tmp/live-20261006T044045Z-ade5f6652231/evidence)。
-
-本地安装／构建冒烟已完成：Python 3.11.15、Node 22.19.0/npm 10.9.3；后端依赖检查、Pi runtime 和前端构建通过。Python 3.12.14 未能通过 uv 获取；当前版本满足项目 `>=3.11` 要求。前端构建有 Vite 配置警告，npm 提示一项 high severity 依赖漏洞。
-
-Pi runtime typecheck/build 通过。后端相关模块此前 **23/23 通过**；针对 Mercury prompt/tool 描述的最新定向测试 **31/31 通过**。2026-10-06 最新隔离真实 API batch 使用 `deepseek-flash` / `api.deepseek.com`，34.02 秒 exit 0，**41/41 checks 通过**，覆盖比较、选品、模拟加购/结算与重放、退款提案/确认与重放；记忆提取为 observed，Dream 因阈值未达到而跳过。[脱敏 evidence](work/live-validation/tmp/live-20261006T062210Z-0575eb5f534d/evidence)。先前 live 失败保留为历史，不追认为通过。真实浏览器、历史复购、供给修订、人工、停止/恢复、记忆修改/删除、独立第二次运行和用户本人验收仍未完成；TASK16 仍待验收。具体范围见 [Ubuntu 接力指南](docs/HANDOFF-UBUNTU.md)，整体验收以 [TASK16](tasks/ceres2-runtime-upgrade-16-integrated-verification.md) 为准。
+旧阶段曾完成 41/41 真实 API checks，也保留了更早 provider 错误、15 秒截止及未知引用失败；它们属于各自历史版本，**不构成本轮真实模型通过证据**。历史详情见[旧 Ubuntu 接力记录](docs/HANDOFF-UBUNTU.md)，本轮结论以[最终报告](work/next-experience/10/final-controlled-verification.md)与[当前接手指南](docs/NEXT-EXPERIENCE-HANDOFF.md)为准。
 
 ## 文件与目录管理
 
@@ -117,6 +133,11 @@ Ceres2/
 |   |   |-- migrations/               # 业务 schema 初始化与版本迁移
 |   |   |-- services/                 # 购物、供给、确认、记忆等业务服务
 |   |   |   |-- seed_service.py        # 显式、幂等导入静态商品/门店/Offer
+|   |   |   |-- product_question_service.py # 稳定问题、候选选择与确认合同
+|   |   |   |-- navigation_service.py  # 单次职责判断与用户选择的角色跳转
+|   |   |   |-- kev_provider.py        # Kev /v1/systemone 联合职责／能力接缝
+|   |   |   |-- activity_service.py    # 已有活动与限定成品选购
+|   |   |   |-- result_introduction_service.py # 结果先行与受校验的介绍
 |   |   |   |-- pi_product_runtime.py  # Python 与 Node/Pi 的运行接缝
 |   |   |   `-- memory_background.py   # 后台记忆提取与 Dream 作业
 |   |   |-- mercury/                  # 墨墨售后；与可可保持独立入口
@@ -132,7 +153,10 @@ Ceres2/
 |       |-- package.json              # Pi SDK 依赖及 build/typecheck 命令
 |       |-- package-lock.json         # 固定 Node 依赖解析
 |       |-- tsconfig.json             # TypeScript 编译配置
-|       `-- src/worker.ts             # 实际 Pi Agent、工具循环与进程协议
+|       `-- src/
+|           |-- worker.ts             # 实际 Pi Agent、工具循环与进程协议
+|           |-- prompt-modules.ts     # 公共、角色与能力的按需 Prompt
+|           `-- result-expression.ts  # 有界结果表达与事实保护
 |-- frontend/
 |   |-- AGENTS.md                     # 前端专属修改约定
 |   |-- package.json                  # React/Vite 依赖与开发构建命令
@@ -142,6 +166,7 @@ Ceres2/
 |       |-- main.tsx                  # React 启动入口
 |       |-- App.tsx                   # 购物页面与可可交互
 |       |-- MercuryChat.tsx           # 墨墨售后聊天
+|       |-- QuestionChoices.tsx        # 稳定问题与可选项呈现
 |       |-- HumanOperatorPage.tsx     # 人工工单处理页面
 |       |-- components/               # 可复用界面组件
 |       `-- lib/                      # HTTP/SSE 客户端与业务接口适配
@@ -149,16 +174,21 @@ Ceres2/
 |   |-- fixtures/                     # products/offers/recipes 与图片映射 JSON
 |   `-- images/                       # 已恢复并核验的静态商品图片
 |-- docs/
-|   |-- HANDOFF-UBUNTU.md              # Ubuntu 安装、运行、验证与接力步骤
+|   |-- NEXT-EXPERIENCE-HANDOFF.md     # 本轮运行、准确候选与剩余验收
+|   |-- HANDOFF-UBUNTU.md              # 原阶段 Ubuntu 安装与历史 live 记录
 |   |-- REFERENCES.md                  # 参考项目链接及采用边界，不携带整仓源码
 |   |-- plans/                        # 实施规格、拆分方案与技术研究
 |   |-- adr/                          # 架构决策及原因
 |   `-- agents/                       # 本项目任务管理与领域文档约定
 |-- tasks/
-|   |-- ceres2-upgrade.md              # 16 项正式任务的总索引
+|   |-- ceres2-next-experience.md      # 本轮 10 票总索引
+|   |-- ceres2-next-*.md               # 本轮任务、依赖、状态与证据
+|   |-- ceres2-upgrade.md              # 原阶段 16 项正式任务的总索引
 |   `-- ceres2-runtime-upgrade-*.md    # 各项范围、依赖、状态、验收和证据
 `-- work/
-    |-- clean-rebuild/                # 按任务组织的交付说明、迁移来源与验证脚本
+    |-- next-experience/              # 本轮各票合同、脚本与评审证据
+    |   `-- 10/                       # 同候选最终验证、等价记录与独立审查
+    |-- clean-rebuild/                # 原阶段交付说明、迁移来源与验证脚本
     `-- live-validation/
         |-- USER-RUN.md               # 用户亲自启动 live 批次的范围与步骤
         |-- run_live_batch.py         # 有界真实模型 API 旅程；不等于浏览器测试
@@ -189,13 +219,14 @@ Ceres2/
 
 ## 在 Ubuntu 开始
 
-完整命令以 [Ubuntu 本地接力指南](docs/HANDOFF-UBUNTU.md) 为单一入口，避免多份启动说明互相漂移：
+当前实现依赖 Linux；原生 Windows 未适配。Python 声明为 `>=3.11`，Pi SDK 要求 Node `>=22.19.0`；本轮受控环境为 **Python 3.12.14、Node 24.19.0、npm 11.9.0**。新环境按 `backend/requirements.lock` 与两份 `package-lock.json` 独立安装，不借用旧项目依赖或数据库。协作期间安装、构建和执行验证由专职 Tester 负责。
 
-1. 克隆到全新目录，保留原项目；使用 Linux Python 与 Node，按锁文件独立安装依赖并构建 Pi／前端。
-2. 用户从 `.env.example` 创建新的本地 `.env`，自行填写凭据。本次真实验证统一使用 `qwen3.8-27b`，不自动换模型或 provider。
-3. 先由用户亲自启动有界 API 批次；页面体验再显式 seed，并启动后端 `127.0.0.1:8012` 与前端 `127.0.0.1:8443`。启动应用和页面交互都可能触发真实模型调用，应遵守接力指南的执行边界。
-4. 记录真实结果与剩余问题，按变更影响面复验，再分别完成浏览器和用户验收。
+1. 从 [Ceres2 仓库](https://github.com/2061623884/Ceres2) 获取本次发布后明确的分支／commit，核对下载版本；不要假定旧 main 已包含本轮。原 Ceres 保持不动。
+2. 从 `.env.example` 创建新的本地 `.env`，在可信本地编辑器填写获准的模型配置与凭据。不要上传 `.env`，不要复制旧数据库或 checkpoint。本轮没有重新选择 provider／模型。
+3. 自动新文字职责／能力判断另需 `KEV_BASE_URL`，服务必须支持当前 `/v1/systemone` 合同。空值或服务失败时会显示判断不可用，用户可明确手动选角色；手动继续不代表自动路由成功。人工入口另需 `HUMAN_OPERATOR_TOKEN`。
+4. 按[本轮接手指南的启动步骤](docs/NEXT-EXPERIENCE-HANDOFF.md)构建 Pi、显式 seed，再启动后端 `127.0.0.1:8012` 和前端 `127.0.0.1:8443`。健康检查成功不证明 provider 可用。
+5. 启动和对话可能调用真实模型、后台记忆任务并产生费用；由用户在同意数据发送与费用后亲自操作，或另行明确授权。按接手指南只补剩余真实旅程和本人验收，不拿旧 live runner 的固定模型／41 项成绩替代本轮验证。
 
-当前实现依赖 Linux；原生 Windows 未适配。协作期间由专职 Tester 执行安装、构建和测试，实现与独立审查分别进行。受控 pytest 使用虚拟 provider 配置并隔离根 `.env`；这不代表任意脚本也被隔离，详见 [测试隔离说明](work/live-validation/TEST-ISOLATION-REVIEW.md)。
+公开仓库仅发布源码、静态模拟素材与经检查的必要证据；不发布凭据、私有状态、依赖／构建目录、大量原始执行日志或外部 reference 整仓副本。测试使用受控 provider／Kev 边界，不能据此推断任意启动脚本也已隔离。
 
-部分较早文档保留了当时“无 remote／不推送”等执行条件和旧进度。阅读时核对日期与适用版本；当前公开交付和本地接力以本页及接力指南为入口，不将历史限制或历史通过直接套用到新版本。
+部分历史文档记录当时“无 remote／不推送”的条件。本次用户已要求整理并发布到独立 Ceres2 仓库；这些旧条件不等于新的发布状态。实际推送完成与准确发布版本应以 GitHub 分支／提交为准，本 README 更新本身不宣称已经推送或部署。

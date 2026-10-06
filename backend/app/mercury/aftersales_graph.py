@@ -74,11 +74,16 @@ def application_graph(service, owner_id, case_id, run_context=None):
 def propose(service, owner_id, case_id, request, run_context=None):
     # Proposal creation is not an application write. Its graph stops at the
     # interrupt and canonical read exposes the immutable preview after refresh.
-    with application_graph(service,owner_id,case_id,run_context) as graph:
-        proposal_id = f'asp-{uuid4().hex}'
-        state=graph.invoke({'request':request,'proposal_id':proposal_id,'recovery':False},
-            {'configurable':{'thread_id':f'aftersales:{case_id}:{proposal_id}'}})
-        return state['proposal']
+    try:
+        with application_graph(service,owner_id,case_id,run_context) as graph:
+            proposal_id = f'asp-{uuid4().hex}'
+            state=graph.invoke({'request':request,'proposal_id':proposal_id,'recovery':False},
+                {'configurable':{'thread_id':f'aftersales:{case_id}:{proposal_id}'}})
+            return state['proposal']
+    except Exception as error:
+        if run_context is None:
+            service.record_failure(owner_id, case_id, error, selection_version=request['selection_version'])
+        raise
 
 
 def confirm(service, owner_id, case_id, proposal_id, key):
@@ -87,10 +92,14 @@ def confirm(service, owner_id, case_id, proposal_id, key):
         return receipt
     # Resume the actual persistent proposal interrupt. If its checkpoint was
     # lost, reconstruct the wait from the immutable reference, never approval.
-    with application_graph(service,owner_id,case_id) as graph:
-        config={'configurable':{'thread_id':f'aftersales:{case_id}:{proposal_id}'}}
-        snapshot = graph.get_state(config)
-        if snapshot.next != ('await_confirmation',):
-            graph.invoke({'proposal_id':proposal_id,'recovery':True},config)
-        state=graph.invoke(Command(resume={'idempotency_key':key}),config)
-        return state['receipt']
+    try:
+        with application_graph(service,owner_id,case_id) as graph:
+            config={'configurable':{'thread_id':f'aftersales:{case_id}:{proposal_id}'}}
+            snapshot = graph.get_state(config)
+            if snapshot.next != ('await_confirmation',):
+                graph.invoke({'proposal_id':proposal_id,'recovery':True},config)
+            state=graph.invoke(Command(resume={'idempotency_key':key}),config)
+            return state['receipt']
+    except Exception as error:
+        service.record_failure(owner_id, case_id, error, proposal_id=proposal_id)
+        raise

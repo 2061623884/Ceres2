@@ -1,3 +1,9 @@
+import { runResultIntroduction, type IntroductionSource } from './lib/resultIntroduction'
+import { enterLightMealActivity } from './lib/activity'
+import QuestionChoices from './QuestionChoices'
+import { answerGuideQuestion, type GuideQuestion } from './lib/productQuestions'
+import './role-chat.css'
+import { openNavigation, closeOpening, routeText, ackPrompt, chooseRole, type BeforeText, type ChatRole, type Handoff, type Opening, type RouteDecision } from './lib/chatNavigation'
 import ComparisonCards from './ComparisonCards'
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { MercuryChat } from './MercuryChat'
@@ -40,6 +46,7 @@ import {
   sendTurnStream,
   yuan,
   type Cart,
+  type ConfirmResponse,
   type Category,
   type PlanResponse,
   type DisplayedPlanRef,
@@ -266,7 +273,7 @@ function DemoBadge() {
 }
 
 type Role = 'user' | 'ai'
-interface Msg { id: string; role: Role; text: string; generalExplanation?: boolean; suggestions?: string[]; productCards?: ProductComparisonCard[] }
+interface Msg { id: string; role: Role; text: string; question?: GuideQuestion; generalExplanation?: boolean; suggestions?: string[]; productCards?: ProductComparisonCard[] }
 
 const WELCOME_MSG: Msg = {
   id: 'welcome',
@@ -324,7 +331,7 @@ const MOODS: { id: CeresMood; label: string; emoji: string }[] = [
   { id: 'angry', label: '烦躁', emoji: '😡' }, { id: 'sad', label: '低气压', emoji: '😕' }, { id: 'calm', label: '平静', emoji: '😐' }, { id: 'pleased', label: '不错', emoji: '🙂' }, { id: 'happy', label: '超开心', emoji: '😍' },
 ]
 
-function LandingScreen({ onGoShelf, onDietPlan }: { onGoShelf: () => void; onDietPlan: () => void }) {
+function LandingScreen({ onGoShelf, onDietPlan, activityBusy, activityError }: { onGoShelf: () => void; onDietPlan: () => void; activityBusy: boolean; activityError: string | null }) {
   const [activeMood, setActiveMood] = useState<CeresMood>('happy')
   const [moodMotion, setMoodMotion] = useState(0)
 
@@ -355,8 +362,9 @@ function LandingScreen({ onGoShelf, onDietPlan }: { onGoShelf: () => void; onDie
 
       <section className="shrink-0 px-5 pb-4 pt-3">
         <div className="mb-3 flex items-center justify-between"><h2 className="flex items-center gap-2 text-[15px] font-semibold tracking-[-0.02em] text-[#26372c]"><span className="h-2 w-2 rounded-full bg-[#d6bded]"/>为你准备</h2><button className="text-[11px] font-semibold text-[#477950]">查看全部 ↗</button></div>
+        {activityError && <p role="alert" className="mb-3 text-xs text-red-700">{activityError}</p>}
         <div className="grid grid-cols-2 gap-3">
-          <button onClick={onDietPlan} className="relative h-[178px] overflow-hidden rounded-[25px] border-2 border-white bg-[#f3b18e] p-4 text-left shadow-[0_5px_0_#d7876c] transition-transform active:translate-y-1 active:shadow-none"><div aria-hidden="true" className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-[#f9e58d]"/><div aria-hidden="true" className="absolute -left-8 bottom-4 h-12 w-16 rotate-[-25deg] rounded-full bg-[#cf92e8]/60"/><span className="relative text-[10px] font-semibold text-[#7f3328]">轻盈计划</span><p className="relative mt-1 text-lg font-bold leading-none tracking-[-0.04em] text-[#522d27]">减脂餐</p><p className="relative mt-1 max-w-[95px] text-[10px] font-medium leading-snug text-[#794f45]">健康轻食食材推荐</p><div className="absolute -bottom-5 right-[-3px] scale-[0.86]"><DietBowlSVG /></div></button>
+          <button onClick={onDietPlan} disabled={activityBusy} aria-busy={activityBusy} className="relative h-[178px] overflow-hidden rounded-[25px] border-2 border-white bg-[#f3b18e] p-4 text-left shadow-[0_5px_0_#d7876c] transition-transform active:translate-y-1 active:shadow-none"><div aria-hidden="true" className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-[#f9e58d]"/><div aria-hidden="true" className="absolute -left-8 bottom-4 h-12 w-16 rotate-[-25deg] rounded-full bg-[#cf92e8]/60"/><span className="relative text-[10px] font-semibold text-[#7f3328]">轻盈计划</span><p className="relative mt-1 text-lg font-bold leading-none tracking-[-0.04em] text-[#522d27]">减脂餐</p><p className="relative mt-1 max-w-[95px] text-[10px] font-medium leading-snug text-[#794f45]">{activityBusy ? '正在读取活动商品…' : '成品轻食选购（演示）'}</p><div className="absolute -bottom-5 right-[-3px] scale-[0.86]"><DietBowlSVG /></div></button>
           <button onClick={onGoShelf} className="relative h-[178px] overflow-hidden rounded-[25px] border-2 border-white bg-[#c3e493] p-4 text-left shadow-[0_5px_0_#90b567] transition-transform active:translate-y-1 active:shadow-none"><div aria-hidden="true" className="absolute -left-5 -top-5 h-20 w-20 rounded-full bg-[#f7e666]"/><div aria-hidden="true" className="absolute right-4 top-12 h-12 w-5 rotate-[35deg] rounded-full bg-[#bca8ec]/70"/><span className="relative text-[10px] font-semibold text-[#356234]">当季鲜选</span><p className="relative mt-1 text-lg font-bold leading-none tracking-[-0.04em] text-[#244c2c]">生鲜采买</p><p className="relative mt-1 max-w-[95px] text-[10px] font-medium leading-snug text-[#527151]">当季食材一键备货</p><div className="absolute -bottom-5 right-[-4px] scale-[0.86]"><BasketSVG /></div></button>
         </div>
       </section>
@@ -1036,16 +1044,26 @@ function CartSheetContent({
 
 function ChatScreen({
   viewContext,
-  autoSend,
-  onAutoSendDone,
   onCartRefresh,
   cart,
   onCartChange,
   onViewOrders,
+  beforeText,
+  handoff,
+  onHandoffDone,
+  active,
+  interactionEpoch,
+  interactionVersion,
+  onInteraction,
 }: {
+  active: boolean
+  interactionEpoch: {current: number}
+  interactionVersion: number
+  onInteraction: () => number
+  beforeText: BeforeText
+  handoff?: Handoff | null
+  onHandoffDone: () => void
   viewContext: { page: string; category_id?: string | null }
-  autoSend?: string | null
-  onAutoSendDone?: () => void
   onCartRefresh: () => void
   cart: Cart | null
   onCartChange: (cart: Cart) => void
@@ -1065,6 +1083,7 @@ function ChatScreen({
   const [historyReminder, setHistoryReminder] = useState<HistoryReminder | null>(null)
   const [canConfirm, setCanConfirm] = useState(false)
   const [confirming, setConfirming] = useState(false)
+  const [questionBusy, setQuestionBusy] = useState(false)
   const [progressText, setProgressText] = useState<string | null>(null)
   const [cartBusy, setCartBusy] = useState(false)
   const [cartError, setCartError] = useState<string | null>(null)
@@ -1074,7 +1093,6 @@ function ChatScreen({
   const streamRef = useRef(new Map<string, AbortController>())
   const phaseRef = useRef(new Map<string, string>())
   const [activeRequests, setActiveRequests] = useState<string[]>([])
-  const autoSentRef = useRef(false)
   const initializationRef = useRef(0)
   const snapshotSessionRef = useRef<string | null>(null)
   const snapshotOrderRef = useRef(0)
@@ -1089,6 +1107,74 @@ function ChatScreen({
   }, [])
   const displayedPlanRef = useRef<DisplayedPlanRef | null>(null)
   const displayedCandidateRefs = useRef<string[]>([])
+  const [pendingIntroduction, setPendingIntroduction] = useState<{source: IntroductionSource; snapshot: SessionResponse; epoch: number; viewKey: string} | null>(null)
+  const [introductionStatus, setIntroductionStatus] = useState<string | null>(null)
+  const introductionRef = useRef<{controller: AbortController; done: boolean} | null>(null)
+  const activeRef = useRef(active)
+  activeRef.current = active
+  const viewKey = `${viewContext.page}:${viewContext.category_id ?? ''}`
+  const viewKeyRef = useRef(viewKey)
+  viewKeyRef.current = viewKey
+
+  const queueIntroduction = useCallback((source: IntroductionSource, snapshot: SessionResponse, epoch: number) => {
+    if (!activeRef.current || interactionEpoch.current !== epoch || acceptedSnapshotRef.current !== snapshot) return
+    setPendingIntroduction({source, snapshot, epoch, viewKey})
+  }, [interactionEpoch, viewKey])
+
+  // Effects run after factual cards/plan/receipt have committed to the DOM.
+  // Expression state never enters business typing, snapshots or write receipts.
+  useEffect(() => {
+    const pending = pendingIntroduction
+    if (!pending || !active || typing || confirming || questionBusy || restoring ||
+        pending.epoch !== interactionEpoch.current || pending.viewKey !== viewKey ||
+        acceptedSnapshotRef.current !== pending.snapshot) return
+    const entry = {controller: new AbortController(), done: false}
+    introductionRef.current = entry
+    const current = () => introductionRef.current === entry && !entry.controller.signal.aborted &&
+      activeRef.current && interactionEpoch.current === pending.epoch &&
+      viewKeyRef.current === pending.viewKey && acceptedSnapshotRef.current === pending.snapshot
+    setIntroductionStatus('running')
+    void runResultIntroduction(pending.snapshot.session_id, pending.source, {
+      signal: entry.controller.signal,
+      onDelta: (text, messageId, replace) => {
+        if (!current()) return
+        const id = messageId || `introduction-${pending.source.source_id}`
+        setMsgs(messages => {
+          if (!current()) return messages
+          const prior = messages.find(message => message.id === id)
+          const content = replace ? text : (prior?.text ?? '') + text
+          return prior ? messages.map(message => message.id === id ? {...message, text: content} : message)
+            : [...messages, {id, role: 'ai', text: content}]
+        })
+      },
+    }).then(result => {
+      if (current()) setIntroductionStatus(result?.expression_status ?? 'failed')
+    }).catch(() => {
+      if (current()) setIntroductionStatus('failed')
+    }).finally(() => {
+      entry.done = true
+      if (introductionRef.current === entry) introductionRef.current = null
+    })
+    return () => {
+      if (!entry.done) entry.controller.abort()
+      if (introductionRef.current === entry) introductionRef.current = null
+      setIntroductionStatus(null)
+    }
+  }, [pendingIntroduction, active, interactionVersion, interactionEpoch, viewKey, typing, confirming, questionBusy, restoring])
+
+  function stopIntroduction() {
+    introductionRef.current?.controller.abort()
+    introductionRef.current = null
+    setIntroductionStatus('stopped')
+  }
+
+  function showPurchaseReceipt(result: ConfirmResponse) {
+    const id = `purchase-receipt-${result.confirmation_id}`
+    const text = `模拟加购回执 ${result.confirmation_id}：本次加入 ${result.items_added.reduce((total, item) => total + item.quantity, 0)} 件销售包装。加购尚未下单或付款。`
+    setMsgs(messages => messages.some(message => message.id === id)
+      ? messages.map(message => message.id === id ? {...message, text} : message)
+      : [...messages, {id, role: 'ai', text}])
+  }
 
   useEffect(() => {
     displayedCandidateRefs.current = msgs.flatMap(message => message.productCards ?? []).map(card => card.ref)
@@ -1127,6 +1213,18 @@ function ChatScreen({
     acceptedSnapshotRef.current = snapshot
     acceptedSnapshotOrderRef.current = order
     setHistoryReminder(snapshot.history_reminder ?? null)
+    if (snapshot.question_history) {
+      setMsgs(current => {
+        const next = [...current]
+        for (const question of snapshot.question_history ?? []) {
+          const index = next.findIndex(message => message.id === question.question_id)
+          const message: Msg = {id: question.question_id, role: 'ai', text: question.question, question}
+          if (index >= 0) next[index] = {...next[index], ...message, suggestions: undefined}
+          else next.push(message)
+        }
+        return next
+      })
+    }
     if (snapshot.product_cards) {
       const currentRefs = new Set(snapshot.product_cards.map(card => card.ref))
       setMsgs(current => current.map(message => ({...message, productCards:message.productCards?.filter(card => currentRefs.has(card.ref))})))
@@ -1155,13 +1253,15 @@ function ChatScreen({
       let next: Msg[] = current.filter(message => message.id !== placeholderId || replies.some(reply => reply.message_id === placeholderId)).map(message => ({...message, productCards:message.productCards?.filter(card => allowedRefs.has(card.ref))}))
       const chips = clarificationChipLabels(normalizePendingClarifications(turn.pending_clarifications ?? []))
       for (const [index, reply] of replies.entries()) {
-        const message: Msg = {id:reply.message_id,role:'ai',text:reply.content,generalExplanation:turn.answer_kind === 'general_explanation', ...(index === replies.length - 1 ? {suggestions:chips,productCards:turn.product_cards?.filter(card => allowedRefs.has(card.ref))} : {})}
+        const question = acceptedSnapshotRef.current?.question_history?.find(item => item.question_id === reply.message_id)
+        const message: Msg = {id:reply.message_id,role:'ai',text:question?.question ?? reply.content,question,generalExplanation:turn.answer_kind === 'general_explanation', ...(index === replies.length - 1 ? {suggestions:chips,productCards:turn.product_cards?.filter(card => allowedRefs.has(card.ref))} : {})}
         next = next.some(item => item.id === message.id) ? next.map(item => item.id === message.id ? message : item) : [...next,message]
       }
       return next
     })
     if (accepted && turn.history_sources?.length) setHistorySources(turn.history_sources)
     if (accepted && turn.plan_effect === 'replace') setHistorySources(null)
+    return accepted
   }, [applyAuthoritativeSnapshot])
 
   const receiveDelta = useCallback((placeholderId: string, event: {payload?: Record<string, unknown>}) => {
@@ -1222,7 +1322,8 @@ function ChatScreen({
           .map(m => ({
             id: m.message_id,
             role: m.role === 'user' ? 'user' : 'ai',
-            text: m.content,
+            text: session.question_history?.find(question => question.question_id === m.message_id)?.question ?? m.content,
+            question: session.question_history?.find(question => question.question_id === m.message_id),
             generalExplanation: m.kind === 'general',
           }))
         if (restored.length) {
@@ -1243,6 +1344,7 @@ function ChatScreen({
       setMsgs(current => {
         const next = [...current]
         for (const run of [...status.runs].reverse()) {
+          if (run.input.kind === 'result_introduction') continue
           if (run.input.message && !knownRequests.has(run.request_id) && !next.some(message => message.id === `u-${run.request_id}`)) next.push({id:`u-${run.request_id}`,role:'user',text:run.input.message})
           for (const message of run.result?.messages ?? []) {
             if (!next.some(item => item.id === message.message_id)) next.push({id:message.message_id,role:'ai',text:message.content,generalExplanation:run.result?.answer_kind === 'general_explanation'})
@@ -1254,7 +1356,7 @@ function ChatScreen({
         }
         return next
       })
-      for (const run of status.runs.filter(run => run.status === 'running' || run.status === 'stop_requested')) {
+      for (const run of status.runs.filter(run => run.input.kind !== 'result_introduction' && (run.status === 'running' || run.status === 'stop_requested'))) {
         if (streamRef.current.has(run.request_id)) continue
         const controller = new AbortController()
         streamRef.current.set(run.request_id, controller)
@@ -1284,10 +1386,13 @@ function ChatScreen({
 
   useEffect(() => { void initSession(); return () => { initializationRef.current += 1 } }, [initSession])
 
-  const send = useCallback(async (text: string) => {
+  const send = useCallback(async (text: string, routedRequestId?: string) => {
     if (!text.trim() || !sessionId || confirming || restoring) return
+    const actionEpoch = onInteraction()
     const trimmed = text.trim()
-    const requestId = newRequestId()
+    const requestId = routedRequestId ?? newRequestId()
+    const routeId = routedRequestId ?? await beforeText('keke', trimmed, requestId)
+    if (!routeId) return
     const placeholderId = `a-${requestId}`
     setMsgs(current => [...current,{id:`u-${requestId}`,role:'user',text:trimmed},{id:placeholderId,role:'ai',text:''}])
     setInput('')
@@ -1307,10 +1412,17 @@ function ChatScreen({
         signal:controller.signal,
         onProgress:event => updatePhase(requestId,String(event.payload?.phase ?? 'understanding')),
         onAnswerDelta:event => receiveDelta(placeholderId,event),
-      }, displayedPlan, shownCandidates)
+      }, displayedPlan, shownCandidates, routeId)
       if (controller.signal.aborted) return
       const latest = await readSnapshot(getGuideSession(sessionId, false))
-      if (!controller.signal.aborted) mergeTerminalTurn(turn, latest, placeholderId)
+      if (!controller.signal.aborted) {
+        const accepted = mergeTerminalTurn(turn, latest, placeholderId)
+        const freshQuestion = turn.active_question?.question_id === turn.assistant_message_id && !!turn.active_question
+        const eligible = turn.runtime_status === 'completed' && turn.answer_kind !== 'general_explanation' &&
+          (freshQuestion || !!turn.product_cards?.length || !!turn.product_evidence?.length || !!turn.confirmation_result ||
+           turn.no_matches === true || (turn.plan_effect === 'replace' && !!turn.plan))
+        if (accepted && eligible) queueIntroduction({source_kind: 'turn', source_id: requestId}, latest, actionEpoch)
+      }
       if (turn.confirmation_result) onCartRefresh()
     } catch (error) {
       if (!controller.signal.aborted) setError(error instanceof Error ? error.message : '发送失败')
@@ -1327,13 +1439,34 @@ function ChatScreen({
     } finally {
       finishTransport(requestId)
     }
-  }, [sessionId, confirming, restoring, viewContext, applyAuthoritativeSnapshot, mergeTerminalTurn, receiveDelta, updatePhase, finishTransport, onCartRefresh, readSnapshot])
+  }, [sessionId, confirming, restoring, viewContext, applyAuthoritativeSnapshot, mergeTerminalTurn, receiveDelta, updatePhase, finishTransport, onCartRefresh, readSnapshot, beforeText, onInteraction, queueIntroduction])
 
+  const resumedHandoff = useRef<string | null>(null)
   useEffect(() => {
-    if (!autoSend || autoSentRef.current || restoring || !sessionId) return
-    autoSentRef.current = true
-    send(autoSend).finally(() => onAutoSendDone?.())
-  }, [autoSend, restoring, sessionId, send, onAutoSendDone])
+    if (!handoff) { resumedHandoff.current = null; return }
+    if (restoring || !sessionId || resumedHandoff.current === handoff.routing_request_id) return
+    resumedHandoff.current = handoff.routing_request_id
+    void send(handoff.original_message, handoff.routing_request_id).finally(onHandoffDone)
+  }, [handoff, restoring, sessionId, send, onHandoffDone])
+
+  async function handleQuestionAnswer(question: GuideQuestion, optionIds: string[], quantities: Record<string, number>) {
+    if (!sessionId || questionBusy) return
+    const actionEpoch = onInteraction()
+    const requestId = newRequestId()
+    setQuestionBusy(true)
+    setError(null)
+    try {
+      const snapshot = await readSnapshot(answerGuideQuestion(sessionId, question, optionIds, quantities, requestId))
+      if (applyAuthoritativeSnapshot(snapshot)) queueIntroduction({source_kind: 'question_answer', source_id: requestId}, snapshot, actionEpoch)
+    } catch (error) {
+      if (error instanceof ApiError && ['QUESTION_STALE', 'QUESTION_SUPPLY_CHANGED', 'STALE_STATE'].includes(error.code)) {
+        applyAuthoritativeSnapshot(await readSnapshot(getGuideSession(sessionId, false)))
+      }
+      throw error
+    } finally {
+      setQuestionBusy(false)
+    }
+  }
 
   async function handleHistoryList() {
     if (!sessionId || restoring || typing || confirming) return
@@ -1372,6 +1505,8 @@ function ChatScreen({
 
   async function handleConfirm() {
     if (!plan || !taskId || confirming || typing || !canConfirm) return
+    const actionEpoch = onInteraction()
+    const confirmationKey = newRequestId()
     setConfirming(true)
     setError(null)
     try {
@@ -1382,11 +1517,15 @@ function ChatScreen({
         stateVersion,
         sessionVersion,
         confirmableItems(plan.items),
-        newRequestId(),
+        confirmationKey,
       )
+      showPurchaseReceipt(result)
       setStateVersion(result.state_version)
       setSessionVersion(result.session_version)
-      if (sessionId) applyAuthoritativeSnapshot(await readSnapshot(getGuideSession(sessionId, false)))
+      if (sessionId) {
+        const snapshot = await readSnapshot(getGuideSession(sessionId, false))
+        if (applyAuthoritativeSnapshot(snapshot)) queueIntroduction({source_kind: 'purchase_confirmation', source_id: confirmationKey}, snapshot, actionEpoch)
+      }
       setOpenSheet(null)
       onCartRefresh()
     } catch (e) {
@@ -1411,11 +1550,15 @@ function ChatScreen({
     if (!plan || !taskId || !sessionId || confirming || typing || !canConfirm) return
     const item = plan.items.find(row => row.sku_id === skuId)
     if (!item || item.selected === false || remainingQuantity(item) <= 0) return
+    const actionEpoch = onInteraction()
+    const confirmationKey = newRequestId()
     setConfirming(true)
     setError(null)
     try {
-      await addPlanItem(taskId, skuId, plan, stateVersion, sessionVersion, remainingQuantity(item), newRequestId())
-      applyAuthoritativeSnapshot(await readSnapshot(getGuideSession(sessionId, false)))
+      const result = await addPlanItem(taskId, skuId, plan, stateVersion, sessionVersion, remainingQuantity(item), confirmationKey)
+      showPurchaseReceipt(result)
+      const snapshot = await readSnapshot(getGuideSession(sessionId, false))
+      if (applyAuthoritativeSnapshot(snapshot)) queueIntroduction({source_kind: 'purchase_confirmation', source_id: confirmationKey}, snapshot, actionEpoch)
       onCartRefresh()
     } catch (error) {
       setError(error instanceof Error ? error.message : '逐行加购失败')
@@ -1497,9 +1640,9 @@ function ChatScreen({
   const planItemCount = hasPlan ? plan.items.length : 0
 
   return (
-    <section className="chat-panel-enter relative flex h-[min(71vh,650px)] min-h-[500px] flex-col overflow-hidden rounded-t-[38px] bg-[#fcfbf8] font-sans shadow-[0_-20px_60px_rgba(40,36,29,0.12)]">
+    <section className="guide-chat-panel chat-panel-enter relative flex h-[min(65vh,600px)] min-h-[min(420px,60vh)] flex-col overflow-hidden rounded-t-[38px] font-sans">
       <div className="flex justify-center bg-[#f7f5f0] pt-3 pb-1.5" aria-hidden="true"><span className="h-1 w-10 rounded-full bg-black/[.12]" /></div>
-      <div className="flex flex-shrink-0 items-center gap-3 bg-[#f7f5f0] px-6 pt-2 pb-5">
+      <div className="guide-glass-header-pill mx-4 mt-2 flex flex-shrink-0 items-center gap-3 rounded-full px-4 py-2">
         <KekeAvatar size={40} animated />
         <div>
           <p className="text-[15px] font-semibold tracking-[-0.04em] text-[#191817]">可可</p>
@@ -1515,6 +1658,9 @@ function ChatScreen({
         </button>
       </div>
 
+      {introductionStatus === 'running' && <p role="status" aria-label="结果介绍进度" className="px-6 py-2 text-xs text-black/50">正在补充介绍，已有结果可以继续操作。 <button type="button" aria-label="停止结果介绍" onClick={stopIntroduction}>停止介绍</button></p>}
+      {introductionStatus && ['failed', 'deadline'].includes(introductionStatus) && <p role="status" className="px-6 py-2 text-xs text-black/50">介绍未完成，已有结果仍保留。</p>}
+      {introductionStatus === 'stopped' && <p role="status" className="px-6 py-2 text-xs text-black/50">介绍已停止，已有结果仍保留。</p>}
       <div className="scrollbar-hide flex-1 space-y-5 overflow-y-auto px-6 py-5">
         {historyReminder && <div className="rounded-2xl bg-amber-50 p-3 text-[12px]" aria-label="历史采购提醒"><p>{historyReminder.message}</p><div className="mt-2 flex gap-3"><button disabled={typing || confirming} onClick={() => void handleHistorySelect(historyReminder.source_task_id)}>按当前条件重新准备</button><button disabled={typing || confirming} onClick={handleHistoryDismiss}>不再提醒</button></div></div>}
         {historySources && <div className="rounded-2xl bg-black/[0.03] p-3 text-[12px]" aria-label="历史方案来源"><p>{historySources.length ? '请选择历史来源，选择后仍需核对新清单并单独确认加购。' : '目前没有历史方案。'}</p>{historySources.map(source => <button key={source.task_id} disabled={typing || confirming} aria-label={`重新采购 ${source.task_id}`} onClick={() => void handleHistorySelect(source.task_id)} className="mt-2 block rounded-xl bg-white px-3 py-2 text-left">{source.goal || '历史采购'} · {source.task_id.slice(-8)}</button>)}</div>}
@@ -1549,8 +1695,13 @@ function ChatScreen({
                   </span>
                 </div>
               ) : null}
+              {msg.question && <QuestionChoices
+                question={msg.question}
+                disabled={typing || confirming || restoring || questionBusy}
+                onAnswer={(optionIds, quantities) => handleQuestionAnswer(msg.question!, optionIds, quantities)}
+              />}
               <ComparisonCards cards={msg.productCards ?? []} disabled={typing || confirming || restoring} onSelect={text => { void send(text) }} />
-              {msg.suggestions && msg.role === 'ai' && !typing && !confirming && (
+              {msg.suggestions && !msg.question && msg.role === 'ai' && !typing && !confirming && (
                 <div className="flex w-full flex-col gap-1.5">
                   {msg.suggestions.map((s, i) => (
                     <button key={i} onClick={() => send(s)} className="rounded-full bg-[#f5f4f0] px-4 py-2.5 text-left text-[12px] font-medium text-black/55 transition hover:bg-[#eceae4] active:scale-[.98]">
@@ -1782,14 +1933,112 @@ export default function App() {
 }
 
 function ShoppingApp() {
-  const [view, setView] = useState<ViewState>('home')
+  const [view, setView] = useState<ViewState>(() => sessionStorage.getItem('ceres-chat-visible') === 'momo' ? 'momo' : sessionStorage.getItem('ceres-chat-visible') === 'keke' ? 'keke' : 'home')
   const [cart, setCart] = useState<Cart | null>(null)
   const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null)
   const [shelfSearch, setShelfSearch] = useState('')
   const [guideFromHome, setGuideFromHome] = useState(false)
-  const [autoSendMessage, setAutoSendMessage] = useState<string | null>(null)
+  const [activityBusy, setActivityBusy] = useState(false)
+  const [activityError, setActivityError] = useState<string | null>(null)
+  const interactionEpoch = useRef(0)
+  const [interactionVersion, setInteractionVersion] = useState(0)
+  const trackInteraction = useCallback(() => {
+    const epoch = ++interactionEpoch.current
+    setInteractionVersion(epoch)
+    return epoch
+  }, [])
+  const activityNavigationEpoch = useRef(0)
+  useEffect(() => () => { activityNavigationEpoch.current += 1 }, [])
   const [mercuryEntry, setMercuryEntry] = useState<{orderId:string|undefined; sequence:number}>({orderId:undefined,sequence:0})
   const consumeMercuryEntry = useCallback((sequence:number) => setMercuryEntry(current => current.sequence === sequence ? {...current,orderId:undefined} : current),[])
+  const [navigation, setNavigation] = useState<{sessionId: string; opening: Opening} | null>(null)
+  const [navigationError, setNavigationError] = useState<string | null>(null)
+  const [routePrompt, setRoutePrompt] = useState<RouteDecision | null>(null)
+  const [navigationBusy, setNavigationBusy] = useState(false)
+  const [handoff, setHandoff] = useState<(Handoff & {role: ChatRole}) | null>(null)
+  const clearHandoff = useCallback(() => setHandoff(null), [])
+  const chatOpen = view === 'keke' || view === 'momo'
+  const navigationRef = useRef(navigation)
+  navigationRef.current = navigation
+  useEffect(() => {
+    if (!chatOpen) return
+    sessionStorage.setItem('ceres-chat-visible', view)
+    if (navigation) return
+    let active = true
+    setNavigationBusy(true)
+    void openNavigation(view === 'momo' ? 'momo' : 'keke').then(next => {
+      if (!active) return
+      setNavigation(next)
+      setView(next.opening.role)
+      if (next.opening.handoff) setHandoff({...next.opening.handoff,role:next.opening.role})
+      setNavigationError(null)
+    }).catch(error => { if (active) setNavigationError(error.message) })
+      .finally(() => { if (active) setNavigationBusy(false) })
+    return () => { active = false }
+  }, [chatOpen, navigation, view])
+
+  const beforeText = useCallback<BeforeText>(async (role, message, requestId, selectedOrder, roleSessionId) => {
+    const nav = navigationRef.current
+    if (!nav) { setNavigationError('正在恢复聊天，请稍后再试'); return null }
+    setNavigationBusy(true)
+    setNavigationError(null)
+    setRoutePrompt(null)
+    try {
+      const result = await routeText(nav.sessionId, nav.opening.opening_id, role, message, requestId, selectedOrder, roleSessionId)
+      if (result.status === 'ready') return result.routing_request_id
+      if (result.status === 'navigation') {
+        setView(result.target_role)
+        setNavigation({...nav, opening:{...nav.opening, role:result.target_role}})
+        if (result.continue_original) setHandoff({...result, role:result.target_role})
+      } else if (result.status === 'switch') {
+        if (result.show_prompt) setRoutePrompt(result)
+        else setNavigationError('这次请求属于另一角色，可使用上方角色按钮继续。')
+      } else setNavigationError(result.message ?? '请重新说明需求')
+      return null
+    } catch (error) {
+      setNavigationError(error instanceof Error ? error.message : '职责判断暂时不可用，请使用角色按钮')
+      return null
+    } finally { setNavigationBusy(false) }
+  }, [])
+
+  useEffect(() => {
+    if (!routePrompt || !navigation) return
+    // This effect runs after the prompt was committed to the visible DOM.
+    void ackPrompt(navigation.sessionId, navigation.opening.opening_id, routePrompt.routing_request_id)
+      .then(opening => setNavigation(current => current ? {...current, opening} : current))
+      .catch(error => setNavigationError(`提示确认失败：${error.message}，可重试确认。`))
+  }, [routePrompt?.routing_request_id])
+
+  async function switchChatRole(role: ChatRole, accept = true, requestId?: string) {
+    if (!navigation || navigationBusy) return
+    setNavigationBusy(true)
+    try {
+      const result = await chooseRole(navigation.sessionId, navigation.opening.opening_id, role, accept, requestId)
+      setNavigation({...navigation, opening:result})
+      setRoutePrompt(null)
+      setNavigationError(null)
+      if (accept) {
+        setView(role)
+        if (result.handoff) {
+          if (result.handoff.selected_object?.kind === 'order' && role === 'momo') setMercuryEntry(current => ({orderId:result.handoff!.selected_object!.id,sequence:current.sequence + 1}))
+          setHandoff({...result.handoff,role})
+        }
+      }
+    } catch (error) { setNavigationError(error instanceof Error ? error.message : '角色切换失败') }
+    finally { setNavigationBusy(false) }
+  }
+
+  async function leaveChat(target: ViewState) {
+    if (navigationBusy) return
+    try {
+      if (navigation) await closeOpening(navigation.sessionId, navigation.opening.opening_id)
+      setNavigation(null)
+      setRoutePrompt(null)
+      setHandoff(null)
+      sessionStorage.removeItem('ceres-chat-visible')
+      setView(target)
+    } catch (error) { setNavigationError(error instanceof Error ? error.message : '关闭失败，请重试') }
+  }
   const cartCount = cartItemCount(cart)
 
   const refreshCart = useCallback(async () => {
@@ -1813,6 +2062,12 @@ function ShoppingApp() {
         : { page: 'home', category_id: null }
 
   function handleNavTap(id: string) {
+    activityNavigationEpoch.current += 1
+    if (chatOpen) {
+      const target = id === 'keke' ? 'shelf' : id === 'momo' ? 'orders' : id as ViewState
+      void leaveChat(target)
+      return
+    }
     if (id === 'home')    { setView('home'); return }
     if (id === 'orders')  { setView('orders'); return }
     if (id === 'profile') { setView('profile'); return }
@@ -1821,20 +2076,38 @@ function ShoppingApp() {
     if (id === 'momo')  { setView(v => v === 'momo' ? 'orders' : 'momo') }
   }
 
-  function handleDietPlan() {
-    setGuideFromHome(true)
-    setView('keke')
-    setAutoSendMessage('帮我配一份减脂餐')
+  async function handleDietPlan() {
+    if (activityBusy) return
+    const requestedNavigation = ++activityNavigationEpoch.current
+    setActivityBusy(true)
+    setActivityError(null)
+    try {
+      const snapshot = await createGuideSession({page: 'home'})
+      if (requestedNavigation !== activityNavigationEpoch.current) return
+      await enterLightMealActivity(snapshot, newRequestId())
+      // The result stays in the canonical session if the user has moved on.
+      // Only the still-current navigation intent may open the chat overlay.
+      if (requestedNavigation !== activityNavigationEpoch.current) return
+      // Opening ChatScreen re-reads the canonical snapshot through its normal
+      // ordered restoration path; the activity result is never sent as text.
+      setGuideFromHome(true)
+      setView('keke')
+    } catch (error) {
+      if (requestedNavigation === activityNavigationEpoch.current) setActivityError(error instanceof Error ? error.message : '活动商品暂时无法读取，请重试')
+    } finally {
+      setActivityBusy(false)
+    }
   }
 
   return (
-    <main className="box-border min-h-dvh bg-[#eaf1ed] p-0 sm:p-8" style={{ fontFamily: "'Noto Sans SC', 'Manrope', system-ui, sans-serif" }}>
+    <main onClickCapture={trackInteraction} onKeyDownCapture={trackInteraction} onChangeCapture={trackInteraction} className="box-border min-h-dvh bg-[#eaf1ed] p-0 sm:p-8" style={{ fontFamily: "'Noto Sans SC', 'Manrope', system-ui, sans-serif" }}>
       <div className="relative mx-auto flex h-dvh w-full max-w-[430px] flex-col overflow-hidden bg-[#F5F5F7] sm:h-[min(860px,calc(100dvh-4rem))] sm:rounded-[32px] sm:shadow-[0_24px_70px_rgba(38,64,51,0.16)]">
         <div className="flex-1 overflow-hidden flex flex-col">
           {view === 'home' && (
             <LandingScreen
-              onGoShelf={() => { setGuideFromHome(false); setView('shelf') }}
-              onDietPlan={handleDietPlan}
+              onGoShelf={() => { activityNavigationEpoch.current += 1; setGuideFromHome(false); setView('shelf') }}
+              onDietPlan={() => void handleDietPlan()}
+              activityBusy={activityBusy} activityError={activityError}
             />
           )}
           {(view === 'shelf' || view === 'keke') && (
@@ -1852,29 +2125,33 @@ function ShoppingApp() {
         </div>
 
         <BottomNav view={view} onTap={handleNavTap} />
-        {view === 'keke' && (
+        {chatOpen && (
           <div className="absolute inset-x-0 bottom-[82px] top-0 z-10 flex flex-col justify-end bg-[#18261b]/20 backdrop-blur-[1px]">
-            <ChatScreen
-              viewContext={guideViewContext}
-              autoSend={autoSendMessage}
-              onAutoSendDone={() => setAutoSendMessage(null)}
-              onCartRefresh={refreshCart}
-              cart={cart}
-              onCartChange={setCart}
-              onViewOrders={() => setView('orders')}
-            />
-          </div>
-        )}
-        {(view === 'orders' || view === 'momo') && (
-          <div
-            className={
-              view === 'momo'
-                ? 'absolute inset-x-0 bottom-[82px] top-0 z-10 flex flex-col justify-end bg-[#18261b]/20 backdrop-blur-[1px]'
-                : 'pointer-events-none absolute h-0 w-0 overflow-hidden opacity-0'
-            }
-            aria-hidden={view !== 'momo'}
-          >
-            <MercuryChat visible={view === 'momo'} initialOrderId={mercuryEntry.orderId} entrySequence={mercuryEntry.sequence} onOrderEntryConsumed={consumeMercuryEntry} />
+            <div className="guide-glass-surface mx-4 mb-2 rounded-[24px] p-3 shadow-lg" aria-label="角色导航">
+              <div className="flex items-center gap-2">
+                <button type="button" aria-pressed={view === 'keke'} disabled={navigationBusy || !navigation} onClick={() => void switchChatRole('keke')} className="rounded-full bg-[#e0ecdd] px-4 py-2 text-xs">可可 · 选购</button>
+                <button type="button" aria-pressed={view === 'momo'} disabled={navigationBusy || !navigation} onClick={() => void switchChatRole('momo')} className="rounded-full bg-[#fff0c2] px-4 py-2 text-xs">墨墨 · 订单售后</button>
+                <button type="button" aria-label="关闭聊天" disabled={navigationBusy} onClick={() => void leaveChat(view === 'momo' ? 'orders' : 'shelf')} className="ml-auto rounded-full px-3 py-2">×</button>
+              </div>
+              {navigationBusy && <p className="mt-2 text-xs" role="status">正在连接角色…</p>}
+              {navigationError && <p className="mt-2 text-xs text-red-700" role="alert">{navigationError}</p>}
+              {routePrompt && <div className="mt-2 text-sm" role="status"><p>{routePrompt.message}</p><div className="mt-2 flex gap-3">
+                <button disabled={navigationBusy} onClick={() => void switchChatRole(routePrompt.target_role, true, routePrompt.routing_request_id)}>切换并继续原请求</button>
+                <button disabled={navigationBusy} onClick={() => void switchChatRole(routePrompt.target_role, false, routePrompt.routing_request_id)}>留在这里</button>
+                {navigationError?.startsWith('提示确认失败') && <button onClick={() => { if (navigation) void ackPrompt(navigation.sessionId, navigation.opening.opening_id, routePrompt.routing_request_id).then(opening => {setNavigation({...navigation,opening});setNavigationError(null)}).catch(error => setNavigationError(`提示确认失败：${error.message}`)) }}>重试确认</button>}
+              </div></div>}
+            </div>
+            <div className={view === 'keke' ? '' : 'hidden'}>
+              {navigation && <ChatScreen active={view === 'keke'} interactionEpoch={interactionEpoch} interactionVersion={interactionVersion} onInteraction={trackInteraction}
+                viewContext={guideViewContext} onCartRefresh={refreshCart}
+                cart={cart} onCartChange={setCart} onViewOrders={() => void leaveChat('orders')}
+                beforeText={beforeText} handoff={handoff?.role === 'keke' ? handoff : null} onHandoffDone={clearHandoff}
+              />}
+            </div>
+            <div className={view === 'momo' ? '' : 'hidden'}>
+              {navigation && <MercuryChat visible={view === 'momo'} initialOrderId={mercuryEntry.orderId} entrySequence={mercuryEntry.sequence} onOrderEntryConsumed={consumeMercuryEntry}
+                beforeText={beforeText} handoff={handoff?.role === 'momo' ? handoff : null} onHandoffDone={clearHandoff} />}
+            </div>
           </div>
         )}
       </div>

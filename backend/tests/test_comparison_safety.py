@@ -115,7 +115,7 @@ def test_comparison_cannot_publish_products_from_a_later_unfiltered_search(pi_cl
             return comparison_hook(body)
         if len(outputs) == 2:
             return {'role':'assistant','tool_calls':[{'index':0,'id':'unfiltered-search','type':'function','function':{'name':'search_products','arguments':json.dumps({'query':'测试可乐'})}}]}, 'tool_calls'
-        return {'role':'assistant','content':json.dumps({'status':'completed','answer_kind':'comparison','product_refs':[outputs[-1]['products'][0]['ref']]})}, 'stop'
+        return {'role':'assistant','content':json.dumps({'status':'completed','answer_kind':'comparison','product_refs':[outputs[-1]['products'][0]['ref'] if outputs[-1]['products'] else 'unfiltered-candidate']})}, 'stop'
     requests.answer_hook = mixed
     events = turn(client,'只比较多件装，不放宽条件','mixed-comparison')
     assert events[-1]['type'] == 'error' and events[-1]['payload']['code'] == 'PI_UNKNOWN_REFERENCE', events

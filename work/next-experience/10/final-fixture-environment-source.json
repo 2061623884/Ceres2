@@ -1,0 +1,39 @@
+{
+  "candidate": "0c752a2b252d797297b4b073883571884ff6855a",
+  "versions": {
+    "python": "3.12.14",
+    "node": "24.19.0",
+    "npm": "11.9.0"
+  },
+  "fixture_counts": {
+    "products.json": {
+      "products": 70
+    },
+    "offers.json": {
+      "offers": 70
+    }
+  },
+  "hashes": {
+    "data/fixtures/offers.json": "2425c593fccf19283b31c1d2bff5968852f685e3593a18c8deebc5a8098b6d66",
+    "data/fixtures/product-images.json": "684dea15dd4f4e6ee8fbc60f399417a71ed09d28816ac821448f91760c280357",
+    "data/fixtures/products.json": "2a51486e885818ee1bd66fcd55dd8de4e165a84905487aac8cde6b47a2172d84",
+    "data/fixtures/recipes.json": "7875530ea65e196e24a34dee98b1e8e648c4754ccd4cbc416b25a973ad6bb23c",
+    "backend/app/prompts/__init__.py": "4f511fc77ed1868eeb2cc58384580f144c01e2926f240c3880d503572fc436c1",
+    "backend/app/prompts/experience.json": "a67c6cc7c26b49d318505b7efe46010b18f0d25c432ffd287cb20f924a1711f6",
+    "backend/app/prompts/experience.py": "d66693ea9c11b7d5ff50df83c133389f0d7104d013f10f6194dc7666a26502a3",
+    "runtime/pi/src/general-claim.ts": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+    "runtime/pi/src/prompt-modules.ts": "9aa1cd686be641b94a73e0c8b0761ccf863f9613917f85831d39f43d2200c1f9",
+    "runtime/pi/src/result-expression.ts": "42df86a4f0a5de25059e0a91f947697e572bc7460be3a718d65f7f2eb694c399",
+    "runtime/pi/src/worker.ts": "8ff83346d7eb3d8b6d83a6b16e4f5bb19bc943b944e58a97ee0e834ea3948e15",
+    "backend/requirements.lock": "3efae6c0b2f3222ced5eccc0a562d49f703d563077533a4d1391fc19e59dd6e6",
+    "backend/pyproject.toml": "391314222545387d6fd4dd3ae7237052c2ae3cf15b773a46601c527b2e699d0c",
+    "runtime/pi/package-lock.json": "2700a4b3ac0ea31611e6a9b2bcb58bb9fda53766474aa8b3382f7d5523aad9cd",
+    "runtime/pi/package.json": "e10332fe16be1faae439e716dee277b0ade28f81145d41a1ccc8f755f504d9be",
+    "frontend/package-lock.json": "9b31e7427564ebb34499cf9adddb5eac2986a6913db66d24d868e644d496e7b7",
+    "frontend/package.json": "2e6f3ba99dbd8a4d567d2f058699451326aa73e3d95fb6a9e555654a99d4f7f2",
+    "work/next-experience/10/test_os_process_restart.py": "3beb48532eb17ffb8533235e6b32c3ecf09b8ff9f644e44a02cc1d0fb8f4b747"
+  },
+  "real_model_configuration": "unverified; no credentials read",
+  "controlled_environment": "dummy key, loopback providers, temporary SQLite/checkpoints; actual model identifier recorded per fixture",
+  "lint": "No configured lint script; not claimed passed"
+}

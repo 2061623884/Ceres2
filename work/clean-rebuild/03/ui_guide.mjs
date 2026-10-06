@@ -1,3 +1,4 @@
+import {withLegacyNavigationTransport} from '../../next-experience/03/legacy_navigation_transport.mjs';
 /** DOM/client contract only, not browser/layout/provider acceptance. */
 import assert from 'node:assert/strict';
 import path from 'node:path';
@@ -8,6 +9,7 @@ Object.assign(globalThis,{window:dom.window,document:dom.window.document,session
 dom.window.HTMLElement.prototype.scrollIntoView=function(){};
 const frontend=createRequire(path.join(cwd,'frontend/package.json')),compiled=createRequire(path.join(cwd,'work/clean-rebuild/03/compiled/package.json'));
 const React=frontend('react'),{act,createElement}=React,{createRoot}=frontend('react-dom/client');
+compiled.extensions['.css']=()=>{};
 const App=compiled('./App.js').default,container=document.getElementById('root');
 const state={session_id:'guide-one',task_id:'task-one',state_version:0,session_version:1,task_status:'active',entry_context:{page:'home'},available_actions:['send_message'],messages:[],product_cards:[]};
 const streams=[],stops=[];
@@ -34,13 +36,14 @@ globalThis.fetch=async(input,options={})=>{
  }
  throw new Error('Unexpected fetch '+url);
 };
+globalThis.fetch=withLegacyNavigationTransport(globalThis.fetch);
 let root=createRoot(container);
 async function click(element){assert.ok(element);await act(async()=>element.dispatchEvent(new dom.window.MouseEvent('click',{bubbles:true})));}
 async function enter(text){const input=container.querySelector('input[placeholder="问问可可吧…"]');assert.ok(input);await act(async()=>{Object.getOwnPropertyDescriptor(dom.window.HTMLInputElement.prototype,'value').set.call(input,text);input.dispatchEvent(new dom.window.Event('input',{bubbles:true}));});await act(async()=>input.dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'Enter',bubbles:true})));}
 async function event(stream,type,payload){await act(async()=>stream.controller.enqueue(new TextEncoder().encode('data: '+JSON.stringify({protocol_version:1,run_id:stream.body.request_id,sequence:++stream.seq,type,session_id:'guide-one',payload})+'\n\n')));}
 await act(async()=>root.render(createElement(App)));
-await click([...container.querySelectorAll('button')].find(b=>b.textContent==='商品'));
-await click([...container.querySelectorAll('button')].find(b=>b.textContent==='问问可可'));
+if(sessionStorage.getItem('ceres-chat-visible') !== 'keke'){await click([...container.querySelectorAll('button')].find(b=>b.textContent==='商品'));
+await click([...container.querySelectorAll('button')].find(b=>b.textContent==='问问可可'));}else{assert.ok(container.querySelector('[aria-label="角色导航"]'),'Reload restores the explicitly open chat shell');}
 await enter('查可乐');assert.equal(streams.length,1);
 await event(streams[0],'accepted',{request_id:streams[0].body.request_id});
 await event(streams[0],'progress',{phase:'retrieve'});
@@ -64,8 +67,8 @@ statusTask={task_id:process.env.GUIDE_UI_CASE==='task-abandoned'?null:'task-rest
 statusRuns=[{run_id:'interrupted-old',request_id:'interrupted-old',status:'interrupted',input:{message:'中断前我问的问题'},result:{code:'RUN_INTERRUPTED',message:'服务重启中断了这次处理'}} ,{run_id:'completed-while-opening',request_id:'completed-while-opening',status:'completed',input:{message:'刚才的查询'},result:{...state,message:'刚刚完成的持久结果',messages:[{message_id:'durable-one',content:'刚刚完成的持久结果'}]}}];
 root=createRoot(container);
 await act(async()=>root.render(createElement(App)));
-await click([...container.querySelectorAll('button')].find(b=>b.textContent==='商品'));
-await click([...container.querySelectorAll('button')].find(b=>b.textContent==='问问可可'));
+if(sessionStorage.getItem('ceres-chat-visible') !== 'keke'){await click([...container.querySelectorAll('button')].find(b=>b.textContent==='商品'));
+await click([...container.querySelectorAll('button')].find(b=>b.textContent==='问问可可'));}else{assert.ok(container.querySelector('[aria-label="角色导航"]'),'Reload restores the explicitly open chat shell');}
 if(!['late-init','interrupted'].includes(process.env.GUIDE_UI_CASE)) assert.match(container.textContent,/刚刚完成的持久结果/,'Reentry must reconcile a run completed after the initial history snapshot');
 assert.equal(container.querySelector('[aria-label="放弃购买任务"]').disabled,process.env.GUIDE_UI_CASE==='task-abandoned','Controls must use newer authoritative task snapshot even when every run is terminal');
 if(process.env.GUIDE_UI_CASE==='interrupted') { assert.match(container.textContent,/中断前我问的问题/); assert.match(container.textContent,/服务重启中断了这次处理/); }
@@ -74,8 +77,8 @@ delayedEntry=new Promise(resolve=>{resolveEntry=resolve});
 statusRuns=[{run_id:'late-run',request_id:'late-run',status:'running',input:{message:'待恢复'}}];
 root=createRoot(container);
 await act(async()=>root.render(createElement(App)));
-await click([...container.querySelectorAll('button')].find(b=>b.textContent==='商品'));
-await click([...container.querySelectorAll('button')].find(b=>b.textContent==='问问可可'));
+if(sessionStorage.getItem('ceres-chat-visible') !== 'keke'){await click([...container.querySelectorAll('button')].find(b=>b.textContent==='商品'));
+await click([...container.querySelectorAll('button')].find(b=>b.textContent==='问问可可'));}else{assert.ok(container.querySelector('[aria-label="角色导航"]'),'Reload restores the explicitly open chat shell');}
 await act(async()=>root.unmount());
 await act(async()=>resolveEntry(response(state)));
 assert.equal(reconnectCalls,0,'Delayed initialization must not start a transport after panel unmount');

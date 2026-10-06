@@ -79,6 +79,16 @@ class PurchaseService:
             offer = self.db.scalar(select(Offer).where(Offer.store_id == store_id, Offer.sku_id == sku_id))
             if not product or product.review_status != 'approved' or not offer or (not supply_preview and item.get('selected', True) and (not offer.sellable or offer.available_qty < quantity)):
                 raise AppError(409, 'CHECKOUT_UNAVAILABLE', '商品供给不足或不可售')
+            from app.services.activity_service import activity_mismatch
+            if item.get('selected', True) and activity_mismatch({'metadata':json.loads(product.metadata_json)}, conditions):
+                raise AppError(409, 'ACTIVITY_SCOPE_CONFLICT', '商品不属于当前活动成品范围，请先更新购买目标。')
+            from app.services.product_constraints import safety_mismatch, drink_filter_mismatch
+            from app.services.catalog_service import product_to_dict
+            if item.get('selected', True) and drink_filter_mismatch(product_to_dict(product, offer), conditions):
+                raise AppError(409, 'PRODUCT_FILTER_CONFLICT', '商品属性不符合当前饮品筛选条件，未加购。')
+            safety_reason = safety_mismatch({'metadata':json.loads(product.metadata_json)}, conditions)
+            if item.get('selected', True) and safety_reason:
+                raise AppError(409, 'DIETARY_CONFLICT', safety_reason + '原条件已保留，未加购。')
             identities = [sku_id, product.name, product.name_zh, product.brand, *json.loads(product.ingredient_ids), *json.loads(product.usage_tags)]
             if item.get('selected', True) and any(exclusion in identities for exclusion in exclusions):
                 raise AppError(409, 'EXCLUSION_CONFLICT', '商品不符合当前排除条件')
@@ -129,6 +139,25 @@ class PurchaseService:
         from app.services.history_service import HistoryService
         HistoryService(self.db, self.owner_id).annotate(task, plan)
         self.project_budget(task, plan)
+        task.plan_json = json.dumps(plan, ensure_ascii=False)
+        self.db.flush()
+        return plan
+
+    def prepare_selected(self, task_id, items, displayed_message_id):
+        """Explicit multiple product selection shares the existing facts/plan authority."""
+        task, session = self.task(task_id)
+        rows, store, zone, total = self.facts(task, session, items, allow_quote=True)
+        prior = json.loads(task.plan_json) if task.plan_json else None
+        plan = {'plan_id':prior['plan_id'] if prior else f'plan-{uuid4().hex}', 'plan_version':prior['plan_version'] + 1 if prior else 1,
+                'mode':'bundle', 'items':rows, 'total_price_fen':total, 'selected_total_fen':total,
+                'expires_at':None, 'validation_status':'valid', 'can_confirm':any(row['remaining_quantity'] for row in rows),
+                'store_id':store.store_id, 'delivery_zone_id':zone, 'delivery_version':store.delivery_version,
+                'displayed_message_id':displayed_message_id}
+        self.project_budget(task, plan)
+        task.state_version += 1
+        task.current_step = 'awaiting_confirmation'
+        from app.services.history_service import HistoryService
+        HistoryService(self.db, self.owner_id).annotate(task, plan)
         task.plan_json = json.dumps(plan, ensure_ascii=False)
         self.db.flush()
         return plan

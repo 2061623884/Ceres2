@@ -1,3 +1,4 @@
+import type {GuideQuestion} from './productQuestions';
 const API_BASE = '';
 
 export interface BootstrapResponse {
@@ -421,6 +422,8 @@ export interface DisplayedPlanRef {
 }
 
 export interface TurnResponse {
+  active_question?: GuideQuestion | null;
+  question_history?: GuideQuestion[];
   history_sources?: HistorySource[];
   confirmation_result?: ConfirmResponse | null;
   product_cards: ProductComparisonCard[];
@@ -432,7 +435,11 @@ export interface TurnResponse {
   status: string;
   message: string;
   messages?: Array<{message_id: string; content: string}>;
-  answer_kind?: 'general_explanation' | 'business_facts';
+  answer_kind?: 'general_explanation' | 'business_facts' | 'result_introduction';
+  expression_status?: 'running' | 'completed' | 'failed' | 'deadline' | 'stopped' | 'stale';
+  runtime_status?: string;
+  no_matches?: boolean;
+  product_evidence?: unknown[];
   plan?: PlanResponse | null;
   plan_effect?: 'keep' | 'replace' | 'clear';
   pending_clarification?: Record<string, unknown> | null;
@@ -445,6 +452,8 @@ export interface TurnResponse {
 }
 
 export interface SessionResponse {
+  active_question?: GuideQuestion | null;
+  question_history?: GuideQuestion[];
   history_reminder?: HistoryReminder | null;
   product_cards: ProductComparisonCard[];
   confirmation_result?: {
@@ -676,6 +685,7 @@ export async function sendTurnStream(
   callbacks?: TurnStreamCallbacks,
   displayedPlan?: DisplayedPlanRef | null,
   displayedCandidateRefs: string[] = [],
+  routingRequestId?: string,
 ): Promise<TurnResponse> {
   await ensureIdentity();
 
@@ -692,7 +702,7 @@ export async function sendTurnStream(
         requestId,
         expectedSessionVersion,
         viewContext,
-      ), displayed_plan: displayedPlan ?? null, displayed_candidate_refs: displayedCandidateRefs },
+      ), displayed_plan: displayedPlan ?? null, displayed_candidate_refs: displayedCandidateRefs, routing_request_id: routingRequestId ?? null },
     ),
   });
 
@@ -751,7 +761,7 @@ export interface GuideRun {
   run_id: string;
   request_id: string;
   status: string;
-  input: {message?: string};
+  input: {message?: string; kind?: string; role?: 'keke' | 'momo'};
   result?: Partial<TurnResponse> & {code?:string};
 }
 

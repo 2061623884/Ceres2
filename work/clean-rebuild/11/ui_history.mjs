@@ -1,3 +1,4 @@
+import {withLegacyNavigationTransport} from '../../next-experience/03/legacy_navigation_transport.mjs';
 /** Retained App public DOM contract; does not establish real-browser acceptance. */
 import assert from 'node:assert/strict';
 import path from 'node:path';
@@ -27,11 +28,12 @@ globalThis.fetch=async(input,options={})=>{
  if(url.includes('/guide/sessions'))return response(state);
  throw new Error('Unexpected fetch '+url);
 };
+globalThis.fetch=withLegacyNavigationTransport(globalThis.fetch);
 const root=createRoot(container);
 async function click(element){assert.ok(element);await act(async()=>element.dispatchEvent(new dom.window.MouseEvent('click',{bubbles:true})));}
 await act(async()=>root.render(createElement(App)));
-await click([...container.querySelectorAll('button')].find(b=>b.textContent==='商品'));
-await click([...container.querySelectorAll('button')].find(b=>b.textContent==='问问可可'));
+if(sessionStorage.getItem('ceres-chat-visible') !== 'keke'){await click([...container.querySelectorAll('button')].find(b=>b.textContent==='商品'));
+await click([...container.querySelectorAll('button')].find(b=>b.textContent==='问问可可'));}else{assert.ok(container.querySelector('[aria-label="角色导航"]'),'Reload restores the explicitly open chat shell');}
 assert.match(container.textContent,/之前番茄炒蛋还有未完成项/);
 await click([...container.querySelectorAll('button')].find(b=>b.textContent==='不再提醒'));
 assert.equal(dismissals[0].decision,'decline');assert.equal(turns.length,0);assert.equal(cartCount,0);

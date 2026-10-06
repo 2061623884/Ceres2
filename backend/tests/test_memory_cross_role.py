@@ -7,6 +7,8 @@ from test_runtime_pi_product_query import pi_client
 from test_memory_public import memory_turn
 from test_memory_mercury import payload
 from test_mercury_public import tool_message
+from test_guide_lifecycle import BASE
+from public_role_navigation import choose_public_role
 
 
 def test_same_user_keke_memory_is_need_to_know_in_actual_momo_query(pi_client, tmp_path, monkeypatch):
@@ -42,6 +44,7 @@ def test_same_user_keke_memory_is_need_to_know_in_actual_momo_query(pi_client, t
     sid=client.post('/api/v1/mercury/sessions').json()['session_id']
     url='/api/v1/mercury/sessions/'+sid
     assert client.put(url+'/order',json={'order_id':'memory-order','selection_version':0}).status_code==200
+    choose_public_role(client, BASE, 'momo')
     result=payload(client.post(url+'/turns/stream',json={'message':'查看订单问题','request_id':'recall'}))
     prompt=model.seen[0][0]['content']
     assert '订单问题希望先解释原因' in prompt and '回复先说结论' in prompt

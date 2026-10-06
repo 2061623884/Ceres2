@@ -42,7 +42,7 @@ def task_projection(db, session):
     return {'history_reminder':reminder if reminder and reminder['decision'] == 'offered' else None, 'session_id': session.session_id, 'task_id': anchor[1], 'state_version': anchor[2], 'session_version': anchor[0], 'task_status': task.status if task else None, 'goal': task.goal if task else None, 'conditions': json.loads(task.conditions_json) if task else {}}
 
 
-def transition(db, owner_id, session_id, body):
+def transition(db, owner_id, session_id, body, *, commit=True):
     owned_session(db, owner_id, session_id)
     require_canonical_session(db, owner_id, session_id)
     digest = hashlib.sha256(json.dumps(body, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
@@ -51,24 +51,28 @@ def transition(db, owner_id, session_id, body):
     prior = db.get(GuideCommandReceipt, (session_id, body['request_id']))
     if prior:
         if prior.digest != digest:
-            db.rollback()
+            if commit:
+                db.rollback()
             raise AppError(409, 'IDEMPOTENCY_CONFLICT', '同一请求标识对应不同内容')
         result = json.loads(prior.result_json)
-        db.rollback()
+        if commit:
+            db.rollback()
         return result
     db.expire_all()
     session = owned_session(db, owner_id, session_id)
     anchor = session_anchor(db, session)
     if anchor != (body['expected_session_version'], body['expected_task_id'], body['expected_state_version']):
-        db.rollback()
+        if commit:
+            db.rollback()
         raise AppError(409, 'STALE_STATE', '会话或任务版本已变化')
     task = db.get(GuideTask, anchor[1]) if anchor[1] else None
     kind = body['kind']
-    if set(body.get('conditions') or {}) & {'dish_groups', 'dish_selection', 'history_source', 'history_memory', 'history_memory_defaults', 'history_reminder'}:
-        raise AppError(422, 'RESERVED_TASK_CONDITION', '菜品分组只能通过明确的选定或分组修订更新')
+    if set(body.get('conditions') or {}) & {'activity_id', 'dish_groups', 'dish_selection', 'history_source', 'history_memory', 'history_memory_defaults', 'history_reminder'}:
+        raise AppError(422, 'RESERVED_TASK_CONDITION', '活动范围与菜品分组只能通过对应的明确入口更新')
     if kind == 'new_goal':
         if not body['goal'] or not body['goal'].strip():
-            db.rollback()
+            if commit:
+                db.rollback()
             raise AppError(422, 'GOAL_REQUIRED', '请说明新的购买目标')
         if task:
             task.status = 'superseded'
@@ -79,7 +83,8 @@ def transition(db, owner_id, session_id, body):
         session.session_version += 1
     elif kind in ('amend', 'abandon'):
         if task is None:
-            db.rollback()
+            if commit:
+                db.rollback()
             raise AppError(409, 'NO_ACTIVE_TASK', '当前没有活动购买任务')
         task.state_version += 1
         if kind == 'abandon':
@@ -88,7 +93,8 @@ def transition(db, owner_id, session_id, body):
             session.session_version += 1
         else:
             if not body['conditions']:
-                db.rollback()
+                if commit:
+                    db.rollback()
                 raise AppError(422, 'CONDITIONS_REQUIRED', '请说明要修改的条件')
             conditions = json.loads(task.conditions_json)
             for key in body['conditions']:
@@ -113,5 +119,6 @@ def transition(db, owner_id, session_id, body):
     result['plan'] = json.loads(task.plan_json) if task and task.plan_json else None
     result['message'] = {'new_goal': '好的，开始这个购买任务 🙂', 'amend': '条件已更新，我会按新条件继续核对。', 'abandon': '已放弃这个购买任务，购物车里的商品仍保留。', 'continue': '继续当前购买任务。'}[kind]
     db.add(GuideCommandReceipt(session_id=session_id, request_id=body['request_id'], digest=digest, result_json=json.dumps(result, ensure_ascii=False)))
-    db.commit()
+    if commit:
+        db.commit()
     return result

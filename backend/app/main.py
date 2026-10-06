@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
-from app.api import bootstrap, catalog, guide, cart, orders
+from app.api import bootstrap, catalog, guide, cart, orders, navigation, activity
 from app.mercury.router import router as mercury_router
 from app.human.router import router as human_router
 from app.core.config import get_settings
@@ -35,6 +35,8 @@ def create_app(database_engine=None) -> FastAPI:
     app.include_router(bootstrap.router)
     app.include_router(catalog.router)
     app.include_router(guide.router)
+    app.include_router(navigation.router)
+    app.include_router(activity.router)
     app.include_router(mercury_router)
     app.include_router(human_router)
     app.include_router(cart.router)

@@ -1,3 +1,4 @@
+import {withLegacyNavigationTransport} from '../../next-experience/03/legacy_navigation_transport.mjs';
 /** DOM/client contract only, not browser/layout/provider acceptance. */
 import assert from 'node:assert/strict';
 import path from 'node:path';
@@ -8,6 +9,7 @@ Object.assign(globalThis,{window:dom.window,document:dom.window.document,session
 dom.window.HTMLElement.prototype.scrollIntoView=function(){};
 const frontend=createRequire(path.join(cwd,'frontend/package.json')),compiled=createRequire(path.join(cwd,'work/clean-rebuild/03/compiled/package.json'));
 const React=frontend('react'),{act,createElement}=React,{createRoot}=frontend('react-dom/client');
+compiled.extensions['.css']=()=>{};
 const App=compiled('./App.js').default,container=document.getElementById('root');
 const state={session_id:'guide-one',task_id:'task-one',state_version:0,session_version:1,task_status:'active',entry_context:{page:'home'},available_actions:['send_message'],messages:[],product_cards:[]};
 const streams=[],stops=[];
@@ -38,13 +40,14 @@ globalThis.fetch=async(input,options={})=>{
  }
  throw new Error('Unexpected fetch '+url);
 };
+globalThis.fetch=withLegacyNavigationTransport(globalThis.fetch);
 let root=createRoot(container);
 async function click(element){assert.ok(element);await act(async()=>element.dispatchEvent(new dom.window.MouseEvent('click',{bubbles:true})));}
 async function enter(text){const input=container.querySelector('input[placeholder="问问可可吧…"]');assert.ok(input);await act(async()=>{Object.getOwnPropertyDescriptor(dom.window.HTMLInputElement.prototype,'value').set.call(input,text);input.dispatchEvent(new dom.window.Event('input',{bubbles:true}));});await act(async()=>input.dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'Enter',bubbles:true})));}
 async function event(stream,type,payload){await act(async()=>stream.controller.enqueue(new TextEncoder().encode('data: '+JSON.stringify({protocol_version:1,run_id:stream.body.request_id,sequence:++stream.seq,type,session_id:'guide-one',payload})+'\n\n')));}
 await act(async()=>root.render(createElement(App)));
-await click([...container.querySelectorAll('button')].find(b=>b.textContent==='商品'));
-await click([...container.querySelectorAll('button')].find(b=>b.textContent==='问问可可'));
+if(sessionStorage.getItem('ceres-chat-visible') !== 'keke'){await click([...container.querySelectorAll('button')].find(b=>b.textContent==='商品'));
+await click([...container.querySelectorAll('button')].find(b=>b.textContent==='问问可可'));}else{assert.ok(container.querySelector('[aria-label="角色导航"]'),'Reload restores the explicitly open chat shell');}
 await enter('旧采购问题');
 await enter('新采购问题');
 Object.assign(state,{task_id:'task-old',session_version:2,state_version:5,plan:plan('旧采购商品'),available_actions:['send_message','modify','confirm']});

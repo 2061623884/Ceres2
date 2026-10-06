@@ -25,7 +25,7 @@ def session_anchor(db, session):
 
 def bounded_dialogue_context(db, owner_id, session_id, anchor, exclude_run_id=None):
     """Only the latest anchored host projection, never raw dialogue or memory text."""
-    query = select(GuideTurnReceipt).join(GuideMessage, (GuideMessage.session_id == GuideTurnReceipt.session_id) & (GuideMessage.request_id == GuideTurnReceipt.request_id)).where(GuideTurnReceipt.session_id == session_id, GuideTurnReceipt.owner_id == owner_id, GuideMessage.owner_id == owner_id, GuideMessage.role == 'assistant')
+    query = select(GuideTurnReceipt).join(GuideMessage, (GuideMessage.session_id == GuideTurnReceipt.session_id) & (GuideMessage.request_id == GuideTurnReceipt.request_id)).where(GuideTurnReceipt.session_id == session_id, GuideTurnReceipt.owner_id == owner_id, GuideMessage.owner_id == owner_id, GuideMessage.role == 'assistant', GuideMessage.kind != 'introduction')
     if exclude_run_id is not None:
         query = query.where(GuideTurnReceipt.run_id != exclude_run_id)
     prior = db.scalar(query.order_by(GuideMessage.sequence.desc()).limit(1))
@@ -113,8 +113,10 @@ class PiProductTurnService:
         from app.services.memory_service import MemoryTurn, MemoryService, previous_guide_memory_refs
         memory_turn = MemoryTurn(db, self.owner_id, role='keke', source_id=run_id, source_text=body['message'])
         memory_context = MemoryService(db, self.owner_id).recall(role='keke', query=body['message'] + ' ' + (task.goal or '' if task else ''), current_conditions=json.loads(task.conditions_json) if task else {})
+        from app.services.product_question_service import ProductQuestionService
+        question_context = ProductQuestionService(db, self.owner_id).projection(session_id)['active_question']
         dialogue_context = bounded_dialogue_context(db, self.owner_id, session_id, anchor, run_id)
-        context = {**dialogue_context, 'memory_list_refs':previous_guide_memory_refs(db, self.owner_id, session_id), 'memory':memory_context, 'has_active_task': task is not None, 'general_history': [row.content for row in reversed(history)]}
+        context = {**dialogue_context, 'capability':body.get('_route_capability'), 'active_question':question_context, 'memory_list_refs':previous_guide_memory_refs(db, self.owner_id, session_id), 'memory':memory_context, 'has_active_task': task is not None, 'general_history': [row.content for row in reversed(history)]}
         db.rollback()
         from app.services.comparison_service import ComparisonService
         comparison_snapshot_refs = [card['ref'] for card in ComparisonService(db, self.owner_id).current(session_id)]
@@ -123,7 +125,14 @@ class PiProductTurnService:
         from app.services.history_service import HistoryService, HistoryTurn
         from app.services.guide_lifecycle_service import task_projection
         history_turn = HistoryTurn(db, self.owner_id, session_id, body['message'])
-        runtime = PiProductRuntime(CatalogService(db, store_id), assert_current, run_id=run_id, route_request=route_request, context=context, memory_command=memory_turn.prepare, comparison_search=lambda arguments: ComparisonService(db, self.owner_id).search(session_id, arguments, body.get('view_context')), candidate_resolve=lambda ref: ComparisonService(db, self.owner_id).resolve(session_id, ref, body.get('displayed_candidate_refs', []), body.get('view_context')), history_command=history_turn.prepare)
+        from app.services.product_question_service import ProductQuestionService
+        questions = ProductQuestionService(db, self.owner_id)
+        def activity_active():
+            current = owned_session(db, self.owner_id, session_id)
+            task = db.get(GuideTask, current.current_task_id) if current.current_task_id else None
+            return bool(task and json.loads(task.conditions_json).get('activity_id'))
+
+        runtime = PiProductRuntime(CatalogService(db, store_id), assert_current, run_id=run_id, route_request=route_request, context=context, memory_command=memory_turn.prepare, product_search=lambda arguments: ComparisonService(db, self.owner_id).search(session_id, arguments, scope_to_page=False), comparison_search=lambda arguments: ComparisonService(db, self.owner_id).search(session_id, arguments, body.get('view_context')), candidate_resolve=lambda ref: ComparisonService(db, self.owner_id).resolve(session_id, ref, body.get('displayed_candidate_refs', []), body.get('view_context')), history_command=history_turn.prepare, explore_products=lambda arguments: questions.explore(session_id, arguments), select_question_products=lambda arguments: questions.select_products(session_id, arguments), activity_active=activity_active)
         try:
             progress('understanding')
             explicit_confirm = body['message'].strip().rstrip('。！!') in ('就按这个加购', '确认加购', '确认把当前清单加入购物车')
@@ -200,16 +209,30 @@ class PiProductTurnService:
                     if selected['sku_id'] != purchase['sku_id']:
                         raise AppError(409, 'COMPARISON_STALE', '已展示候选发生变化，请重新比较')
                 service = PurchaseService(db, self.owner_id)
-                plan = service.prepare_dish(anchor[1], purchase, assistant_id) if 'dish_id' in purchase else service.prepare(anchor[1], purchase['sku_id'], purchase['quantity'], assistant_id)
+                if purchase.get('question_selection'):
+                    selection = questions.select_products(session_id, purchase['question_selection'])
+                    plan = service.prepare_selected(anchor[1], selection['items'], assistant_id)
+                    questions.record_selection(selection)
+                else:
+                    plan = service.prepare_dish(anchor[1], purchase, assistant_id) if 'dish_id' in purchase else service.prepare(anchor[1], purchase['sku_id'], purchase['quantity'], assistant_id)
                 anchor = (anchor[0], anchor[1], db.get(GuideTask, anchor[1]).state_version)
                 outcome['message'] = render_plan(plan)
             if status in ('deadline', 'tool_budget'):
                 ComparisonService(db, self.owner_id).clear(session_id, comparison_snapshot_refs)
             cards = ComparisonService(db, self.owner_id).publish(session_id, outcome['products'], assistant_id, body.get('view_context')) if status == 'completed' and outcome.get('comparison') else []
+            if outcome.get('policy_message'):
+                outcome['messages'] = [outcome['message'], outcome['policy_message']]
             public_messages = [{'message_id': assistant_id if index == 0 else f'msg-{uuid4().hex}', 'content': content} for index, content in enumerate(outcome.get('messages', [outcome['message']]))]
             db.add(GuideMessage(message_id=f'msg-{uuid4().hex}', session_id=session_id, owner_id=self.owner_id, task_id=anchor[1], sequence=sequence + 1, role='user', kind='text', content=body['message'], request_id=body['request_id']))
             for index, message in enumerate(public_messages):
                 db.add(GuideMessage(message_id=message['message_id'], session_id=session_id, owner_id=self.owner_id, task_id=anchor[1], sequence=sequence + index + 2, role='assistant', kind='general' if outcome.get('answer_kind') == 'general_explanation' else 'text', content=message['content'], request_id=body['request_id']))
+            if outcome.get('exploration'):
+                question = questions.publish(session_id, outcome['exploration'], assistant_id)
+                db.flush()
+                question_message = db.get(GuideMessage, assistant_id)
+                question_message.kind = 'question'
+                question_message.content = json.dumps(question, ensure_ascii=False)
+                db.flush()
             task = db.get(GuideTask, anchor[1]) if anchor[1] else None
             retained_context = bounded_dialogue_context(db, self.owner_id, session_id, anchor, run_id) if status == 'completed' and runtime.route_result and runtime.route_result['kind'] in ('question', 'progress') else {}
             pending = [{'slot': outcome['clarification_slot'], 'question': outcome['message']}] if status == 'waiting' and outcome.get('clarification_slot') else ([retained_context['pending_clarification']] if retained_context.get('pending_clarification') else [])
@@ -225,8 +248,10 @@ class PiProductTurnService:
                 'action_results': [confirmation] if confirmation else [memory_result] if memory_result else [], 'confirmation_result':confirmation, 'committed': bool(confirmation or (memory_result and memory_result['action'] != 'list')), 'runtime': 'pi-agent-core',
                 'runtime_status': status, 'tool_rounds': runtime.tool_rounds,
                 'dish_candidates': outcome.get('dish_candidates', retained_context.get('dish_candidates', [])), 'runtime_events': runtime.events, 'product_evidence': outcome['products'], 'product_cards':cards,
+                'no_matches': outcome.get('no_matches', False),
                 'model_mode': 'live', 'business_data_mode': 'demo',
             }
+            result.update(questions.projection(session_id))
             receipt.status = {'stopped': 'stopped', 'waiting': 'waiting_clarification', 'deadline': 'protected', 'tool_budget': 'protected'}.get(status, 'completed')
             if status == 'completed' and (purchase or history_selection) and result['plan']:
                 receipt.status = 'waiting_confirmation'

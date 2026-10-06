@@ -1,0 +1,154 @@
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/Ceres2-next/work/next-experience/10/compile_dom.cjs", "work/clean-rebuild/02/compiled"]
+{"compiled":"/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/02/compiled"}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/Ceres2-next/work/next-experience/10/compile_dom.cjs", "work/clean-rebuild/02/compiled"], "exit_code": 0, "seconds": 0.608}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/Ceres2-next/work/next-experience/10/compile_dom.cjs", "work/clean-rebuild/13/compiled"]
+{"compiled":"/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/13/compiled"}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/Ceres2-next/work/next-experience/10/compile_dom.cjs", "work/clean-rebuild/13/compiled"], "exit_code": 0, "seconds": 0.719}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/Ceres2-next/work/next-experience/10/compile_dom.cjs", "work/clean-rebuild/15/compiled"]
+{"compiled":"/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/15/compiled"}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/Ceres2-next/work/next-experience/10/compile_dom.cjs", "work/clean-rebuild/15/compiled"], "exit_code": 0, "seconds": 0.717}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/Ceres2-next/work/next-experience/10/compile_dom.cjs", "work/clean-rebuild/03/compiled"]
+{"compiled":"/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/03/compiled"}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/Ceres2-next/work/next-experience/10/compile_dom.cjs", "work/clean-rebuild/03/compiled"], "exit_code": 0, "seconds": 0.685}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/Ceres2-next/work/next-experience/10/compile_dom.cjs", "work/clean-rebuild/04-purchase/compiled"]
+{"compiled":"/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/04-purchase/compiled"}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/Ceres2-next/work/next-experience/10/compile_dom.cjs", "work/clean-rebuild/04-purchase/compiled"], "exit_code": 0, "seconds": 0.6}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/Ceres2-next/work/next-experience/10/compile_dom.cjs", "work/clean-rebuild/12/compiled"]
+{"compiled":"/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/12/compiled"}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/Ceres2-next/work/next-experience/10/compile_dom.cjs", "work/clean-rebuild/12/compiled"], "exit_code": 0, "seconds": 0.614}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/Ceres2-next/work/next-experience/10/compile_dom.cjs", "work/clean-rebuild/14/compiled"]
+{"compiled":"/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/14/compiled"}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/Ceres2-next/work/next-experience/10/compile_dom.cjs", "work/clean-rebuild/14/compiled"], "exit_code": 0, "seconds": 0.659}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/Ceres2-next/work/next-experience/10/compile_dom.cjs", "work/next-experience/01/compiled"]
+{"compiled":"/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/next-experience/01/compiled"}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/Ceres2-next/work/next-experience/10/compile_dom.cjs", "work/next-experience/01/compiled"], "exit_code": 0, "seconds": 0.683}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/Ceres2-next/work/next-experience/10/compile_dom.cjs", "work/next-experience/02/compiled"]
+{"compiled":"/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/next-experience/02/compiled"}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/Ceres2-next/work/next-experience/10/compile_dom.cjs", "work/next-experience/02/compiled"], "exit_code": 0, "seconds": 0.637}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/Ceres2-next/work/next-experience/10/compile_dom.cjs", "work/next-experience/03/compiled"]
+{"compiled":"/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/next-experience/03/compiled"}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/Ceres2-next/work/next-experience/10/compile_dom.cjs", "work/next-experience/03/compiled"], "exit_code": 0, "seconds": 0.645}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/Ceres2-next/work/next-experience/10/compile_dom.cjs", "work/next-experience/04/compiled"]
+{"compiled":"/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/next-experience/04/compiled"}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/Ceres2-next/work/next-experience/10/compile_dom.cjs", "work/next-experience/04/compiled"], "exit_code": 0, "seconds": 0.686}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/Ceres2-next/work/next-experience/10/compile_dom.cjs", "work/next-experience/08/compiled"]
+{"compiled":"/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/next-experience/08/compiled"}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/Ceres2-next/work/next-experience/10/compile_dom.cjs", "work/next-experience/08/compiled"], "exit_code": 0, "seconds": 0.652}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/Ceres2-next/work/next-experience/10/compile_dom.cjs", "work/next-experience/09/compiled"]
+{"compiled":"/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/next-experience/09/compiled"}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/Ceres2-next/work/next-experience/10/compile_dom.cjs", "work/next-experience/09/compiled"], "exit_code": 0, "seconds": 0.615}
+COMMAND ["node", "work/clean-rebuild/02/compile_ui_races.cjs"]
+{"compiled":true,"out":"/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/02/compiled","component":"/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/02/compiled/MercuryChat.js","script":"/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/02/compiled/ui_races.mjs"}
+RESULT {"command": ["node", "work/clean-rebuild/02/compile_ui_races.cjs"], "exit_code": 0, "seconds": 0.422}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/02/compiled/ui_races.mjs"]
+{"ok":true,"level":"DOM-only","checks":["late old selection ignored","late old SSE/error ignored"]}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/02/compiled/ui_races.mjs"], "exit_code": 0, "seconds": 0.868}
+COMMAND ["node", "work/clean-rebuild/13/compile_ui_contact.cjs"]
+{"compiled":true,"out":"/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/13/compiled","component":"/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/13/compiled/MercuryChat.js","script":"/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/13/compiled/ui_contact.mjs"}
+RESULT {"command": ["node", "work/clean-rebuild/13/compile_ui_contact.cjs"], "exit_code": 0, "seconds": 0.498}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/13/compiled/ui_contact.mjs"]
+{"ok":true,"level":"controlled-DOM","checks":["exact contact","canonical selection before query","repeat same contact","close and resume","no implicit stream"]}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/13/compiled/ui_contact.mjs"], "exit_code": 0, "seconds": 0.932}
+COMMAND ["node", "work/clean-rebuild/15/compile_ui_human.cjs"]
+{"compiled":true,"out":"/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/15/compiled"}
+RESULT {"command": ["node", "work/clean-rebuild/15/compile_ui_human.cjs"], "exit_code": 0, "seconds": 0.293}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/15/compiled/ui_human.mjs"]
+{"ok":true,"level":"controlled-DOM","checks":["explicit user request","operator deny by default","operator ask and context","user progress and reply","operator resolve","case change isolation"]}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/15/compiled/ui_human.mjs"], "exit_code": 0, "seconds": 0.745}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/03/ui_guide.mjs"]
+{"ok":true,"level":"DOM-only","checks":["concurrent input","no automatic cancellation","single replacing action line","dots then multi-message stream","explicit run stop","unmount transport only"]}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/03/ui_guide.mjs"], "exit_code": 0, "seconds": 0.93}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/03/ui_operator_route.mjs"]
+{"ok":true,"level":"DOM-only","route":"/operator/human-cases"}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/03/ui_operator_route.mjs"], "exit_code": 0, "seconds": 0.635}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/04-purchase/ui_purchase.mjs"]
+{"ok":true,"level":"DOM-only","checks":["restored plan visible","explicit row confirmation body","real receipt ledger projection","cart refresh","no duplicate full confirm","button and text exact two-item UI contracts","ledger survives remount"]}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/04-purchase/ui_purchase.mjs"], "exit_code": 0, "seconds": 0.968}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/04-purchase/ui_purchase_background_refresh.mjs"]
+{"ok":true,"level":"DOM-only","checks":["v1 actually displayed","sheet closed","unrelated chat refreshes v2","v2 explicitly redisplayed before authority promotion","confirmation binds v2 quantity3"]}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/04-purchase/ui_purchase_background_refresh.mjs"], "exit_code": 0, "seconds": 0.761}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/04-purchase/ui_purchase_lost_response.mjs"]
+{"ok":true,"level":"DOM-only","checks":["successful commit then lost response","stale retry does not add twice","receipt ledger recovered","authoritative cart refreshed","badge exactly two items"]}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/04-purchase/ui_purchase_lost_response.mjs"], "exit_code": 0, "seconds": 0.776}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/05/ui_dish.mjs"]
+{"ok":true,"level":"DOM-only","checks":["baseline provenance","demand/package/leftover","pantry unknown","people revision request"]}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/05/ui_dish.mjs"], "exit_code": 0, "seconds": 0.845}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/06/ui_group_ledger.mjs"]
+{"ok":true,"level":"DOM-only","checks":["source groups","targeted people revision","targeted SKU revision","group removal"]}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/06/ui_group_ledger.mjs"], "exit_code": 0, "seconds": 0.871}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/06/ui_multidish.mjs"]
+{"ok":true,"level":"DOM-only","checks":["source groups","targeted people revision","targeted SKU revision","group removal"]}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/06/ui_multidish.mjs"], "exit_code": 0, "seconds": 0.809}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/07/ui_alternative.mjs"]
+{"ok":true,"level":"DOM-only","checks":["priced remainder alternative","explicit alternative selection","independent cart confirmation"]}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/07/ui_alternative.mjs"], "exit_code": 0, "seconds": 0.826}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/07/ui_supply.mjs"]
+{"ok":true,"level":"DOM-only","checks":["supply preview title and gaps","preview confirmation disabled","explicit partial choice","independent cart confirmation"]}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/07/ui_supply.mjs"], "exit_code": 0, "seconds": 0.86}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/08-comparison/ui_comparison.mjs"]
+{"ok":true,"level":"DOM-only","checks":["source-backed fields and unknown values","restored displayed refs posted with selection","no auto-confirm","empty/error clear old cards and refs"]}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/08-comparison/ui_comparison.mjs"], "exit_code": 0, "seconds": 0.85}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/08-comparison/ui_comparison_order.mjs"]
+{"ok":true,"level":"DOM-only","mode":"error","checks":["current cards survive completion order or reconnect","current displayed refs remain selectable"]}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/08-comparison/ui_comparison_order.mjs"], "exit_code": 0, "seconds": 0.801}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/11/ui_history.mjs"]
+{"ok":true,"level":"DOM-only","checks":["decline reminder without restoration","explicit historical source list and selection","fresh source and current changes visible","supply choice separate from confirmation","exact current three-pack cart count"]}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/11/ui_history.mjs"], "exit_code": 0, "seconds": 0.851}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/12/ui_orders.mjs"]
+{"ok":true,"level":"DOM-only","checks":["nonempty migrated public projection renders finite total","exact order contact control","preview read does not confirm","explicit confirmation preserves target and key","receipt screen"]}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/12/ui_orders.mjs"], "exit_code": 0, "seconds": 0.657}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/14/ui_aftersales.mjs"]
+{"ok":true,"level":"DOM-only","checks":["concrete preview","no first-intent submission","explicit confirmation exact key","receipt restore","changed terms hide confirmation","late old-order response fenced"]}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/14/ui_aftersales.mjs"], "exit_code": 0, "seconds": 0.681}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/16/ui_plan_controls.mjs"]
+{"ok":true,"level":"DOM-only","mode":"quantity"}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/16/ui_plan_controls.mjs"], "exit_code": 0, "seconds": 0.752}
+COMMAND ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/16/ui_snapshot_ordering.mjs"]
+{"ok":true,"level":"DOM-only","checks":["out-of-order completion GET","new task with lower state version retained","rendered confirmation reference remains newer"]}
+RESULT {"command": ["node", "/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/clean-rebuild/16/ui_snapshot_ordering.mjs"], "exit_code": 0, "seconds": 0.795}
+COMMAND ["node", "work/clean-rebuild/13/identity_race.mjs"]
+{"ok":true,"checks":["one shared bootstrap","Mercury waits for trusted owner"]}
+RESULT {"command": ["node", "work/clean-rebuild/13/identity_race.mjs"], "exit_code": 0, "seconds": 0.066}
+COMMAND ["node", "work/clean-rebuild/08-comparison/ui_comparison_order.mjs", "completed"]
+{"ok":true,"level":"DOM-only","mode":"completed","checks":["current cards survive completion order or reconnect","current displayed refs remain selectable"]}
+RESULT {"command": ["node", "work/clean-rebuild/08-comparison/ui_comparison_order.mjs", "completed"], "exit_code": 0, "seconds": 0.807}
+COMMAND ["node", "work/clean-rebuild/08-comparison/ui_comparison_order.mjs", "reconnect"]
+{"ok":true,"level":"DOM-only","mode":"reconnect","checks":["current cards survive completion order or reconnect","current displayed refs remain selectable"]}
+RESULT {"command": ["node", "work/clean-rebuild/08-comparison/ui_comparison_order.mjs", "reconnect"], "exit_code": 0, "seconds": 0.776}
+COMMAND ["node", "work/clean-rebuild/16/ui_snapshot_ordering.mjs", "cards"]
+{"ok":true,"level":"DOM-only","checks":["out-of-order completion GET","new task with lower state version retained","rendered confirmation reference remains newer"]}
+RESULT {"command": ["node", "work/clean-rebuild/16/ui_snapshot_ordering.mjs", "cards"], "exit_code": 0, "seconds": 0.793}
+COMMAND ["node", "work/clean-rebuild/16/ui_plan_controls.mjs", "budget"]
+{"ok":true,"level":"DOM-only","mode":"budget"}
+RESULT {"command": ["node", "work/clean-rebuild/16/ui_plan_controls.mjs", "budget"], "exit_code": 0, "seconds": 0.753}
+COMMAND ["node", "work/next-experience/01/ui_snack_choices.mjs"]
+{"ok":true,"level":"DOM-only","checks":["typed category identity","answered history disabled","unknown attributes","multiple product selection","separate explicit cart confirmation","zero text routing"]}
+RESULT {"command": ["node", "work/next-experience/01/ui_snack_choices.mjs"], "exit_code": 0, "seconds": 0.908}
+COMMAND ["node", "work/next-experience/02/ui_policy.mjs"]
+{"ok":true,"level":"controlled DOM only","checks":["Keke input with no task/order submits actual client request","Mercury empty order selection permits input and actual client request","both render policy source and conditions","no selection/proposal/confirmation/checkout/human-request writes","existing human support entry retained"]}
+RESULT {"command": ["node", "work/next-experience/02/ui_policy.mjs"], "exit_code": 0, "seconds": 0.783}
+COMMAND ["node", "work/next-experience/03/ui_navigation.mjs"]
+{"ok":true,"level":"DOM-only","checks":["visible ACK","decline","refresh quota","manual original request once","explicit close resets","visible provider failure and manual role entry","explicit retry after failed admission retains request identity","compound explicit return preserves full goal without another confirmation or judge"]}
+RESULT {"command": ["node", "work/next-experience/03/ui_navigation.mjs"], "exit_code": 0, "seconds": 0.967}
+COMMAND ["node", "work/next-experience/04/ui_drink_filters.mjs"]
+{"ok":true,"level":"DOM-only","checks":["typed drink category identity","typed factual filter identity","filter history disabled","flavor packaging stock display","answered history disabled","unknown attributes","multiple product selection","separate explicit cart confirmation","zero text routing"]}
+RESULT {"command": ["node", "work/next-experience/04/ui_drink_filters.mjs"], "exit_code": 0, "seconds": 0.854}
+COMMAND ["node", "work/next-experience/08/ui_activity_entry.mjs"]
+{"ok":true,"level":"DOM-only","checks":["existing homepage activity card","anchored typed entry","unknown attributes","finished product selection","separate explicit cart confirmation","zero text routing"]}
+RESULT {"command": ["node", "work/next-experience/08/ui_activity_entry.mjs"], "exit_code": 0, "seconds": 0.777}
+COMMAND ["node", "work/next-experience/08/ui_activity_navigation.mjs"]
+{"ok":true,"level":"DOM-only","checks":["delayed activity entry","newer navigation wins","no cart write"]}
+RESULT {"command": ["node", "work/next-experience/08/ui_activity_navigation.mjs"], "exit_code": 0, "seconds": 0.676}
+COMMAND ["node", "work/next-experience/09/ui_application_recovery.mjs"]
+{"ok":true,"level":"DOM-only","checks":["failure requery","committed receipt after response loss","no automatic submission retry","valid proposal retained on transient failure","remount receipt"]}
+RESULT {"command": ["node", "work/next-experience/09/ui_application_recovery.mjs"], "exit_code": 0, "seconds": 0.644}
+COMMAND ["node", "work/next-experience/09/ui_shopping_return.mjs", "work/next-experience/09/compiled/package.json"]
+Cannot update a component (`ShoppingApp`) while rendering a different component (`ShelfScreen`). To locate the bad setState() call inside `ShelfScreen`, follow the stack trace as described in https://react.dev/link/setstate-in-render
+{"ok":true,"level":"DOM-only","checks":["explicit cart","independent checkout","exact new-order contact","concrete proposal","explicit application","compound return with original request identity","receipt restored after switch and close","no repeated application"]}
+RESULT {"command": ["node", "work/next-experience/09/ui_shopping_return.mjs", "work/next-experience/09/compiled/package.json"], "exit_code": 0, "seconds": 0.939}
+SUMMARY {"level": "controlled DOM only", "commands": 49, "failed_commands": []}
+{"ok":true,"level":"DOM-only","checks":["result visible before expression admission","fragment before completion","cards actionable during intro","local interaction and navigation cancellation","failure retains plan and no retry","receipt visible before introduction","exact source keys","explicit expression stop","eligible text result","restored role/run isolation"]}
+{"compiled":"/workspace/scratch/0c1b4cfa2ef3/Ceres-workspace/worktrees/next-final-fixture/work/next-experience/06/compiled"}
+{"ok":true,"level":"DOM-only","checks":["receipt visible before introduction request","controls usable during expression","incremental text","new action fences stale text","one confirmation write"]}
+{"ok":true,"level":"DOM-only","checks":["known total for single choice","single to multi clears implicit quantity","explicit distribution preserved","explicit clearing respected","no automatic cart write"]}
+{"ok":true,"level":"controlled DOM only","checks":["compound result shows question and policy","policy conditions and source intact","refresh retains both","no business writes"]}

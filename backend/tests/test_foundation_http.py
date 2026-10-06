@@ -47,10 +47,11 @@ def test_bootstrap_uses_persistent_server_identity(web):
 def test_catalog_returns_real_seeded_products_and_current_offer(web):
     client, sessions = web
     categories = client.get('/api/v1/categories').json()
-    assert sum(c['product_count'] for c in categories) == 65
+    assert sum(c['product_count'] for c in categories) == 70
     listing = client.get('/api/v1/products', params={'page_size': 500}).json()
-    assert listing['total'] == 65
-    assert len(listing['items']) == 65
+    assert listing['total'] == 70
+    assert len(listing['items']) == 70  # baseline65 + approved35g snack + DR lemon-cola + three AC finished-product fixtures
+    assert 'demo:snack-original-potato-chips-35g-bag' in {p['sku_id'] for p in listing['items']}
     assert all(p['price_fen'] > 0 for p in listing['items'])
     sku = 'demo:flour-all-purpose-500g'
     with sessions() as db:

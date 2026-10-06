@@ -1,0 +1,16 @@
+{
+  "convention": "Unicode code points including whitespace. Static introduction system prompts only; not tokens or full per-turn contexts.",
+  "roles": {
+    "keke": {
+      "before_system_codepoints": 925,
+      "after_system_codepoints": 1656
+    },
+    "momo": {
+      "before_system_codepoints": 935,
+      "after_system_codepoints": 1665
+    }
+  },
+  "token_gain": null,
+  "latency_gain": null,
+  "language_quality_gain": null
+}

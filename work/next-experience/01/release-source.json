@@ -1,0 +1,33 @@
+{
+  "scope": "TASK01 controlled release source; shared files include composed TASK02/TASK03 adapters",
+  "files": {
+    "backend/app/api/guide.py": "d61f1474dbfecd078f5102b136094c46ba9d6af847455b84a58c39b3fb1c2efe",
+    "backend/app/services/pi_product_runtime.py": "ac0b5aeb39dace958539e101b906a06280f83b6b43270354a5274e9043a3dd35",
+    "backend/app/services/pi_product_turn_service.py": "674124861e8975522504223c66bbb4e43eabbf19dc8afbb94fdd8f49e72c30e1",
+    "backend/app/services/product_question_service.py": "4f8262b4640563e135687ae5311f988357574fc563604174872de9fef80f183f",
+    "backend/app/services/product_constraints.py": "a907e09754de9a8103f0ad2a345c7783ba02ab9f37b20dcff84e04eb7a3ffcc2",
+    "backend/app/services/purchase_service.py": "34afa4836750b3930cd065fea572c195059163830826e9aaa1b83fb227958866",
+    "backend/app/services/seed_service.py": "fc658d046b2a9f97296326d18104c2eec100bd1d39f02d698e7f227652fce7fe",
+    "frontend/src/App.tsx": "7e4ce04985868db8eca0b11d2c978be22d8b10c39545c55052b1ceee132d381b",
+    "frontend/src/QuestionChoices.tsx": "b5b1782b7268aebc6f646a3af3793afd751d6f6ed8695c165b8f79b3dcc04c71",
+    "frontend/src/lib/productQuestions.ts": "a7f39f1052dce18c75fe429d5ae564bc82195ffaf61b27ece43716f33b9e8724",
+    "frontend/src/lib/saleGuide.ts": "b151ce14ce1d59bf6d5a47751b9144b5502d5a8fd89edeaa0ee8150a82b5fa6c",
+    "runtime/pi/src/worker.ts": "61cf051ff64b3e05e45ce4ddd7e0c9c4884c5ce77e393623cc837a3a3c67973a",
+    "data/fixtures/products.json": "297f6ee5bc50e37dbab49eba86fa54ef5adc53056fb856cfc68d6d6ddc9de0bd",
+    "data/fixtures/offers.json": "cfcd866f80aa00f4163d235b95f6d2da832977c66e3a0387b731c4cb8e290e46",
+    "backend/tests/test_next_snack_public.py": "b08b09f8c10b9d2c6cbd2892d23dd106e7b5cca56b6611f78f2a9af40ff6e468",
+    "backend/tests/test_next_snack_safety_public.py": "2c6f47864942ea1369d198be5c33947f4410aa6d54c1e56e4cf03116b2df17fc",
+    "backend/tests/test_next_guide_gate_public.py": "16e177a7a7edd377e5a08d7323a5d015f07fb07e99a6315aeb7f949b1a6b2132",
+    "backend/tests/test_foundation_http.py": "77898005d5e2c0d4ddf5cb33704082c3c31754700685099bacbc911767d304fb",
+    "backend/tests/test_guide_semantics.py": "6cea9b326a84247046eaf05044f3588ca6e65367e0800abda79511ae62b68695",
+    "work/next-experience/01/contract.md": "d07f2c52449aee5937f2e25cb16ed4e975e232e24bd0ce2273b0f1eaa4fb158f",
+    "work/next-experience/01/fixture-manifest.md": "a433525d75859ae8ee1a73f79d711bd33607a842028c1220e3757e7526550d09",
+    "work/next-experience/01/compile_ui.cjs": "84094097e72f454c9b09ce48dd544e5a0c69cd52ad35202f5df0ddbe16d2b467",
+    "work/next-experience/01/ui_snack_choices.mjs": "346195a2f8d81e693e816962b0e2c5fdaa98263122315ff4c1525bf09c0aea03"
+  },
+  "dependency_files": {
+    "backend/app/services/navigation_service.py": "b57ee14260b3b3ced9041cbe5ad0f1ca95d3710f479d0a21455b2cd2e086b835",
+    "backend/app/services/kev_provider.py": "a95388f40274f4af6e558b72b29f854bd599d84b50894292f3d53d0f9771f9b5",
+    "backend/tests/conftest.py": "f78e1fff118a590cb2839a5b5a6ea99778f65d06747e1963360df531f1896650"
+  }
+}

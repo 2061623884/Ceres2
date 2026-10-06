@@ -1,3 +1,4 @@
+import {withLegacyNavigationTransport} from '../../next-experience/03/legacy_navigation_transport.mjs';
 /** Actual App: completion order and reconnect may not lose current cards. */
 import assert from 'node:assert/strict';
 import path from 'node:path';
@@ -31,12 +32,13 @@ globalThis.fetch=async(input,options={})=>{
  }
  throw Error('Unexpected fetch '+url);
 };
+globalThis.fetch=withLegacyNavigationTransport(globalThis.fetch);
 let root=createRoot(container);
 async function click(element){assert.ok(element);await act(async()=>element.dispatchEvent(new dom.window.MouseEvent('click',{bubbles:true})));}
 async function send(text){const input=container.querySelector('input[placeholder="问问可可吧…"]');assert.ok(input);await act(async()=>{Object.getOwnPropertyDescriptor(dom.window.HTMLInputElement.prototype,'value').set.call(input,text);input.dispatchEvent(new dom.window.Event('input',{bubbles:true}));});await act(async()=>input.dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'Enter',bubbles:true})));}
 await act(async()=>root.render(createElement(App)));
-await click([...container.querySelectorAll('button')].find(b=>b.textContent==='商品'));
-await click([...container.querySelectorAll('button')].find(b=>b.textContent==='问问可可'));
+if(sessionStorage.getItem('ceres-chat-visible') !== 'keke'){await click([...container.querySelectorAll('button')].find(b=>b.textContent==='商品'));
+await click([...container.querySelectorAll('button')].find(b=>b.textContent==='问问可可'));}else{assert.ok(container.querySelector('[aria-label="角色导航"]'),'Reload restores the explicitly open chat shell');}
 if(mode!=='reconnect') {
  await send('旧请求A');assert.equal(typeof releaseOld,'function');
  await send('新比较B');assert.ok(container.querySelector('[aria-label="商品候选比较"]'));

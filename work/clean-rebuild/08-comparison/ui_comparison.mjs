@@ -1,3 +1,4 @@
+import {withLegacyNavigationTransport} from '../../next-experience/03/legacy_navigation_transport.mjs';
 /** Actual retained App under jsdom; explicitly not a real-browser acceptance. */
 import assert from 'node:assert/strict';
 import path from 'node:path';
@@ -44,7 +45,8 @@ globalThis.fetch=async(input,options={})=>{
 };
 let root;
 async function click(element){assert.ok(element);await act(async()=>element.dispatchEvent(new dom.window.MouseEvent('click',{bubbles:true})));}
-async function open(){root=createRoot(container);await act(async()=>root.render(createElement(App)));await click([...container.querySelectorAll('button')].find(b=>b.textContent==='商品'));await click([...container.querySelectorAll('button')].find(b=>b.textContent==='问问可可'));}
+globalThis.fetch=withLegacyNavigationTransport(globalThis.fetch);
+async function open(){root=createRoot(container);await act(async()=>root.render(createElement(App)));if(sessionStorage.getItem('ceres-chat-visible') !== 'keke'){await click([...container.querySelectorAll('button')].find(b=>b.textContent==='商品'));await click([...container.querySelectorAll('button')].find(b=>b.textContent==='问问可可'));}else{assert.ok(container.querySelector('[aria-label="角色导航"]'),'Reload restores the explicitly open chat shell');}}
 async function send(text){const input=container.querySelector('input[placeholder="问问可可吧…"]');assert.ok(input);await act(async()=>{Object.getOwnPropertyDescriptor(dom.window.HTMLInputElement.prototype,'value').set.call(input,text);input.dispatchEvent(new dom.window.Event('input',{bubbles:true}));});await act(async()=>input.dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'Enter',bubbles:true})));}
 await open();
 assert.match(container.textContent,/品牌：真实品牌/);

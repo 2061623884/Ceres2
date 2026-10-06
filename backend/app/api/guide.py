@@ -5,7 +5,7 @@ import time
 from typing import Literal
 from fastapi import APIRouter, Depends, Header, Query, Request, Response
 from fastapi.responses import StreamingResponse
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, field_validator
 from sqlalchemy import select, update
 from sqlalchemy.orm import Session, sessionmaker
 from app.core.database import get_db
@@ -49,6 +49,7 @@ class TurnRequest(BaseModel):
     view_context: dict | None = None
     displayed_plan: DisplayedPlan | None = None
     displayed_candidate_refs: list[str] = Field(default_factory=list)
+    routing_request_id: str | None = None
 
 
 class StopRequest(BaseModel):
@@ -64,7 +65,7 @@ class SupplyRequest(BaseModel):
 
 def messages(db, session_id, owner_id, after_sequence=0, limit=None):
     rows = db.scalars(select(GuideMessage).where(GuideMessage.session_id == session_id, GuideMessage.owner_id == owner_id, GuideMessage.sequence > after_sequence).order_by(GuideMessage.sequence).limit(limit)).all()
-    return [{key: getattr(row, key) for key in ('message_id', 'session_id', 'task_id', 'sequence', 'role', 'kind', 'content', 'request_id')} for row in rows]
+    return [{**{key: getattr(row, key) for key in ('message_id', 'session_id', 'task_id', 'sequence', 'role', 'kind', 'content', 'request_id')}, 'content':json.loads(row.content)['question'] if row.kind == 'question' else row.content} for row in rows]
 
 
 def projection(db, session, include_messages=False, view_context=None):
@@ -81,6 +82,8 @@ def projection(db, session, include_messages=False, view_context=None):
         from app.services.purchase_service import plan_actions
         result['available_actions'] = plan_actions(result['plan'])
         result['confirmation_result'] = result['plan'].get('confirmation_result')
+    from app.services.product_question_service import ProductQuestionService
+    result.update(ProductQuestionService(db, session.owner_id).projection(session.session_id))
     if include_messages:
         result['messages'] = messages(db, session.session_id, session.owner_id)
     return result
@@ -183,8 +186,12 @@ def event_stream(factory, owner_id, session_id, run_id, after_sequence=0):
 
 
 def accept_run(db, owner_id, session_id, body, deadline):
+    from app.services.navigation_service import authorize_text, consume_handoff
+    route = authorize_text(db, owner_id, session_id, 'keke', body)
+    body['_route_capability'] = route['capability']
     factory = sessionmaker(bind=db.get_bind(), autoflush=False, expire_on_commit=False)
     receipt, is_new = admit(db, owner_id, session_id, body)
+    consume_handoff(db, owner_id, session_id, body['request_id'])
     run_id = receipt.run_id
     db.rollback()
     if is_new:
@@ -380,3 +387,46 @@ def dismiss_history_reminder(session_id: str, body: ReminderDecision, request: R
     HistoryService(db, owner_id).dismiss_reminder(session_id, body.task_id, body.decision)
     db.commit()
     return projection(db, owned_session(db, owner_id, session_id))
+
+
+class QuestionAnswer(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    request_id: str = Field(min_length=1, max_length=100)
+    option_ids: list[str] = Field(min_length=1)
+    quantities: dict[str, StrictInt] = Field(default_factory=dict)
+    expected_task_id: str
+    expected_state_version: int = Field(ge=0)
+    expected_session_version: int = Field(ge=0)
+
+    @field_validator('quantities')
+    @classmethod
+    def positive_quantities(cls, value):
+        if any(type(quantity) is not int or quantity <= 0 for quantity in value.values()):
+            raise ValueError('销售包装数量必须为正整数')
+        return value
+
+
+@router.post('/sessions/{session_id}/questions/{question_id}/answers')
+def answer_question(session_id: str, question_id: str, body: QuestionAnswer, request: Request, response: Response, db: Session = Depends(get_db)):
+    from app.services.product_question_service import ProductQuestionService
+    owner_id = get_or_create_owner(request, response, db)
+    try:
+        result = ProductQuestionService(db, owner_id).answer(session_id, question_id, body.model_dump())
+        db.commit()
+        return result
+    except Exception:
+        db.rollback()
+        raise
+
+
+class ResultIntroduction(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    source_kind: Literal['question_answer', 'purchase_confirmation', 'turn', 'aftersales_receipt']
+    source_id: str = Field(min_length=1, max_length=150)
+
+
+@router.post('/sessions/{session_id}/result-introductions', status_code=202)
+def introduce_result(session_id: str, body: ResultIntroduction, request: Request, response: Response, db: Session = Depends(get_db)):
+    from app.services.result_introduction_service import start_introduction
+    owner_id = get_or_create_owner(request, response, db)
+    return start_introduction(db, owner_id, session_id, body.model_dump())

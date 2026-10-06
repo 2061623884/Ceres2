@@ -20,7 +20,7 @@ def schemas():
             "order_id": {"type": "string"}}, "required": ["order_id"]}
     }} for name in READS]
     tools.append({"type": "function", "function": {
-        "name": "search_after_sales_policy", "description": "检索现有售后政策原文。",
+        "name": "search_after_sales_policy", "description": "无需选择订单，检索一般售后政策及来源。政策不证明具体订单资格，不授权申请。",
         "parameters": {"type": "object", "properties": {
             "query": {"type": "string", "minLength": 1},
             "category": {"type": "string", "enum": ["refund", "return", "delivery"]}},
@@ -86,9 +86,7 @@ def fact_summary(name, data):
         return f"当前有 {len(data)} 条模拟退款申请进度记录"
     if name == "get_return_status":
         return f"当前有 {len(data)} 条模拟退货申请进度记录"
-    if not data:
-        return "未找到匹配的售后政策，无法据此判断资格"
-    return "；".join(f"{item['title']}：{item['content']}" for item in data)
+    return policy.policy_summary(data)
 
 
 def policy_indeterminate(name, data):

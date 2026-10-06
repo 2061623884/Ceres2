@@ -482,7 +482,12 @@
       "usage_tags": [
         "饮料",
         "无糖"
-      ]
+      ],
+      "metadata": {
+        "type_label": "苏打水",
+        "drink_attribute_version": "next-drink-v1"
+      },
+      "product_type": "sparkling_water"
     },
     {
       "brand": "演示品牌",
@@ -520,7 +525,12 @@
       "usage_tags": [
         "饮料",
         "茶"
-      ]
+      ],
+      "metadata": {
+        "type_label": "茶饮",
+        "drink_attribute_version": "next-drink-v1"
+      },
+      "product_type": "tea"
     },
     {
       "brand": "演示品牌",
@@ -742,7 +752,12 @@
         "饮料",
         "可乐",
         "汽水"
-      ]
+      ],
+      "metadata": {
+        "type_label": "可乐",
+        "drink_attribute_version": "next-drink-v1"
+      },
+      "product_type": "cola"
     },
     {
       "brand": "演示品牌",
@@ -762,7 +777,12 @@
         "水",
         "饮用水",
         "矿泉水"
-      ]
+      ],
+      "metadata": {
+        "type_label": "饮用水",
+        "drink_attribute_version": "next-drink-v1"
+      },
+      "product_type": "water"
     },
     {
       "brand": "演示品牌",
@@ -1123,7 +1143,10 @@
           "price": true,
           "product_combination": true
         },
-        "sugar_type": "original"
+        "sugar_type": "original",
+        "type_label": "可乐",
+        "flavor": "原味",
+        "drink_attribute_version": "next-drink-v1"
       },
       "name": "Coca-Cola Original 330ml Can",
       "name_zh": "可口可乐经典原味汽水330ml罐装",
@@ -1138,7 +1161,8 @@
         "汽水",
         "原味",
         "罐装"
-      ]
+      ],
+      "product_type": "cola"
     },
     {
       "brand": "可口可乐",
@@ -1160,7 +1184,10 @@
           "price": true,
           "product_combination": true
         },
-        "sugar_type": "original"
+        "sugar_type": "original",
+        "type_label": "可乐",
+        "flavor": "原味",
+        "drink_attribute_version": "next-drink-v1"
       },
       "name": "Coca-Cola Original 500ml Bottle",
       "name_zh": "可口可乐经典原味汽水500ml瓶装",
@@ -1175,7 +1202,8 @@
         "汽水",
         "原味",
         "瓶装"
-      ]
+      ],
+      "product_type": "cola"
     },
     {
       "brand": "可口可乐",
@@ -1197,7 +1225,9 @@
           "price": true,
           "product_combination": true
         },
-        "sugar_type": "zero"
+        "sugar_type": "zero",
+        "type_label": "可乐",
+        "drink_attribute_version": "next-drink-v1"
       },
       "name": "Coca-Cola Zero Sugar 500ml Bottle",
       "name_zh": "可口可乐零度无糖汽水500ml瓶装",
@@ -1212,7 +1242,8 @@
         "汽水",
         "无糖",
         "瓶装"
-      ]
+      ],
+      "product_type": "cola"
     },
     {
       "brand": "百事可乐",
@@ -1234,7 +1265,10 @@
           "price": true,
           "product_combination": true
         },
-        "sugar_type": "original"
+        "sugar_type": "original",
+        "type_label": "可乐",
+        "flavor": "原味",
+        "drink_attribute_version": "next-drink-v1"
       },
       "name": "Pepsi Original 330ml Can",
       "name_zh": "百事可乐原味汽水330ml罐装",
@@ -1249,7 +1283,8 @@
         "汽水",
         "原味",
         "罐装"
-      ]
+      ],
+      "product_type": "cola"
     },
     {
       "brand": "可口可乐",
@@ -1271,7 +1306,10 @@
           "price": true,
           "product_combination": true
         },
-        "sugar_type": "original"
+        "sugar_type": "original",
+        "type_label": "可乐",
+        "flavor": "原味",
+        "drink_attribute_version": "next-drink-v1"
       },
       "name": "Coca-Cola Original 330ml x 6 Cans",
       "name_zh": "可口可乐经典原味汽水330ml×6罐",
@@ -1287,7 +1325,8 @@
         "原味",
         "罐装",
         "多件装"
-      ]
+      ],
+      "product_type": "cola"
     },
     {
       "brand": "伊利",
@@ -1415,7 +1454,9 @@
           "inventory": true,
           "price": true,
           "product_combination": true
-        }
+        },
+        "type_label": "饮用水",
+        "drink_attribute_version": "next-drink-v1"
       },
       "name": "Nongfu Spring Natural Drinking Water 550ml Bottle",
       "name_zh": "农夫山泉饮用天然水550ml瓶装",
@@ -1429,7 +1470,8 @@
         "饮用水",
         "天然水",
         "瓶装"
-      ]
+      ],
+      "product_type": "water"
     },
     {
       "brand": "怡宝",
@@ -1448,7 +1490,9 @@
           "inventory": true,
           "price": true,
           "product_combination": true
-        }
+        },
+        "type_label": "饮用水",
+        "drink_attribute_version": "next-drink-v1"
       },
       "name": "Cestbon Purified Drinking Water 555ml Bottle",
       "name_zh": "怡宝饮用纯净水555ml瓶装",
@@ -1462,7 +1506,8 @@
         "饮用水",
         "纯净水",
         "瓶装"
-      ]
+      ],
+      "product_type": "water"
     },
     {
       "brand": "农夫山泉",
@@ -1481,7 +1526,9 @@
           "inventory": true,
           "price": true,
           "product_combination": true
-        }
+        },
+        "type_label": "饮用水",
+        "drink_attribute_version": "next-drink-v1"
       },
       "name": "Nongfu Spring Natural Drinking Water 550ml x 12 Bottles",
       "name_zh": "农夫山泉饮用天然水550ml×12瓶",
@@ -1496,7 +1543,8 @@
         "天然水",
         "瓶装",
         "多件装"
-      ]
+      ],
+      "product_type": "water"
     },
     {
       "brand": "演示品牌",
@@ -1517,7 +1565,8 @@
           "inventory": true,
           "price": true,
           "product_combination": true
-        }
+        },
+        "type_label": "薯片"
       },
       "name": "Demo Original Potato Chips 70g Bag",
       "name_zh": "原味薯片70克袋装",
@@ -1554,7 +1603,8 @@
           "inventory": true,
           "price": true,
           "product_combination": true
-        }
+        },
+        "type_label": "苏打饼干"
       },
       "name": "Demo Soda Crackers 100g Box",
       "name_zh": "苏打饼干100克盒装",
@@ -1599,7 +1649,10 @@
         "simulation": {
           "inventory": true,
           "price": true
-        }
+        },
+        "type_label": "果汁饮料",
+        "flavor": "桃味",
+        "drink_attribute_version": "next-drink-v1"
       },
       "name": "Minute Maid Peach Juice Drink 450ml Bottle",
       "name_zh": "美汁源汁汁桃桃桃汁饮料450毫升瓶装",
@@ -1617,6 +1670,160 @@
         "甜而不腻",
         "瓶装"
       ]
+    },
+    {
+      "brand": "演示品牌",
+      "category_id": "snack",
+      "image_path": null,
+      "image_status": "placeholder",
+      "ingredient_ids": [
+        "potato"
+      ],
+      "metadata": {
+        "catalog_batch": "next-snack-v2",
+        "family_id": "potato_chips",
+        "item_quantity": 35,
+        "item_unit": "g",
+        "pack_count": 1,
+        "packaging": "bag",
+        "simulation": {
+          "inventory": true,
+          "price": true,
+          "product_combination": true
+        },
+        "type_label": "薯片"
+      },
+      "name": "Demo Original Potato Chips 35g Bag",
+      "name_zh": "演示原味薯片35克袋装",
+      "product_type": "potato_chips",
+      "review_status": "approved",
+      "sku_id": "demo:snack-original-potato-chips-35g-bag",
+      "source": "demo",
+      "spec_quantity": 35,
+      "spec_unit": "g",
+      "usage_tags": [
+        "零食",
+        "薯片",
+        "原味",
+        "即食",
+        "袋装"
+      ]
+    },
+    {
+      "sku_id": "DR:cola-lemon-330ml-can",
+      "name": "Demo Lemon Cola 330ml Can",
+      "name_zh": "演示柠檬味可乐330毫升罐装",
+      "category_id": "beverage",
+      "brand": "演示品牌",
+      "image_path": null,
+      "source": "demo",
+      "review_status": "approved",
+      "spec_quantity": 330,
+      "spec_unit": "ml",
+      "product_type": "cola",
+      "ingredient_ids": [],
+      "usage_tags": [
+        "饮料"
+      ],
+      "metadata": {
+        "type_label": "可乐",
+        "flavor": "柠檬味",
+        "packaging": "can",
+        "pack_count": 1,
+        "item_quantity": 330,
+        "item_unit": "ml",
+        "drink_attribute_version": "next-drink-v1",
+        "attribute_evidence": {},
+        "simulation": {
+          "product_combination": true,
+          "inventory": true,
+          "price": true
+        }
+      }
+    },
+    {
+      "sku_id": "demo:AC-salad-250g-box",
+      "name": "Demo Finished Salad 250g",
+      "name_zh": "演示成品沙拉 250克",
+      "category_id": "prepared_food",
+      "product_type": "salad",
+      "brand": "演示品牌",
+      "source": "demo",
+      "review_status": "approved",
+      "image_path": null,
+      "spec_quantity": 250,
+      "spec_unit": "g",
+      "ingredient_ids": [],
+      "usage_tags": [
+        "成品"
+      ],
+      "metadata": {
+        "type_label": "成品沙拉",
+        "packaging": "box",
+        "pack_count": 1,
+        "finished_product": true,
+        "activity_ids": [
+          "light-meal"
+        ],
+        "fixture_version": "next-activity-v1",
+        "provenance": "TASK08 bounded demo fixture; not verified merchant or nutrition data"
+      }
+    },
+    {
+      "sku_id": "demo:AC-fruit-platter-300g-box",
+      "name": "Demo Finished Fruit Platter 300g",
+      "name_zh": "演示水果拼盘 300克",
+      "category_id": "fruit",
+      "product_type": "fruit_platter",
+      "brand": "演示品牌",
+      "source": "demo",
+      "review_status": "approved",
+      "image_path": null,
+      "spec_quantity": 300,
+      "spec_unit": "g",
+      "ingredient_ids": [],
+      "usage_tags": [
+        "成品"
+      ],
+      "metadata": {
+        "type_label": "水果拼盘",
+        "packaging": "box",
+        "pack_count": 1,
+        "finished_product": true,
+        "activity_ids": [
+          "light-meal"
+        ],
+        "fixture_version": "next-activity-v1",
+        "provenance": "TASK08 bounded demo fixture; not verified merchant or nutrition data"
+      }
+    },
+    {
+      "sku_id": "demo:AC-juice-300ml-bottle",
+      "name": "Demo Juice 300ml",
+      "name_zh": "演示果汁 300毫升",
+      "category_id": "beverage",
+      "product_type": "juice",
+      "brand": "演示品牌",
+      "source": "demo",
+      "review_status": "approved",
+      "image_path": null,
+      "spec_quantity": 300,
+      "spec_unit": "ml",
+      "ingredient_ids": [],
+      "usage_tags": [
+        "成品"
+      ],
+      "metadata": {
+        "type_label": "果汁",
+        "packaging": "bottle",
+        "pack_count": 1,
+        "finished_product": true,
+        "activity_ids": [
+          "light-meal"
+        ],
+        "fixture_version": "next-activity-v1",
+        "provenance": "TASK08 bounded demo fixture; not verified merchant or nutrition data"
+      }
     }
   ],
   "version": "v1"

@@ -1,3 +1,4 @@
+import type { BeforeText, Handoff } from './lib/chatNavigation'
 /**
  * 墨墨售后 — 与 ChatScreen 同结构的奶油色 Grok 面板
  */
@@ -19,7 +20,7 @@ interface MercuryMsg {
 const WELCOME_MSG: MercuryMsg = {
   id: 'welcome',
   role: 'ai',
-  text: '您好！我是墨墨 🍞\n可以帮您查询模拟订单、物流、售后资格和政策。查询不会提交申请；退款或退货会先展示具体提案，确认后才提交模拟申请。',
+  text: '您好！我是墨墨 🍞\n一般政策无需选择订单。我也可以帮您查询模拟订单、物流和售后资格。查询不会提交申请；退款或退货会先展示具体提案，确认后才提交模拟申请。',
   suggestions: ['我想查看我的订单', '帮我查询物流信息', '我想查询退款资格', '我想查询退货资格'],
 }
 
@@ -35,13 +36,16 @@ function formatText(text: string) {
 }
 
 interface MercuryChatProps {
+  beforeText?: BeforeText
+  handoff?: Handoff | null
+  onHandoffDone?: () => void
   initialOrderId?: string
   entrySequence?: number
   onOrderEntryConsumed?: (entrySequence: number) => void
   visible?: boolean
 }
 
-export function MercuryChat({ initialOrderId, entrySequence = 0, onOrderEntryConsumed, visible = true }: MercuryChatProps) {
+export function MercuryChat({ initialOrderId, entrySequence = 0, onOrderEntryConsumed, visible = true, beforeText, handoff, onHandoffDone }: MercuryChatProps) {
   const [sessionId, setSessionId] = useState<string | null>(null)
   const [msgs, setMsgs] = useState<MercuryMsg[]>([WELCOME_MSG])
   const [orders, setOrders] = useState<MercuryOrder[]>([])
@@ -50,6 +54,7 @@ export function MercuryChat({ initialOrderId, entrySequence = 0, onOrderEntryCon
   const [selecting, setSelecting] = useState(false)
   const [caseRefresh, setCaseRefresh] = useState(0)
   const generationRef = useRef(0)
+  const [interactionVersion, setInteractionVersion] = useState(0)
   const [input, setInput] = useState('')
   const [typing, setTyping] = useState(false)
   const [restoring, setRestoring] = useState(true)
@@ -117,10 +122,14 @@ export function MercuryChat({ initialOrderId, entrySequence = 0, onOrderEntryCon
   }, [initSession, initialOrderId, entrySequence, onOrderEntryConsumed, visible])
 
   const send = useCallback(
-    async (text: string) => {
+    async (text: string, routedRequestId?: string) => {
       if (!text.trim() || !sessionId || typing || restoring || selecting) return
+      setInteractionVersion(value => value + 1)
       const generation = generationRef.current
       const trimmed = text.trim()
+      const requestId = routedRequestId ?? crypto.randomUUID()
+      const routeId = routedRequestId ?? (beforeText ? await beforeText('momo', trimmed, requestId, selectedOrder, sessionId) : requestId)
+      if (!routeId) return
       setMsgs((p) => [...p, { id: `u-${Date.now()}`, role: 'user', text: trimmed }])
       setInput('')
       setTyping(true)
@@ -160,7 +169,7 @@ export function MercuryChat({ initialOrderId, entrySequence = 0, onOrderEntryCon
               ),
             )
           },
-        })
+        }, routeId)
       } catch (e) {
         if (generation !== generationRef.current) return
         const message = e instanceof Error ? e.message : '发送失败'
@@ -181,10 +190,19 @@ export function MercuryChat({ initialOrderId, entrySequence = 0, onOrderEntryCon
         if (generation === generationRef.current) setTyping(false)
       }
     },
-    [sessionId, typing, restoring, selecting],
+    [sessionId, typing, restoring, selecting, selectedOrder, beforeText],
   )
 
+  const resumedHandoff = useRef<string | null>(null)
+  useEffect(() => {
+    if (!handoff) { resumedHandoff.current = null; return }
+    if (!visible || restoring || !sessionId || selecting || resumedHandoff.current === handoff.routing_request_id) return
+    resumedHandoff.current = handoff.routing_request_id
+    void send(handoff.original_message, handoff.routing_request_id).finally(() => onHandoffDone?.())
+  }, [handoff, visible, restoring, sessionId, selecting, send, onHandoffDone])
+
   async function handleNewChat() {
+    setInteractionVersion(value => value + 1)
     setMsgs([WELCOME_MSG])
     setSessionId(null)
     await initSession(true)
@@ -192,6 +210,7 @@ export function MercuryChat({ initialOrderId, entrySequence = 0, onOrderEntryCon
 
   async function chooseOrder(orderId: string) {
     if (!sessionId || !orderId || selecting || typing || restoring) return
+    setInteractionVersion(value => value + 1)
     const generation = generationRef.current
     setSelecting(true)
     setError(null)
@@ -216,12 +235,12 @@ export function MercuryChat({ initialOrderId, entrySequence = 0, onOrderEntryCon
 
   return (
     <section
-      className="chat-panel-enter relative flex h-[min(71vh,650px)] min-h-[500px] flex-col overflow-hidden rounded-t-[38px] bg-[#fcfbf8] font-sans shadow-[0_-20px_60px_rgba(40,36,29,0.12)]"
+      className="guide-chat-panel chat-panel-enter relative flex h-[min(65vh,600px)] min-h-[min(420px,60vh)] flex-col overflow-hidden rounded-t-[38px] font-sans"
     >
       <div className="flex justify-center bg-[#f7f5f0] pt-3 pb-1.5" aria-hidden="true">
         <span className="h-1 w-10 rounded-full bg-black/[.12]" />
       </div>
-      <div className="flex flex-shrink-0 items-center gap-3 bg-[#f7f5f0] px-6 pt-2 pb-5">
+      <div className="guide-glass-header-pill mx-4 mt-2 flex flex-shrink-0 items-center gap-3 rounded-full px-4 py-2">
         <MomoAvatar size={40} animated />
         <div>
           <p className="text-[15px] font-semibold tracking-[-0.04em] text-[#191817]">墨墨</p>
@@ -258,7 +277,7 @@ export function MercuryChat({ initialOrderId, entrySequence = 0, onOrderEntryCon
         {restoring && <p className="text-center text-sm text-black/40">正在连接墨墨…</p>}
         {error && <p className="text-center text-xs text-red-600">{error}</p>}
 
-        {sessionId && !restoring && <AfterSalesPanel caseId={sessionId} orderId={selectedOrder} selectionVersion={selectionVersion} refreshKey={caseRefresh} disabled={typing || selecting} />}
+        {sessionId && !restoring && <AfterSalesPanel caseId={sessionId} orderId={selectedOrder} selectionVersion={selectionVersion} refreshKey={caseRefresh} disabled={typing || selecting} interactionVersion={interactionVersion} />}
 
         {sessionId && !restoring && <HumanCasePanel key={sessionId} caseId={sessionId} refreshKey={caseRefresh} />}
 

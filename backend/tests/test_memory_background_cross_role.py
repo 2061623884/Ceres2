@@ -6,6 +6,8 @@ import pytest
 from sqlalchemy.orm import sessionmaker
 from test_runtime_pi_product_query import pi_client
 from test_guide_semantics import turn
+from test_guide_lifecycle import BASE
+from public_role_navigation import choose_public_role
 from test_memory_public import memory_turn
 from test_memory_mercury import payload
 from test_mercury_public import tool_message
@@ -44,9 +46,11 @@ def test_actual_role_same_key_keeps_domain_fence_and_truthful_origin(pi_client,t
     sid=client.post('/api/v1/mercury/sessions').json()['session_id']
     url='/api/v1/mercury/sessions/'+sid
     assert client.put(url+'/order',json={'order_id':'role-memory-order','selection_version':0}).status_code==200
+    choose_public_role(client, BASE, 'momo')
     assert payload(client.post(url+'/turns/stream',json={'message':'查看订单，我一直希望售后回复先说结论',
         'request_id':'momo-auto-collision'}))['status']=='completed'
     assert worker.run_once()
+    choose_public_role(client, BASE, 'keke')
     found=memory_turn(client,requests,'查看全部记忆',{'action':'list'},'after-role-collision')['records']
     assert len(found)==1
     assert (found[0]['content'],found[0]['domain'],found[0]['origin_role']) == (

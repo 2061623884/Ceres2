@@ -654,6 +654,56 @@
       "sellable": true,
       "sku_id": "demo:cn-minute-maid-peach-450ml-bottle",
       "store_id": "store-demo-01"
+    },
+    {
+      "available_qty": 8,
+      "is_demo": true,
+      "offer_version": 1,
+      "price_fen": 350,
+      "provenance": "next-snack-v2: explicitly simulated package-choice fixture",
+      "sellable": true,
+      "sku_id": "demo:snack-original-potato-chips-35g-bag",
+      "store_id": "store-demo-01"
+    },
+    {
+      "sku_id": "DR:cola-lemon-330ml-can",
+      "store_id": "store-demo-01",
+      "price_fen": 450,
+      "available_qty": 8,
+      "sellable": true,
+      "offer_version": 1,
+      "is_demo": true,
+      "provenance": "next-drink-v1:explicit-simulated-flavor-contrast"
+    },
+    {
+      "sku_id": "demo:AC-salad-250g-box",
+      "store_id": "store-demo-01",
+      "price_fen": 1990,
+      "available_qty": 12,
+      "sellable": true,
+      "offer_version": 1,
+      "is_demo": true,
+      "provenance": "next-activity-v1 explicitly simulated offer"
+    },
+    {
+      "sku_id": "demo:AC-fruit-platter-300g-box",
+      "store_id": "store-demo-01",
+      "price_fen": 1590,
+      "available_qty": 8,
+      "sellable": true,
+      "offer_version": 1,
+      "is_demo": true,
+      "provenance": "next-activity-v1 explicitly simulated offer"
+    },
+    {
+      "sku_id": "demo:AC-juice-300ml-bottle",
+      "store_id": "store-demo-01",
+      "price_fen": 990,
+      "available_qty": 16,
+      "sellable": true,
+      "offer_version": 1,
+      "is_demo": true,
+      "provenance": "next-activity-v1 explicitly simulated offer"
     }
   ],
   "store": {

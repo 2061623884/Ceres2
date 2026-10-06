@@ -204,3 +204,57 @@ class AfterSalesService:
             if latest and not latest.invalidated and latest.selection_version == case.selection_version and latest.responsibility_generation == case.responsibility_generation and case.responsibility == 'agent' and not any(row['proposal_id'] == latest.proposal_id for row in receipts):
                 proposal = {**json.loads(latest.preview_json), 'proposal_id':latest.proposal_id, 'revision':latest.revision}
             return {'proposal':proposal,'receipts':receipts,'simulated':True}
+
+    def record_failure(self, owner_id, case_id, error, *, selection_version=None, proposal_id=None):
+        """Keep a safe, order-bound explanation in existing conversation history.
+
+        This is not application status or permission. Canonical proposals and
+        receipts remain the only business truth, including after response loss.
+        """
+        descriptions = {
+            'NOT_DELIVERED': '订单尚未签收，不能申请签收商品退货',
+            'DELIVERY_TIME_UNKNOWN': '签收时间未知，不能确定退货期限',
+            'RETURN_WINDOW_EXPIRED': '已超过七天退货期限',
+            'POLICY_UNKNOWN': '商品退货政策未知，不能确定资格',
+            'NOT_RETURNABLE': '此商品不支持退货',
+            'REFUND_INELIGIBLE': '当前订单状态不支持未发货整单退款',
+            'ALREADY_REQUESTED': '该事项已有模拟申请，请查看原回执',
+            'STALE_FACTS': '订单或资格已变化，需要重新查看提案',
+            'STALE_PROPOSAL': '提案或事项已变化，需要重新查看提案',
+            'HUMAN_RESPONSIBILITY': '人工正在负责此事项',
+        }
+        if isinstance(error, AppError):
+            code = error.detail['error']['code']
+            if code not in descriptions:
+                return  # Invalid input, foreign identifiers and stale requests do not write history.
+            explanation = descriptions[code]
+        else:
+            explanation = '售后服务暂时失败'
+        with self.sessions() as db:
+            changed = db.execute(update(MercuryCase).where(MercuryCase.case_id == case_id,
+                MercuryCase.owner_id == owner_id).values(selection_version=MercuryCase.selection_version)).rowcount
+            if changed != 1:
+                return
+            case = db.get(MercuryCase, case_id)
+            if not case.order_id or (case.active_run_id and case.active_until > time.time()):
+                return  # The active query owns publication of its own failure.
+            if proposal_id is not None:
+                proposal = db.query(AfterSalesProposal).filter_by(owner_id=owner_id,
+                    case_id=case_id, proposal_id=proposal_id).first()
+                if proposal is None or proposal.order_id != case.order_id or proposal.selection_version != case.selection_version:
+                    return
+                receipt = db.query(AfterSalesReceipt).filter_by(owner_id=owner_id,
+                    case_id=case_id, proposal_id=proposal_id).first()
+            else:
+                if selection_version != case.selection_version:
+                    return
+                receipt = None
+            if receipt:
+                message = f'订单 {case.order_id}：提交响应未完整返回；已查到模拟申请回执 {receipt.receipt_id}，尚未审批或退款到账。不会自动重提。'
+            else:
+                message = f'订单 {case.order_id}：{explanation}；本次申请未提交，处理已暂停。可选择继续购物，购物不会重试此申请。'
+            messages = json.loads(case.messages_json)
+            entry = {'role': 'assistant', 'content': message}
+            if not messages or messages[-1] != entry:
+                case.messages_json = encoded([*messages, entry])
+                db.commit()

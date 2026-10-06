@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=ROOT_DIR / '.env', extra='ignore', populate_by_name=True)
     database_url: str = Field('sqlite:///data/runtime/ceres2.sqlite3', alias='DATABASE_URL')
     llm_mode: str = Field('live', alias='LLM_MODE')
+    kev_base_url: str = Field('', alias='KEV_BASE_URL')
     # Scoped operational hold: only cart/checkout mutation routes use it.
     shopping_writes_paused: bool = Field(False, alias='SHOPPING_WRITES_PAUSED')
     human_operator_token: str = Field('', alias='HUMAN_OPERATOR_TOKEN')

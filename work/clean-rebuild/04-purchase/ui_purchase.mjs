@@ -1,3 +1,4 @@
+import {withLegacyNavigationTransport} from '../../next-experience/03/legacy_navigation_transport.mjs';
 /** Retained App DOM contract only; not real browser/provider acceptance. */
 import assert from 'node:assert/strict';
 import path from 'node:path';
@@ -8,6 +9,7 @@ Object.assign(globalThis,{window:dom.window,document:dom.window.document,session
 dom.window.HTMLElement.prototype.scrollIntoView=function(){};
 const frontend=createRequire(path.join(cwd,'frontend/package.json')),compiled=createRequire(path.join(cwd,'work/clean-rebuild/04-purchase/compiled/package.json'));
 const React=frontend('react'),{act,createElement}=React,{createRoot}=frontend('react-dom/client');
+compiled.extensions['.css']=()=>{};
 const App=compiled('./App.js').default,container=document.getElementById('root');
 const state={session_id:'guide-one',task_id:'task-one',state_version:1,session_version:1,task_status:'active',entry_context:{page:'home'},available_actions:['send_message','modify','confirm'],messages:[],product_cards:[],plan:{plan_id:'plan-one',plan_version:1,mode:'bundle',items:[{sku_id:'cola',name:'测试可乐',quantity:2,selected:true,added_quantity:0,remaining_quantity:2,unit_price_fen:350,line_total_fen:700}],total_price_fen:700,expires_at:null,validation_status:'valid',can_confirm:true}};
 const calls=[];let cartReads=0, cartQuantity=0, staleText=false;
@@ -37,12 +39,13 @@ globalThis.fetch=async(input,options={})=>{
  }
  throw new Error('Unexpected fetch '+url);
 };
+globalThis.fetch=withLegacyNavigationTransport(globalThis.fetch);
 let root=createRoot(container);
 async function click(element){assert.ok(element);await act(async()=>element.dispatchEvent(new dom.window.MouseEvent('click',{bubbles:true})));}
 async function openPlan(){if(!container.querySelector('[aria-label="加购 测试可乐"]'))await click(container.querySelector('[aria-label="采购清单 1 件"]'));}
 await act(async()=>root.render(createElement(App)));
-await click([...container.querySelectorAll('button')].find(b=>b.textContent==='商品'));
-await click([...container.querySelectorAll('button')].find(b=>b.textContent==='问问可可'));
+if(sessionStorage.getItem('ceres-chat-visible') !== 'keke'){await click([...container.querySelectorAll('button')].find(b=>b.textContent==='商品'));
+await click([...container.querySelectorAll('button')].find(b=>b.textContent==='问问可可'));}else{assert.ok(container.querySelector('[aria-label="角色导航"]'),'Reload restores the explicitly open chat shell');}
 await openPlan();
 assert.match(container.textContent,/测试可乐/,'Authoritative restored plan must remain visible');
 const rowButton=container.querySelector('[aria-label="加购 测试可乐"]');assert.ok(rowButton);assert.equal(rowButton.disabled,false);
@@ -54,7 +57,7 @@ assert.equal([...container.querySelectorAll('button')].find(b=>b.textContent==='
 assert.equal(cartQuantity,2);
 await act(async()=>root.unmount());
 function reset(){cartQuantity=0;state.state_version=1;state.plan.plan_version=1;state.plan.items[0].added_quantity=0;state.plan.items[0].remaining_quantity=2;state.plan.can_confirm=true;state.available_actions=['send_message','modify','confirm'];}
-async function open(){root=createRoot(container);await act(async()=>root.render(createElement(App)));await click([...container.querySelectorAll('button')].find(b=>b.textContent==='商品'));await click([...container.querySelectorAll('button')].find(b=>b.textContent==='问问可可'));}
+async function open(){root=createRoot(container);await act(async()=>root.render(createElement(App)));if(sessionStorage.getItem('ceres-chat-visible') !== 'keke'){await click([...container.querySelectorAll('button')].find(b=>b.textContent==='商品'));await click([...container.querySelectorAll('button')].find(b=>b.textContent==='问问可可'));}else{assert.ok(container.querySelector('[aria-label="角色导航"]'),'Reload restores the explicitly open chat shell');}}
 reset();await open();await openPlan();
 await click([...container.querySelectorAll('button')].find(b=>b.textContent==='确认加购'));
 assert.equal(calls.at(-1).url,'/api/v1/guide/tasks/task-one/confirm');assert.deepEqual(calls.at(-1).body.selected_items,[{sku_id:'cola',quantity:2}]);assert.equal(cartQuantity,2);

@@ -1,0 +1,31 @@
+{
+  "tested_commit": "0c752a2b252d797297b4b073883571884ff6855a",
+  "integration_commit": "a41d9ea53c1684051d81de4471277f0ca4a4c8e1",
+  "generated_dist_excluded_from_integration_equality": true,
+  "checks": {
+    "runs/fixture-final-backend-full": {
+      "source_count": 238,
+      "differences": [],
+      "exit_code": 0,
+      "source_changed_during_run": false
+    },
+    "runs/fixture-final-process-restart": {
+      "source_count": 238,
+      "differences": [],
+      "exit_code": 0,
+      "source_changed_during_run": false
+    },
+    "checks/fixture-final-builds": {
+      "source_count": 280,
+      "differences": [],
+      "exit_code": 0,
+      "source_changed_during_run": false
+    },
+    "checks/fixture-final-dom-all": {
+      "source_count": 280,
+      "differences": [],
+      "exit_code": 0,
+      "source_changed_during_run": false
+    }
+  }
+}
