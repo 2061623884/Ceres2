@@ -1,10 +1,11 @@
 # Ceres2 Runtime 16：同版完整生命周期验收
 
-状态：**阻塞／待验收**（受控同版技术集成通过；真实 provider／真实浏览器／用户体验门槛未完成）。
+状态：**待验收**（最新隔离 DeepSeek API 生命周期批次通过；真实浏览器、扩展场景与用户本人体验门槛未完成）。
 负责人：**implement_clean_final_integration**；所有测试命令仅由专职 Tester 执行，Standards/Spec 两轴独立只读审查。
 受控技术验收：**通过（294／294 两次，45 项匹配源码检查通过，两轴源码审查关闭；主会话 20:58 UTC 确认）**。
 整体验收：**未完成，不标已验收**。
 用户本人验收：**待验收／未完成**。
+最新真实 API 批次：**41／41 checks 通过**，Pi 比较、选品、模拟结算/重放及 Mercury 退款提案/确认/重放均完成；Dream 因阈值未达到而跳过。
 
 2026-10-05 15:42 UTC 已获干净重建及持续实施授权；历史通过不继承。
 母任务：[Ceres2 升级](ceres2-upgrade.md)；[规格](../docs/plans/ceres2-proactive-upgrade-spec.md)；[批准拆分](../docs/plans/ceres2-ticket-breakdown-proposal.md)。
@@ -38,9 +39,11 @@
 
 ## 下一步
 
-1. 安全手动配置实际 provider：`LLM_MODEL`、`MEMORY_EXTRACTION_MODEL`、`MEMORY_DREAM_MODEL` 均为 `qwen3.8-27b`；配置正确 endpoint 与凭据，不使用聊天中粘贴的密钥，不复制旧 `.env`。人工后台使用独立 operator 凭据。
-2. 提供获准且可用的真实浏览器路径。保留既有 localhost `ERR_BLOCKED_BY_CLIENT` 与 shell Chromium `EPERM` 阻塞记录，不绕过限制。
-3. 在全新隔离 DB/checkpoint 启动后，由用户体验：比较→选择→报价接受（如需）→独立加购→模拟结算→同订单售后提案/确认/回执；历史多菜复购改条件/缺货后重新确认；人工进度/关闭后新提案；停止与关页恢复；记忆更正/删除。均为模拟业务。本人验收单独记录。
+1. 用户本人在已打开的真实浏览器中验收当前工作区，确认页面交互、错误提示与启动/恢复体验。若进程需重载以读取本轮后端提示词改动，先保留活动数据库与会话，只重启服务进程。
+2. 补齐未覆盖场景：历史多菜复购改条件/缺货后重新确认；人工进度/关闭后新提案；停止与关页恢复；记忆更正/删除；Dream 阈值触发。保持隔离数据并记录证据。
+3. 对新增版本完成两次独立行为验证与最终 Standards/Spec 审查；重新核对固定源码、依赖、seed、模型/Prompt、时钟和迁移范围。
+
+最新批次细节：2026-10-06，`deepseek-flash` / `api.deepseek.com`，fresh isolated DB，34.02 秒，exit 0；`api_batch_passed`，41／41 checks。`test_mercury_public.py` 与 `test_aftersales_public.py` 为 31／31。证据：[脱敏 evidence](../work/live-validation/tmp/live-20261006T062210Z-0575eb5f534d/evidence)。之前的失败证据保持原状，不追认为成功；原 `run_live_batch.py` 未修改，实际写入只在本次临时 demo DB。浏览器、历史复购、供给修订、独立第二次运行、记忆修订/删除与人工工单仍未覆盖。
 
 完整命令、已证实/未证实范围及体验步骤见 [DELIVERY](../work/clean-rebuild/16/DELIVERY.md)。
 
@@ -57,3 +60,15 @@
 ## 2026-10-06 配置与测试隔离补充
 
 用户已手动配置凭据；本地配置加载检查通过，未验证真实接口。发现受控测试可能继承配置后，新增测试收集前隔离与合成子进程回归。独立受控全量 **295／295 两次通过**，322 个源码文件同版，两轴审查关闭；生产源码未改动，真实凭据未被使用或发送。详情见 [隔离复验](../work/live-validation/TEST-ISOLATION-REVIEW.md)。这不替代真实 qwen、真实浏览器或用户验收，当前外部门槛仍保留。
+
+### 本地接手与真实 API 尝试
+
+在 `3283e28` 上，Tester 使用 Python 3.11.15 创建 `.venv`；后端 lock 安装和 `pip check`、Pi runtime build、前端 build 通过。Node 22.19.0/npm 10.9.3。Python 3.12.14 未能从当前 uv Python 源获取；现用版本满足 `>=3.11`。前端构建有 Vite 配置警告，npm 提示一项 high severity 依赖漏洞。
+
+用户明确要求后，Tester 于 2026-10-06 03:42 UTC 仅运行一次 bounded live API batch，退出码 1。配置、隔离路径、seed 和 live health gate 通过；Pi 比较返回 `protected`、`runtime_status=deadline`、`answer_status=failed`。15 秒边界前完成 4 轮工具交互，第 5 轮模型调用未完成。没有观察到上游 HTTP 状态或传输原因；购买、结算和 Mercury 未运行。保留原失败记录：[脱敏 evidence](../work/live-validation/tmp/live-20261006T034233Z-d66f017a40aa/evidence)。未自动重试，未查看相邻 `private-state`。此结果不满足 live 验收条件，TASK16 仍阻塞／待验收。
+
+### 用户要求改为 30 秒后的复测
+
+Pi runtime `npm run typecheck` 和 `npm run build` 均退出 0。将 admission 测试锁等待更新为 31 秒，并把测试 fixture 自身 SQLite busy timeout 调至 40 秒后，完整受影响模块复跑 **23 项全部通过**（87.70 秒，退出码 0）。
+
+用户于 2026-10-06 要求将导购保护上限调至 30 秒后，专职 Tester 在更新的未提交工作树上执行一次 bounded live batch，退出码 1，耗时约 9.87 秒。配置、隔离、seed 和 live health gates 通过；Pi 比较阶段返回应用级 `422 PI_UNKNOWN_REFERENCE`（`retryable=false`）。这不是 deadline；公共证据没有 `runtime_status`、工具轮数、provider upstream HTTP status 或 transport cause。比较未完成，购买、结算、Mercury、提取和记忆阶段未运行。证据：[脱敏 evidence](../work/live-validation/tmp/live-20261006T044045Z-ade5f6652231/evidence)。未重试，未查看相邻 `private-state`。TASK16 仍阻塞／待验收。

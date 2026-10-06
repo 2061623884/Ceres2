@@ -18,7 +18,7 @@ from app.core.errors import AppError
 from app.services.catalog_service import CatalogService
 
 MAX_TOOL_ROUNDS = 5
-EXPLORATION_SECONDS = 15.0
+EXPLORATION_SECONDS = 30.0
 LOGGER = logging.getLogger(__name__)
 WORKER = Path(__file__).resolve().parents[3] / 'runtime' / 'pi' / 'dist' / 'worker.js'
 
@@ -371,6 +371,6 @@ class PiProductRuntime:
         return '\n'.join(lines)
 
     def _close(self, status: str) -> dict[str, Any]:
-        explanation = {'stopped': '已停止本次查询。', 'deadline': '已达到 15 秒查询时限，未继续探索。', 'tool_budget': '已达到 5 轮工具查询上限，未继续探索。'}[status]
+        explanation = {'stopped': '已停止本次查询。', 'deadline': '已达到 30 秒查询时限，未继续探索。', 'tool_budget': '已达到 5 轮工具查询上限，未继续探索。'}[status]
         products = list(self.products.values())[:5]
         return {'status': status, 'message': explanation + ('\n' + self._facts(products) if products else ''), 'products': products}

@@ -36,7 +36,7 @@
 
 ## 下一步
 
-受控技术范围已放行，当前总状态仍为待验收。继续 TASK16 综合验证；实际 qwen3.8-27b 采样需安全 provider 配置，真实浏览器环境仍阻塞，用户本人验收未完成。后续 TASK06 共享源码变化属于 successor，须按各自范围复验，不把本次指纹视为整个工作树的永久通过。无新增代码或本地提交。
+受控技术范围已放行，当前总状态仍为待验收。2026-10-06 在 `3283e28` 上的首次 qwen3.8-27b 真实比较在原 15 秒保护时限内未自然完成；记录为 `protected`／`runtime_status=deadline`，没有上游 HTTP 状态或传输原因。[首次脱敏证据](../work/live-validation/tmp/live-20261006T034233Z-d66f017a40aa/evidence)。用户随后明确将导购保护时限调整为 30 秒。04:40 UTC 的新源码 live 复测约 9.87 秒时以 `422 PI_UNKNOWN_REFERENCE` 失败，未记录 runtime deadline、工具轮数或上游错误；[复测脱敏证据](../work/live-validation/tmp/live-20261006T044045Z-ade5f6652231/evidence)。不改写首次失败，也不把复测计成功。真实浏览器环境仍阻塞，用户本人验收未完成。后续 TASK06 共享源码变化属于 successor，须按各自范围复验，不把本次指纹视为整个工作树的永久通过。
 
 ## 证据
 

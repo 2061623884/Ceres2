@@ -1,6 +1,6 @@
 # Ubuntu 本地接力：先补 live 与浏览器证据，不重复已完成验证
 
-更新：2026-10-06。TASK16 仍为 **阻塞／待验收**。本文是本地接力入口，不是整体验收通过声明。当前计划：发布代码后在用户自己的电脑继续；不再安排云端 live 重试。
+更新：2026-10-06。TASK16 状态为 **待验收**；真实浏览器、扩展场景和用户本人验收仍未完成。最新隔离 DeepSeek API batch 已通过 **41/41 checks**，包含 Pi 比较、选品、模拟结算/重放和 Mercury 退款提案/确认/重放。本文是本地接力入口，不是整体验收通过声明；覆盖范围见 [TASK16](../tasks/ceres2-runtime-upgrade-16-integrated-verification.md)。
 
 ## 1. Ubuntu 原生运行，保留原项目
 
@@ -12,10 +12,13 @@
 
 - `4d4eca7` 对应受控测试隔离版本：后端 **295/295 两次**，独立数据目录、同版 322 文件；两轴审查关闭。只增加测试隔离与回归，没有改变当时生产源码。见 [隔离复验](../work/live-validation/TEST-ISOLATION-REVIEW.md)。
 - 前一生产版本：后端 294 两次，以及 **45 项匹配源码的 DOM／build／typecheck／pip 命令记录**通过。45 是命令记录数，不是 45 个浏览器用例；受控 DOM 不是真实浏览器。见 [原集成交付](../work/clean-rebuild/16/DELIVERY.md)。
-- 最新 provider 诊断补丁：**3 个定向诊断用例、60 个受影响回归用例、12 个 inert harness 用例**通过，Pi build/typecheck 通过，独立 Standards/Spec 审查关闭。3 和 60 不应相加宣称全量覆盖。该补丁没有重新跑完整后端两次，也没有新的 live 成功结果。见 [诊断补丁范围](../work/live-validation/DIAGNOSTICS-20261006.md)。原始受控执行证据保留在原验证环境，不随公开仓库分发。
-- 2026-10-06 02:22 UTC 用户启动过一次 live batch：配置、全新隔离数据和 seed 检查通过；Pi 比较返回 `PI_PROVIDER_ERROR`。记录中的 502 是应用状态，**不是已观察到的上游 HTTP 状态**。上游原因未知；采购、结算和售后阶段均未到达。诊断补丁只改善可观测性，尚未重新 live 验证。
+- 最新 provider 诊断补丁：**3 个定向诊断用例、60 个受影响回归用例、12 个 inert harness 用例**通过，Pi build/typecheck 通过，独立 Standards/Spec 审查关闭。3 和 60 不应相加宣称全量覆盖。该补丁经一次真实运行验证诊断可见性，但运行未通过。见 [诊断与真实运行记录](../work/live-validation/DIAGNOSTICS-20261006.md)。原始受控执行证据保留在原验证环境，不随公开仓库分发。
+- 2026-10-06 02:22 UTC 用户启动过一次 live batch：配置、全新隔离数据和 seed 检查通过；Pi 比较返回 `PI_PROVIDER_ERROR`。记录中的 502 是应用状态，**不是已观察到的上游 HTTP 状态**。上游原因未知；采购、结算和售后阶段均未到达。
+- 2026-10-06 03:42 UTC，在 `3283e28` 上由专职 Tester 按用户明确指示执行一次有界 live batch：配置、fresh isolation、seed 和 live health gate 通过；Pi 比较以 `protected` 结束，`runtime_status=deadline`、`answer_status=failed`，15 秒内完成 4 轮工具交互，第 5 轮模型调用在截止时仍未完成。未观察到上游 HTTP 状态或 transport cause；购物、结算和 Mercury 未运行。退出码 1。脱敏证据留在本机 [evidence](../work/live-validation/tmp/live-20261006T034233Z-d66f017a40aa/evidence)，不得上传相邻 `private-state`。
+- 2026-10-06 04:40 UTC，用户明确要求将导购保护上限调到 30 秒后，Tester 在相同 Git revision、已修改且已构建的工作树上执行一次 live batch：配置、fresh isolation、seed 和 live health gate 通过。Pi 比较约 9.87 秒时以应用错误 `422 PI_UNKNOWN_REFERENCE` 失败；不是 deadline。没有记录 upstream HTTP status、transport cause、runtime status 或工具轮数；购物、结算和 Mercury 未运行。退出码 1。证据：[evidence](../work/live-validation/tmp/live-20261006T044045Z-ade5f6652231/evidence)。仅检查脱敏 evidence，未看相邻 `private-state`，未重试。
+- 2026-10-06 06:22 UTC，后续按用户“未完成继续”授权，在独立临时 DB 上使用 `deepseek-flash` / `api.deepseek.com` 执行一次有界 live API batch：**41/41 checks passed**，耗时 34.02 秒、exit 0。真实 Pi 比较与选品、模拟购物车确认、checkout/replay、订单退款提案及确认/replay通过；记忆提取被观察到，Dream 因阈值未达到而跳过。两项 Mercury 定向测试 31/31 通过；Pi typecheck/build 通过。测试前后 canonical active runs=0；未读取临时 DB 的 private-state，仅检查脱敏 evidence。
 
-所以本地先做必要的安装／构建冒烟，再补一次 bounded live API 和真实浏览器体验。仅因换电脑，不要先把全部历史受控用例重跑一遍。若修了代码，按影响面复验；共享业务／事务边界变动或最终同版验收确有需要时，再安排新的全量同版验证。新结果不得追认旧失败为通过。
+本工作区安装／构建冒烟已完成：Python 3.11.15（满足 `>=3.11`，uv 未提供指定的 3.12.14）、Node 22.19.0/npm 10.9.3；后端依赖检查、Pi runtime typecheck/build 和前端构建通过。修正 31 秒 admission 边界夹具及 40 秒测试专用 SQLite busy timeout 后，受影响后端模块完整复跑 **23/23 通过**（87.70 秒，退出码 0）；最新 Mercury prompt/tool 描述的定向测试 **31/31 通过**。前端构建输出 Vite 配置警告，npm 提示一项 high severity 依赖漏洞。下一步由用户本人在浏览器验收当前工作区，并按 TASK16 补齐剩余历史、人工、停止恢复、记忆生命周期和独立第二次运行；不得把历史 live 失败改记成功。
 
 阅读路线：[README](../README.md) → 本文 → [参考项目与采用边界](REFERENCES.md) → [TASK16](../tasks/ceres2-runtime-upgrade-16-integrated-verification.md)。
 
@@ -38,6 +41,8 @@ git status --short
 记录实际下载的 commit。发布仓库可能采用新的提交历史；`4d4eca7` 是验证源版本标识，不保证是发布仓库中可以 checkout 的提交。
 
 版本依据：`backend/pyproject.toml` 要求 Python >=3.11；Pi SDK 要求 Node >=22.19.0，前端锁中 Vite 也有现代 Node 要求。原验证环境为 Python **3.12.14**、Node **24.19.0**、npm **11.9.0**。优先使用同系列 Linux 运行时，保留实际版本；不要借用 Windows 的 Python/Node。环境缺失时由本地负责人安排官方来源安装，不擅自更改锁文件绕开安装失败。
+
+本工作区实际使用 Python 3.11.15、Node 22.19.0、npm 10.9.3；后端 lock 依赖安装及 `pip check`、Pi runtime build、前端 build 均通过。Python 3.12.14 的 uv 安装尝试没有匹配下载，因此没有替换项目依赖或锁文件。
 
 以下安装／构建／验证由专职 Tester 执行；实现者不另跑同一组命令。逐行执行，不要整块粘贴。每步失败即停，保留不含凭据的错误摘要，不继续到 live。
 
@@ -87,9 +92,11 @@ chmod 600 .env
 
 agent 不代跑；不以“连接检查”名义偷偷重试。无需提前 seed 或启动 Uvicorn/Vite。batch 创建全新独立 DB/checkpoint、导入静态数据并启动真实 app lifecycle；最多五轮 guide、一轮 Mercury、240 秒总上限，包含正常后台提取／Dream。它不是浏览器测试，也没有 dry-run 模式。
 
+本工作区先后执行的历史批次和 06:22 UTC 成功批次均保留各自 evidence；历史失败不覆盖或追认为通过。最新一次已经通过，后续 provider 批次不需要重跑，必须有用户新的明确授权。本文下方 `USER-RUN` 命令仍固定到旧 InternAI/qwen 配置，不是最新 DeepSeek runner。
+
 预期顺序：真实 Pi 比较 → 选择返回候选并生成计划 → 单独确认加购／重放 → 模拟结算／重放 → 同一订单真实 Mercury 提案 → 独立确认 requested 回执／重放 → 普通问答、偏好、停止与自动记忆观察。某步失败后下游不再执行。具体断言和退出码以 USER-RUN 为准。
 
-失败时保留本次 evidence：区分应用 502、真实 `upstream_http_status`、有限 transport class/code、保护超时和业务断言。缺失字段保留未知，不猜鉴权／网络原因，不换模型、不绕过网络限制。诊断后由用户决定是否再亲自启动新的 run。
+失败时保留本次 evidence：区分应用 502、真实 `upstream_http_status`、有限 transport class/code、保护超时和业务断言。缺失字段保留未知，不猜鉴权／网络原因，不绕过网络限制。新的 live run 需新的用户明确授权。
 
 只回传生成目录下经检查的 `evidence` 文件；不要上传相邻 `private-state`、数据库、checkpoint、`.env`、headers/cookies 或原始 provider 日志。即使退出 0，也不代表完整 TASK16、两次独立 live 验证、真实页面或用户验收通过。
 
@@ -127,12 +134,11 @@ npm run dev -- --host 127.0.0.1 --port 8443
 
 ## 7. 仍待关闭的 gate 与下一位 agent 接力
 
-- 本地 Ubuntu 安装、构建和启动冒烟。
-- 指定 provider 上 Pi、Mercury、提取、Dream 的实际输出；目前只有首轮失败，诊断补丁未 live 重跑。
-- 第一条完整 API journey；历史多菜／缺货修订、人工工单、关页恢复、记忆更正／删除／重启等剩余场景。
+- 指定 DeepSeek provider 上的最新真实比较已完成，P0 购物/结算/退款批次 **41/41** 通过；历史复购、供给修订、用户浏览器、人工工单、停止与浏览器恢复、记忆更正/删除、独立第二次运行仍未覆盖。提取仅为 observed，Dream 因阈值未达到而跳过。
+- 完整 API journey；历史多菜／缺货修订、人工工单、关页恢复、记忆更正／删除／重启等剩余场景。
 - TASK16 要求的两次独立新增业务验证及最终同版证据核对；一个 batch 通过不够。已有受控双跑不需要为形式而原样重跑，新增 live／页面证据也不能借用历史结果。
 - 必要变更后的相关复验和两轴审查；真实浏览器结果；用户本人明确验收。三者分别记录，不自动标已验收。
 
 可复制给本地下一位 agent：
 
-> 在这个新克隆的 Ceres2 中接力，保留原项目。先读 AGENTS.md、docs/HANDOFF-UBUNTU.md、TASK16 和链接证据，核对当前 commit、工作树和 Ubuntu 环境。遵循本地电脑访问授权与执行环境规则；不要把云端访问或凭据当成本地授权。当前重点是补实际 qwen3.8-27b、真实浏览器和用户体验证据，不盲目重跑已完成的 295 两次受控测试。专职 Tester 唯一执行安装／build／test；实现者定位并修复最小问题，独立 Standards/Spec 只读审查，Tester 做有针对性的复验。先完成一次性安装构建，再请用户安全填写新的 .env 并亲自启动 bounded live batch；不读取或转发 key，不代跑 live，不自动换 provider/model。查看允许分享的 evidence，遇失败先诊断和修复，保留原失败，不把保护终止算完成。随后指导用户亲自启动 Uvicorn，并由用户亲自在获准的本地真实浏览器执行会触发 live provider 的体验步骤；agent 不代触发 live。按本文体验清单，记录 commit/模型/数据版本、实际结果与未验证项。只在修改影响面或验收要求确有需要时补全量同版回归。不能自行关闭 TASK16 或代替用户验收；需新的权限或真实用户动作时明确说出 blocker。
+> 在这个 Ceres2 工作区接力，保留原项目。先读 AGENTS.md、docs/HANDOFF-UBUNTU.md、TASK16 和链接 evidence，核对当前工作树与服务状态。当前 `deepseek-flash` / `api.deepseek.com` bounded isolated API batch 已 41/41 通过；不要重跑已完成的 live batch 或读取 `.env`/`private-state`。专职 Tester 唯一执行安装/build/test；实现者按需修复，独立 Standards/Spec 只读审查。当前重点是让用户在已打开的真实浏览器完成验收，并补齐 TASK16 尚未覆盖的历史复购、供给变更、人工、停止/恢复、记忆生命周期、Dream 和第二次独立验证。若后端进程未加载本轮 Python prompt 修正且需要 reload，先确认无 active run，保留数据库与会话，只重启此前由本任务启动的服务。任何新 provider 批次需要用户新的明确授权。记录模型、源码和 evidence 版本；不把单次 API batch 通过写成 TASK16 已验收，也不代替用户签署本人验收。

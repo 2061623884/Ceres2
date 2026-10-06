@@ -66,9 +66,15 @@ Pi 和 LangGraph 是采用的外部运行框架。Ceres2 的工程重点在于�
 
 **第一阶段已有实现和受控技术验证，整体仍待验收。** 01–15 的受控技术范围及 TASK16 的受控集成已有通过记录；它们不能代替真实模型、真实浏览器和用户本人体验。
 
-2026-10-06 首次用户启动的真实模型批次通过了配置与隔离数据检查，但在 Pi 比较阶段返回 `PI_PROVIDER_ERROR`，下游购买、结算和售后未执行。记录中的 502 是应用状态，上游原因仍未知。后续诊断补丁已完成定向受控验证，尚未重新进行 live 验证，不能宣称原故障已修复。
+2026-10-06 首次真实模型批次通过配置与隔离数据检查，但在 Pi 比较阶段返回 `PI_PROVIDER_ERROR`；记录中的 502 是应用状态，上游原因未知。随后诊断补丁补充了安全的传输诊断字段。
 
-下一步是在 Ubuntu 完成必要的安装／构建冒烟，再补真实 API 旅程与浏览器体验；无需仅因换机器就重复所有历史受控测试。具体版本、验证范围和未完成项见 [Ubuntu 接力指南](docs/HANDOFF-UBUNTU.md)；整体验收以 [TASK16](tasks/ceres2-runtime-upgrade-16-integrated-verification.md) 为准。
+同日 03:42 UTC，在 commit `3283e28` 上执行的一次有界真实 API 批次通过配置、seed 和 live health 检查，但 Pi 比较在原 15 秒保护上限处以 `runtime_status=deadline` 结束；4 轮工具交互后第 5 轮模型调用尚未完成。没有观察到上游 HTTP 状态或传输原因，购买、结算与售后阶段未运行。[脱敏证据](work/live-validation/tmp/live-20261006T034233Z-d66f017a40aa/evidence)。
+
+用户随后明确将导购保护上限调到 30 秒。04:40 UTC 的单次复测通过配置、隔离、seed 和 health gates，但约 9.87 秒时在 Pi 比较阶段失败：应用返回 `422 PI_UNKNOWN_REFERENCE`。它不是 30 秒截止；证据没有记录 provider 上游 HTTP 状态、传输原因、runtime status 或工具轮数。购买、结算和 Mercury 阶段未运行。[脱敏证据](work/live-validation/tmp/live-20261006T044045Z-ade5f6652231/evidence)。
+
+本地安装／构建冒烟已完成：Python 3.11.15、Node 22.19.0/npm 10.9.3；后端依赖检查、Pi runtime 和前端构建通过。Python 3.12.14 未能通过 uv 获取；当前版本满足项目 `>=3.11` 要求。前端构建有 Vite 配置警告，npm 提示一项 high severity 依赖漏洞。
+
+Pi runtime typecheck/build 通过。后端相关模块此前 **23/23 通过**；针对 Mercury prompt/tool 描述的最新定向测试 **31/31 通过**。2026-10-06 最新隔离真实 API batch 使用 `deepseek-flash` / `api.deepseek.com`，34.02 秒 exit 0，**41/41 checks 通过**，覆盖比较、选品、模拟加购/结算与重放、退款提案/确认与重放；记忆提取为 observed，Dream 因阈值未达到而跳过。[脱敏 evidence](work/live-validation/tmp/live-20261006T062210Z-0575eb5f534d/evidence)。先前 live 失败保留为历史，不追认为通过。真实浏览器、历史复购、供给修订、人工、停止/恢复、记忆修改/删除、独立第二次运行和用户本人验收仍未完成；TASK16 仍待验收。具体范围见 [Ubuntu 接力指南](docs/HANDOFF-UBUNTU.md)，整体验收以 [TASK16](tasks/ceres2-runtime-upgrade-16-integrated-verification.md) 为准。
 
 ## 文件与目录管理
 

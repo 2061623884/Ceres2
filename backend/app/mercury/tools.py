@@ -33,10 +33,10 @@ def schemas():
             "required": ["slot"], "additionalProperties": False}
     }})
     tools.append({"type": "function", "function": {
-        "name": "prepare_aftersales_proposal", "description": "仅在用户要求申请退款或退货时准备具体提案，不提交申请；纯资格查询使用查询工具。",
+        "name": "prepare_aftersales_proposal", "description": "仅在用户明确要求申请退款或退货时准备具体提案，不提交申请。整单退款(kind=refund)必须省略item_id或传null；只有用户明确选定整行退货商品时才传item_id。纯资格查询使用查询工具。",
         "parameters": {"type": "object", "properties": {
             "order_id": {"type": "string"}, "kind": {"type": "string", "enum": ["refund", "return"]},
-            "item_id": {"type": ["string", "null"]}, "reason": {"type": "string", "minLength": 1, "maxLength": 1000}},
+            "item_id": {"type": ["string", "null"], "description": "仅在用户明确选择整行退货商品时填写；整单退款必须省略或设为null。"}, "reason": {"type": "string", "minLength": 1, "maxLength": 1000}},
             "required": ["order_id", "kind", "reason"], "additionalProperties": False}
     }})
     from app.schemas.memory import memory_tool_schema

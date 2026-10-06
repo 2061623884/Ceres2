@@ -2,6 +2,8 @@
 
 Preparation only until you personally run the command. This is **API integration through the actual FastAPI application lifecycle, real Pi SDK and real LangGraph**. It is not a browser test, browser workaround, or TASK16 acceptance.
 
+> Historical scope note (2026-10-06): this checked-in command is pinned to InternAI/qwen3.8-27b and is not the latest validation path. After this document was written, the user explicitly authorized the Tester to execute a separate one-shot DeepSeek variant in fresh isolated databases. That bounded batch passed 41/41 checks; see [the sanitized evidence](tmp/live-20261006T062210Z-0575eb5f534d/evidence) and [diagnostics](DIAGNOSTICS-20261006.md). Do not use the old command to repeat the DeepSeek test. Remaining work is browser/user acceptance and TASK16's uncovered scenarios.
+
 ## User command
 
 From the Ceres2 project directory, personally run:
@@ -20,7 +22,7 @@ Only run where that provider's outbound access is permitted. A denied provider/n
 
 - Creates a new private run directory and a new isolated business DB/checkpoint pair each time; process overrides replace only the two DB paths. Existing `.env`, databases, checkpoints and services are never edited, reused or deleted.
 - Seeds 65 static catalog products, 65 simulated Offers and one store. Verifies no prior owners/carts/orders/applications/memory.
-- Runs at most five guide turns and one Mercury query, stopping immediately if a required stage fails. Each guide turn retains the application's existing 15-second/five-tool-round protection; Mercury retains its own 15-second/five-round budget. Ordinary explanation may invoke the app's additional same-model claim checker. These are application-level bounds, not an exact invoice/network-request count. A narrow Pi fetch observer retains only safe status/class/code evidence; SDK transport behavior is otherwise unchanged.
+- Runs at most five guide turns and one Mercury query, stopping immediately if a required stage fails. Each guide turn uses a 30-second/five-tool-round protection; Mercury retains its separate 15-second/five-round budget. Ordinary explanation may invoke the app's additional same-model claim checker. These are application-level bounds, not an exact invoice/network-request count. A narrow Pi fetch observer retains only safe status/class/code evidence; SDK transport behavior is otherwise unchanged.
 - The worker has a 240-second total wall-clock cap. Normal background extraction/Dream is enabled throughout that window, including during shutdown; its calls use the application's 20-second timeout and zero SDK retries. Memory observation itself waits at most 35 seconds, then reports pending/missing work. The supervisor terminates only its own process group, including any surviving Pi child. Ctrl-C cancels that owned group. Cleanup does not delete any DB or evidence.
 - No installation, build, dependency modification or service restart is performed. Uses this project's existing `.venv` and compiled Pi worker.
 

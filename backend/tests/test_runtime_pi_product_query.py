@@ -49,7 +49,7 @@ def pi_client(tmp_path, monkeypatch):
             tool_messages = [m for m in body['messages'] if m['role'] == 'tool']
             if '受控慢查询' in prompt_text:
                 requests.started.set()
-                requests.release.wait(timeout=25)
+                requests.release.wait(timeout=40)
             override = requests.answer_hook(body) if requests.answer_hook else None
             if override is not None:
                 delta, reason = override
@@ -295,7 +295,7 @@ def test_explicit_stop_kills_inflight_pi_query_without_a_late_product_reply(pi_c
     assert client.get('/api/v1/guide/sessions/pi-session-a').status_code == 200
 
 
-def test_pi_deadline_closes_inflight_provider_at_fifteen_seconds_without_retry(pi_client):
+def test_pi_deadline_closes_inflight_provider_at_thirty_seconds_without_retry(pi_client):
     client, requests = pi_client
     started_at = time.monotonic()
     response = client.post('/api/v1/guide/sessions/pi-session-a/turns/stream', json={'request_id': 'pi-deadline-1', 'message': '受控慢查询可乐', 'expected_state_version': 0, 'expected_session_version': 0})
@@ -306,8 +306,8 @@ def test_pi_deadline_closes_inflight_provider_at_fifteen_seconds_without_retry(p
     assert result['runtime_status'] == 'deadline'
     assert result['tool_rounds'] == 0
     assert result['answer_status'] == 'failed'
-    assert '15 秒' in result['message']
-    assert 14.5 <= elapsed < 18
+    assert '30 秒' in result['message']
+    assert 29.5 <= elapsed < 33
     assert len(requests) == 1
     requests.release.set()
 
@@ -391,10 +391,18 @@ def test_empty_model_selection_is_not_misreported_as_empty_catalog_evidence(pi_c
 def test_spent_http_admission_budget_cannot_start_a_fresh_pi_exploration(pi_client, tmp_path):
     client, requests = pi_client
     # External infrastructure fault: hold the actual isolated SQLite write lock,
-    # so receipt admission takes longer than the accepted request's 15s budget.
+    # so receipt admission takes longer than the accepted request's 30s budget.
+    # Extend this fixture connection's SQLite wait beyond the product deadline,
+    # otherwise SQLite's independent 30s busy timeout wins first.
+    from sqlalchemy import event
+    def allow_long_test_lock(dbapi_connection, *_args):
+        cursor = dbapi_connection.cursor()
+        cursor.execute('PRAGMA busy_timeout=40000')
+        cursor.close()
+    event.listen(requests.engine, 'checkout', allow_long_test_lock)
     blocker = sqlite3.connect(tmp_path / 'runtime.sqlite3', check_same_thread=False)
     blocker.execute('BEGIN IMMEDIATE')
-    release = threading.Timer(16, blocker.commit)
+    release = threading.Timer(31, blocker.commit)
     release.start()
     started_at = time.monotonic()
     try:
@@ -408,9 +416,9 @@ def test_spent_http_admission_budget_cannot_start_a_fresh_pi_exploration(pi_clie
     assert events[-1]['type'] == 'turn.completed', events
     assert events[-1]['payload']['runtime_status'] == 'deadline'
     assert len(requests) == 0
-    # The blocked DB itself needs 16s to return; there is no fresh exploration
-    # after it releases and no promise that a blocked DB response ends at 15s.
-    assert elapsed < 19
+    # The blocked DB itself needs 31s to return; there is no fresh exploration
+    # after it releases and no promise that a blocked DB response ends at 30s.
+    assert elapsed < 34
 
 
 def test_changed_session_revision_fences_a_slow_pi_reply(pi_client):
@@ -494,7 +502,7 @@ def test_actual_pi_stdio_contract_emits_sdk_events_and_scoped_tool_requests(pi_c
         child.stdin.write((json.dumps({**frame, 'run_id': 'ipc-proof-run', 'sequence': input_sequence}) + '\n').encode())
 
     try:
-        send({'type': 'start', 'message': '协议查可乐', 'categories': [{'id': 'beverage', 'name_zh': '饮料'}], 'model': {'id': settings.llm_model, 'baseUrl': settings.openai_base_url, 'apiKey': settings.openai_api_key}, 'maxToolRounds': 5, 'timeoutMs': 15000})
+        send({'type': 'start', 'message': '协议查可乐', 'categories': [{'id': 'beverage', 'name_zh': '饮料'}], 'model': {'id': settings.llm_model, 'baseUrl': settings.openai_base_url, 'apiKey': settings.openai_api_key}, 'maxToolRounds': 5, 'timeoutMs': 30000})
         until = time.monotonic() + 10
         while time.monotonic() < until:
             if not selector.select(timeout=0.2):
