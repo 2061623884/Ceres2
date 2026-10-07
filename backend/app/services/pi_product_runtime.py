@@ -177,6 +177,15 @@ class PiProductRuntime:
     def _query_policy(self, query, category, *, origin):
         from app.mercury.policy import search_policies, POLICY_SOURCE_VERSION, POLICY_SOURCE_NAME
         started = time.monotonic()
+        # The Pi scheduler is sequential. Reuse only actual successful/empty
+        # acquisitions in this trusted request, never a failed attempt.
+        for evidence in self.policy_results.values():
+            if (evidence['scope'] == self.policy_scope and evidence['query'] == query
+                    and evidence['category'] == category and evidence['source_version'] == POLICY_SOURCE_VERSION):
+                self.events.append({'type': 'policy_reuse', 'origin': origin, 'outcome': evidence['outcome'],
+                                    'elapsed_ms': (time.monotonic() - started) * 1000,
+                                    'source_version': POLICY_SOURCE_VERSION, 'policy_ref': evidence['policy_ref']})
+                return {key: value for key, value in evidence.items() if key != 'scope'}
         evidence = {'request_id': self.policy_scope['request_id'], 'query': query,
                     'category': category, 'source_name': POLICY_SOURCE_NAME, 'source_version': POLICY_SOURCE_VERSION}
         try:
@@ -456,10 +465,12 @@ class PiProductRuntime:
             for attempt in failures)
 
     def _policy_message(self, ref):
-        from app.mercury.policy import policy_summary
-        if not isinstance(ref, str) or not self.policy_results or ref != next(reversed(self.policy_results)):
+        from app.mercury.policy import policy_summary, POLICY_SOURCE_VERSION
+        if not isinstance(ref, str) or ref not in self.policy_results:
             raise AppError(422, 'PI_UNKNOWN_REFERENCE', '政策必须引用本次实际查询的规则')
         evidence = self.policy_results[ref]
+        if evidence['scope'] != self.policy_scope or evidence['source_version'] != POLICY_SOURCE_VERSION:
+            raise AppError(422, 'PI_UNKNOWN_REFERENCE', '政策引用的请求或来源版本已失效，请重新查询')
         text = policy_summary(evidence['data'])
         if evidence['outcome'] == 'empty':
             return f"{text} 来源：{evidence['source_name']}（版本 {evidence['source_version']}）。"
