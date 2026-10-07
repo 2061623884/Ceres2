@@ -1,0 +1,13 @@
+{
+  "source_commit": "6734c7fe79e670df2dae12b065dcc49c0b10a307",
+  "purpose": "Unblock T01 real corpus contract without depending on T02 implementation",
+  "files": {
+    "data/fixtures/products.json": "8857a75c26387acb98023dd3b743e369a6d1f01fb1b64c24993fe3b87690f3e1",
+    "data/fixtures/recipes.json": "1fd396fe8255961fd8c423817efe0d80a1a0ad8377b26e42104a76886c3ed45c",
+    "data/fixtures/ingredients.json": "a9079a1c7ca8d3f94c4efdfa004ede7e48b5ea568f7cb8025804124ad82ca19d",
+    "data/fixtures/policies.json": "7a370431a1a9c2df2b818218f3c54cb01946f93fa027aad44021dd1637f10502",
+    "data/fixtures/knowledge-provenance.json": "bd0dbb60462ea1db3fdb0d36bb0cd12f8c86aa87e7b9ac1619fa9159bbef0fd9"
+  },
+  "offers": "Not migrated; T02 owns current Offer and seed",
+  "execution": "No seed, build, install or test performed"
+}

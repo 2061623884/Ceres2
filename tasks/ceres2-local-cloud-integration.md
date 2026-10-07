@@ -57,3 +57,7 @@ Git 静态计数：baseline→incoming **340** 个变更路径；local-start→i
 ## Deadline 传递责任
 
 T01：知识服务接口及 Pi 政策路径；T02（prepare_shopping_filter_slice）：catalog/comparison/explore 调用链；T03：其余 Pi 上下文/工具协议；T06：菜谱/GraphRAG 调用链。运行内每一检索必须传递原绝对 deadline 和取消检查，不允许因 optional 参数漏传而重置 15 秒。普通产品 HTTP 自身请求预算明确创建一次并贯穿检索。参数只为实际 callsite 提供；共享接口变更由当前唯一 owner 实施，调用方逐个核对。T07 接收 T01 给出的 Mercury deadline 补丁需求。
+
+## 静态来源前置提交
+
+T01 corpus 实际消费五份 incoming 静态来源，而 T02 原计划迁入这些文件会形成实现循环。经主会话授权，Merger 精确迁入 incoming 五文件，供 T01 的索引/版本合同使用；offers/seed/current Offer 仍属 T02。本次不运行导入、索引构建或模型，不等于检索已实测。T01 已确认未写这些 fixture；后续转给 T02 前由主会话通知，双方不能并行改来源。
