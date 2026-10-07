@@ -32,7 +32,7 @@ def return_eligibility(order, items):
             if item['returnable'] is None:
                 item_code, item_reason = 'POLICY_UNKNOWN', '此商品退货政策未知，不能确认符合资格。'
             elif not item['returnable']:
-                item_code, item_reason = 'NOT_RETURNABLE', '此商品不支持退货。'
+                item_code, item_reason = 'NOT_RETURNABLE', '此商品不支持当前无理由退货；质量问题可另行登记。'
             else:
                 item_reason = '可以申请此商品整行模拟退货；未提交申请。'
         eligible = item_code is None

@@ -9,7 +9,7 @@ from app.core.config import get_settings
 from app.core.database import get_db
 from app.mercury.router import _owner
 from app.human.models import HumanTicket
-from app.human.service import owned_case, latest_ticket, ticket_view, create_ticket, append_message
+from app.human.service import owned_case, latest_ticket, ticket_view, create_ticket, append_message, ticket_evidence
 
 router = APIRouter(prefix='/api/v1/mercury', tags=['human-support'])
 
@@ -85,6 +85,21 @@ def user_message(case_id: str, body: UserMessage, owner_id: str = Depends(_owner
 @router.get('/operator/tickets', dependencies=[Depends(operator_only)])
 def operator_tickets(db: Session = Depends(get_db)):
     return [ticket_view(db, ticket) for ticket in db.scalars(select(HumanTicket).order_by(HumanTicket.created_at.desc()))]
+
+
+@router.get('/operator/tickets/{ticket_id}/photos/{photo_id}', dependencies=[Depends(operator_only)])
+def operator_photo(ticket_id: str, photo_id: str, db: Session = Depends(get_db)):
+    from fastapi.responses import Response
+    from app.mercury.models import MercuryCase
+    ticket = db.get(HumanTicket, ticket_id)
+    if ticket is None:
+        raise HTTPException(404, '未找到工单')
+    case = db.get(MercuryCase, ticket.case_id)
+    _, photos = ticket_evidence(db, ticket, case.owner_id)
+    photo = next((photo for photo in photos if photo.photo_id == photo_id), None)
+    if photo is None:
+        raise HTTPException(404, '照片不属于该工单订单')
+    return Response(photo.content, media_type=photo.content_type, headers={'X-Content-Type-Options':'nosniff'})
 
 
 @router.post('/operator/tickets/{ticket_id}/messages', dependencies=[Depends(operator_only)])

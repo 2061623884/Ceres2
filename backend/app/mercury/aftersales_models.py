@@ -1,5 +1,5 @@
 """Immutable proposals and atomic simulated application receipts, no copied orders."""
-from sqlalchemy import Boolean, ForeignKey, Integer, String, Text, UniqueConstraint
+from sqlalchemy import Boolean, ForeignKey, Integer, LargeBinary, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 from app.core.database import Base
 
@@ -43,3 +43,14 @@ class AfterSalesReceipt(Base):
     application_id: Mapped[str] = mapped_column(ForeignKey('aftersales_applications.application_id'), unique=True)
     idempotency_key: Mapped[str] = mapped_column(String(160))
     result_json: Mapped[str] = mapped_column(Text)
+
+
+class AfterSalesPhoto(Base):
+    __tablename__ = 'aftersales_photos'
+    photo_id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    owner_id: Mapped[str] = mapped_column(ForeignKey('owners.id'), index=True)
+    case_id: Mapped[str] = mapped_column(ForeignKey('mercury_cases.case_id'), index=True)
+    order_id: Mapped[str] = mapped_column(ForeignKey('simulated_orders.order_id'))
+    selection_version: Mapped[int] = mapped_column(Integer)
+    content_type: Mapped[str] = mapped_column(String(24))
+    content: Mapped[bytes] = mapped_column(LargeBinary)

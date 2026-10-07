@@ -6,7 +6,7 @@ from uuid import uuid4
 from sqlalchemy import update
 from app.core.errors import AppError
 from app.mercury.models import MercuryCase, SimulatedOrder
-from app.mercury.aftersales_models import AfterSalesProposal, AfterSalesApplication, AfterSalesReceipt
+from app.mercury.aftersales_models import AfterSalesProposal, AfterSalesApplication, AfterSalesReceipt, AfterSalesPhoto
 from app.mercury import orders
 
 
@@ -49,7 +49,8 @@ class AfterSalesService:
         return db.query(AfterSalesProposal).filter_by(case_id=case_id).order_by(AfterSalesProposal.revision.desc()).first()
 
     @staticmethod
-    def _facts(db, owner_id, case, kind, item_id, reason):
+    def _facts(db, owner_id, case, request):
+        kind, item_id, reason = request['kind'], request['item_id'], request['reason']
         order = db.query(SimulatedOrder).filter_by(owner_id=owner_id, order_id=case.order_id).first()
         if order is None:
             fail('ORDER_REQUIRED', '请先选择模拟订单')
@@ -68,18 +69,34 @@ class AfterSalesService:
             condition = '仅限未发货整单模拟退款；申请不代表资金到账。'
         else:
             if not item_id:
-                fail('ITEM_REQUIRED', '请选择要整行退货的商品', 422)
+                fail('ITEM_REQUIRED', '请选择要整行退货的商品' if kind == 'return' else '请选择问题商品', 422)
             chosen = [item for item in items if item['sku_id'] == item_id]
             if not chosen:
                 fail('ITEM_NOT_FOUND', '订单中没有该商品', 404)
             if any(row.item_scope == item_id for row in applications):
                 fail('ALREADY_REQUESTED', '此商品已有模拟退货申请，请查看回执')
-            eligibility = orders.return_eligibility(order, chosen)['items'][0]
-            if not eligibility['eligible']:
-                fail(eligibility['reason_code'], eligibility['reason'])
+            if kind in ('quality', 'fulfillment'):
+                if order.status != 'delivered':
+                    fail('NOT_DELIVERED', '请先核对签收后的具体商品问题')
+                quantity = request['problem_quantity']
+                if quantity is None or quantity > chosen[0]['quantity']:
+                    fail('PROBLEM_QUANTITY_INVALID', '问题数量必须是订单明细内的销售包装件数', 422)
+                chosen = [{**chosen[0], 'quantity': quantity}]
+                for photo_id in request['photo_ids']:
+                    photo = db.get(AfterSalesPhoto, photo_id)
+                    if (photo is None or photo.owner_id != owner_id or photo.case_id != case.case_id
+                            or photo.order_id != order.order_id or photo.selection_version != case.selection_version):
+                        fail('PHOTO_SCOPE_INVALID', '照片不属于当前订单与此次选单，请重新关联', 422)
+                policy_id = 'P-QUA-01' if kind == 'quality' else 'P-FUL-01'
+                condition = ('按问题销售包装件数登记质量申请并交人工核对；涉及金额不是批准退款。不可无理由退货不阻止质量问题登记，照片供人工参考。'
+                    if kind == 'quality' else '按问题商品销售包装件数登记漏送、错送或包装破损申请并交人工核对；不可无理由退货不阻止登记，照片供人工参考。登记不表示补送已安排、退款获批或到账。')
+            else:
+                eligibility = orders.return_eligibility(order, chosen)['items'][0]
+                if not eligibility['eligible']:
+                    fail(eligibility['reason_code'], eligibility['reason'])
+                policy_id = 'P-RET-01'
+                condition = '签收后七天内且商品可退，仅整行模拟退货；提交时重新检查期限与资格。'
             amount = chosen[0]['quantity'] * chosen[0]['unit_price_fen']
-            policy_id = 'P-RET-01'
-            condition = '签收后七天内且商品可退，仅整行模拟退货；提交时重新检查期限与资格。'
         facts = {'version': order.version, 'status': order.status, 'total_fen': order.total_fen,
                  'delivered_at': order.delivered_at.isoformat() if order.delivered_at else None,
                  'snapshot': json.loads(order.snapshot_json)}
@@ -89,6 +106,9 @@ class AfterSalesService:
                        'amount_fen': item['quantity'] * item['unit_price_fen']} for item in chosen],
             'policy_id': policy_id, 'policy': condition, 'simulated': True,
             'status': 'awaiting_confirmation'}
+        if kind in ('quality', 'fulfillment'):
+            preview['problem_quantity'] = request['problem_quantity']
+            preview['photo_ids'] = request['photo_ids']
         return preview, hashlib.sha256(encoded(facts).encode()).hexdigest()
 
     def accept_replacement(self, owner_id, case_id, request, run_context=None):
@@ -97,8 +117,8 @@ class AfterSalesService:
             fail('REASON_REQUIRED', '请说明售后申请原因', 422)
         if request['kind'] == 'refund' and request['item_id'] is not None:
             fail('WHOLE_ORDER_ONLY', '仅退款只支持整单申请', 422)
-        if request['kind'] == 'return' and not request['item_id']:
-            fail('ITEM_REQUIRED', '请选择要整行退货的商品', 422)
+        if request['kind'] in ('return', 'quality', 'fulfillment') and not request['item_id']:
+            fail('ITEM_REQUIRED', '请选择问题商品', 422)
         with self.sessions() as db:
             case = self._case(db, owner_id, case_id)
             self._agent(case, run_context)
@@ -125,7 +145,7 @@ class AfterSalesService:
             self._intent(case, accepted_version)
             if case.selection_version != request['selection_version']:
                 fail('STALE_SELECTION', '订单选择已变化，请重新查看提案')
-            preview, _ = self._facts(db, owner_id, case, request['kind'], request['item_id'], request['reason'])
+            preview, _ = self._facts(db, owner_id, case, request)
             return preview
 
     def propose(self, owner_id, case_id, request, proposal_id, accepted_version, run_context=None):
@@ -135,7 +155,7 @@ class AfterSalesService:
             self._intent(case, accepted_version)
             if case.selection_version != request['selection_version']:
                 fail('STALE_SELECTION', '订单选择已变化，请重新查看提案')
-            preview, facts_hash = self._facts(db, owner_id, case, request['kind'], request['item_id'], request['reason'])
+            preview, facts_hash = self._facts(db, owner_id, case, request)
             latest = self._latest(db, case_id)
             proposal = AfterSalesProposal(proposal_id=proposal_id, owner_id=owner_id,
                 case_id=case_id, order_id=case.order_id, revision=latest.revision+1 if latest else 1,
@@ -176,7 +196,7 @@ class AfterSalesService:
             if db.query(AfterSalesReceipt).filter_by(proposal_id=proposal_id).first():
                 fail('ALREADY_CONFIRMED', '提案已提交，请查看原回执')
             preview = json.loads(proposal.preview_json)
-            fresh, facts_hash = self._facts(db, owner_id, case, preview['kind'], preview['item_id'], preview['reason'])
+            fresh, facts_hash = self._facts(db, owner_id, case, preview)
             if fresh != preview or facts_hash != proposal.facts_hash:
                 fail('STALE_FACTS', '订单或资格已变化，请生成新提案后确认')
             application = AfterSalesApplication(application_id=f'asa-{uuid4().hex}', owner_id=owner_id,
@@ -190,6 +210,10 @@ class AfterSalesService:
             db.add(AfterSalesReceipt(receipt_id=result['receipt_id'], owner_id=owner_id,
                 case_id=case_id,proposal_id=proposal_id,application_id=application.application_id,
                 idempotency_key=key,result_json=encoded(result)))
+            if preview['kind'] in ('quality', 'fulfillment'):
+                from app.human.service import create_ticket
+                label = '质量问题' if preview['kind'] == 'quality' else '履约异常'
+                create_ticket(db, case, f"{label}申请 {application.application_id}：{preview['reason']}，问题包装数 {preview['problem_quantity']}；需要核对照片、问题与处理方式，不代表退款获批或补送已安排。", preview['kind']+'_application')
             db.commit()
             return result
 
@@ -205,6 +229,36 @@ class AfterSalesService:
                 proposal = {**json.loads(latest.preview_json), 'proposal_id':latest.proposal_id, 'revision':latest.revision}
             return {'proposal':proposal,'receipts':receipts,'simulated':True}
 
+    def upload_photo(self, owner_id, case_id, request):
+        import base64
+        import binascii
+        try:
+            content = base64.b64decode(request['data_base64'], validate=True)
+        except (binascii.Error, ValueError) as error:
+            raise AppError(422, 'PHOTO_INVALID', '照片编码不合法') from error
+        signatures = {'image/jpeg': content.startswith(b'\xff\xd8\xff'),
+            'image/png': content.startswith(b'\x89PNG\r\n\x1a\n'),
+            'image/webp': content.startswith(b'RIFF') and content[8:12] == b'WEBP'}
+        if len(content) > 4194304 or not signatures[request['content_type']]:
+            fail('PHOTO_INVALID', '请选择不超过 4MB 的 JPEG、PNG 或 WebP 照片', 422)
+        with self.sessions() as db:
+            case = self._case(db, owner_id, case_id)
+            if case.order_id is None or case.selection_version != request['selection_version']:
+                fail('STALE_SELECTION', '照片对应订单已变化，请重新查看当前订单')
+            photo = AfterSalesPhoto(photo_id=f'photo-{uuid4().hex}', owner_id=owner_id, case_id=case_id,
+                order_id=case.order_id, selection_version=case.selection_version,
+                content_type=request['content_type'], content=content)
+            db.add(photo)
+            db.commit()
+            return {'photo_id':photo.photo_id, 'order_id':photo.order_id, 'content_type':photo.content_type}
+
+    def read_photo(self, owner_id, case_id, photo_id):
+        with self.sessions() as db:
+            photo = db.query(AfterSalesPhoto).filter_by(owner_id=owner_id, case_id=case_id, photo_id=photo_id).first()
+            if photo is None:
+                fail('NOT_FOUND', '照片不存在', 404)
+            return photo.content, photo.content_type
+
     def record_failure(self, owner_id, case_id, error, *, selection_version=None, proposal_id=None):
         """Keep a safe, order-bound explanation in existing conversation history.
 
@@ -216,7 +270,7 @@ class AfterSalesService:
             'DELIVERY_TIME_UNKNOWN': '签收时间未知，不能确定退货期限',
             'RETURN_WINDOW_EXPIRED': '已超过七天退货期限',
             'POLICY_UNKNOWN': '商品退货政策未知，不能确定资格',
-            'NOT_RETURNABLE': '此商品不支持退货',
+            'NOT_RETURNABLE': '此商品不支持当前无理由退货，质量问题可另行登记',
             'REFUND_INELIGIBLE': '当前订单状态不支持未发货整单退款',
             'ALREADY_REQUESTED': '该事项已有模拟申请，请查看原回执',
             'STALE_FACTS': '订单或资格已变化，需要重新查看提案',
