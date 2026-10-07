@@ -1,6 +1,6 @@
 # T02：Canonical 商品召回与当前 Offer
 
-- 状态：进行中（T01 已技术放行；当前实现尚未整体放行）
+- 状态：待验收（受控技术门槛及两轴无阻断，已合入；固定 postmerge 已通过，最终验收开放）
 - 负责人：prepare_shopping_filter_slice（shopping owner）；主会话绑定实际 worker/worktree 后方可写入
 - 规格：[本轮规格](../docs/plans/ceres2-local-cloud-integration-spec.md)
 - 总任务：[集成 TASK](ceres2-local-cloud-integration.md)
@@ -29,3 +29,12 @@
 允许最多两条最小可重复的合成演示正例：明确 selling_unit=case 且有字段来源的箱装水，以及 attribute_evidence.sugar_free={value:true,source:...} 的茶。来源必须明确是合成演示定义，不得伪称外部真实商品事实。packaging 是容器类别，pack_count 是内装数量，均不单独证明箱装；保留现有12瓶水不推定箱装、无可靠无糖事实的原茶仍 unknown/noverified。新增正例与原数据负例分别验收，不能用新商品掩盖原事实缺口。别名在匹配边界处理且保留原始条件；不增加无调用方 schema。21st-candidate 和其他负例保持 test-local。
 
 为避免 T01↔T02 循环，五份 incoming 静态检索来源由 Merger 在 prerequisite 提交精确迁入（products/recipes/ingredients/policies/knowledge-provenance）。offers 及 seed/current Offer 仍由 T02 负责；该源码迁入不代表已建索引、已运行 seed 或 RAG 通过。T01 消费此提交后，后续 fixture 改动必须与来源 snapshot/version 同步；T02 获得明确所有权后再新增演示字段。
+
+
+## 组合技术交付
+
+T02 最终 `4efd809` 的66例验证与324个捕获源码文件等价核对已完成。T03 `09ed3a3` 修复 optional recipe facts 与非主引用两项 P2，独立两轴复审关闭；原始失败与报告保留。实际 T02 ancestry 合入 T03 得到 `8950b08`，122例/13文件受影响验证与 Pi typecheck/build 均通过、源码/harness 稳定。
+
+组合 `8950b08` 无冲突合入 canonical `4fd13b3`。T02/T03 源码与受测 pin 相同；仅三份 Mercury 文件来自先前已通过门槛的 T07。固定 detached `4fd13b3` postmerge 独立锁离线安装/build及37例/45.43s通过，无源码/harness漂移。T04 已技术放行。独立真实 BGE/模型/前端/最终全量验收仍未完成。[验证摘要](../work/local-cloud-integration/t02-t03/verification-summary.json)、[源码关系](../work/local-cloud-integration/t02-t03/source-equivalence.json)。
+
+Standards 留一个非阻断 P3：drink_filter_mismatch 名称现覆盖通用品类条件。主会话决定最终整合集中修复时考虑 product_filter_mismatch，届时统一调用方并复验；不在冻结候选并发重命名。

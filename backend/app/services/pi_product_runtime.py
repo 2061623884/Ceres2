@@ -478,6 +478,19 @@ class PiProductRuntime:
             raise AppError(502, 'PI_ANSWER_INVALID', 'Pi 回复必须为结构化对象')
         if 'role_boundary' in answer and type(answer['role_boundary']) is not bool:
             raise AppError(502, 'PI_ANSWER_INVALID', '售后职责标记必须为布尔值')
+        # One primary result is rendered. Policy and role-boundary additions
+        # compose with it; unrelated reference fields must not be ignored.
+        primary_references = {
+            'products': {'product_refs'}, 'comparison': {'product_refs'},
+            'dish_candidates': {'dish_refs'}, 'recipe_facts': {'dish_refs', 'ingredient_ids'},
+            'purchase_plan': {'proposal_ref'}, 'exploration': {'exploration_ref'},
+            'question_selection': {'selection_ref'}, 'history_result': {'history_ref'},
+            'memory_result': {'memory_ref'}, 'general_explanation': {'general_ref'},
+        }
+        reference_fields = set().union(*primary_references.values())
+        applicable = set() if answer.get('status') == 'waiting' else primary_references.get(answer.get('answer_kind', 'products'), set())
+        if (set(answer) & reference_fields) - applicable:
+            raise AppError(422, 'PI_UNKNOWN_REFERENCE', '回复含有不适用于当前主结果的引用字段')
         outcome = self._answer_value(answer)
         # Every successful primary result may carry independently acquired
         # policy facts, including a clarification or an explicit memory result.
@@ -587,6 +600,47 @@ class PiProductRuntime:
             if dishes:
                 lines.append('尚未选定或加购；食材供给会在准备清单时核对，价格和库存为模拟数据。')
             return {'status': 'completed', 'message': '\n'.join(lines), 'products': [], 'dish_candidates': candidates}
+        if kind == 'recipe_facts':
+            refs, ingredient_ids = answer.get('dish_refs'), answer.get('ingredient_ids', [])
+            if (not isinstance(refs, list) or any(not isinstance(ref, str) or ref not in self.dishes for ref in refs)
+                    or not isinstance(ingredient_ids, list) or any(not isinstance(identity, str) for identity in ingredient_ids)):
+                raise AppError(422, 'PI_UNKNOWN_REFERENCE', '菜谱事实必须来自本次查询的菜谱和食材')
+            if not self.dishes_searched:
+                raise AppError(422, 'PI_EVIDENCE_MISSING', '请先查询真实菜谱')
+            dishes = [self.dishes[ref] for ref in dict.fromkeys(refs)][:5]
+            used = {item['ingredient_id'] for dish in dishes for item in [*dish['required_items'], *dish['optional_items']]} | {identity for dish in dishes for identity in dish['pantry_items']}
+            if set(ingredient_ids)-used:
+                raise AppError(422, 'PI_UNKNOWN_REFERENCE', '食材不属于本次选定的菜谱事实')
+            corpus = json.loads((get_settings().root_dir/'data/fixtures/ingredients.json').read_text())
+            names = {row['ingredient_id']:row['name_zh'] for row in corpus['ingredients']}
+            lines = ['菜谱基准用量（不是采购包装数）：'] if dishes else ['本次未取得选定菜谱的可核对事实。']
+            for dish in dishes:
+                required = '、'.join(names[item['ingredient_id']]+' '+ ' '.join(
+                    f"{item['quantity_'+unit]:g}{unit}" for unit in ('g','ml','pc') if 'quantity_'+unit in item) for item in dish['required_items'])
+                lines.append(f"{dish['name']}：基准{dish['base_people']}人；必需食材 {required}；来源 recipes.json/{dish['dish_id']}。")
+                optional = []
+                for item in dish['optional_items']:
+                    quantity = ' '.join(f"{item['quantity_'+unit]:g}{unit}" for unit in ('g', 'ml', 'pc') if 'quantity_'+unit in item)
+                    optional.append(names[item['ingredient_id']] + (' ' + quantity if quantity else '（用量未记录）'))
+                lines.append('可选食材：' + ('、'.join(optional) if optional else '来源未记录可选项') + '；不默认纳入采购。')
+                if dish['pantry_items']:
+                    lines.append('基础调料：'+'、'.join(names[identity] for identity in dish['pantry_items'])+'；数量未记录，家庭已有量未知。')
+            if len(dishes)>1:
+                shared = set.intersection(*({item['ingredient_id'] for item in dish['required_items']} for dish in dishes))
+                lines.append('共用必需食材：'+('、'.join(names[identity] for identity in sorted(shared)) if shared else '当前这几道菜没有共用必需食材记录')+'。')
+            products = {}
+            from app.services.dish_service import DishService
+            for dish in dishes:
+                # This union is only for the read-only fact lookup. Purchase
+                # requirements still use the original required/pantry records.
+                candidates = DishService(self.catalog).candidates({**dish, 'required_items':[*dish['required_items'], *dish['optional_items']]})
+                for identity in ingredient_ids:
+                    for product in candidates.get(identity, []):
+                        products[product['sku_id']] = product
+            if ingredient_ids:
+                lines.append('指定食材的当前采购候选（仅信息查询，尚未选定或加购）：')
+                lines.append(self._facts(list(products.values())))
+            return {'status':'completed','message':'\n'.join(lines),'products':list(products.values())}
         if kind == 'purchase_plan':
             if self.comparison_requested:
                 raise AppError(422, 'COMPARISON_SELECTION_REQUIRED', '请先展示比较候选并由用户选定')

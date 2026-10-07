@@ -138,3 +138,45 @@ def controlled_policy_source(tmp_path, monkeypatch):
     monkeypatch.setattr(policy, 'get_settings', lambda: SimpleNamespace(root_dir=root))
     monkeypatch.setattr(knowledge, 'search', search)
     return control
+
+
+@pytest.fixture(autouse=True)
+def controlled_product_source(controlled_policy_source, monkeypatch):
+    """Independent controlled product recall, never eligibility or Offer logic.
+
+    Static documents and pi_client's explicit synthetic Cola document simulate
+    the external worker. Tests may supply a literal ranking. This does not test
+    BGE quality or a real built index; policy stays in its own namespace double.
+    """
+    from app.knowledge.corpus import load_corpus
+    from app.services.knowledge_service import knowledge, check_budget
+    documents, _manifest = load_corpus(controlled_policy_source['root'] / 'data/fixtures')
+    product_documents = {doc['id']:doc for doc in documents if doc['namespace'] == 'product'}
+    product_documents['pi-cola'] = {'id':'pi-cola', 'namespace':'product', 'title':'测试可乐',
+        'text':'Cola 测试可乐', 'source':{'file':'controlled-products', 'record_id':'pi-cola'}}
+    policy_search = knowledge.search
+    control = {'documents':product_documents, 'ranking':None, 'calls':[], 'extra_hits':[]}
+
+    def search(query, namespace, *, limit=10, allowed_ids=None, category=None,
+               deadline=None, should_stop=None, expected_index_revision=None):
+        if namespace == 'policy':
+            return policy_search(query, namespace, limit=limit, allowed_ids=allowed_ids,
+                category=category, deadline=deadline, should_stop=should_stop,
+                expected_index_revision=expected_index_revision)
+        assert namespace == 'product', 'Controlled product worker cannot simulate graph or recipe retrieval'
+        if deadline is not None:
+            check_budget(deadline, should_stop)
+        control['calls'].append({'query':query, 'allowed_ids':allowed_ids, 'limit':limit, 'deadline':deadline})
+        if control.get('on_search'):
+            control['on_search']()
+        ids = control['ranking'] if control['ranking'] is not None else [identity for identity, doc in control['documents'].items()
+            if query.lower() in (doc['title'] + ' ' + doc['text']).lower()]
+        allowed = set(allowed_ids) if allowed_ids is not None else None
+        ids = [identity for identity in ids if allowed is None or identity in allowed][:limit]
+        hits = [{'id':identity, 'document':control['documents'][identity],
+                 'ranks':{'sparse':rank}, 'scores':{'sparse':-1.0}, 'rrf_score':1/(60+rank)}
+                for rank, identity in enumerate(ids, 1)]
+        return {'manifest':controlled_policy_source['manifest'], 'hits':hits + control['extra_hits']}
+
+    monkeypatch.setattr(knowledge, 'search', search)
+    return control

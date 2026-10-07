@@ -1,6 +1,6 @@
 # T04：可选审校过程消息与 SSE
 
-- 状态：待开始
+- 状态：进行中（T03 技术门槛已放行，交接 runtime/message owner）
 - 负责人：runtime/message-schema owner (T03→T04 交接)；主会话绑定实际 worker/worktree 后方可写入
 - 规格：[本轮规格](../docs/plans/ceres2-local-cloud-integration-spec.md)
 - 总任务：[集成 TASK](ceres2-local-cloud-integration.md)
@@ -20,4 +20,4 @@
 
 ## 当前阻塞、下一步、证据
 
-尚未实现；等待上列依赖交付。本票是可独立演示/验证的业务切片，不允许只搬文件并宣称完成。Tester 和两轴审查证据由主会话在收到后登记；历史来源报告不能代替本票结果。
+依赖 T03 已合入 canonical `4fd13b3` 并经固定 postmerge 37例验证，技术放行；runtime owner 从此产品基线接管。本票是可独立演示/验证的业务切片，不允许只搬文件并宣称完成。Tester 和两轴审查证据由主会话在收到后登记；历史来源报告不能代替本票结果。

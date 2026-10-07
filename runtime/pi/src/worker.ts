@@ -92,6 +92,7 @@ async function run(start: Start) {
   let errorCode: string | undefined;
   let validator: Agent | undefined;
   let requestKind: GuideRequestKind | undefined;
+  let finalAnswer: string | undefined;
   const model: Model<'openai-completions'> = {
     id: start.model.id, name: start.model.id, api: 'openai-completions', provider: 'ceres',
     baseUrl: start.model.baseUrl, reasoning: false, input: ['text'],
@@ -110,6 +111,28 @@ async function run(start: Start) {
     return { content: [{ type: 'text' as const, text: JSON.stringify(result) }], details: result };
   };
   const tools: AgentTool[] = [
+    { name:'finish_response', label:'完成当前回复',
+      description:'End this same run with validated reference fields. Call alone after guide_request and all needed evidence. Python validates references and renders facts; this never authorizes a purchase or application.',
+      parameters:Type.Object({
+        status:Type.Union([Type.Literal('completed'),Type.Literal('waiting')]),
+        answer_kind:Type.Optional(Type.Union(['products','comparison','policy_result','purchase_plan','exploration','question_selection','history_result','memory_result','dish_candidates','recipe_facts','general_explanation','status','role_boundary'].map(value=>Type.Literal(value)))),
+        product_refs:Type.Optional(Type.Array(Type.String())),
+        dish_refs:Type.Optional(Type.Array(Type.String())),
+        ingredient_ids:Type.Optional(Type.Array(Type.String())),
+        policy_ref:Type.Optional(Type.String()),
+        policy_refs:Type.Optional(Type.Array(Type.String(),{minItems:1})),
+        role_boundary:Type.Optional(Type.Boolean()),
+        proposal_ref:Type.Optional(Type.String()), exploration_ref:Type.Optional(Type.String()),
+        selection_ref:Type.Optional(Type.String()), history_ref:Type.Optional(Type.String()),
+        memory_ref:Type.Optional(Type.String()), general_ref:Type.Optional(Type.String()),
+        clarification_slot:Type.Optional(Type.Union(['target','packaging','brand','budget'].map(value=>Type.Literal(value)))),
+      },{additionalProperties:false}),
+      execute:async(_id,args,signal)=>{
+        if(requestKind === undefined || signal?.aborted || status !== 'completed' || errorCode) throw new Error('Completion is not available');
+        finalAnswer=JSON.stringify(args);
+        return {content:[{type:'text',text:'Response references supplied for host validation.'}],details:{final_response:true}};
+      },
+    },
     { name: 'guide_request', label: '登记当前请求', description: 'Classify this user message once, before product tools. question preserves shopping work; progress reads status; continue keeps goal; new_goal explicitly replaces goal; amend records explicit new conditions; stop only stops current processing; abandon ends the shopping task without changing cart. This never authorizes cart or order writes.', parameters: Type.Object({ kind: Type.Union(['question','progress','continue','new_goal','amend','stop','abandon'].map(value => Type.Literal(value))), goal: Type.Optional(Type.String({minLength:1,maxLength:8000})), conditions: Type.Optional(Type.Record(Type.String(), Type.Unknown())) }, {additionalProperties:false}), execute: (id, args, signal) => remote('guide_request', id, args, signal) },
     { name: 'validate_general_text', label: '核对普通解释', description: 'For unrelated general knowledge only, submit proposed short messages once. Uses the same configured model to check merchant/execution claims within this run deadline. Return only the resulting general_ref in your final answer. No merchant facts or execution receipts are authorized.', parameters: Type.Object({messages:Type.Array(Type.String({minLength:1}),{minItems:1})},{additionalProperties:false}), execute: async (id, args, signal) => {
       const reserved = await remote('validate_general_text', id, args, signal);
@@ -170,10 +193,11 @@ async function run(start: Start) {
     },
     streamFn: (_model, context, options) => {
       beginProviderCall();
-      const samplingParams = officialDeepSeekSampling(start.model.baseUrl, options?.samplingParams);
+      const toolSampling = {...options?.samplingParams, tool_choice:'auto'};
+      const samplingParams = officialDeepSeekSampling(start.model.baseUrl, toolSampling) ?? toolSampling;
       return streamSimple(model, context, {
         ...options, apiKey: start.model.apiKey, maxTokens: 1536, fetch: providerFetch,
-        ...(samplingParams ? { samplingParams: { ...samplingParams, response_format: { type: 'json_object' } } } : {}),
+        samplingParams,
       });
     },
     prepareRequest: ({context}) => {
@@ -183,6 +207,7 @@ async function run(start: Start) {
     },
     toolExecution: 'sequential',
     finishTurn: ({ toolResults }) => {
+      if (finalAnswer !== undefined) return {action:'end'};
       if (toolResults.length > 0) toolRounds += 1;
       if (toolRounds >= Math.min(5, start.maxToolRounds)) {
         status = 'tool_budget';
@@ -202,6 +227,10 @@ async function run(start: Start) {
       } });
     }
     if (event.type === 'message_end' && event.message.role === 'assistant') {
+      const calls = event.message.content.filter(block=>block.type==='toolCall');
+      if(calls.some(block=>block.name==='finish_response') && calls.length !== 1) {
+        errorCode='PI_TOOL_INVALID'; agent.abort();
+      }
       for (const block of event.message.content) {
         if (block.type === 'toolCall' && !tools.some(tool => tool.name === block.name)) {
           errorCode = 'PI_TOOL_FORBIDDEN'; agent.abort();
@@ -225,6 +254,7 @@ async function run(start: Start) {
     }
     if (errorCode) return sendError(errorCode, new Error(errorCode));
     if (status !== 'completed') return send({ type: 'result', status });
+    if (finalAnswer !== undefined) return send({type:'result',status,answer:finalAnswer});
     const last = [...agent.state.messages].reverse().find(message => message.role === 'assistant');
     if (!last || last.role !== 'assistant' || last.stopReason === 'error' || last.stopReason === 'aborted') {
       const cause = new Error(last?.role === 'assistant' ? last.errorMessage : agent.state.errorMessage);

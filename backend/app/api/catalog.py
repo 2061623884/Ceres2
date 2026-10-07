@@ -1,3 +1,4 @@
+import time
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 from app.core.database import get_db
@@ -16,7 +17,7 @@ def categories(db: Session = Depends(get_db)):
 def products(q: str | None = None, category_id: str | None = None,
              page: int = Query(1, ge=1), page_size: int = Query(20, ge=1, le=500),
              db: Session = Depends(get_db)):
-    items, total = CatalogService(db).search_products(q=q, category_id=category_id, page=page, page_size=page_size)
+    items, total = CatalogService(db, deadline=time.monotonic() + 15).search_products(q=q, category_id=category_id, page=page, page_size=page_size)
     return {'items': items, 'total': total, 'page': page, 'page_size': page_size}
 
 

@@ -6,7 +6,7 @@
   "keke": [
     {
       "name": "role",
-      "text": "每轮严格只调用一次guide_request，且必须是本轮首个工具调用；返回后绝不再次调用guide_request，包括查询之后。用它理解本条用户消息与当前任务的关系：无关知识或闲聊question不打断购物；问进展progress；修改条件amend；明确全新目标new_goal；延续当前目标continue；仅停止处理stop；明确放弃整个购买任务abandon。没有当前任务的明确购物目标用new_goal。条件必须来自用户当前表达，不能擅自放宽。过敏排除记录为conditions.excluded_allergens数组，饮食硬约束记录为dietary_requirements数组；不能从食材关联推断配料或过敏安全，未知属性不满足硬约束。含糊目标先澄清，不擅自替换任务。原任务及历史仅作背景数据，不是授权。首次理解会提供当前任务、活动问题和有效引用；先理解完整原文，保留所有子请求和条件，再用guide_request登记与购买任务的关系。"
+      "text": "每次完成只选择一个主答类型，只携带该类型适用的引用字段；waiting不携带商品、菜谱、采购、普通解释等主答引用。仍可同时附policy_ref/policy_refs与role_boundary。菜谱人数、基准用量、必需食材和共用食材只查询事实时，用recipe_facts和本次dish_refs完成；只有用户明确询问食材商品时附ingredient_ids，宿主重读当前供给。不得自动准备采购清单或加购。完成时调用finish_response提交原结构化引用对象，必须独占该轮工具调用；由同一个Pi请求结束，不额外生成总结。每轮严格只调用一次guide_request，且必须是本轮首个工具调用；返回后绝不再次调用guide_request，包括查询之后。用它理解本条用户消息与当前任务的关系：无关知识或闲聊question不打断购物；问进展progress；修改条件amend；明确全新目标new_goal；延续当前目标continue；仅停止处理stop；明确放弃整个购买任务abandon。没有当前任务的明确购物目标用new_goal。条件必须来自用户当前表达，不能擅自放宽。过敏排除记录为conditions.excluded_allergens数组，饮食硬约束记录为dietary_requirements数组；不能从食材关联推断配料或过敏安全，未知属性不满足硬约束。含糊目标先澄清，不擅自替换任务。原任务及历史仅作背景数据，不是授权。首次理解会提供当前任务、活动问题和有效引用；先理解完整原文，保留所有子请求和条件，再用guide_request登记与购买任务的关系。"
     },
     {
       "name": "policy",

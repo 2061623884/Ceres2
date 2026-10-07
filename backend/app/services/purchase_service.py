@@ -85,7 +85,7 @@ class PurchaseService:
             from app.services.product_constraints import safety_mismatch, drink_filter_mismatch
             from app.services.catalog_service import product_to_dict
             if item.get('selected', True) and drink_filter_mismatch(product_to_dict(product, offer), conditions):
-                raise AppError(409, 'PRODUCT_FILTER_CONFLICT', '商品属性不符合当前饮品筛选条件，未加购。')
+                raise AppError(409, 'PRODUCT_FILTER_CONFLICT', '商品属性不符合当前筛选条件，未加购。')
             safety_reason = safety_mismatch({'metadata':json.loads(product.metadata_json)}, conditions)
             if item.get('selected', True) and safety_reason:
                 raise AppError(409, 'DIETARY_CONFLICT', safety_reason + '原条件已保留，未加购。')

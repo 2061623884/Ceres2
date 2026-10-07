@@ -1,5 +1,5 @@
 {
-  "version": "optimization-demo-v2",
+  "version": "integration-shopping-demo-v1",
   "origin": {
     "repository": "2061623884/Ceres",
     "commit": "e24debf670db02a86cb79c40933b901827db8a55",
@@ -42,5 +42,17 @@
     }
   ],
   "business_data_mode": "demo",
-  "scope": "Static recipe and ingredient selection only; no old runtime state or indexes."
+  "scope": "Static recipe and ingredient selection only; no old runtime state or indexes.",
+  "integration_shopping_demo": {
+    "source": "Ceres2 T02 synthetic demo specification v1; not a merchant or nutrition claim",
+    "added_sku_ids": [
+      "demo:synthetic-case-water-12x550ml",
+      "demo:synthetic-sugar-free-tea-500ml"
+    ],
+    "preserved_negative_sku_ids": [
+      "demo:cn-nongfu-water-550ml-12bottle",
+      "demo:green-tea-500ml"
+    ],
+    "scope": "Exactly two explicitly synthetic demo definitions and Offers. Existing pack count does not establish case selling unit; existing tea has no verified sugar-free evidence."
+  }
 }

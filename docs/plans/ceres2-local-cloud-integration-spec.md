@@ -64,3 +64,11 @@
 ### 15 秒边界的精确适用范围
 
 直接 Guide 请求在 owner 查询及同步角色授权前建立一次 15 秒绝对 deadline；它涵盖本次处理内的判断、检索、Pi 与发布/提交。单独 `/navigation/routes` 预检是另一 HTTP 请求，用户等待确认亦不共享跨请求 monotonic budget。既有 run 重放/重连只恢复该 run，不能重置其预算。不声称整个多 HTTP 用户交互在 15 秒内。
+
+### T03 可选菜谱食材的最小事实合同
+
+既有 canonical recipes.json 含 optional_items 字段，但本轮之前所有值均为空；此前不存在已执行的非空记录合同。本轮将非空条目明确定义为 `{ingredient_id, quantity_g?, quantity_ml?, quantity_pc?}`，与 required_items 的食材/用量字段命名一致；缺少用量时显示“用量未记录”，空数组显示来源未记录可选项。recipe_facts 可引用这些食材作只读当前商品事实查询，未知或非本次菜谱食材引用仍拒绝。可选事实不自动加入采购需求、采购清单或购物车；图查询和后续菜谱事实能力沿用同一定义。
+
+### T03 完成引用的适用边界
+
+一次 finish_response 保留一个主结果，不扩展为多个并列主业务答案。Python 拒绝与主结果不适用的引用字段，包括 waiting 携带商品/菜谱/采购/普通解释等引用；适用的主引用仍逐项按本次查询来源校验。`policy_ref`、非空 `policy_refs` 和 `role_boundary` 保留为合法的独立附加信息，waiting 也可以使用；菜谱事实的 `dish_refs` 与 `ingredient_ids` 只适用于 recipe_facts，菜品候选仅使用 dish_refs。

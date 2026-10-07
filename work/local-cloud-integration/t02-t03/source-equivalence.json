@@ -1,0 +1,13 @@
+{
+  "combined_tested_pin": "8950b085753cbdc8bdf53b6d223e9d3c1d865f02",
+  "canonical_merge": "4fd13b340ff959b7e389ebd4b9dde234b8fd2b92",
+  "canonical_merge_conflicts": false,
+  "product_delta_from_tested_combined": [
+    "backend/app/mercury/graph.py",
+    "backend/app/mercury/tools.py",
+    "backend/tests/test_merge_mercury_policy_public.py"
+  ],
+  "delta_source": "a465dcf2b88dd7b3d6db676c3869588642c8587e",
+  "delta_matches_source": true,
+  "meaning": "All T02/T03 source matches tested combined pin; only separately verified Mercury delta differs. Fixed integrated postmerge verification remains separate."
+}

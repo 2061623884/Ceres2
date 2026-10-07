@@ -99,9 +99,13 @@ def test_displayed_current_candidate_selected_in_later_pi_turn_prepares_then_con
     assert [(r['sku_id'],r['quantity']) for r in client.get('/api/v1/cart').json()['items']] == [('pi-cola-six',1)]
 
 
-def test_task_filters_and_page_category_are_preserved_and_empty_retires_refs(pi_client):
+def test_task_filters_and_page_category_are_preserved_and_empty_retires_refs(pi_client, controlled_product_source):
     client, requests = pi_client
     seed_multipack(requests)
+    controlled_product_source['documents']['pi-cola-six'] = {
+        'id':'pi-cola-six', 'namespace':'product', 'title':'测试六罐可乐',
+        'text':'Six cola cans 测试六罐可乐',
+        'source':{'file':'controlled-products','record_id':'pi-cola-six'}}
     command(client,'new_goal',goal='比较当前品类',conditions={'brand':'真实品牌','packaging':'can','pack_count_mode':'multi','budget_fen':2000})
     def page_hook(body):
         delta, reason = comparison_hook(body)

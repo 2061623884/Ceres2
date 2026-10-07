@@ -89,3 +89,13 @@ T02 恢复 pin `911a7a0`，catalog API/service 有两份保留中的未提交改
 T07 Mercury 两轴均 clear 后，`24ee4d0` 无冲突合入 `4616798`，产品目录与受测 `79a7eff` 零差异。固定 postmerge 最小验证已交 Tester；完成后可解除 T05 的 T07 依赖，T02/T04 仍各自必须完成。详情以 T07 TASK 为准。
 
 T07 Mercury 固定 `4616798` postmerge 11 passed / 7.25s，无源码/harness 漂移；T05 的 T07 依赖已解除，T02/T04 依赖保持。此结果不等于完整最终验收。
+
+
+实际源码集成依赖：T03 已借入 T02 早期提交，因而 T03 的 canonical 合入现在等待 T02 最终技术门槛。T03 的50例/typecheck/build分片通过不释放 T02 或 T04；详见 T03 TASK。不能通过只摘取部分提交继承完整候选的验证结论。
+
+发布已核实：T01 local `ccf272b` → remote `d9c1520e1d251f129d53f2682bd86d5856cb8116`，tree `e80311dcee43e5957007dc865898c6de697c0e03`；T07 Mercury local `a465dcf` → remote `bbaadd3b7e4302d87a0365f8b891260dd03e2403`，tree `368c7f40cf2b8ca65bd7655b9505de1e174aa36d`。回执在 work/local-cloud-integration；不是 main merge 或最终验收。
+
+
+T02/T03 组合 `8950b08` 已122例+Pi typecheck/build稳定通过并无冲突合入 `4fd13b3`；两轴无阻断，T02 留一个非阻断 helper 命名 P3待最终集中修复。与该组合相比仅已验过的 Mercury 三文件增量不同，固定 postmerge 已交 Tester。通过即释放 T04，不需等待发布。详细候选、来源等价及证据在各票。
+
+固定 `4fd13b3` postmerge 独立锁离线安装/build与37例/45.43s通过，无源码/harness漂移。T04 的 T03依赖已解除并交接 runtime owner；T05/T06仍等待T04。所有受控与最终/真实/本人验收分开。

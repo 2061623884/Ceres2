@@ -4,7 +4,7 @@ from uuid import uuid4
 from app.models.comparison import ComparisonDisplay
 from app.services.catalog_service import CatalogService
 from app.core.errors import AppError
-from app.services.product_constraints import safety_mismatch, drink_filter_mismatch
+from app.services.product_constraints import safety_mismatch, drink_filter_mismatch, offer_mismatch, product_type_matches, packaging_matches
 
 
 def comparison_card(product):
@@ -23,8 +23,9 @@ def comparison_card(product):
 
 
 class ComparisonService:
-    def __init__(self, db, owner_id):
+    def __init__(self, db, owner_id, *, deadline=None, should_stop=None):
         self.db, self.owner_id = db, owner_id
+        self.deadline, self.should_stop = deadline, should_stop
 
     def _scope(self, session_id, view_context=None):
         from app.services.pi_product_turn_service import owned_session, session_anchor
@@ -46,29 +47,26 @@ class ComparisonService:
             return [], 0
         if conditions.get('activity_id'):
             from app.services.product_question_service import ProductQuestionService
-            products = ProductQuestionService(self.db, self.owner_id).explore(session_id, {'category_id':category, 'query':filters.get('query')})['products']
+            products = ProductQuestionService(self.db, self.owner_id, deadline=self.deadline, should_stop=self.should_stop).explore(session_id, {'category_id':category, 'query':filters.get('query')})['products']
             return products[:5], len(products)
-        catalog = CatalogService(self.db, context['store_id'])
+        catalog = CatalogService(self.db, context['store_id'], deadline=self.deadline, should_stop=self.should_stop)
         matched, count, page = [], 0, 1
         while True:
             products, total = catalog.search_products(q=filters.get('query'), category_id=category, page=page, page_size=100)
             for product in products:
-                if safety_mismatch(product, conditions) or drink_filter_mismatch(product, conditions):
+                if safety_mismatch(product, conditions) or drink_filter_mismatch(product, conditions) or offer_mismatch(product, conditions):
                     continue
-                if conditions.get('product_type') is not None and product['product_type'] != conditions['product_type']:
+                if conditions.get('product_type') is not None and not product_type_matches(product['product_type'], conditions['product_type']):
                     continue
                 metadata = product['metadata']
                 if filters.get('brand') is not None and product['brand'] != filters['brand']:
                     continue
-                if filters.get('packaging') is not None and metadata.get('packaging') != filters['packaging']:
+                if filters.get('packaging') is not None and not packaging_matches(metadata, filters['packaging']):
                     continue
                 packs = metadata.get('pack_count')
                 if filters.get('pack_count_mode') == 'single' and packs != 1:
                     continue
                 if filters.get('pack_count_mode') == 'multi' and (packs is None or packs <= 1):
-                    continue
-                budget = conditions.get('budget_fen')
-                if budget is not None and (product['price_fen'] is None or product['price_fen'] > budget):
                     continue
                 identities = [product['sku_id'], product['name'], product['name_zh'], product['brand'], *product['ingredient_ids'], *product['usage_tags']]
                 if any(excluded in identities for excluded in conditions.get('exclusions', [])):
@@ -119,7 +117,7 @@ class ComparisonService:
         if ref not in displayed_refs or selected is None:
             raise AppError(409, 'COMPARISON_STALE', '候选未展示或已失效，请重新比较后选择')
         _anchor, context = self._scope(session_id, view_context)
-        product = CatalogService(self.db, context['store_id']).get_product(selected['sku_id'])
+        product = CatalogService(self.db, context['store_id'], deadline=self.deadline, should_stop=self.should_stop).get_product(selected['sku_id'])
         if product is None:
             raise AppError(409, 'COMPARISON_STALE', '候选商品已不可查询，请重新比较')
         return product

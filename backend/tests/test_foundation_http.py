@@ -47,21 +47,25 @@ def test_bootstrap_uses_persistent_server_identity(web):
 def test_catalog_returns_real_seeded_products_and_current_offer(web):
     client, sessions = web
     categories = client.get('/api/v1/categories').json()
-    assert sum(c['product_count'] for c in categories) == 70
+    assert sum(c['product_count'] for c in categories) == 73
     listing = client.get('/api/v1/products', params={'page_size': 500}).json()
-    assert listing['total'] == 70
-    assert len(listing['items']) == 70  # baseline65 + approved35g snack + DR lemon-cola + three AC finished-product fixtures
+    assert listing['total'] == 73
+    assert len(listing['items']) == 73  # prior 70 + incoming shrimp + two synthetic T02 products
     assert 'demo:snack-original-potato-chips-35g-bag' in {p['sku_id'] for p in listing['items']}
     assert all(p['price_fen'] > 0 for p in listing['items'])
+    shrimp = next(p for p in listing['items'] if p['sku_id'] == 'demo:shrimp-200g')
+    assert shrimp['price_fen'] == 1590 and shrimp['available_qty'] == 25
     sku = 'demo:flour-all-purpose-500g'
     with sessions() as db:
         offer = db.scalar(select(Offer).where(Offer.sku_id == sku))
         offer.price_fen = 1234
+        offer.available_qty, offer.sellable, offer.offer_version = 3, False, 6
         db.commit()
         seed_catalog(db)
         db.commit()
     detail = client.get(f'/api/v1/products/{sku}').json()
     assert detail['price_fen'] == 1234  # repeated seed must not reset business facts
+    assert (detail['available_qty'], detail['sellable'], detail['offer_version']) == (3, False, 6)
     assert detail['spec_quantity'] == 500
     assert detail['spec_unit'] == 'g'
     assert detail['image_path'] == '/media/images/demo-flour-all-purpose-500g.jpg'

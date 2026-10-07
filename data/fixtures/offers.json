@@ -704,6 +704,36 @@
       "offer_version": 1,
       "is_demo": true,
       "provenance": "next-activity-v1 explicitly simulated offer"
+    },
+    {
+      "store_id": "store-demo-01",
+      "sku_id": "demo:shrimp-200g",
+      "price_fen": 1590,
+      "available_qty": 25,
+      "sellable": true,
+      "offer_version": 1,
+      "is_demo": true,
+      "provenance": "Ceres2 optimization declared demo Offer; not a merchant quote"
+    },
+    {
+      "sku_id": "demo:synthetic-case-water-12x550ml",
+      "store_id": "store-demo-01",
+      "price_fen": 2500,
+      "available_qty": 20,
+      "sellable": true,
+      "offer_version": 1,
+      "is_demo": true,
+      "provenance": "Ceres2 T02 synthetic demo specification v1; not a merchant or nutrition claim"
+    },
+    {
+      "sku_id": "demo:synthetic-sugar-free-tea-500ml",
+      "store_id": "store-demo-01",
+      "price_fen": 400,
+      "available_qty": 40,
+      "sellable": true,
+      "offer_version": 1,
+      "is_demo": true,
+      "provenance": "Ceres2 T02 synthetic demo specification v1; not a merchant or nutrition claim"
     }
   ],
   "store": {
@@ -712,5 +742,5 @@
     "name": "演示超市（模拟数据）",
     "store_id": "store-demo-01"
   },
-  "version": "v1"
+  "version": "integration-shopping-demo-v1"
 }

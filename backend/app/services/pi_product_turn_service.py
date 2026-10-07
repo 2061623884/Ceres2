@@ -4,6 +4,7 @@ import json
 import time
 from uuid import uuid4
 from sqlalchemy import func, select, update
+from sqlalchemy.orm import Session
 from app.core.errors import AppError
 from app.models.guide import GuideSession, GuideTask, GuideMessage, GuideTurnReceipt
 from app.services.catalog_service import CatalogService
@@ -69,10 +70,10 @@ class PiProductTurnService:
         def should_stop():
             if run_cancelled(run_id):
                 return True
-            db.expire_all()
-            stopped = db.get(GuideTurnReceipt, run_id).status != 'running'
-            db.rollback()
-            return stopped
+            # Retrieval may also run while final publication is staged. Stop
+            # observation must never expire or roll back that business Session.
+            with Session(db.get_bind()) as observation:
+                return observation.get(GuideTurnReceipt, run_id).status != 'running'
 
         def route_request(arguments):
             nonlocal anchor
@@ -103,7 +104,7 @@ class PiProductTurnService:
                 result = task_projection(db, owned_session(db, self.owner_id, session_id))
                 db.rollback()
             if kind in ('continue', 'new_goal', 'amend'):
-                result['categories'] = CatalogService(db, store_id).get_categories()
+                result['categories'] = CatalogService(db, store_id, deadline=deadline, should_stop=should_stop).get_categories()
                 db.rollback()
             if kind == 'question':
                 result = {}  # General channel gets no merchant task or facts.
@@ -115,26 +116,26 @@ class PiProductTurnService:
         memory_turn = MemoryTurn(db, self.owner_id, role='keke', source_id=run_id, source_text=body['message'])
         memory_context = MemoryService(db, self.owner_id).recall(role='keke', query=body['message'] + ' ' + (task.goal or '' if task else ''), current_conditions=json.loads(task.conditions_json) if task else {})
         from app.services.product_question_service import ProductQuestionService
-        question_context = ProductQuestionService(db, self.owner_id).projection(session_id)['active_question']
+        question_context = ProductQuestionService(db, self.owner_id, deadline=deadline, should_stop=should_stop).projection(session_id)['active_question']
         dialogue_context = bounded_dialogue_context(db, self.owner_id, session_id, anchor, run_id)
         from app.services.guide_lifecycle_service import task_projection
         current_task = {**task_projection(db, session), 'plan': json.loads(task.plan_json) if task.plan_json else None} if task else None
         context = {**dialogue_context, 'role':'keke', 'current_task':current_task, 'active_question':question_context, 'memory_list_refs':previous_guide_memory_refs(db, self.owner_id, session_id), 'memory':memory_context, 'has_active_task': task is not None, 'general_history': [row.content for row in reversed(history)]}
         db.rollback()
         from app.services.comparison_service import ComparisonService
-        comparison_snapshot_refs = [card['ref'] for card in ComparisonService(db, self.owner_id).current(session_id)]
-        context['comparison_candidates'] = [card for card in ComparisonService(db, self.owner_id).current(session_id, body.get('view_context')) if card['ref'] in body.get('displayed_candidate_refs', [])]
+        comparison_snapshot_refs = [card['ref'] for card in ComparisonService(db, self.owner_id, deadline=deadline, should_stop=should_stop).current(session_id)]
+        context['comparison_candidates'] = [card for card in ComparisonService(db, self.owner_id, deadline=deadline, should_stop=should_stop).current(session_id, body.get('view_context')) if card['ref'] in body.get('displayed_candidate_refs', [])]
         db.rollback()
         from app.services.history_service import HistoryService, HistoryTurn
         history_turn = HistoryTurn(db, self.owner_id, session_id, body['message'])
         from app.services.product_question_service import ProductQuestionService
-        questions = ProductQuestionService(db, self.owner_id)
+        questions = ProductQuestionService(db, self.owner_id, deadline=deadline, should_stop=should_stop)
         def activity_active():
             current = owned_session(db, self.owner_id, session_id)
             task = db.get(GuideTask, current.current_task_id) if current.current_task_id else None
             return bool(task and json.loads(task.conditions_json).get('activity_id'))
 
-        runtime = PiProductRuntime(CatalogService(db, store_id), assert_current, run_id=run_id, policy_scope={'owner_id': self.owner_id, 'session_id': session_id, 'request_id': body['request_id'], 'run_id': run_id}, route_request=route_request, context=context, memory_command=memory_turn.prepare, product_search=lambda arguments: ComparisonService(db, self.owner_id).search(session_id, arguments, scope_to_page=False), comparison_search=lambda arguments: ComparisonService(db, self.owner_id).search(session_id, arguments, body.get('view_context')), candidate_resolve=lambda ref: ComparisonService(db, self.owner_id).resolve(session_id, ref, body.get('displayed_candidate_refs', []), body.get('view_context')), history_command=history_turn.prepare, explore_products=lambda arguments: questions.explore(session_id, arguments), select_question_products=lambda arguments: questions.select_products(session_id, arguments), activity_active=activity_active)
+        runtime = PiProductRuntime(CatalogService(db, store_id, deadline=deadline, should_stop=should_stop), assert_current, run_id=run_id, policy_scope={'owner_id': self.owner_id, 'session_id': session_id, 'request_id': body['request_id'], 'run_id': run_id}, route_request=route_request, context=context, memory_command=memory_turn.prepare, product_search=lambda arguments: ComparisonService(db, self.owner_id, deadline=deadline, should_stop=should_stop).search(session_id, arguments, scope_to_page=False), comparison_search=lambda arguments: ComparisonService(db, self.owner_id, deadline=deadline, should_stop=should_stop).search(session_id, arguments, body.get('view_context')), candidate_resolve=lambda ref: ComparisonService(db, self.owner_id, deadline=deadline, should_stop=should_stop).resolve(session_id, ref, body.get('displayed_candidate_refs', []), body.get('view_context')), history_command=history_turn.prepare, explore_products=lambda arguments: questions.explore(session_id, arguments), select_question_products=lambda arguments: questions.select_products(session_id, arguments), activity_active=activity_active)
         try:
             progress('understanding')
             explicit_confirm = body['message'].strip().rstrip('。！!') in ('就按这个加购', '确认加购', '确认把当前清单加入购物车')
@@ -219,7 +220,7 @@ class PiProductTurnService:
                 if anchor[1] is None:
                     raise AppError(409, 'NO_ACTIVE_TASK', '请先明确购买任务')
                 if purchase.get('comparison_ref'):
-                    selected = ComparisonService(db, self.owner_id).resolve(session_id, purchase['comparison_ref'], body.get('displayed_candidate_refs', []), body.get('view_context'))
+                    selected = ComparisonService(db, self.owner_id, deadline=deadline, should_stop=should_stop).resolve(session_id, purchase['comparison_ref'], body.get('displayed_candidate_refs', []), body.get('view_context'))
                     if selected['sku_id'] != purchase['sku_id']:
                         raise AppError(409, 'COMPARISON_STALE', '已展示候选发生变化，请重新比较')
                 service = PurchaseService(db, self.owner_id)
@@ -232,8 +233,8 @@ class PiProductTurnService:
                 anchor = (anchor[0], anchor[1], db.get(GuideTask, anchor[1]).state_version)
                 outcome['message'] = render_plan(plan)
             if status in ('deadline', 'tool_budget'):
-                ComparisonService(db, self.owner_id).clear(session_id, comparison_snapshot_refs)
-            cards = ComparisonService(db, self.owner_id).publish(session_id, outcome['products'], assistant_id, body.get('view_context')) if status == 'completed' and outcome.get('comparison') else []
+                ComparisonService(db, self.owner_id, deadline=deadline, should_stop=should_stop).clear(session_id, comparison_snapshot_refs)
+            cards = ComparisonService(db, self.owner_id, deadline=deadline, should_stop=should_stop).publish(session_id, outcome['products'], assistant_id, body.get('view_context')) if status == 'completed' and outcome.get('comparison') else []
             ordinary_kind = 'general' if outcome.get('answer_kind') == 'general_explanation' else 'text'
             message_units = [(content, ordinary_kind) for content in outcome.get('messages', [outcome['message']])]
             for field in ('policy_message', 'role_boundary_message'):
@@ -276,7 +277,7 @@ class PiProductTurnService:
                     session_id=session_id,
                     request=SwitchRequest(opening_id=route['opening_id'], target_role='momo', accept=True),
                 ).model_dump()
-            result.update(questions.projection(session_id))
+            result.update(questions.projection(session_id, refresh_supply=status in ('completed', 'waiting')))
             require_publication_budget()
             receipt.status = {'stopped': 'stopped', 'waiting': 'waiting_clarification', 'deadline': 'protected', 'tool_budget': 'protected'}.get(status, 'completed')
             if status == 'completed' and (purchase or history_selection) and result['plan']:
@@ -301,7 +302,7 @@ class PiProductTurnService:
             detail = exc.detail['error'] if isinstance(exc, AppError) else {'code': 'PI_QUERY_FAILED', 'message': 'Pi 查询失败'}
             failed = db.execute(update(GuideTurnReceipt).where(GuideTurnReceipt.run_id == run_id, GuideTurnReceipt.status.in_(['running', 'stop_requested'])).values(status='failed', result_json=json.dumps({**detail, 'http_status': exc.status_code if isinstance(exc, AppError) else 502})))
             if failed.rowcount:
-                ComparisonService(db, self.owner_id).clear(session_id, comparison_snapshot_refs)
+                ComparisonService(db, self.owner_id, deadline=deadline, should_stop=should_stop).clear(session_id, comparison_snapshot_refs)
                 receipt = db.get(GuideTurnReceipt, run_id)
                 append_event(db, receipt, 'error', detail)
             db.commit()
