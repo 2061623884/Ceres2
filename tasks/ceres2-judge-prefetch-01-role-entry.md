@@ -1,6 +1,6 @@
 # 01：可可入口与按钮返回
 
-- 状态：进行中（2026-10-07：规划已发布，01 已获准逐行为 TDD 实施）
+- 状态：待验收（2026-10-07：云端技术门槛已释放；用户本地前端／浏览器、真实 provider 与本人验收仍开放）
 - 拆分：已批准；功能依赖保持 01 → 02 → 03 → 04
 - 执行授权：2026-10-07 用户已授权从 GitHub 基线重新 implement-spec／TDD／Agent Team 实施、可追溯提交及分支推送；前置功能与专职 Tester 门槛保留。
 - 负责人：01 独立实现者，工作树 `../worktrees/01-role-entry`，分支 `ceres2/judge-prefetch-01-role-entry-20261007`；专职 Tester 执行所有验证命令，集成者维护 TASK／PROJECT、提交和合并，Standards／Spec 独立只读审查。共享文件按 [执行决定](../docs/REBUILD-DECISIONS.md#4-写入所有权与可并行支持项) 交接。
@@ -41,6 +41,21 @@
 
 本票独占云端导航、角色准入、初始上下文、typed 返回动作的服务端契约及对应 fixture 的写入；如需修改共享 schema／Prompt 也由本票一位指定维护者处理。向 02 交付新可可入口、首次上下文与重放契约及证据；不能只删枚举而把消费者裁剪修复留到后票。
 
+## 2026-10-07 WIP 与当前审查门槛
+
+可恢复源码已提交为本地 `ec625a27db5418f0851a5da946c384531534309c`，在独立 WIP 分支发布为远端 `f323d15751c141e0ded4763a3881bbda6355eae3`，两者精确 tree 均为 `b9a6d62a8c51e3299a76c35359dc6132d8931587`；[核实映射](../work/judge-prefetch/publication-role-entry-wip.json)。该快照不表示验收或 02 依赖释放。
+
+该 WIP 时点的两个独立审查发现均已修复并复审闭合：脱敏且可关联的 Kev 原因诊断，以及混合请求中可组合的售后职责说明／显式入口。下面的最终云端证据覆盖修复版本；WIP 本身仍不作为通过证明。
+
+## 2026-10-07 云端交付与依赖释放
+
+- 修复提交：`9f2eff1265c373736cc5f8683c8ccaa680959c30`；集成提交：`46f3fcf47d544e0c0ecead0abc13cb23d63a38b8`。244 个产品／测试文件与最终四项门槛的运行前后 source map 完全一致，提交和合并未改变它们；[冻结清单与提交映射](../work/judge-prefetch-rebuild/01-role-entry-final-source.json)。
+- [Tester 报告](../work/judge-prefetch-rebuild/01-role-entry-verification.md)：同版完整 backend **480 passed**，其重叠专项子集 **149 passed**，Pi typecheck/build、62 个 Python 锁定包及 Pi 依赖检查通过。不能把 149 与 480 相加。红测、失败 GREEN 与修复历史保留在[执行摘要](../work/judge-prefetch-rebuild/01-role-entry-verification-history.json)。
+- [Standards 复审](../work/judge-prefetch-rebuild/reviews/standards-01-rereview.md)与[Spec 复审](../work/judge-prefetch-rebuild/reviews/spec-01-rereview.md)均闭合原 P2，无新增 01 阻塞发现。
+- 云端公开契约包括 Coco-only yes/no/uncertain 判断与真实故障诊断、Momo 零 Kev、显式纯导航按钮、旧回执保护、完整首次任务／问题／引用上下文；混合 completed 或 waiting 结果可附加宿主售后边界与显式入口，既有合法购物／政策事实不被替换。
+- 02 明确接收既有政策附加门槛缺口：waiting/general 等尚未支持的主结果可能丢失 policy_ref 对应证据，须覆盖 waiting + policy + role boundary。01 修复的是职责边界可组合性，不宣称修完所有混合政策呈现；详见 Spec 复审。
+- 本票向 02 交付云端准入与首次上下文。02 可接手最小共享 runtime／Prompt／证据与 fixture 文件；导航本身不并行修改。原 typed UI／DOM／浏览器条目仍待用户本地验收，真实 provider 和本人验收未完成，不宣称整体已验收。
+
 ## 下一步与证据
 
-规划里程碑已于 2026-10-07 发布并核实：[提交映射](../work/judge-prefetch/publication-planning.json)。01 从本地 `2c705d09746d293c3d47b02edb42cffb7b47cb9b` 开始，逐行为红 → 绿由 Tester 独立执行；当前尚无 01 功能完成结论。既有烟测属于[新基线验证](../work/judge-prefetch-rebuild/baseline-verification.md)，不替代本票新行为与安全回归。依据来源及旧测试导航见规格 Further Notes。
+规划里程碑已于 2026-10-07 发布并核实：[提交映射](../work/judge-prefetch/publication-planning.json)。01 从本地 `2c705d09746d293c3d47b02edb42cffb7b47cb9b` 开始，逐行为红 → 绿由 Tester 独立执行；云端结论以本节上方最终同版证据为准。既有烟测属于[新基线验证](../work/judge-prefetch-rebuild/baseline-verification.md)，不替代本票新行为与安全回归。依据来源及旧测试导航见规格 Further Notes。

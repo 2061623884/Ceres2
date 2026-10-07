@@ -1,6 +1,6 @@
 # 可可角色判断与政策预检索：总 TASK
 
-- 状态：进行中（规划已发布；01 逐行为 TDD 实施中，02–04 依赖未释放）
+- 状态：进行中（01 云端技术门槛已释放且整体待验收；02 工作树就绪，03–04 等待依赖）
 - 拆分：已批准；功能依赖保持 01 → 02 → 03 → 04
 - 执行授权：2026-10-07 用户已批准从真实 GitHub 基线重新 implement-spec／TDD／Agent Team 实施、可追溯提交与分支推送。前端由用户本地处理；详见 [执行决定](../docs/REBUILD-DECISIONS.md)。
 - 负责人：主会话维护状态、权限与集成候选；各票唯一实现者按交接绑定，专职 Tester 独占验证，集成者独占提交／合并。
@@ -31,9 +31,21 @@
 - 04 维护集成 fixture、版本清单与报告，专职 Tester 唯一执行测试／lint／typecheck／build；业务缺陷回所属票修复，再重新冻结与复验，不能静默把功能延期到 04。
 - 共享入口、schema、Prompt、fixture 和索引的实际文件由主会话先列单一写入负责人，再交接；不得在同一文件上开并行实现者。总 TASK／PROJECT 由主会话协调。
 
+## 2026-10-07 源码保全快照
+
+01 当前源码已独立保存为 WIP：本地 `ec625a27db5418f0851a5da946c384531534309c` 对应远端 `f323d15751c141e0ded4763a3881bbda6355eae3`，精确 tree 均为 `b9a6d62a8c51e3299a76c35359dc6132d8931587`。目标分支为 `ceres2/judge-prefetch-role-entry-wip-20261007`，与集成分支分开；[发布映射](../work/judge-prefetch/publication-role-entry-wip.json)保留核实回执。
+
+这只是该时点可恢复的源码快照，不是通过证明。其两个审查发现随后已修复；最终云端结论见下节。WIP 与后续功能里程碑保持不同分支／提交映射。
+
+## 2026-10-07 01 云端技术交付
+
+01 修复提交 `9f2eff1265c373736cc5f8683c8ccaa680959c30` 已合并为 `46f3fcf47d544e0c0ecead0abc13cb23d63a38b8`。244 个产品／测试源码文件与最终完整 backend **480 passed**、重叠专项 **149 passed**、Pi typecheck/build 和依赖检查的所有前后 manifest 完全一致；[Tester 报告](../work/judge-prefetch-rebuild/01-role-entry-verification.md)及[源码映射](../work/judge-prefetch-rebuild/01-role-entry-final-source.json)。独立 [Standards](../work/judge-prefetch-rebuild/reviews/standards-01-rereview.md)／[Spec](../work/judge-prefetch-rebuild/reviews/spec-01-rereview.md)原发现已闭合。
+
+01 保持“待验收”，云端技术依赖已释放给 02；前端、真实 provider／浏览器及本人验收仍开放。02 工作树为 `../worktrees/02-policy-evidence`，共享产品文件在显式交接后只由 02 维护；集成者继续独占 TASK／PROJECT 和合并／提交，Tester 继续独占所有安装／验证。03–04 仍等待各自功能前置，不以局部通过提前验收。
+
 ## 当前局部支持证据
 
-官方 DeepSeek 五条辅助请求路径的有界支持已集成，详见 [04 支持项记录](ceres2-judge-prefetch-04-candidate-evidence.md#2026-10-07-有界传输支持项)及[Tester 报告](../work/judge-prefetch-rebuild/thinking-transport-verification.md)。主 Pi／validator 两条路径仍待 01 接入及重新验证；04 的功能依赖没有释放。当前只报告有边界的受控结果，不宣称完整功能、独立审查或真实 provider 通过。
+官方 DeepSeek 五条辅助请求路径的有界支持已集成，详见 [04 支持项记录](ceres2-judge-prefetch-04-candidate-evidence.md#2026-10-07-有界传输支持项)及[Tester 报告](../work/judge-prefetch-rebuild/thinking-transport-verification.md)。主 Pi／validator 两条路径随后已由 01 串行接入，并在最终同版专项／完整套件重新验证全部七路径；04 的业务依赖没有释放。当前只报告有边界的受控结果，不宣称完整功能、独立审查或真实 provider 通过。
 
 ## 总体验收与证据
 
@@ -41,4 +53,4 @@
 
 ## 阻塞／下一步
 
-01 独立实现者从已发布规划对应的 worktree 开始逐行为红 → 绿；02／03／04 继续等待各自前置云端交付。官方 DeepSeek thinking 是 04 记录的有界传输支持项，可提前准备但不释放 04 功能验收。真实 provider 采样须先核实配置及有限额度；前端由用户本地接手。各里程碑在本地 commit、授权分支发布、远端完整 SHA 读取与精确 tree 一致性核实后发布；GitHub connector 生成不同提交 SHA 时保留本地／远端 SHA 的持久映射回执，当前尚无本轮功能通过结论。
+02 从已验证 01 集成候选的独立工作树接手政策证据；03／04 继续等待各自前置云端交付。官方 DeepSeek thinking 是 04 记录的有界传输支持项，可提前准备但不释放 04 功能验收。真实 provider 采样须先核实配置及有限额度；前端由用户本地接手。各里程碑在本地 commit、授权分支发布、远端完整 SHA 读取与精确 tree 一致性核实后发布；GitHub connector 生成不同提交 SHA 时保留本地／远端 SHA 的持久映射回执，01 云端技术结论如上；其余功能与外部门槛不继承该结论。

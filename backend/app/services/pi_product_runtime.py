@@ -22,6 +22,7 @@ MAX_TOOL_ROUNDS = 5
 EXPLORATION_SECONDS = 30.0
 LOGGER = logging.getLogger(__name__)
 WORKER = Path(__file__).resolve().parents[3] / 'runtime' / 'pi' / 'dist' / 'worker.js'
+ROLE_BOUNDARY_MESSAGE = '具体订单、退款或退货事项由墨墨处理。这里尚未查询订单资格，也未提交申请；你可以点击角色按钮前往墨墨。'
 
 
 class PiProductRuntime:
@@ -327,11 +328,16 @@ class PiProductRuntime:
             raise AppError(502, 'PI_ANSWER_INVALID', 'Pi 回复不符合事实引用契约') from exc
         if not isinstance(answer, dict):
             raise AppError(502, 'PI_ANSWER_INVALID', 'Pi 回复必须为结构化对象')
+        if 'role_boundary' in answer and type(answer['role_boundary']) is not bool:
+            raise AppError(502, 'PI_ANSWER_INVALID', '售后职责标记必须为布尔值')
         outcome = self._answer_value(answer)
         # A shopping result may carry one independently queried policy. Each
         # reference is validated before the host publishes either result.
         if answer.get('answer_kind') in ('exploration', 'question_selection', 'products', 'comparison', 'purchase_plan') and 'policy_ref' in answer:
             outcome['policy_message'] = self._policy_message(answer['policy_ref'])
+        if answer.get('role_boundary') is True and answer.get('answer_kind') != 'role_boundary':
+            outcome['role_boundary'] = True
+            outcome['role_boundary_message'] = ROLE_BOUNDARY_MESSAGE
         return outcome
 
     def _policy_message(self, ref):
@@ -342,6 +348,12 @@ class PiProductRuntime:
 
     def _answer_value(self, answer):
         kind = answer.get('answer_kind')
+        if kind == 'role_boundary':
+            if not self.route_result or self.route_result['kind'] != 'question':
+                raise AppError(422, 'PI_ROUTE_INVALID', '具体售后说明不能修改购买任务')
+            return {'status': 'completed', 'answer_kind': 'role_boundary',
+                    'message': ROLE_BOUNDARY_MESSAGE, 'role_boundary': True,
+                    'products': []}
         if kind == 'question_selection':
             ref = answer.get('selection_ref')
             if not isinstance(ref, str) or ref not in self.question_selections:

@@ -1,0 +1,682 @@
+{
+  "note": "Historical REDs and failed GREEN attempts are retained. Only the four final checks in 01-role-entry-final-source.json establish the final frozen verdict. Raw evidence remains local.",
+  "runs": [
+    {
+      "label": "01-initial-pi-build",
+      "head": "2c705d09746d293c3d47b02edb42cffb7b47cb9b",
+      "command": [
+        "bash",
+        "-c",
+        "npm run typecheck && npm run build"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 7.453,
+      "pytest_summary": null,
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "9d2bfec511e65c4881159d4e0a03990245a25ba52d027b293c4413e63d080bb6",
+      "record_sha256": "0f6f26ee19f64387729ab953a84e578a2508941662055ecd5a42809212491f48",
+      "output_sha256": "e2df98651515bc2bdf7ded57bfdb21a18a37cf1c97b5b8b2ffc76b2efce266d0"
+    },
+    {
+      "label": "01-role-entry-red-01",
+      "head": "2c705d09746d293c3d47b02edb42cffb7b47cb9b",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_role_entry_public.py::test_coco_judges_only_momo_need_and_waits_for_explicit_switch"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 4.679,
+      "pytest_summary": "1 failed in 3.16s",
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "9c044c2fa7176a615f1e391c2d3adbc3edfa2393005f4e6285e1fae9d4691cf8",
+      "record_sha256": "ad9f0b2874425bf893c7cb1d86ba71a20545e9c9e21f7ef9f20e5474bd893d69",
+      "output_sha256": "498ddb26b0f3481cc99e049be177b13492a2ec858e9a7b2e8264b9e4d6b1577b"
+    },
+    {
+      "label": "01-role-entry-green-01",
+      "head": "2c705d09746d293c3d47b02edb42cffb7b47cb9b",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_role_entry_public.py::test_coco_judges_only_momo_need_and_waits_for_explicit_switch"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 2.373,
+      "pytest_summary": "1 failed in 1.33s",
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "44c9f078f054bfad2f87c0db66104aaedc00b1021d7df16d030666b72a416578",
+      "record_sha256": "070999df5a83d9f0e9c2d0e0393e38bf65c776ef35c2cecc14787c010fb7d4c4",
+      "output_sha256": "00b275fca8455912bba9e41fd31fb4377fee27a8b79a18df5fb2e4277756c7fb"
+    },
+    {
+      "label": "01-role-entry-green-01b",
+      "head": "2c705d09746d293c3d47b02edb42cffb7b47cb9b",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_role_entry_public.py::test_coco_judges_only_momo_need_and_waits_for_explicit_switch"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 2.292,
+      "pytest_summary": "1 passed in 1.26s",
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "396e4d1b514b18e105c6307f0427993aefc04a2e7ededccb9b315cf86bbcd1b9",
+      "record_sha256": "2068f93f7154309225a4ad386aa2fd49a44114848967ca9cd87901ae3cfb0cf1",
+      "output_sha256": "eb9b4f1a944ad55440ef124081b12f44ca37e01cf23ff227ce3b533a939260bc"
+    },
+    {
+      "label": "01-role-entry-red-02",
+      "head": "2c705d09746d293c3d47b02edb42cffb7b47cb9b",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_role_entry_public.py::test_momo_text_goes_directly_to_langgraph_and_only_button_returns"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 3.043,
+      "pytest_summary": "4 failed in 1.85s",
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "19b7a6d8220e8e617408880a2af4b73f45d615a27e8502c7d602620fbb6dbcab",
+      "record_sha256": "fa1af5219b1c52d970bf64af7d4a8f71ca439eeb8505aa8ed517a7e1a2e1808e",
+      "output_sha256": "fafa14ecb442e1a88a483a36d301b767c9da7a81c43e275108af2590eca2e0c3"
+    },
+    {
+      "label": "01-role-entry-green-02",
+      "head": "2c705d09746d293c3d47b02edb42cffb7b47cb9b",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_role_entry_public.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 3.186,
+      "pytest_summary": "5 passed in 2.04s",
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "fe7171045bd82cc3e0ea797071c233e23cdcff52c7ea3c8f01da5f7b383de954",
+      "record_sha256": "1ed96b45ce99712bcbfa3ad32161281fc87e30ae2690bfda94650210afcf9df9",
+      "output_sha256": "004b1d199d246a30c1d3cb9dabe086bdfe7b6776cf26f2a597cfd8ef8cda3773"
+    },
+    {
+      "label": "01-role-entry-red-03",
+      "head": "2c705d09746d293c3d47b02edb42cffb7b47cb9b",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_role_entry_public.py::test_first_pi_request_keeps_task_question_and_entire_mixed_second_choice"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 4.023,
+      "pytest_summary": "1 failed in 2.91s",
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "05408300b5daa49b639f6c0bb47a81f5bc239c92be24f0d9208a32fb210149cf",
+      "record_sha256": "100f156d2707d8874663fe642d29e71567dd6b5c32730d3db01f75ffcb1841f3",
+      "output_sha256": "8670db7c79b846fbf51af529c6e33a7ede6c93b56f691d9e82fd1b8bd9737329"
+    },
+    {
+      "label": "01-role-entry-build-03",
+      "head": "2c705d09746d293c3d47b02edb42cffb7b47cb9b",
+      "command": [
+        "bash",
+        "-c",
+        "npm run typecheck && npm run build"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 7.15,
+      "pytest_summary": null,
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "97441cdaa7690419244f36e6efca6c9a12915286db5327319c39069a647c1f4c",
+      "record_sha256": "ef9cee6b66f0a91573c9136ad4897b7bf948edd93955f1e0e9933868115ee77a",
+      "output_sha256": "e2df98651515bc2bdf7ded57bfdb21a18a37cf1c97b5b8b2ffc76b2efce266d0"
+    },
+    {
+      "label": "01-role-entry-green-03",
+      "head": "2c705d09746d293c3d47b02edb42cffb7b47cb9b",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_role_entry_public.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 4.528,
+      "pytest_summary": "6 passed in 3.33s",
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "97441cdaa7690419244f36e6efca6c9a12915286db5327319c39069a647c1f4c",
+      "record_sha256": "74c87fe91e546fbad1f0c34e07d6ddfe579ffe14dce31f5bc0367cc3bc0d9a7e",
+      "output_sha256": "ab331e4b96a1e5ceb26163a46e78b14d09d4328c37028d8e68ac6c0f56e2bbfa"
+    },
+    {
+      "label": "01-role-entry-red-04",
+      "head": "2c705d09746d293c3d47b02edb42cffb7b47cb9b",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_role_entry_public.py::test_non_transfer_and_entry_failures_continue_original_pi_once"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 5.054,
+      "pytest_summary": "2 failed, 2 passed in 4.01s",
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "019017d0f0c06aae6b7e6bd72db0373dde5eb7dcacba71fb26ffdf0f97884be7",
+      "record_sha256": "d0bd5b5e203203ffaa2dc29aca35d6e810789f8d278da6d41b8d68fc70853d1f",
+      "output_sha256": "2acb8203bd36a9f37a592936dfc9434ca4117e5e20dab0cc041d9f4ace36d376"
+    },
+    {
+      "label": "01-role-entry-green-04",
+      "head": "2c705d09746d293c3d47b02edb42cffb7b47cb9b",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_role_entry_public.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 8.701,
+      "pytest_summary": "10 passed in 7.45s",
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "dcfaf6013028f4bfd43e30cb85001ee01b194c90868287042d1d5f1ba32b502a",
+      "record_sha256": "b6e1f146af8597dc15dabd2d3e654243d52d48c55ee6be4b870c81c0052a2b2b",
+      "output_sha256": "bb7a6bc3d88641ca7e9be80b39e02ad67e860b36459a1ce85015cdb3c601c155"
+    },
+    {
+      "label": "01-role-entry-red-05",
+      "head": "2c705d09746d293c3d47b02edb42cffb7b47cb9b",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_role_entry_public.py::test_role_button_never_picks_up_pending_or_accepted_text"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 2.84,
+      "pytest_summary": "2 failed in 1.76s",
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "8baeb81ead278dab0907e2c784a0cd5a44a2e9c483d5a5cf015a69feb642962e",
+      "record_sha256": "e5a6e5f2b99aa7dbe99efafd9a89ebf6e74c4fa4962993361d9e3227dbb87c5b",
+      "output_sha256": "509ddbf5c52220c9156d31973ba2767ebddfc8bec878c6b8d07d2943289634a2"
+    },
+    {
+      "label": "01-role-entry-green-05",
+      "head": "2c705d09746d293c3d47b02edb42cffb7b47cb9b",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_role_entry_public.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 8.655,
+      "pytest_summary": "12 passed in 7.35s",
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "470b129321196d13e6237d64cbf81f15a7bf4d42b6c7133c697a4886015c1983",
+      "record_sha256": "82c80e80506cfdeebeecca4a236e3f8997f652967323f2d1d84fbc6b571f01a4",
+      "output_sha256": "a6135bae3bdabdfe26cbd892ab379e81262db7948cea4bf5f9c9f853c5a725fa"
+    },
+    {
+      "label": "01-role-entry-red-06",
+      "head": "2c705d09746d293c3d47b02edb42cffb7b47cb9b",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_role_entry_public.py::test_specific_order_fallback_explains_boundary_with_explicit_typed_entry"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 3.283,
+      "pytest_summary": "1 failed in 2.26s",
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "33df82afbb955520b9335e50ef4da2bfdfe7a5da1931401e2138eb3d9e1a7fb8",
+      "record_sha256": "7e1a98e593fa4142335047f5f3ad870f8fd2ed7a4bfbb70e99fdaf62dcd30e75",
+      "output_sha256": "4f6d3b1c684d8e2dfd744b6ed113c6bb746c15f14f0554625e0bdfcd058d0e5a"
+    },
+    {
+      "label": "01-role-entry-green-06",
+      "head": "2c705d09746d293c3d47b02edb42cffb7b47cb9b",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_role_entry_public.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 9.593,
+      "pytest_summary": "13 passed in 8.28s",
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "f7594f3220597ed5b1b5c903536a387d73212c37dc7194f7409bd2dc18895755",
+      "record_sha256": "0108ca23bc4a0b5ee174fcab987d0c7133646bf81063a04aec5128f45abc16ea",
+      "output_sha256": "13f15a5033b0636a422c422e308a23b4e0a0c79c1d5d371bb5e40cfdae00f6e9"
+    },
+    {
+      "label": "01-role-entry-red-07",
+      "head": "2c705d09746d293c3d47b02edb42cffb7b47cb9b",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_legacy_navigation_public.py::test_unfinished_legacy_navigation_explicitly_expires_without_rejudging"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 3.782,
+      "pytest_summary": "11 failed in 2.49s",
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "98b5a8387d40bbc66f62cd4c066cc2d23830509fb95f2dda225025dd22c3fe29",
+      "record_sha256": "fd6811316a55bc5118fdf1d41e9dbe2f49a8c1b8035f08b1051c34b8ba89c27f",
+      "output_sha256": "fe2c62c292bd9284f2fb14c02822bd95546ed78f74ce968c05fa62d8e56d444d"
+    },
+    {
+      "label": "01-role-entry-green-07",
+      "head": "2c705d09746d293c3d47b02edb42cffb7b47cb9b",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_role_entry_public.py",
+        "tests/test_judge_legacy_navigation_public.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 11.125,
+      "pytest_summary": "24 passed in 9.48s",
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "146f7a67967085b764bc8ca92cac8ef540ac87f06de0e3663e2b42be145d6bd5",
+      "record_sha256": "9d4e6393672fdd23606ff26ef6820e75e2b5fa598358208e22bf1abed71956b3",
+      "output_sha256": "1dd671e1a18f2f1a92ebe0c7afcc5153254c8cfe0c1bb09ee0c3b289d7ed545d"
+    },
+    {
+      "label": "01-role-entry-red-08",
+      "head": "2c705d09746d293c3d47b02edb42cffb7b47cb9b",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_legacy_navigation_public.py::test_completed_legacy_cart_receipt_replays_without_navigation_or_duplicate_write"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 4.457,
+      "pytest_summary": "2 failed in 3.33s",
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "4bbb6d7778cd3b325ec51f536b9e6667b9823e32afdfca814d66c1070630c03c",
+      "record_sha256": "474f7a70bdad73b9b63c522b6e66ed3e79f298dae0b701f44e37e50224d918e6",
+      "output_sha256": "185f1c2d019190b6c2c5405f5b153a11d7f1aab97eb51469d5e171d369bdd16e"
+    },
+    {
+      "label": "01-role-entry-green-08",
+      "head": "2c705d09746d293c3d47b02edb42cffb7b47cb9b",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_role_entry_public.py",
+        "tests/test_judge_legacy_navigation_public.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 13.045,
+      "pytest_summary": "26 passed in 11.38s",
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "d098be1d799281b117f0bb1315b541c3d052a5ab30245c3803f27402ae28e182",
+      "record_sha256": "9f9bf7a9c24995ed9a7a790b3dc2bb02d1773a79873937e3a69183efcc36766c",
+      "output_sha256": "b3750509a6c70d273a6c3017e5e5a776d81fe057365b6646217e591e3b9a1b13"
+    },
+    {
+      "label": "01-transport-integrated-build",
+      "head": "a676f3ecf6ed4bd13052852cc7a78e41bc070afe",
+      "command": [
+        "bash",
+        "-c",
+        "npm run typecheck && npm run build"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 7.01,
+      "pytest_summary": null,
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "704fd723be29157ea391a073dc4df3b0817f2bb3de306d2ee231e4923d8dbb32",
+      "record_sha256": "efea7105553df406fa7be7e89d64489cecdc6979436144023de511a532975a82",
+      "output_sha256": "e2df98651515bc2bdf7ded57bfdb21a18a37cf1c97b5b8b2ffc76b2efce266d0"
+    },
+    {
+      "label": "01-transport-integrated-green",
+      "head": "a676f3ecf6ed4bd13052852cc7a78e41bc070afe",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_official_deepseek_thinking.py",
+        "tests/test_judge_role_entry_public.py",
+        "tests/test_judge_legacy_navigation_public.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 20.256,
+      "pytest_summary": "46 passed in 18.65s",
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "704fd723be29157ea391a073dc4df3b0817f2bb3de306d2ee231e4923d8dbb32",
+      "record_sha256": "9c2e44220bc5117b4d25a925e186f81b278db2821caa0818af9e20cad91b0b81",
+      "output_sha256": "cb1cb2972094dced43d833610e7f30daa991aadf8fb8ebaf4e918fd9363be66c"
+    },
+    {
+      "label": "01-role-entry-red-09",
+      "head": "a676f3ecf6ed4bd13052852cc7a78e41bc070afe",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_role_entry_public.py::test_public_navigation_schema_types_ready_switch_and_real_entry_diagnostics"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 2.693,
+      "pytest_summary": "1 failed in 1.63s",
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "66efb9eb752817c6ee5bd754d5e93c1b6a3509a37409b2e389e6aab79a3332ba",
+      "record_sha256": "086f3ae8ab5e43643bbef3d02664cc21f48ad9959109eebaad4f81676d6fe0a4",
+      "output_sha256": "32a32fef7e9c592589070f06a74450a3a7e863b89e9257fc93efa854db06edd1"
+    },
+    {
+      "label": "01-focused-regression",
+      "head": "a676f3ecf6ed4bd13052852cc7a78e41bc070afe",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_role_entry_public.py",
+        "tests/test_judge_legacy_navigation_public.py",
+        "tests/test_next_navigation_public.py",
+        "tests/test_next_context_public.py",
+        "tests/test_next_explicit_return_public.py",
+        "tests/test_next_shopping_return_public.py",
+        "tests/test_next_guide_gate_public.py",
+        "tests/test_next_kev_wire.py",
+        "tests/test_next_snack_public.py",
+        "tests/test_next_snack_safety_public.py",
+        "tests/test_next_drinks_public.py",
+        "tests/test_comparison_public.py",
+        "tests/test_comparison_safety.py",
+        "tests/test_guide_clarification_context.py",
+        "tests/test_purchase_confirmations.py",
+        "tests/test_official_deepseek_thinking.py"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 134.18,
+      "pytest_summary": "1 failed, 141 passed in 129.73s (0:02:09)",
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "1f1c3269b9b7f4f88a0994464f99ddad0aab19c15586db3dc4f7cc8fb7f8c171",
+      "record_sha256": "d9d8d565e4630461dc1b6f1a656f5595fc8cfe37a3deb6a8f75a0657463ee655",
+      "output_sha256": "d2959dbb1ee24be557d12db7670fd69c9aff570b1ec35091b50af588c27e1855"
+    },
+    {
+      "label": "01-review-diagnostics-red-01",
+      "head": "ec625a27db5418f0851a5da946c384531534309c",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_role_entry_public.py::test_entry_failure_keeps_correlated_sanitized_causes"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 2.517,
+      "pytest_summary": "2 failed in 1.50s",
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "1197e21a6c37176119f76baae14fe37bf6c911f53c885e37d262d342f948a596",
+      "record_sha256": "043a9775e1f3bfbc34c9fef154ac6c27f9e914c5539d6c212a7515a51ce9d685",
+      "output_sha256": "9b3d37232bdfdc7ae6d3b95768be7a450475c0b113e39c752dff539b27e2a475"
+    },
+    {
+      "label": "01-review-diagnostics-green-01",
+      "head": "ec625a27db5418f0851a5da946c384531534309c",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_role_entry_public.py::test_entry_failure_keeps_correlated_sanitized_causes",
+        "tests/test_judge_role_entry_public.py::test_non_transfer_and_entry_failures_continue_original_pi_once"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 6.039,
+      "pytest_summary": "6 passed in 5.00s",
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "e0259f7b244bf0585ea326f78a0ea460aa8c16a5dc6f3f2b48846b449dd5a7b3",
+      "record_sha256": "9679027434b56a13d9debac96dadf8da1c9a2f29e95598f6304982c93b48b151",
+      "output_sha256": "8114846f18b72d082d814789c9e180a9e3e86a5a89a90b805bc60983b0968254"
+    },
+    {
+      "label": "01-review-composition-red-01",
+      "head": "ec625a27db5418f0851a5da946c384531534309c",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_role_entry_public.py::test_mixed_fallback_retains_shopping_and_explicit_order_boundary"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 4.136,
+      "pytest_summary": "2 failed in 3.15s",
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "47216099229dd81743782fe6ef0c652179dc6c79862ab4503e2a4262a9b0c521",
+      "record_sha256": "d4e779c5c4931bb2136ae9d5ba0e197989293c9d824e8c15943289379a67056e",
+      "output_sha256": "e841aa1460cd901ff1943f935aad644e2013c39c9112639eaa4e1079adddaf8b"
+    },
+    {
+      "label": "01-review-composition-green-01",
+      "head": "ec625a27db5418f0851a5da946c384531534309c",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_role_entry_public.py::test_mixed_fallback_retains_shopping_and_explicit_order_boundary",
+        "tests/test_judge_role_entry_public.py::test_specific_order_fallback_explains_boundary_with_explicit_typed_entry",
+        "tests/test_judge_role_entry_public.py::test_first_pi_request_keeps_task_question_and_entire_mixed_second_choice"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 6.087,
+      "pytest_summary": "4 passed in 5.13s",
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "81ade5c8888b9d0e01b0f081c0b479fcd76a59f2f9d483cdba663baf90d6f9b5",
+      "record_sha256": "36d64b479bea0caac5fd472ed51f2cbea1842cbf1346bc452cd8c6691d1c9d23",
+      "output_sha256": "9c1b83f050558a9f350612f799dcec05c314e27f4cc1cb2e66ea926d5aa622e0"
+    },
+    {
+      "label": "01-review-boundary-type-red-01",
+      "head": "ec625a27db5418f0851a5da946c384531534309c",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_role_entry_public.py::test_role_boundary_marker_requires_an_actual_boolean"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 4.734,
+      "pytest_summary": "3 failed in 3.81s",
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "827ba6e7714e3a0b698a1a2afcb05edb902bd573b9fbe34f0ea7774ca8c09e7f",
+      "record_sha256": "9d5b2142d830b7173cf3063c58ce5a13faa4af3ca9dc4d3f8046dbfbc109bfed",
+      "output_sha256": "3ab49c6e2fb106c599dd369fa349e34c603aaa23b344afef39a9d030bfe08239"
+    },
+    {
+      "label": "01-review-boundary-type-green-01",
+      "head": "ec625a27db5418f0851a5da946c384531534309c",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_role_entry_public.py::test_role_boundary_marker_requires_an_actual_boolean",
+        "tests/test_judge_role_entry_public.py::test_mixed_fallback_retains_shopping_and_explicit_order_boundary"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 6.724,
+      "pytest_summary": "5 passed in 5.68s",
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "f91d0b7b0fd95e3d0608cd06e562ab245c10c6458f3c425df046cf517d1b0fc2",
+      "record_sha256": "15a7022347bccb4e9d32a9d23d6b7e45d7b28cdc6a6f80fd9d299ec7b153c9ca",
+      "output_sha256": "b4dbd998b57975fcf82cc8a22522d8f6550058dfa58d2dc9663b31a65071eb08"
+    },
+    {
+      "label": "01-review-final-focused",
+      "head": "ec625a27db5418f0851a5da946c384531534309c",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_role_entry_public.py",
+        "tests/test_judge_legacy_navigation_public.py",
+        "tests/test_next_navigation_public.py",
+        "tests/test_next_context_public.py",
+        "tests/test_next_explicit_return_public.py",
+        "tests/test_next_shopping_return_public.py",
+        "tests/test_next_guide_gate_public.py",
+        "tests/test_next_kev_wire.py",
+        "tests/test_next_snack_public.py",
+        "tests/test_next_snack_safety_public.py",
+        "tests/test_next_drinks_public.py",
+        "tests/test_comparison_public.py",
+        "tests/test_comparison_safety.py",
+        "tests/test_guide_clarification_context.py",
+        "tests/test_purchase_confirmations.py",
+        "tests/test_official_deepseek_thinking.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 140.192,
+      "pytest_summary": "149 passed in 135.26s (0:02:15)",
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "05e4e9ca1d0cabdd7169ad3d56a83003f8edc3ea4daa330f9a30738c8c01e09f",
+      "record_sha256": "a721a894d5282768400e460b915f07baaae63b04f8f5b880a5c5dbf6ff06f6cc",
+      "output_sha256": "86950aff0cfe9ed75fbc0897dd170841ffb3a209cc6d096de1015849aece4d72"
+    },
+    {
+      "label": "01-review-final-dependencies",
+      "head": "ec625a27db5418f0851a5da946c384531534309c",
+      "command": [
+        "bash",
+        "-c",
+        "uv pip check --python backend/.venv/bin/python && backend/.venv/bin/python -c 'from importlib.metadata import version; from pathlib import Path; pairs=[line.split(\"==\") for line in Path(\"backend/requirements.lock\").read_text().splitlines() if line and not line.startswith(\"#\")]; mismatches=[(name,expected,version(name)) for name,expected in pairs if version(name)!=expected]; assert not mismatches,mismatches; print(f\"All {len(pairs)} locked Python package versions match\")' && cd runtime/pi && npm ls --depth=0"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.455,
+      "pytest_summary": null,
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "05e4e9ca1d0cabdd7169ad3d56a83003f8edc3ea4daa330f9a30738c8c01e09f",
+      "record_sha256": "2e5a65b250fe1c02eca3687321cf42b9d1f60fb6285a691fc78cc24520460e10",
+      "output_sha256": "9d168ad49b9faefc3753488d035c54ffc0f2fce8bd99219164e583709990dbb9"
+    },
+    {
+      "label": "01-review-final-pi-build",
+      "head": "ec625a27db5418f0851a5da946c384531534309c",
+      "command": [
+        "bash",
+        "-c",
+        "npm run typecheck && npm run build"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 7.351,
+      "pytest_summary": null,
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "05e4e9ca1d0cabdd7169ad3d56a83003f8edc3ea4daa330f9a30738c8c01e09f",
+      "record_sha256": "e70fb6e49ca2a01194174058503d989bbbfe22bc6b6fe9ae080b09fac12737d5",
+      "output_sha256": "e2df98651515bc2bdf7ded57bfdb21a18a37cf1c97b5b8b2ffc76b2efce266d0"
+    },
+    {
+      "label": "01-review-final-backend-full",
+      "head": "ec625a27db5418f0851a5da946c384531534309c",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 668.007,
+      "pytest_summary": "480 passed in 652.46s (0:10:52)",
+      "source_changes_during_run": [],
+      "source_manifest_sha256": "05e4e9ca1d0cabdd7169ad3d56a83003f8edc3ea4daa330f9a30738c8c01e09f",
+      "record_sha256": "cf873ba444666e0911a5f6e91f7f22c7712524ec01ee322944f130831ff94217",
+      "output_sha256": "28a6fbb714034ebe21382ae6c20f2f9865df2930339709a2e984643f82f8d4b1"
+    }
+  ]
+}

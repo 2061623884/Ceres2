@@ -1,8 +1,10 @@
 """Installed SDK wire contracts with synthetic, offline provider transports."""
 import json
 import os
+import selectors
 import subprocess
 import threading
+import time
 from contextlib import contextmanager
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -228,3 +230,140 @@ def test_expression_and_validator_disable_thinking_on_actual_sdk_wire(
     assert all(frame['usage_source'] == 'provider' and frame['input_tokens'] == 3
                and frame['output_tokens'] == 1 and frame['cache_read_tokens'] == 0
                and frame['cache_write_tokens'] is None for frame in usage)
+
+
+@contextmanager
+def _main_pi_server():
+    requests = []
+
+    class Handler(BaseHTTPRequestHandler):
+        def log_message(self, *_args):
+            pass
+
+        def do_POST(self):
+            body = json.loads(self.rfile.read(int(self.headers['Content-Length'])))
+            requests.append(body)
+            if len(requests) == 1:
+                delta = {'role': 'assistant', 'tool_calls': [{
+                    'index': 0, 'id': 'general-check', 'type': 'function', 'function': {
+                        'name': 'validate_general_text', 'arguments': '{"messages":["你好。"]}'}}]}
+                finish = 'tool_calls'
+            elif len(requests) == 2:
+                delta = {'role': 'assistant',
+                         'content': '{"merchant_claims":false,"execution_claims":false}'}
+                finish = 'stop'
+            else:
+                delta = {'role': 'assistant',
+                         'content': '{"status":"completed","answer_kind":"general","general_ref":"general-wire"}'}
+                finish = 'stop'
+            chunks = [
+                {'choices': [{'index': 0, 'delta': delta, 'finish_reason': None}]},
+                {'choices': [{'index': 0, 'delta': {}, 'finish_reason': finish}],
+                 'usage': {'prompt_tokens': 3, 'completion_tokens': 1, 'total_tokens': 4}},
+            ]
+            data = ''.join('data: ' + json.dumps({
+                'id': 'controlled-pi-stream', 'object': 'chat.completion.chunk',
+                'created': 0, 'model': body['model'], **chunk}) + '\n\n' for chunk in chunks)
+            encoded = (data + 'data: [DONE]\n\n').encode()
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/event-stream')
+            self.send_header('Content-Length', str(len(encoded)))
+            self.end_headers()
+            self.wfile.write(encoded)
+
+    server = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        yield f'http://127.0.0.1:{server.server_port}', requests
+    finally:
+        server.shutdown()
+        server.server_close()
+        thread.join(timeout=2)
+
+
+@pytest.mark.parametrize('base_url,official', HOSTS)
+def test_main_pi_and_validator_disable_thinking_on_actual_sdk_wire(
+        tmp_path, base_url, official):
+    from app.prompts.experience import keke_modules
+
+    script = Path(__file__).resolve().parents[2] / 'runtime/pi/dist/worker.js'
+    assert script.is_file(), 'Tester must build this worktree before the wire test'
+    preload = tmp_path / 'main-loopback-fetch.mjs'
+    preload.write_text(LOOPBACK_PRELOAD)
+    frames = []
+    with _main_pi_server() as (loopback, requests):
+        child = subprocess.Popen(['node', '--import', str(preload), str(script)],
+            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=0,
+            env={**{key: os.environ[key] for key in ('PATH', 'NODE_OPTIONS') if key in os.environ},
+                 'CERES_WIRE_BASE': base_url, 'CERES_WIRE_LOOPBACK': loopback})
+        selector = selectors.DefaultSelector()
+        selector.register(child.stdout, selectors.EVENT_READ)
+        input_sequence = 0
+
+        def send(frame):
+            nonlocal input_sequence
+            input_sequence += 1
+            child.stdin.write((json.dumps({**frame, 'run_id': 'main-wire',
+                'sequence': input_sequence}, ensure_ascii=False) + '\n').encode())
+            child.stdin.flush()
+
+        try:
+            send({'type': 'start', 'message': '打个招呼', 'categories': [],
+                  'context': {'role': 'keke', 'has_active_task': False, 'general_history': []},
+                  'promptModules': keke_modules(), 'maxToolRounds': 5, 'timeoutMs': 8000,
+                  'model': {'id': 'controlled-main', 'baseUrl': base_url,
+                            'apiKey': 'synthetic-not-a-real-key'}})
+            pending = b''
+            deadline = time.monotonic() + 12
+            terminal = False
+            while not terminal and time.monotonic() < deadline:
+                if not selector.select(timeout=0.2):
+                    continue
+                chunk = os.read(child.stdout.fileno(), 65536)
+                if not chunk:
+                    break
+                pending += chunk
+                while b'\n' in pending:
+                    line, pending = pending.split(b'\n', 1)
+                    frame = json.loads(line)
+                    frames.append(frame)
+                    if frame['type'] == 'tool_call':
+                        assert frame['name'] == 'validate_general_text'
+                        assert frame['arguments'] == {'messages': ['你好。']}
+                        send({'type': 'tool_result', 'id': frame['id'],
+                              'result': {'general_ref': 'general-wire'}})
+                    if frame['type'] in ('result', 'error'):
+                        terminal = True
+                        break
+        finally:
+            selector.close()
+            if child.poll() is None:
+                child.kill()
+            child.wait(timeout=5)
+            child.stdin.close()
+            child.stdout.close()
+            child.stderr.close()
+
+    assert frames[-1]['type'] == 'result' and frames[-1]['status'] == 'completed', frames
+    assert json.loads(frames[-1]['answer'])['general_ref'] == 'general-wire'
+    verdicts = [frame for frame in frames if frame['type'] == 'general_validation']
+    assert len(verdicts) == 1 and verdicts[0]['approved'] is True
+    assert len(requests) == 3
+    for index, (body, limit) in enumerate(zip(requests, (1536, 256, 1536))):
+        _assert_profile(body, official)
+        assert body['model'] == 'controlled-main'
+        assert [body[key] for key in ('max_tokens', 'max_completion_tokens') if key in body] == [limit]
+        assert body['stream'] is True
+        if index == 1:
+            assert not body.get('tools')
+            assert 'response_format' not in body
+        else:
+            assert any(tool['function']['name'] == 'validate_general_text' for tool in body['tools'])
+            if official:
+                assert body['response_format'] == {'type': 'json_object'}
+            else:
+                assert 'response_format' not in body
+    assert requests[2]['messages'][-1]['role'] == 'tool'
+    assert json.loads(requests[2]['messages'][-1]['content']) == {
+        'general_ref': 'general-wire', 'approved': True}

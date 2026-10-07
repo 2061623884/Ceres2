@@ -1,9 +1,9 @@
 # 02：政策预检索与同 Pi 回答
 
-- 状态：待开始
+- 状态：待开始（01 云端技术依赖已释放，独立工作树已准备）
 - 拆分：已批准；功能依赖保持 01 → 02 → 03 → 04
 - 执行授权：2026-10-07 用户已授权从 GitHub 基线重新 implement-spec／TDD／Agent Team 实施、可追溯提交及分支推送；前置功能与专职 Tester 门槛保留。
-- 负责人：主会话绑定本票唯一实现者／worktree；专职 Tester 执行所有验证命令，Standards／Spec 独立只读审查。共享文件按 [执行决定](../docs/REBUILD-DECISIONS.md#4-写入所有权与可并行支持项) 交接。
+- 负责人：02 唯一实现者接手工作树 `../worktrees/02-policy-evidence`、分支 `ceres2/judge-prefetch-02-policy-evidence-20261007`；专职 Tester 执行所有验证命令，Standards／Spec 独立只读审查。共享文件按 [执行决定](../docs/REBUILD-DECISIONS.md#4-写入所有权与可并行支持项) 交接。
 - 上级：[总 TASK](ceres2-judge-prefetch.md)；依据：[规格](../docs/plans/ceres2-judge-prefetch-spec.md)。本票不得继承旧版通过成绩。
 
 ## 2026-10-07 当前执行差异
@@ -21,7 +21,7 @@
 
 ## Blocked by
 
-[01 可可入口与按钮返回](ceres2-judge-prefetch-01-role-entry.md)：需要其可可准入与安全首次上下文，避免预取被旧能力裁剪丢失。交付阻塞 [03 同范围复用与安全补查](ceres2-judge-prefetch-03-query-reuse.md)。2026-10-07 实施授权已具备；仍须前票交付。
+[01 可可入口与按钮返回](ceres2-judge-prefetch-01-role-entry.md)：需要其可可准入与安全首次上下文，避免预取被旧能力裁剪丢失。交付阻塞 [03 同范围复用与安全补查](ceres2-judge-prefetch-03-query-reuse.md)。2026-10-07 前票云端技术门槛已交付，详见 01 最终验证与两轴复审；用户本地外部验收仍开放。
 
 ## 数据与 fixture
 
@@ -43,4 +43,6 @@
 
 ## 下一步与证据
 
-等待 01 云端契约／受控证据交付；验证接缝沿用公开 HTTP/SSE、typed UI 和模型边界观测。当前为规划导入，无本轮实现或测试结果。
+从 01 集成提交 `46f3fcf47d544e0c0ecead0abc13cb23d63a38b8` 的同一源码与后续状态文档接手。验证接缝沿用公开 HTTP/SSE、typed UI 和模型边界观测；本票尚无实现或测试结果。
+
+01 Spec 复审明确向本票移交既有完整性缺口：waiting + 有效 policy_ref + 售后职责边界必须同时保留澄清问题、政策证据及显式入口，不能用仅 completed 的五类结果附加门槛丢弃政策；该缺口在基线已存在，不作为 01 新回归。其他合法主结果（包括 general/history/memory）与政策证据组合按当前本票完整请求契约验证，不能把政策事实写入闲聊历史来绕过引用权威。

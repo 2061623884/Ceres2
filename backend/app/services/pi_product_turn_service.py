@@ -116,14 +116,15 @@ class PiProductTurnService:
         from app.services.product_question_service import ProductQuestionService
         question_context = ProductQuestionService(db, self.owner_id).projection(session_id)['active_question']
         dialogue_context = bounded_dialogue_context(db, self.owner_id, session_id, anchor, run_id)
-        context = {**dialogue_context, 'capability':body.get('_route_capability'), 'active_question':question_context, 'memory_list_refs':previous_guide_memory_refs(db, self.owner_id, session_id), 'memory':memory_context, 'has_active_task': task is not None, 'general_history': [row.content for row in reversed(history)]}
+        from app.services.guide_lifecycle_service import task_projection
+        current_task = {**task_projection(db, session), 'plan': json.loads(task.plan_json) if task.plan_json else None} if task else None
+        context = {**dialogue_context, 'role':'keke', 'current_task':current_task, 'active_question':question_context, 'memory_list_refs':previous_guide_memory_refs(db, self.owner_id, session_id), 'memory':memory_context, 'has_active_task': task is not None, 'general_history': [row.content for row in reversed(history)]}
         db.rollback()
         from app.services.comparison_service import ComparisonService
         comparison_snapshot_refs = [card['ref'] for card in ComparisonService(db, self.owner_id).current(session_id)]
         context['comparison_candidates'] = [card for card in ComparisonService(db, self.owner_id).current(session_id, body.get('view_context')) if card['ref'] in body.get('displayed_candidate_refs', [])]
         db.rollback()
         from app.services.history_service import HistoryService, HistoryTurn
-        from app.services.guide_lifecycle_service import task_projection
         history_turn = HistoryTurn(db, self.owner_id, session_id, body['message'])
         from app.services.product_question_service import ProductQuestionService
         questions = ProductQuestionService(db, self.owner_id)
@@ -222,6 +223,8 @@ class PiProductTurnService:
             cards = ComparisonService(db, self.owner_id).publish(session_id, outcome['products'], assistant_id, body.get('view_context')) if status == 'completed' and outcome.get('comparison') else []
             if outcome.get('policy_message'):
                 outcome['messages'] = [outcome['message'], outcome['policy_message']]
+            if outcome.get('role_boundary_message'):
+                outcome['messages'] = [*outcome.get('messages', [outcome['message']]), outcome['role_boundary_message']]
             public_messages = [{'message_id': assistant_id if index == 0 else f'msg-{uuid4().hex}', 'content': content} for index, content in enumerate(outcome.get('messages', [outcome['message']]))]
             db.add(GuideMessage(message_id=f'msg-{uuid4().hex}', session_id=session_id, owner_id=self.owner_id, task_id=anchor[1], sequence=sequence + 1, role='user', kind='text', content=body['message'], request_id=body['request_id']))
             for index, message in enumerate(public_messages):
@@ -251,6 +254,14 @@ class PiProductTurnService:
                 'no_matches': outcome.get('no_matches', False),
                 'model_mode': 'live', 'business_data_mode': 'demo',
             }
+            if outcome.get('role_boundary'):
+                from app.schemas.navigation import RoleSwitchAction, SwitchRequest
+                from app.services.navigation_service import receipt as route_receipt
+                route = json.loads(route_receipt(db, session_id, body['request_id']).result_json)
+                result['navigation_action'] = RoleSwitchAction(
+                    session_id=session_id,
+                    request=SwitchRequest(opening_id=route['opening_id'], target_role='momo', accept=True),
+                ).model_dump()
             result.update(questions.projection(session_id))
             receipt.status = {'stopped': 'stopped', 'waiting': 'waiting_clarification', 'deadline': 'protected', 'tool_budget': 'protected'}.get(status, 'completed')
             if status == 'completed' and (purchase or history_selection) and result['plan']:

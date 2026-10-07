@@ -42,14 +42,14 @@
 
 ## 2026-10-07 有界传输支持项
 
-- 已集成局部支持提交 `4944f7ea5ec02f1443685e6665154347ba9540d8`，集成 merge `37f3ad88bdb7f1bf84aa83e0c78a9a67b6e2d3ea`。其产品源码与 Tester 冻结六文件及完整受控 source map 一致。
+- 已集成局部支持提交 `4944f7ea5ec02f1443685e6665154347ba9540d8`，集成 merge `37f3ad88bdb7f1bf84aa83e0c78a9a67b6e2d3ea`。其产品源码与 Tester 冻结六文件及完整受控 source map 一致。 已发布远端 `d5aba692d2c5bc6756ac35b513b2904c08a6758b`，与本地里程碑 `820aa8c88c64abb0036dd55ba30cc43d8e858d7a` 的 tree `d75cefe23e8682a299b4ddb4ecc9db8761704650` 完全一致；[发布映射](../work/judge-prefetch/publication-thinking-five-paths.json)。
 - [专职 Tester 报告](../work/judge-prefetch-rebuild/thinking-transport-verification.md)：五条实际请求路径（Momo、提取、Dream、结果表达及表达 validator）在官方主机发送关闭 thinking 字段；非官方主机及相似后缀保持字段不存在。18/18 专项／既有 provider 用例、12/12 相关回归、Pi typecheck/build 通过；各 RED 失败保留。
-- `worker.ts` 未在此提交修改。主 Pi 及其 validator 两条路径仍待 01 所有者串行接入，并须重新验证全部七条路径。独立 Standards／Spec 审查、全量集成、真实模型和用户前端验收均未由这份局部报告证明。
+- 上述五路径提交未修改 `worker.ts`。后续 01 已串行接入主 Pi 及其 validator，修复提交 `9f2eff1265c373736cc5f8683c8ccaa680959c30`／集成提交 `46f3fcf47d544e0c0ecead0abc13cb23d63a38b8` 的最终 149 专项和 480 完整 backend 套件重新验证七条路径，Pi typecheck/build 通过；[同版报告](../work/judge-prefetch-rebuild/01-role-entry-verification.md)。01 两轴审查已闭合，但不表示 04 业务集成、真实模型或用户前端验收完成。
 - 此支持项不释放 04 的 03 前置依赖，也不代表 01–04 完成；模型、原输出额度与前端未改。
 
 ## 下一步与证据
 
-等待前三票云端交付与对应验证环境条件；验证计划执行前注明模型与数据版本，完成后交用户审阅收益及本人验收。当前未运行任何测试或模型；不以文档发布标记验收。
+等待前三票云端交付与对应验证环境条件；验证计划执行前注明模型与数据版本，完成后交用户审阅收益及本人验收。当前 04 全阶段功能集成及真实模型比较尚未执行；前述有界传输与 01 受控结果单独保留，不以局部通过标记 04 验收。
 
 ## 有界传输支持项（可提前准备，非新增业务票）
 

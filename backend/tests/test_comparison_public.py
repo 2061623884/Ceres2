@@ -82,8 +82,11 @@ def test_displayed_current_candidate_selected_in_later_pi_turn_prepares_then_con
     cards = events[-1]['payload']['product_cards']
     selected = next(c for c in cards if c['sku_id'] == 'pi-cola-six')
     requests.answer_hook = select_hook(selected['ref'])
+    first_request = len(requests)
     events = posted_turn(client,f"选候选 {selected['ref']} 一包，生成清单",'selection-choose',[c['ref'] for c in cards])
     assert events[-1]['type'] == 'turn.completed', events
+    from test_guide_clarification_context import context
+    assert context(requests[first_request])['comparison_candidates'] == cards
     state = client.get(BASE).json()
     assert [r['sku_id'] for r in state['plan']['items']] == ['pi-cola-six']
     assert state['plan']['items'][0]['quantity'] == 1
