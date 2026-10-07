@@ -1,0 +1,8 @@
+{
+  "branch": "ceres2/local-cloud-t01-wip-20261007",
+  "remote_commit": "395b53fe411371b2e5d1ba8bd71a90bbc181593f",
+  "local_commit": "a2a88fb9b802689f31939017b407eec009a1894c",
+  "tree": "7f5d6b67ace2d12a2f27cf7e3ad5f011cb2d3a7c",
+  "verified": true,
+  "scope": "Incomplete snapshot/deadline checkpoint, 4 focused GREEN, policy/Pi pending"
+}

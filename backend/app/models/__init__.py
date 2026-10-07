@@ -7,7 +7,7 @@ from app.mercury.models import MercuryCase, SimulatedOrder
 from app.models.cart import Cart, CartItem
 from app.models.checkout import CheckoutPreview, CheckoutReceipt
 from app.human.models import HumanTicket, HumanHandoffState
-from app.mercury.aftersales_models import AfterSalesProposal, AfterSalesApplication, AfterSalesReceipt
+from app.mercury.aftersales_models import AfterSalesProposal, AfterSalesApplication, AfterSalesReceipt, AfterSalesPhoto
 from app.models.purchase import PurchaseConfirmation, PurchaseLedger
 from app.models.memory import ShoppingMemory
 from app.models.comparison import ComparisonDisplay

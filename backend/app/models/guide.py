@@ -81,3 +81,4 @@ class GuideRunEvent(Base):
     sequence: Mapped[int] = mapped_column(Integer, primary_key=True)
     type: Mapped[str] = mapped_column(String(40))
     payload_json: Mapped[str] = mapped_column(Text)
+    recorded_at_ms: Mapped[float | None] = mapped_column(Float, nullable=True)

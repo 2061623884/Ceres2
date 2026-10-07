@@ -31,6 +31,17 @@ def initialize_schema(bind) -> None:
             if name not in receipt_columns:
                 connection.execute(text(f'ALTER TABLE guide_turn_receipts ADD COLUMN {name} {definition}'))
         connection.execute(text("INSERT INTO schema_migrations(version) SELECT '0003_responsive_runs' WHERE NOT EXISTS (SELECT 1 FROM schema_migrations WHERE version = '0003_responsive_runs')"))
+        # Event times are unknown for legacy rows, never invented during upgrade.
+        event_columns = {column['name'] for column in inspect(connection).get_columns('guide_run_events')}
+        if 'recorded_at_ms' not in event_columns:
+            connection.execute(text('ALTER TABLE guide_run_events ADD COLUMN recorded_at_ms FLOAT'))
+        connection.execute(text("INSERT INTO schema_migrations(version) SELECT 'optimization_run_event_time_v1' WHERE NOT EXISTS (SELECT 1 FROM schema_migrations WHERE version = 'optimization_run_event_time_v1')"))
+        # Photos are an additive table. Existing canonical rows and payloads stay intact.
+        connection.execute(text("INSERT INTO schema_migrations(version) SELECT 'integration_aftersales_photos_v1' WHERE NOT EXISTS (SELECT 1 FROM schema_migrations WHERE version = 'integration_aftersales_photos_v1')"))
+        application_columns = {column['name'] for column in inspect(connection).get_columns('aftersales_applications')}
+        if 'human_ticket_id' not in application_columns:
+            connection.execute(text('ALTER TABLE aftersales_applications ADD COLUMN human_ticket_id VARCHAR(64) REFERENCES human_tickets(ticket_id)'))
+        connection.execute(text("INSERT INTO schema_migrations(version) SELECT 'integration_ticket_application_link_v1' WHERE NOT EXISTS (SELECT 1 FROM schema_migrations WHERE version = 'integration_ticket_application_link_v1')"))
         # P15 tables are additive and share the canonical business transaction.
         connection.execute(text("INSERT INTO schema_migrations(version) SELECT '0015_async_human_tickets' WHERE NOT EXISTS (SELECT 1 FROM schema_migrations WHERE version = '0015_async_human_tickets')"))
         # P14 proposal/application/receipt tables preserve canonical case/order rows.

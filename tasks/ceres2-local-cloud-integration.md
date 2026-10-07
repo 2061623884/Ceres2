@@ -61,3 +61,11 @@ T01：知识服务接口及 Pi 政策路径；T02（prepare_shopping_filter_slic
 ## 静态来源前置提交
 
 T01 corpus 实际消费五份 incoming 静态来源，而 T02 原计划迁入这些文件会形成实现循环。经主会话授权，Merger 精确迁入 incoming 五文件，供 T01 的索引/版本合同使用；offers/seed/current Offer 仍属 T02。本次不运行导入、索引构建或模型，不等于检索已实测。T01 已确认未写这些 fixture；后续转给 T02 前由主会话通知，双方不能并行改来源。
+
+## T07 核心合入与当前边界
+
+售后核心 `0ff65a0` 经 Tester 75 affected GREEN、两轴修复复审后无冲突合入 `5f592575`；产品 pin `0a6e8fa` 与合并结果 backend/runtime/frontend/data 无差异。已实现 nullable application.human_ticket_id 精确关联、合法图片解码与受限格式/尺寸，历史记录不猜测关联。核心通过不是 T07 整体完成；T01 合入后由 T07 owner 独占补 Mercury deadline/categories，然后验证才释放 T05，避免互等循环。后端业务 requirements/lock 仅 T07 持有，独立知识 requirements/lock 仅 T01；锁生成/安装/验证仅 Tester。
+
+T01 conftest 的 controlled_policy_source 只允许 policy namespace；T02 接管后独占增加 product 专用受控 fixture，不取消 namespace 断言，不用政策假数据冒充商品。T03 仅独立 fixture、不并改 conftest。
+
+重要更正：实际基线 Guide API 30 秒，Mercury 15 秒；T01 独占 Guide API 入口落实用户确认 15 秒，不改模型 token。新旧 30→15 必须明确报告，旧 30 秒性能样本不得当同条件对照。

@@ -8,7 +8,7 @@
 
 ## What to build / 合同
 
-保留 Coco/Momo 入口和 policy_scope；source version/name 与实际 fixture、索引版本一致；成功/空复用及失败补查；排锁和 worker I/O 全部消费现有 15 秒总预算。首票包含知识模块实际需要的基础依赖与合同，不提前铺未调用抽象。
+保留 Coco/Momo 入口和 policy_scope；source version/name 与实际 fixture、索引版本一致；成功/空复用及失败补查；排锁和 worker I/O 全部消费本轮确认的 15 秒总预算。首票包含知识模块实际需要的基础依赖与合同，不提前铺未调用抽象。
 
 ## 验收
 
@@ -27,3 +27,5 @@
 source_snapshot 返回 source_name/source_version/source_revision/index_revision；fixture SHA 与 canonical index manifest hash 进入身份，manifest 的五份静态语料文件哈希及模型/tokenizer/relevance 版本必须匹配实际实现。search_policies 使用 snapshot、共享绝对 monotonic deadline、should_stop；证据从索引命中文档读取而非另读新文本。worker 验证 expected index_revision，响应后复核 fixture，失效不铸 ref。缺索引/依赖或版本失配明确失败，无词面兜底；成功空结果可有合法 ref。Pi 以整个 snapshot 加原 query/category/scope/request 校验复用和最终引用。现有独立 catalog/API 调用可保留缺省 budget，Pi/Mercury run 必须传入共享 deadline。错误码 KNOWLEDGE_UNAVAILABLE/STALE/TIMEOUT/CANCELLED 区分原因；仅实际持锁且拥有查询者可以关闭其 worker。
 
 本票拥有 Pi source/reuse 接线。Mercury tools/orders 文件由 T07 owner 持有，相关 deadline 接线需求交其串行写入。
+
+实际基线 Guide API 为 30 秒（start_run/stream_turn），Mercury 为 15 秒。T01 独占 api/guide.py，公开 RED/GREEN 落实 Guide 30→15，异步/直接/预检/恢复沿同一 deadline；这是本轮行为修复，旧 30 秒时延结果不可作同条件对照。

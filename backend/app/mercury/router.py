@@ -5,7 +5,7 @@ import json
 import time
 from typing import Literal
 from fastapi import APIRouter, Depends, HTTPException, Request, Response
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, StrictInt
 from sqlalchemy.orm import Session, sessionmaker
 from sse_starlette import EventSourceResponse
 from app.core.database import get_db
@@ -182,9 +182,18 @@ async def mercury_turn_stream(session_id: str, request: TurnRequest, owner_id: s
 
 class ProposalRequest(BaseModel):
     model_config = ConfigDict(extra='forbid')
-    kind: Literal['refund', 'return']
+    kind: Literal['refund', 'return', 'quality', 'fulfillment']
     item_id: str | None = None
     reason: str = Field(min_length=1, max_length=1000)
+    selection_version: int = Field(ge=0)
+    problem_quantity: StrictInt | None = Field(default=None, ge=1)
+    photo_ids: list[str] = Field(default_factory=list, max_length=3)
+
+
+class PhotoUpload(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    content_type: Literal['image/jpeg', 'image/png', 'image/webp']
+    data_base64: str = Field(min_length=1, max_length=5592408)
     selection_version: int = Field(ge=0)
 
 
@@ -202,6 +211,18 @@ def get_aftersales_service(db: Session = Depends(get_db)):
 @router.get('/sessions/{session_id}/aftersales')
 def read_aftersales(session_id: str, owner_id: str = Depends(_owner), service=Depends(get_aftersales_service)):
     return service.read(owner_id, session_id)
+
+
+@router.post('/sessions/{session_id}/photos')
+def upload_photo(session_id: str, request: PhotoUpload, owner_id: str = Depends(_owner), service=Depends(get_aftersales_service)):
+    return service.upload_photo(owner_id, session_id, request.model_dump())
+
+
+@router.get('/sessions/{session_id}/photos/{photo_id}')
+def read_photo(session_id: str, photo_id: str, owner_id: str = Depends(_owner), service=Depends(get_aftersales_service)):
+    from fastapi.responses import Response
+    content, content_type = service.read_photo(owner_id, session_id, photo_id)
+    return Response(content, media_type=content_type, headers={'X-Content-Type-Options':'nosniff'})
 
 
 @router.post('/sessions/{session_id}/proposals')

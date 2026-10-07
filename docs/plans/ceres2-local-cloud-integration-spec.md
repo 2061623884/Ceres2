@@ -38,7 +38,7 @@
 - 政策来源升级使用真实 fixture/语料版本，保留来源语义；按真实知识快照更新所有调用方，旧全局常量不是兼容目标；缓存身份必须绑定实际来源版本、query/category/policy_scope/current request。跨版本与跨 owner/session/task/run 不复用。
 - 成功和空证据都可复用；error 不伪装成 empty，失败允许补查。每个合法早期引用继续有效；单 policy_ref 与非空 policy_refs 同时兼容并逐项校验。
 - 预取证据直接送入同一 Pi start envelope，不伪装成模型已调用工具。完整 runtime_summary 独立于裁剪后的详细事件尾部。
-- 15 秒现有整次处理预算和 5 个工具轮次不放宽。知识 worker 排锁、启动、写入、等待与读取必须消耗同一个剩余 deadline；incoming 无界锁及额外 30 秒等待不可照搬。超时/取消后不得发布或提交暂存业务。
+- 本轮确认整次处理预算为 15 秒、工具轮次为 5。实际基线 Guide API 是 30 秒，Mercury 是 15 秒；T01 必须通过公开 RED/GREEN 将 Guide 30→15，并贯穿异步/直接请求、预检和恢复。不能把这项变更说成基线原有 15 秒，也不能继承旧 30 秒性能对照。知识 worker 排锁、启动、写入、等待与读取必须消耗同一个剩余 deadline；incoming 无界锁及额外 30 秒等待不可照搬。超时/取消后不得发布或提交暂存业务。
 - BM25/BGE/RRF 是候选证据，不是商品资格。canonical 条件在检索候选空间/最终验证保持，避免全局截断造成合法候选漏召回；当前身份、Offer 与库存必须重读。
 - 原生 finish_response 在 guide_request 登记后的同一 Pi loop 完成；保留 cloud 按 kind 缩小上下文及工具授权，不恢复旧 capability 分流。主调用 auto 与原生完成配套，validator 的结构化要求独立保留。
 - 可选 interim 必须经审校，独立稳定 message ID 持久化并发 SSE；不给固定气泡数、不增加额外主 Agent、不跨回合调度。私有 reasoning、工具参数和未经证据支持的事实不能发布。

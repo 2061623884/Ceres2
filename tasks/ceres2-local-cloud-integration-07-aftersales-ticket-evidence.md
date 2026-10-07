@@ -1,6 +1,6 @@
 # T07：售后数量照片与工单证据范围
 
-- 状态：待开始
+- 状态：进行中（售后核心已受控验证并合入；Mercury 接线待 T01）
 - 负责人：implement_aftersales_evidence_slice（售后/DB/migration 唯一 owner）；主会话绑定实际 worker/worktree 后方可写入
 - 规格：[本轮规格](../docs/plans/ceres2-local-cloud-integration-spec.md)
 - 总任务：[集成 TASK](ceres2-local-cloud-integration.md)
@@ -23,3 +23,7 @@
 尚未实现；等待主会话分配独立工作树；无需等待 T01。本票是可独立演示/验证的业务切片，不允许只搬文件并宣称完成。Tester 和两轴审查证据由主会话在收到后登记；历史来源报告不能代替本票结果。
 
 共享 model/migration registry 由本票 owner 唯一维护。T04 的事件时间列通过该 owner 串行登记或正式提交后交接。T01 Mercury deadline 接线亦由本票 owner 写入其文件。
+
+## 已合入核心阶段
+
+产品 pin `0a6e8fa83d14165844e81f3d8e8d1a016c35ece2`，交付 `0ff65a0a16a7a8a281452357ebdb2ca3b7d25385`，无冲突合入 `5f592575e9117ecdf2ae354faa14dad2bb2a92a8`。集成 backend/runtime/frontend/data 与产品 pin 零路径差异（Git source equivalence，不是重新测试）。专职 Tester 75 affected passed，两轴已关闭精确工单关联和图片实际解码两项问题；[验证](../work/local-cloud-integration/t07/verification.md)、[交接](../work/local-cloud-integration/t07/handoff.md)。尚需 postmerge 最小核验、T01 后 Mercury deadline/category 接线及验证，T05 仍阻塞；不称整体已验收。

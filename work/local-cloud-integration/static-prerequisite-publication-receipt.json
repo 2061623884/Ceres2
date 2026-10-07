@@ -1,0 +1,8 @@
+{
+  "branch": "ceres2/local-cloud-integration-20261007",
+  "remote_commit": "1508ac74d3e8b052daf27b68f377c0ad9077feaa",
+  "local_commit": "93ac1d4a2357cbd5ed09ff680e87945eff3a13a2",
+  "tree": "5c1d3f383e9b715f8b368486ae982a136703e127",
+  "verified": true,
+  "scope": "Static prerequisite only; T02 seed/Offer acceptance pending"
+}

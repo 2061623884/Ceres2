@@ -1,0 +1,14 @@
+{
+  "product_pin": "0a6e8fa83d14165844e81f3d8e8d1a016c35ece2",
+  "delivery_pin": "0ff65a0a16a7a8a281452357ebdb2ca3b7d25385",
+  "merge_commit": "5f592575e9117ecdf2ae354faa14dad2bb2a92a8",
+  "scopes": [
+    "backend",
+    "runtime",
+    "frontend",
+    "data"
+  ],
+  "changed_paths": [],
+  "verification": "Git source comparison only; no tests by merger",
+  "remaining": "Postmerge minimum check, T01 Mercury wiring, full integration/browser/user gates"
+}
