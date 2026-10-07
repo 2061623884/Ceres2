@@ -1,6 +1,6 @@
 # T01：Hybrid 政策与有界预取复用
 
-- 状态：待开始
+- 状态：待验收（本票受控技术门槛通过，实际 BGE/整体验收仍开放）
 - 负责人：design_policy_retrieval_bridge（runtime-policy owner）；主会话绑定实际 worker/worktree 后方可写入
 - 规格：[本轮规格](../docs/plans/ceres2-local-cloud-integration-spec.md)
 - 总任务：[集成 TASK](ceres2-local-cloud-integration.md)
@@ -29,3 +29,9 @@ source_snapshot 返回 source_name/source_version/source_revision/index_revision
 本票拥有 Pi source/reuse 接线。Mercury tools/orders 文件由 T07 owner 持有，相关 deadline 接线需求交其串行写入。
 
 实际基线 Guide API 为 30 秒（start_run/stream_turn），Mercury 为 15 秒。T01 独占 api/guide.py，公开 RED/GREEN 落实 Guide 30→15，异步/直接/预检/恢复沿同一 deadline；这是本轮行为修复，旧 30 秒时延结果不可作同条件对照。
+
+## 技术交付
+
+产品 `6ba93b2b66a004fdfae1d7106d5f29a0512ddfd6` 无冲突合入 `3ecf15e8fbdb9099a30e3c16793f70251a8dfa3c`；backend/runtime/frontend/data 与受测 pin 零路径差异。Tester 同 pin 165 affected、runtime typecheck/build、实际 Node guard 2 passed，无漂移；两轴 correction review clear。[验证](../work/local-cloud-integration/t01/verification.md)。T02/T03 可接管依赖；T07 Mercury 接线由其 owner 后补，不使本票互等。真实本地 BGE 权重/质量未验证，最终集成和用户验收不继承这些受控结果。
+
+直接 Guide15秒包含同步授权；单独导航预检/用户确认是独立边界，既有run replay/reconnect不得重新计时。

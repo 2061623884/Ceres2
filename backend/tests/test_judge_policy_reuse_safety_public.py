@@ -18,7 +18,7 @@ from test_guide_semantics import turn
 
 @pytest.mark.parametrize('source', ['forged', 'other_request', 'other_owner', 'old_version'])
 @pytest.mark.parametrize('representation', ['legacy_invalid', 'list_invalid'])
-def test_both_reference_forms_validate_every_supplied_value(pi_client, policy_transport, monkeypatch, source, representation):
+def test_both_reference_forms_validate_every_supplied_value(pi_client, policy_transport, monkeypatch, source, representation, controlled_policy_source):
     from app.mercury import policy
     client, requests = pi_client
     invalid_ref = 'policy-forged'
@@ -36,7 +36,7 @@ def test_both_reference_forms_validate_every_supplied_value(pi_client, policy_tr
         if not rows:
             return call(body, 'guide_request', {'kind': 'question'})
         if source == 'old_version' and len(rows) == 1:
-            monkeypatch.setattr(policy, 'POLICY_SOURCE_VERSION', 'controlled-v2')
+            controlled_policy_source['change_version']('controlled-v2')
             return call(body, 'search_after_sales_policy', {'query': '退货政策'})
         valid = rows[-1]['policy_ref'] if source == 'old_version' else prefetched(body)['policy_ref']
         invalid = prefetched(body)['policy_ref'] if source == 'old_version' else invalid_ref
@@ -83,9 +83,9 @@ def test_mixed_purchase_keeps_all_scopes_and_confirmation_replay_has_no_new_work
     original = '选定两件测试可乐，预算10元，准备清单并说明退货政策及配送进度规则'
     lookups, search = [], policy.search_policies
 
-    def observe(query, category=None):
+    def observe(query, category=None, **kwargs):
         lookups.append((query, category))
-        return search(query, category)
+        return search(query, category, **kwargs)
 
     monkeypatch.setattr(policy, 'search_policies', observe)
 
@@ -164,9 +164,9 @@ def test_reuse_obeys_guards_after_blocking_callbacks_and_replay_stays_terminal(p
     monkeypatch.setattr(pi_product_runtime, 'time', SimpleNamespace(monotonic=lambda: time.monotonic() + clock['elapsed']))
     queued, phase_seen, blocked, release = (threading.Event() for _ in range(4))
 
-    def observe(query, category=None):
+    def observe(query, category=None, **kwargs):
         lookups.append((query, category))
-        return search(query, category)
+        return search(query, category, **kwargs)
 
     monkeypatch.setattr(policy, 'search_policies', observe)
 
@@ -185,7 +185,7 @@ def test_reuse_obeys_guards_after_blocking_callbacks_and_replay_stays_terminal(p
             phase_seen.set()
         current = phase_seen.is_set() and statement.startswith('SELECT guide_sessions')
         if interruption == 'deadline' and not blocked.is_set() and ((guard == 'progress' and progress) or (guard == 'current_state' and current)):
-            clock['elapsed'] = 31.0
+            clock['elapsed'] = 16.0
             blocked.set()
 
     def before_sql(_connection, _cursor, statement, _parameters, _context, _many):

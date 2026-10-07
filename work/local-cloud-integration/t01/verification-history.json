@@ -1,0 +1,1812 @@
+{
+  "baseline": "37c98400e7152b89e4a58f02fff3bceaa73b0eac",
+  "incoming": "6734c7fe79e670df2dae12b065dcc49c0b10a307",
+  "product_commit": "6ba93b2b66a004fdfae1d7106d5f29a0512ddfd6",
+  "scope": "Controlled T01 affected verification; overlapping counts must not be summed",
+  "runs": [
+    {
+      "label": "t01-build-metadata-green",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_policy_snapshot_contract.py",
+        "tests/test_knowledge_worker_deadline.py",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "2a411b3125afc718b39bed12767b1f04252a7a56",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 0,
+      "elapsed_seconds": 2.551,
+      "before_source_set_sha256": "de216562f169f4bcc5351c80b2dee35c1523823071b75ed91dd96f701c711a0e",
+      "after_source_set_sha256": "de216562f169f4bcc5351c80b2dee35c1523823071b75ed91dd96f701c711a0e",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "22 passed in 1.73s"
+      ],
+      "raw_record_sha256": "6d7d3d67ff959fd330a5dcef38bab081f3e1be9cdab9c88f905d4bc65ca6fcb6",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "bb301c605ca92b9318a88e29fb1ef183d8cb7517b8969821ef5333b6880b995d",
+      "node_guard_loads": 0,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-build-metadata-red",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_policy_snapshot_contract.py::test_policy_snapshot_rejects_changed_build_metadata_with_unchanged_named_versions",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "2a411b3125afc718b39bed12767b1f04252a7a56",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 1,
+      "elapsed_seconds": 2.637,
+      "before_source_set_sha256": "e06b6cff9a8112b910f4e895b936c9411cf84fae9aca0a66c2b7e06e739c83d0",
+      "after_source_set_sha256": "e06b6cff9a8112b910f4e895b936c9411cf84fae9aca0a66c2b7e06e739c83d0",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "6 failed in 1.25s"
+      ],
+      "raw_record_sha256": "25c616e8a1cb14555d22c442d891a2d913c082a69c3dd0b25cea33b1770762b5",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "96e97c792f84e71f4e427b1f9bdef49cc89331f94944289b2e9b41c9478f8b7c",
+      "node_guard_loads": 0,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-final-affected-regression",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_policy_snapshot_contract.py",
+        "tests/test_knowledge_worker_deadline.py",
+        "tests/test_judge_policy_prefetch_public.py",
+        "tests/test_judge_policy_reuse_public.py",
+        "tests/test_judge_policy_reuse_safety_public.py",
+        "tests/test_judge_policy_safety_public.py",
+        "tests/test_next_shared_policy_public.py",
+        "tests/test_official_deepseek_thinking.py",
+        "tests/test_mercury_wire.py",
+        "tests/test_next_kev_wire.py",
+        "tests/test_memory_wire.py",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "3edc663b4a0a67ccbc15d9a20c91f58d38d743a6",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 0,
+      "elapsed_seconds": 161.238,
+      "before_source_set_sha256": "c238ec9dc8d7aa3d5b1c0c8afcb52e8d8aaabe5281116f6ed1597ad3a9975a74",
+      "after_source_set_sha256": "c238ec9dc8d7aa3d5b1c0c8afcb52e8d8aaabe5281116f6ed1597ad3a9975a74",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "135 passed in 156.41s (0:02:36)"
+      ],
+      "raw_record_sha256": "f97d0a0a704cb058a96a4d64dcf5e61c1de6cbe5c5ef4b65fc602bcfaa71d496",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "5e5006cb6a244d5728a5bd2eab24e551e36cfecf6c7ea0bf606cc23ae1903944",
+      "node_guard_loads": 103,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-final-node-guard",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/.venv/bin/python",
+        "-m",
+        "pytest",
+        "../work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "3edc663b4a0a67ccbc15d9a20c91f58d38d743a6",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 0,
+      "elapsed_seconds": 5.028,
+      "before_source_set_sha256": "c238ec9dc8d7aa3d5b1c0c8afcb52e8d8aaabe5281116f6ed1597ad3a9975a74",
+      "after_source_set_sha256": "c238ec9dc8d7aa3d5b1c0c8afcb52e8d8aaabe5281116f6ed1597ad3a9975a74",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "2 passed in 4.03s"
+      ],
+      "raw_record_sha256": "3ebcccf5053c2e6a76c690f5077c5199477d52506d2b096173a78ce7c36b7704",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "f0454fbe5c31139478fc3fd8fe90ad3d65a0c7d44a6c54dac35a11eccd8ac110",
+      "node_guard_loads": 3,
+      "node_guard_blocks": 3
+    },
+    {
+      "label": "t01-final-runtime-build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "head": "3edc663b4a0a67ccbc15d9a20c91f58d38d743a6",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/runtime/pi",
+      "exit_code": 0,
+      "elapsed_seconds": 7.407,
+      "before_source_set_sha256": "c238ec9dc8d7aa3d5b1c0c8afcb52e8d8aaabe5281116f6ed1597ad3a9975a74",
+      "after_source_set_sha256": "c238ec9dc8d7aa3d5b1c0c8afcb52e8d8aaabe5281116f6ed1597ad3a9975a74",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [],
+      "raw_record_sha256": "bc7b9c4f60bcd9ba4e36a9cd2c31885c8578dea32dfd685c795e319d4e610159",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "52652d82f1b8d1a5159b20b6719437d39866f48d431b34f6bb819a6efde73a30",
+      "node_guard_loads": 2,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-final-runtime-typecheck",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "head": "3edc663b4a0a67ccbc15d9a20c91f58d38d743a6",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/runtime/pi",
+      "exit_code": 0,
+      "elapsed_seconds": 6.415,
+      "before_source_set_sha256": "c238ec9dc8d7aa3d5b1c0c8afcb52e8d8aaabe5281116f6ed1597ad3a9975a74",
+      "after_source_set_sha256": "c238ec9dc8d7aa3d5b1c0c8afcb52e8d8aaabe5281116f6ed1597ad3a9975a74",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [],
+      "raw_record_sha256": "02277901dfe31cb11aa96c255aec6db544f3823058390b05e5f16c382687737c",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "70e0a2a5422f918881eaf163f5fcfd7da9447a7deb71aad7f61049772a7dad29",
+      "node_guard_loads": 2,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-guide-budget-green",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_guide_deadline_contract.py",
+        "tests/test_judge_policy_safety_public.py::test_direct_admission_and_separate_route_keep_their_existing_budget_boundaries",
+        "tests/test_judge_policy_safety_public.py::test_typed_actions_and_momo_text_have_zero_total_judgments",
+        "tests/test_runtime_pi_product_query.py::test_pi_deadline_closes_inflight_provider_at_fifteen_seconds_without_retry",
+        "tests/test_guide_semantics.py::test_slow_general_claim_check_uses_original_fifteen_second_deadline",
+        "tests/test_runtime_pi_product_query.py::test_spent_http_admission_budget_cannot_start_a_fresh_pi_exploration",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "2a411b3125afc718b39bed12767b1f04252a7a56",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 0,
+      "elapsed_seconds": 55.908,
+      "before_source_set_sha256": "e191d90b0d9b6b6e495dc5b1052faf86bc170dcb5e986c4e620b1e560afadec9",
+      "after_source_set_sha256": "e191d90b0d9b6b6e495dc5b1052faf86bc170dcb5e986c4e620b1e560afadec9",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "8 passed in 54.82s"
+      ],
+      "raw_record_sha256": "05560df995c58abcb747b9cfe65fa702946d3530933e84f97c737aa416b12189",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "ed944f4af288c77c7a61991ae28bcc9dd2b3715b92ebb39056fde1fa78f78dd6"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "ed944f4af288c77c7a61991ae28bcc9dd2b3715b92ebb39056fde1fa78f78dd6"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "22d33393c22d2acfd9f55e00829c9a736fd200b80d7eeb9819b8e2ae599de5cf",
+      "node_guard_loads": 6,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-guide-budget-red",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_guide_deadline_contract.py",
+        "tests/test_judge_policy_safety_public.py::test_direct_admission_and_separate_route_keep_their_existing_budget_boundaries",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "2a411b3125afc718b39bed12767b1f04252a7a56",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 1,
+      "elapsed_seconds": 8.731,
+      "before_source_set_sha256": "87aefc6886b9e9e787162bc78129263bdadcfcd0684ea18862dfcaa613bcaa1d",
+      "after_source_set_sha256": "87aefc6886b9e9e787162bc78129263bdadcfcd0684ea18862dfcaa613bcaa1d",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "3 failed, 1 passed in 7.58s"
+      ],
+      "raw_record_sha256": "934baff01a94dbfacf3a8149a39b19eb7c236343b007efa0b3997030682f0434",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "c16416cc9a0b7bbb5c55ca4f8822e8e37a184aef62f6a9ad1e2084d9a4b59337",
+      "node_guard_loads": 4,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-guide-budget-runtime-build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "head": "2a411b3125afc718b39bed12767b1f04252a7a56",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/runtime/pi",
+      "exit_code": 0,
+      "elapsed_seconds": 6.312,
+      "before_source_set_sha256": "e191d90b0d9b6b6e495dc5b1052faf86bc170dcb5e986c4e620b1e560afadec9",
+      "after_source_set_sha256": "e191d90b0d9b6b6e495dc5b1052faf86bc170dcb5e986c4e620b1e560afadec9",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [],
+      "raw_record_sha256": "21118c4238fd1d534f7b55d3ee15abc04e98043997e4dec019ae1bf827ff73be",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "ed944f4af288c77c7a61991ae28bcc9dd2b3715b92ebb39056fde1fa78f78dd6"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "ee26c282872bb785973b23691b5c7eff8f0b28fc415d05d8a06d3150ae35bb4f",
+      "node_guard_loads": 2,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-live-corpus-green",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_policy_snapshot_contract.py",
+        "tests/test_knowledge_worker_deadline.py",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "d7c8de428d13978ec95d6e0e50e6d979855c8f60",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 0,
+      "elapsed_seconds": 2.127,
+      "before_source_set_sha256": "c238ec9dc8d7aa3d5b1c0c8afcb52e8d8aaabe5281116f6ed1597ad3a9975a74",
+      "after_source_set_sha256": "c238ec9dc8d7aa3d5b1c0c8afcb52e8d8aaabe5281116f6ed1597ad3a9975a74",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "16 passed in 1.40s"
+      ],
+      "raw_record_sha256": "f093ae09adf3e99fc4b7024d8c5c7686be974b639bd81955355cdbea06098a67",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "c0d368182d4fc5a8278e4f7a08501ebce0b77edb5bd14cd9b65191c705a40290",
+      "node_guard_loads": 0,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-live-corpus-red",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_knowledge_worker_deadline.py::test_real_worker_rejects_changed_live_corpus_before_model_recall",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "d7c8de428d13978ec95d6e0e50e6d979855c8f60",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 1,
+      "elapsed_seconds": 1.389,
+      "before_source_set_sha256": "121ba30e90f5bdd7ea2729f0aed308b62246284f249c6599d20a0135842187da",
+      "after_source_set_sha256": "121ba30e90f5bdd7ea2729f0aed308b62246284f249c6599d20a0135842187da",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "E           AssertionError: assert 'KNOWLEDGE_UNAVAILABLE' == 'KNOWLEDGE_STALE'",
+        "E           AssertionError: assert 'KNOWLEDGE_UNAVAILABLE' == 'KNOWLEDGE_STALE'",
+        "3 failed in 0.71s"
+      ],
+      "raw_record_sha256": "837742096ea543a894264a79961fae273eb108188d84a34e9663a4ccdb6788ac",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "8dd592f70db098b069ff288263e38cb41bb7091cdfae7b42929305dea9be8322",
+      "node_guard_loads": 0,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-lookup-snapshot-green",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_policy_snapshot_contract.py",
+        "tests/test_knowledge_worker_deadline.py",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "a2a88fb9b802689f31939017b407eec009a1894c",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 0,
+      "elapsed_seconds": 1.585,
+      "before_source_set_sha256": "bf76212a54abaf5120807afa3a4d49b69cecc2075819a0c07abe141cfad97999",
+      "after_source_set_sha256": "bf76212a54abaf5120807afa3a4d49b69cecc2075819a0c07abe141cfad97999",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "6 passed in 0.59s"
+      ],
+      "raw_record_sha256": "274c1f5bd66e42cfe002a96959fb56a96565a47bc844df52f2ffae34c761f0c2",
+      "before_build_sha256": {},
+      "after_build_sha256": {},
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "6c923e6ec0f21cbb2f3b8dfc3722fda4e50214fb44e3c25ec6ac433441e9510c",
+      "node_guard_loads": 0,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-lookup-snapshot-red",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_policy_snapshot_contract.py::test_policy_lookup_returns_indexed_facts_with_its_actual_snapshot",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "a2a88fb9b802689f31939017b407eec009a1894c",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 1,
+      "elapsed_seconds": 0.829,
+      "before_source_set_sha256": "911866cce1e52e99a31fac72c75781943bd7753708dbadf542a706a04bc7bc39",
+      "after_source_set_sha256": "911866cce1e52e99a31fac72c75781943bd7753708dbadf542a706a04bc7bc39",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "E       TypeError: search_policies() got an unexpected keyword argument 'snapshot'",
+        "1 failed in 0.29s"
+      ],
+      "raw_record_sha256": "0fedcf717b06f33904b6443ced01831bbc1a8682450bd0cdfdfdb0292efd3bf1",
+      "before_build_sha256": {},
+      "after_build_sha256": {},
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "909e7bdf66459ef20c15c662e514c346ff168d0aca6e7a4ca5b74eafea865c80",
+      "node_guard_loads": 0,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-missing-index-dependency-red",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_policy_snapshot_contract.py::test_missing_policy_index_is_unavailable_not_empty",
+        "tests/test_knowledge_worker_deadline.py::test_real_worker_missing_local_dependencies_does_not_fake_empty_hits",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "d7c8de428d13978ec95d6e0e50e6d979855c8f60",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 1,
+      "elapsed_seconds": 1.238,
+      "before_source_set_sha256": "b505a1a1ff19f9f90a42d722f94760ba6e1edaa0cd2451a609757ed073d18b3d",
+      "after_source_set_sha256": "b505a1a1ff19f9f90a42d722f94760ba6e1edaa0cd2451a609757ed073d18b3d",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "E       sqlite3.OperationalError: unable to open database file",
+        "1 failed, 1 passed in 0.50s"
+      ],
+      "raw_record_sha256": "a60d09d60a4c8899dd66dbeae17fafd8ab22bc153fb2fb6c79f99589bd7924c6",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "ecee3cc546fb1c9b24b255146bb0bff9c9b02bbbadd8ff8e6779d474495153ab",
+      "node_guard_loads": 0,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-missing-index-green",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_policy_snapshot_contract.py",
+        "tests/test_knowledge_worker_deadline.py",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "d7c8de428d13978ec95d6e0e50e6d979855c8f60",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 0,
+      "elapsed_seconds": 1.456,
+      "before_source_set_sha256": "9793f3f9429930a6652456a88b0456ea55939461403794da91c13e064d432577",
+      "after_source_set_sha256": "9793f3f9429930a6652456a88b0456ea55939461403794da91c13e064d432577",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "12 passed in 0.94s"
+      ],
+      "raw_record_sha256": "f450859883611229c1c4541cc44315ed5c84cc41a336c5605a013543df679145",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "8b5b962829a5e68b0468669b5a11ed13e87ad8b11bb5b87ebabd000f0650993b",
+      "node_guard_loads": 0,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-missing-index-red",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_policy_snapshot_contract.py::test_missing_policy_index_is_unavailable_not_empty",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "d7c8de428d13978ec95d6e0e50e6d979855c8f60",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 1,
+      "elapsed_seconds": 1.502,
+      "before_source_set_sha256": "b505a1a1ff19f9f90a42d722f94760ba6e1edaa0cd2451a609757ed073d18b3d",
+      "after_source_set_sha256": "b505a1a1ff19f9f90a42d722f94760ba6e1edaa0cd2451a609757ed073d18b3d",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "E       sqlite3.OperationalError: unable to open database file",
+        "1 failed in 0.36s"
+      ],
+      "raw_record_sha256": "e66746a2a9ba84405aa5502ab829df1d40a7d589212213544aacf79805fc7687",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "eefe40034617f7418738dff1838a2ab9515414b3cb1eb30b5479761be274e6f7",
+      "node_guard_loads": 0,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-model-revision-green",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_policy_snapshot_contract.py",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "f50f040edc12b2499091e1c8aaeb63dd6a256b38",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 0,
+      "elapsed_seconds": 2.366,
+      "before_source_set_sha256": "46c1d2cbfe23ebd9dd7d11b80f40f6d201f11733c95465244e26c9a43e74393c",
+      "after_source_set_sha256": "46c1d2cbfe23ebd9dd7d11b80f40f6d201f11733c95465244e26c9a43e74393c",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "2 passed in 0.67s"
+      ],
+      "raw_record_sha256": "a1163897ac60eb2ad9e498ac7e2b9becde273b1d69043c242afccf478723781b",
+      "before_build_sha256": null,
+      "after_build_sha256": null,
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "4f023343a84a9d1243ca36b7ca0d3cb08a2a2159f9724ef5e22857d0fb3be8ca",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "3a987ba19ac2cbc279e5d09f776fbae7f65ada18a342d2a748de75bceeab4419",
+      "node_guard_loads": 0,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-model-revision-red",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_policy_snapshot_contract.py::test_policy_source_rejects_wrong_model_revision_even_when_fixture_bytes_match",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "f50f040edc12b2499091e1c8aaeb63dd6a256b38",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 1,
+      "elapsed_seconds": 1.314,
+      "before_source_set_sha256": "7168ef9ed0bb0a2f17bf5af9c7f3fc767057eb12beb221d73f506485b205de74",
+      "after_source_set_sha256": "7168ef9ed0bb0a2f17bf5af9c7f3fc767057eb12beb221d73f506485b205de74",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "1 failed in 0.52s"
+      ],
+      "raw_record_sha256": "41f085bcd310f34dcdf01a98250d1c4fa13dc55b3319fedcc3578f50113fa290",
+      "before_build_sha256": null,
+      "after_build_sha256": null,
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "4f023343a84a9d1243ca36b7ca0d3cb08a2a2159f9724ef5e22857d0fb3be8ca",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "775810608cecd2f721b8c6a03048500dd1f4c9e17a845178ebf3f23ad9beec12",
+      "node_guard_loads": 0,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-pi-prefetch-red",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_judge_policy_prefetch_public.py::test_yes_prefetch_is_actual_low_trust_input_and_registered_policy_evidence",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "a2a88fb9b802689f31939017b407eec009a1894c",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 1,
+      "elapsed_seconds": 8.593,
+      "before_source_set_sha256": "6ec5bd9944317f2c9949599c1aa71f42516e26c12c48d25aca254ec58cfd77fb",
+      "after_source_set_sha256": "6ec5bd9944317f2c9949599c1aa71f42516e26c12c48d25aca254ec58cfd77fb",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "E       AssertionError: [{'protocol_version': 1, 'run_id': 'run-2480b1719c8b4ea78b72109123981f6e', 'sequence': 1, 'type': 'accepted', ...}, {'..., ...}, {'protocol_version': 1, 'run_id': 'run-2480b1719c8b4ea78b72109123981f6e', 'sequence': 4, 'type': 'error', ...}]",
+        "ERROR    app.services.guide_run_service:guide_run_service.py:255 Pi host failure run_id=run-2480b1719c8b4ea78b72109123981f6e causes=[{'kind': 'Error', 'fingerprint': '8a9b2f8cad69657d37b8e667719c4ea8774d8d41d21b505375e93c6c7bd059f7', 'frames': [{'file': 'pi_product_turn_service.py', 'line': 148, 'function': 'process'}, {'file': 'pi_product_runtime.py', 'line': 299, 'function': 'run'}, {'file': 'pi_product_runtime.py', 'line': 281, 'function': 'prepare_policy'}, {'file': 'pi_product_runtime.py', 'line': 204, 'function': '_query_policy'}]}]",
+        "1 failed in 5.93s"
+      ],
+      "raw_record_sha256": "876ada6c74a1ed3a9936fa0f21c9f1bfc7c718c758703ca7320920a66df74c19",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "ef420bfa77b7ac4b9226fe2f702a357482cd08b272bcd105871d5ea23acca62a"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "ef420bfa77b7ac4b9226fe2f702a357482cd08b272bcd105871d5ea23acca62a"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "dee3881ff9279feac521da1f81fb1af2a0714df727d989f124e6c0bc119d72bf",
+      "node_guard_loads": 0,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-pi-prefetch-reuse-green",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_judge_policy_prefetch_public.py::test_yes_prefetch_is_actual_low_trust_input_and_registered_policy_evidence",
+        "tests/test_judge_policy_reuse_public.py",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "a2a88fb9b802689f31939017b407eec009a1894c",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 1,
+      "elapsed_seconds": 26.582,
+      "before_source_set_sha256": "61021560edc70bfd34f594250f616f7b027eb29e4badb680ac48ec65248f8d94",
+      "after_source_set_sha256": "61021560edc70bfd34f594250f616f7b027eb29e4badb680ac48ec65248f8d94",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "E       AssertionError: assert (5 == 5 and False)",
+        "1 failed, 15 passed in 25.12s"
+      ],
+      "raw_record_sha256": "79069cda907d32ef25ee494e6a533e8b50262968fed809fd1eb9e4f77d0c4bd7",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "e60fba204926cecfe7cbc48d5426030837fd06948ede91f87dc17cc770f8aa5c",
+      "node_guard_loads": 18,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-prefetch-reuse-compact-green",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_judge_policy_prefetch_public.py::test_yes_prefetch_is_actual_low_trust_input_and_registered_policy_evidence",
+        "tests/test_judge_policy_reuse_public.py",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "a2a88fb9b802689f31939017b407eec009a1894c",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 0,
+      "elapsed_seconds": 28.321,
+      "before_source_set_sha256": "56b51b5610d1b66567bf8c5718c0a1d5eecefede611f08ebae14f627ffa7ac1d",
+      "after_source_set_sha256": "56b51b5610d1b66567bf8c5718c0a1d5eecefede611f08ebae14f627ffa7ac1d",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "16 passed in 26.82s"
+      ],
+      "raw_record_sha256": "6a583ea2e2bfe9dff6d0ba913d5a8977f3cc5588e97b41af951a6cab47b988ef",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "162cc8f157876bcdec20612a3dbbb4cff3eb7f40098d4c925ec649dfc3d1a78a",
+      "node_guard_loads": 18,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-prefetch-runtime-green",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "head": "a2a88fb9b802689f31939017b407eec009a1894c",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/runtime/pi",
+      "exit_code": 0,
+      "elapsed_seconds": 6.533,
+      "before_source_set_sha256": "61021560edc70bfd34f594250f616f7b027eb29e4badb680ac48ec65248f8d94",
+      "after_source_set_sha256": "61021560edc70bfd34f594250f616f7b027eb29e4badb680ac48ec65248f8d94",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [],
+      "raw_record_sha256": "4cc1f7fca668bbf27f38d6867ab27136ecf3e5e647ebdb1d90afe994feb2de87",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "ef420bfa77b7ac4b9226fe2f702a357482cd08b272bcd105871d5ea23acca62a"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "6d04c89393cd8e4603ca3f7aa367dc8b4c6eba3750e0a4bdbb377a00271c6859",
+      "node_guard_loads": 2,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-real-worker-index-green",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_knowledge_worker_deadline.py",
+        "tests/test_policy_snapshot_contract.py",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "d7c8de428d13978ec95d6e0e50e6d979855c8f60",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 0,
+      "elapsed_seconds": 1.351,
+      "before_source_set_sha256": "3b5e9b217e4fa3dde896acef9007475b43dd07e470faf237299f3b661c775e94",
+      "after_source_set_sha256": "3b5e9b217e4fa3dde896acef9007475b43dd07e470faf237299f3b661c775e94",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "7 passed in 0.43s"
+      ],
+      "raw_record_sha256": "218209d20cfe20eb35069407335cebc609a3476095a1ed025a06ea3b72678e1e",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "165f3717e739ebf29defa7bd539116cb995c4854a2969a8d99d5d702d6767166",
+      "node_guard_loads": 0,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-real-worker-index-red",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_knowledge_worker_deadline.py::test_real_worker_rejects_wrong_index_revision_before_loading_models",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "d7c8de428d13978ec95d6e0e50e6d979855c8f60",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 1,
+      "elapsed_seconds": 2.039,
+      "before_source_set_sha256": "f0f05815b9b7aea0633201c0555629bea36ea6a3bab2211aecc833447595f3ba",
+      "after_source_set_sha256": "f0f05815b9b7aea0633201c0555629bea36ea6a3bab2211aecc833447595f3ba",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "E           AssertionError: assert 'KNOWLEDGE_UNAVAILABLE' == 'KNOWLEDGE_STALE'",
+        "1 failed in 0.71s"
+      ],
+      "raw_record_sha256": "188771b7ea166fcd3f67680e73e4eca9000b81a3c4ce5494b54ddf1217e807cd",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "1cb9aa1620da1567db803709bddd61e920846f918f5ab80e00914626a27d458f",
+      "node_guard_loads": 0,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-repaired-affected-regression",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_policy_snapshot_contract.py",
+        "tests/test_knowledge_worker_deadline.py",
+        "tests/test_judge_policy_prefetch_public.py",
+        "tests/test_judge_policy_reuse_public.py",
+        "tests/test_judge_policy_reuse_safety_public.py",
+        "tests/test_judge_policy_safety_public.py",
+        "tests/test_next_shared_policy_public.py",
+        "tests/test_official_deepseek_thinking.py",
+        "tests/test_mercury_wire.py",
+        "tests/test_next_kev_wire.py",
+        "tests/test_memory_wire.py",
+        "tests/test_guide_deadline_contract.py",
+        "tests/test_guide_lifecycle.py",
+        "tests/test_guide_recovery.py",
+        "tests/test_guide_disconnect.py",
+        "tests/test_runtime_pi_product_query.py::test_pi_deadline_closes_inflight_provider_at_fifteen_seconds_without_retry",
+        "tests/test_guide_semantics.py::test_slow_general_claim_check_uses_original_fifteen_second_deadline",
+        "tests/test_runtime_pi_product_query.py::test_spent_http_admission_budget_cannot_start_a_fresh_pi_exploration",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "6ba93b2b66a004fdfae1d7106d5f29a0512ddfd6",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 0,
+      "elapsed_seconds": 250.986,
+      "before_source_set_sha256": "5c5b9eb24a38067810b9e85b4d8e9d6a253286465274a61c21dd26f2b03a6adc",
+      "after_source_set_sha256": "5c5b9eb24a38067810b9e85b4d8e9d6a253286465274a61c21dd26f2b03a6adc",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "165 passed in 245.01s (0:04:05)"
+      ],
+      "raw_record_sha256": "03446323f2e9647d7c8a63b38ffc07c2e5099072e8440829ca65fa84d55bd288",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "ed944f4af288c77c7a61991ae28bcc9dd2b3715b92ebb39056fde1fa78f78dd6"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "ed944f4af288c77c7a61991ae28bcc9dd2b3715b92ebb39056fde1fa78f78dd6"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "c1966247e0f8ac2c958d8deb026e3c1a8b3800434841bcfc4ffce87f986e6760",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "70f31ad0c7ed80de4898af456bf7d402497353fd122577488f773405e712c785",
+      "node_guard_loads": 118,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-repaired-node-guard",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+        "-m",
+        "pytest",
+        "../work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "6ba93b2b66a004fdfae1d7106d5f29a0512ddfd6",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 0,
+      "elapsed_seconds": 7.13,
+      "before_source_set_sha256": "5c5b9eb24a38067810b9e85b4d8e9d6a253286465274a61c21dd26f2b03a6adc",
+      "after_source_set_sha256": "5c5b9eb24a38067810b9e85b4d8e9d6a253286465274a61c21dd26f2b03a6adc",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "2 passed in 4.44s"
+      ],
+      "raw_record_sha256": "1a79e54e29f16701c8740a9d7be23690334dc3f6777f181d285bb00a862c9669",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "ed944f4af288c77c7a61991ae28bcc9dd2b3715b92ebb39056fde1fa78f78dd6"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "ed944f4af288c77c7a61991ae28bcc9dd2b3715b92ebb39056fde1fa78f78dd6"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "c1966247e0f8ac2c958d8deb026e3c1a8b3800434841bcfc4ffce87f986e6760",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "01acb0234ea295254c60aa449e4be7909b749785747fb6c225af8819e51ffda4",
+      "node_guard_loads": 3,
+      "node_guard_blocks": 3
+    },
+    {
+      "label": "t01-repaired-runtime-build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "head": "6ba93b2b66a004fdfae1d7106d5f29a0512ddfd6",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/runtime/pi",
+      "exit_code": 0,
+      "elapsed_seconds": 8.028,
+      "before_source_set_sha256": "5c5b9eb24a38067810b9e85b4d8e9d6a253286465274a61c21dd26f2b03a6adc",
+      "after_source_set_sha256": "5c5b9eb24a38067810b9e85b4d8e9d6a253286465274a61c21dd26f2b03a6adc",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [],
+      "raw_record_sha256": "6209824a5232df26568e740f92165c7829aeb00f5a2e08cb017d8ebd591a13fc",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "ed944f4af288c77c7a61991ae28bcc9dd2b3715b92ebb39056fde1fa78f78dd6"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "ed944f4af288c77c7a61991ae28bcc9dd2b3715b92ebb39056fde1fa78f78dd6"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "c1966247e0f8ac2c958d8deb026e3c1a8b3800434841bcfc4ffce87f986e6760",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "52c83239ece0ec09a820060e00a45253664d4ad627a50763e4cc4c82e3570bf6",
+      "node_guard_loads": 2,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-repaired-runtime-typecheck",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "head": "6ba93b2b66a004fdfae1d7106d5f29a0512ddfd6",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/runtime/pi",
+      "exit_code": 0,
+      "elapsed_seconds": 5.77,
+      "before_source_set_sha256": "5c5b9eb24a38067810b9e85b4d8e9d6a253286465274a61c21dd26f2b03a6adc",
+      "after_source_set_sha256": "5c5b9eb24a38067810b9e85b4d8e9d6a253286465274a61c21dd26f2b03a6adc",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [],
+      "raw_record_sha256": "ebc330b44bdfa407d3643079dd606ffd3267cbcd52120dab9ed807994f326177",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "ed944f4af288c77c7a61991ae28bcc9dd2b3715b92ebb39056fde1fa78f78dd6"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "ed944f4af288c77c7a61991ae28bcc9dd2b3715b92ebb39056fde1fa78f78dd6"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "c1966247e0f8ac2c958d8deb026e3c1a8b3800434841bcfc4ffce87f986e6760",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "d704f18e40d32c62147ebc3f7cbf7fbcffc119b3dc8d4f979376594f4aec40e5",
+      "node_guard_loads": 2,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-runtime-build-red-precondition",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "head": "a2a88fb9b802689f31939017b407eec009a1894c",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/runtime/pi",
+      "exit_code": 0,
+      "elapsed_seconds": 9.186,
+      "before_source_set_sha256": "6ec5bd9944317f2c9949599c1aa71f42516e26c12c48d25aca254ec58cfd77fb",
+      "after_source_set_sha256": "6ec5bd9944317f2c9949599c1aa71f42516e26c12c48d25aca254ec58cfd77fb",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [],
+      "raw_record_sha256": "b39f607f73ffe4cc38953af9dd11bd78736d5d9fe146d6d181fc020ef7a90d12",
+      "before_build_sha256": {},
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "ef420bfa77b7ac4b9226fe2f702a357482cd08b272bcd105871d5ea23acca62a"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "ae337c2fd56874221dcf1bcf4c842941f432fc8bdcdd6a1b955154ecb74932e6",
+      "node_guard_loads": 2,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-snapshot-green",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_policy_snapshot_contract.py::test_policy_source_rejects_index_built_from_different_fixture",
+        "-q"
+      ],
+      "head": "f50f040edc12b2499091e1c8aaeb63dd6a256b38",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 0,
+      "elapsed_seconds": 0.92,
+      "before_source_set_sha256": "41d78ec4759bc993402978091167d681e0d9812a8a2ce11253e5e0028ebf8e3d",
+      "after_source_set_sha256": "41d78ec4759bc993402978091167d681e0d9812a8a2ce11253e5e0028ebf8e3d",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "1 passed, 1 warning in 0.31s"
+      ],
+      "raw_record_sha256": "d5bd36ec0f66cf375e4313c184bd65ef3246f4bd2eef92c82af615f29e13e291",
+      "before_build_sha256": null,
+      "after_build_sha256": null,
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "4f023343a84a9d1243ca36b7ca0d3cb08a2a2159f9724ef5e22857d0fb3be8ca",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "5abbfe8b712be195334ace5d3233cd3f005aa50df6c9ed7118bfb20327559d0e",
+      "node_guard_loads": 0,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-snapshot-red",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_policy_snapshot_contract.py::test_policy_source_rejects_index_built_from_different_fixture",
+        "-q"
+      ],
+      "head": "f50f040edc12b2499091e1c8aaeb63dd6a256b38",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 1,
+      "elapsed_seconds": 1.198,
+      "before_source_set_sha256": "cb8d1046617d77246f2980b9ec660d3f3af5df800ea90154df2c12417c073d42",
+      "after_source_set_sha256": "cb8d1046617d77246f2980b9ec660d3f3af5df800ea90154df2c12417c073d42",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "E           AttributeError: module 'app.mercury.policy' has no attribute 'source_snapshot'",
+        "1 failed, 1 warning in 0.36s"
+      ],
+      "raw_record_sha256": "69bd3e57cfcba2fb52be0bc1309bf6a37ca4b8aab52ef40f544d3128db77c44a",
+      "before_build_sha256": null,
+      "after_build_sha256": null,
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "402be70ba7ef0f04de9f746e363043441292ca97295c52901ebfa9b2bba7e668",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "6dcadf53218ea7a0195268e80981313ea624b6efe2075279eb5848525e1b4ac5",
+      "node_guard_loads": 0,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-tail-cap-diagnostic",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_judge_policy_reuse_public.py::test_bounded_event_tail_does_not_erase_actual_request_accounting",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "a2a88fb9b802689f31939017b407eec009a1894c",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 1,
+      "elapsed_seconds": 5.206,
+      "before_source_set_sha256": "de6fd76e2e48e42d09e0a199b048d6ad706acd4e8c81cd1ae56b4aedb5427807",
+      "after_source_set_sha256": "de6fd76e2e48e42d09e0a199b048d6ad706acd4e8c81cd1ae56b4aedb5427807",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "E       AssertionError: [(1536, 7610), (1536, 6762), (1536, 50670), (1536, 94610), (1, 138550)]",
+        "1 failed in 4.13s"
+      ],
+      "raw_record_sha256": "87144bfa6cec1ba438a36314b17991be69b24ab7e9e965719cf686c9c8327e8a",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "42b96883b48a4158a9800ed784e6728c38949996e369bf59f9076455c32600a3",
+      "node_guard_loads": 1,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-unknown-source-recovery-green",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_judge_policy_safety_public.py::test_unknown_source_failure_is_resolved_only_by_actual_same_scope_recovery",
+        "tests/test_judge_policy_safety_public.py::test_same_scope_recovery_replaces_failure_with_actual_success_or_empty",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "2a411b3125afc718b39bed12767b1f04252a7a56",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 0,
+      "elapsed_seconds": 10.029,
+      "before_source_set_sha256": "56a1bf33176492a75c3c8f77f020673d757af807b87fb89a3388f949a8bf89fc",
+      "after_source_set_sha256": "56a1bf33176492a75c3c8f77f020673d757af807b87fb89a3388f949a8bf89fc",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "5 passed in 8.59s"
+      ],
+      "raw_record_sha256": "e5d82d919b74697231d9ea81c915e6541282bc292eb57c7a7b9bd2725471135b",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "040da6b799f86321814567993ee7a704269baa759d4fd1c0944e6a5a75fb67da",
+      "node_guard_loads": 5,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-unknown-source-recovery-red",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_judge_policy_safety_public.py::test_unknown_source_failure_is_resolved_only_by_actual_same_scope_recovery",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "2a411b3125afc718b39bed12767b1f04252a7a56",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 1,
+      "elapsed_seconds": 6.207,
+      "before_source_set_sha256": "1c85c6cdcada6928c70c645b3f811cad1d055dab47dcb4d9840dadc4019700fe",
+      "after_source_set_sha256": "1c85c6cdcada6928c70c645b3f811cad1d055dab47dcb4d9840dadc4019700fe",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "2 failed, 1 passed in 5.26s"
+      ],
+      "raw_record_sha256": "c21f86e46f73052345bae9d7a349c58e8ecc987d85cb7e9be4589df9f574dd64",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "6eab0bef391d463425e14b26a66ada12f729a6ee38cf7b046ef65f64f12f7b3f",
+      "node_guard_loads": 3,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-worker-deadline-green",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_knowledge_worker_deadline.py",
+        "tests/test_policy_snapshot_contract.py",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "93ac1d4a2357cbd5ed09ff680e87945eff3a13a2",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 0,
+      "elapsed_seconds": 0.904,
+      "before_source_set_sha256": "43879ba59de7ea9bae3c59aa19ed0278a190aa4b9df8f9882e307bc1ffec84ac",
+      "after_source_set_sha256": "43879ba59de7ea9bae3c59aa19ed0278a190aa4b9df8f9882e307bc1ffec84ac",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "4 passed in 0.33s"
+      ],
+      "raw_record_sha256": "0b909e3ee791503b35ccf563684f44898f31d446a2b04e8c6080c250da1dcc9d",
+      "before_build_sha256": {},
+      "after_build_sha256": {},
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "81ce7929cd1f20b1c31800409761b1403a7f3fffc2713130bd696c9011572178",
+      "node_guard_loads": 0,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-worker-deadline-red",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_knowledge_worker_deadline.py",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "93ac1d4a2357cbd5ed09ff680e87945eff3a13a2",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 1,
+      "elapsed_seconds": 0.871,
+      "before_source_set_sha256": "d5ccb772100557ba116b1e8a0b86004d355cb8eff6e19c991a723bf4df225130",
+      "after_source_set_sha256": "d5ccb772100557ba116b1e8a0b86004d355cb8eff6e19c991a723bf4df225130",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "E       ModuleNotFoundError: No module named 'app.services.knowledge_service'",
+        "E       ModuleNotFoundError: No module named 'app.services.knowledge_service'",
+        "2 failed in 0.27s"
+      ],
+      "raw_record_sha256": "fddbea115c62ebd6a9debc02dd8877d514ef5b009f471a8cfcaaa6a63e9d33ae",
+      "before_build_sha256": null,
+      "after_build_sha256": null,
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "c474f4a07847e311ae20371e4b40b68789adf9d89a2a3a909537fe2a0b6338e2",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "4c2c1b4d8bf9b22151a9e00b2c32ccb5c8530cb7b4c241dd7b1ce08bb44c1d5b",
+      "node_guard_loads": 0,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-worker-stale-green",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_knowledge_worker_deadline.py",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "a2a88fb9b802689f31939017b407eec009a1894c",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 0,
+      "elapsed_seconds": 0.881,
+      "before_source_set_sha256": "1e1753d7ab01a1584e5e9dcad714121eed8051459eeb411659c2ae04c147bef1",
+      "after_source_set_sha256": "1e1753d7ab01a1584e5e9dcad714121eed8051459eeb411659c2ae04c147bef1",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "3 passed in 0.34s"
+      ],
+      "raw_record_sha256": "2831fb58cef0ecd56ed1d27f7aead97aeaf75c82b41c6ad4cbc425e189abd6f4",
+      "before_build_sha256": {},
+      "after_build_sha256": {},
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "6db3a35218d4d1c4cf8589d23a8febba3fd6f0b92b46221f6f605c6a8286a01d",
+      "node_guard_loads": 0,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-worker-stale-red",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_knowledge_worker_deadline.py::test_worker_stale_index_error_is_not_returned_as_success",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "a2a88fb9b802689f31939017b407eec009a1894c",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 1,
+      "elapsed_seconds": 1.408,
+      "before_source_set_sha256": "c534cbe3970e275e1e703e81092436a0631a384487f58e50735e30847438eb2f",
+      "after_source_set_sha256": "c534cbe3970e275e1e703e81092436a0631a384487f58e50735e30847438eb2f",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "1 failed in 0.65s"
+      ],
+      "raw_record_sha256": "159688dfe4464e8d296b2a886e9183a967033f4825b5a2b47a98743f5cc6c444",
+      "before_build_sha256": {},
+      "after_build_sha256": {},
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "fc49e95b4d3fdb58a3f3b67f7675226e727fe60addcb66c63862ce372b695b99",
+      "node_guard_loads": 0,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-worker-unavailable-green",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_knowledge_worker_deadline.py",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "d7c8de428d13978ec95d6e0e50e6d979855c8f60",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 0,
+      "elapsed_seconds": 1.493,
+      "before_source_set_sha256": "15af355ede349fb6c9c439947ad40c6fb4dd2ce132328df198180204bca26a8e",
+      "after_source_set_sha256": "15af355ede349fb6c9c439947ad40c6fb4dd2ce132328df198180204bca26a8e",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "7 passed in 0.87s"
+      ],
+      "raw_record_sha256": "f7a52957b85a49b501063a5d628b6d20e21469b673d3f70a74b2f414a21f710f",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "9ba557f5e661de570d97cc11bf8d5d27a2f1566d833960420fcf6e747f4930a7",
+      "node_guard_loads": 0,
+      "node_guard_blocks": 0
+    },
+    {
+      "label": "t01-worker-unavailable-red",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_knowledge_worker_deadline.py",
+        "-q",
+        "-p",
+        "pytest_asyncio.plugin"
+      ],
+      "head": "d7c8de428d13978ec95d6e0e50e6d979855c8f60",
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/backend",
+      "exit_code": 1,
+      "elapsed_seconds": 2.014,
+      "before_source_set_sha256": "3694b907c32b3403930dd2a064d89090a6cd5a42616a51a1a963637029fa311e",
+      "after_source_set_sha256": "3694b907c32b3403930dd2a064d89090a6cd5a42616a51a1a963637029fa311e",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "summary": [
+        "1 failed, 6 passed in 1.12s"
+      ],
+      "raw_record_sha256": "99913f9c5e0fda016a8b380c856e31dafe7f146f433aebffdc449afee8d007b1",
+      "before_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "after_build_sha256": {
+        "runtime/pi/dist/general-claim.js": "34bd70d93e4ba652ee43c3b8a879179f8b166adab1d4d84fa125e8a73aa4349f",
+        "runtime/pi/dist/official-deepseek.js": "ff9313e72e592167c91527df900931a9b266dd275ffa2885f531326d57c9b62c",
+        "runtime/pi/dist/prompt-modules.js": "3223f61a244db77262e30da2980d97584507b0244f5230f7e61078c7999e5d1d",
+        "runtime/pi/dist/result-expression.js": "96172b38c5487458e9b51d94a0c3608de1c2bf4869bfa6720c82e56830882f78",
+        "runtime/pi/dist/worker.js": "8e54c0b86da758e24f984840ebd3bedbfdeaa66ce53d807dd160b06f9916e3b6"
+      },
+      "harness_sha256": {
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2/../test-evidence/run_check.py": "27f12adcce9fd5ffd55a6676ce08221e3da43e0a1fddf7dd8e61681ccb1731ce",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T01-policy/work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "node_guard_launcher_sha256": "5cb50fcc281740dbdf00af6d3c32af5bffbdf72a5ec91461596746f2c3e080cf",
+      "node_guard_loads": 0,
+      "node_guard_blocks": 0
+    }
+  ]
+}

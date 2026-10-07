@@ -69,3 +69,9 @@ T01 corpus 实际消费五份 incoming 静态来源，而 T02 原计划迁入这
 T01 conftest 的 controlled_policy_source 只允许 policy namespace；T02 接管后独占增加 product 专用受控 fixture，不取消 namespace 断言，不用政策假数据冒充商品。T03 仅独立 fixture、不并改 conftest。
 
 重要更正：实际基线 Guide API 30 秒，Mercury 15 秒；T01 独占 Guide API 入口落实用户确认 15 秒，不改模型 token。新旧 30→15 必须明确报告，旧 30 秒性能样本不得当同条件对照。
+
+## T01 技术放行与 frontier
+
+`6ba93b2` 经165受影响用例、runtime typecheck/build、guard2及两轴修复复审后合入 `3ecf15e8`；产品目录与受测 pin 相同。T01 为待验收，实际 BGE质量、最终集成/本人验收仍开放。当前 frontier：T02 与 T03 并行；T07 owner 同时只写 Mercury deadline/category 调用链。T02独占 conftest 和商品/fixture调用链；T03独占 Pi上下文/工具/Prompt及独立test，双方不得共享文件。T01的policy/knowledge已冻结供消费，需要接口变更先协调owner，不私改。
+
+T07核心postmerge最小检查在15c0ad6冻结工作树13passed无漂移，证据已记录；这不解除其Mercury接线或T05阻塞。直接 Guide15秒涵盖同步授权，独立navigation预检不共用跨请求预算，重放/重连不重置。

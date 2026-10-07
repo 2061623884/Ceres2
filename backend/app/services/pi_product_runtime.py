@@ -19,7 +19,7 @@ from app.services.catalog_service import CatalogService
 from app.prompts.experience import keke_modules
 
 MAX_TOOL_ROUNDS = 5
-EXPLORATION_SECONDS = 30.0
+EXPLORATION_SECONDS = 15.0
 LOGGER = logging.getLogger(__name__)
 WORKER = Path(__file__).resolve().parents[3] / 'runtime' / 'pi' / 'dist' / 'worker.js'
 ROLE_BOUNDARY_MESSAGE = '具体订单、退款或退货事项由墨墨处理。这里尚未查询订单资格，也未提交申请；你可以点击角色按钮前往墨墨。'
@@ -201,21 +201,31 @@ class PiProductRuntime:
         raise AppError(422, 'PI_TOOL_FORBIDDEN', '本次运行仅允许查询商品')
 
     def _query_policy(self, query, category, *, origin):
-        from app.mercury.policy import search_policies, POLICY_SOURCE_VERSION, POLICY_SOURCE_NAME
+        from app.mercury.policy import search_policies, source_snapshot
+        from app.services.knowledge_service import check_budget
         started = time.monotonic()
-        # The Pi scheduler is sequential. Reuse only actual successful/empty
-        # acquisitions in this trusted request, never a failed attempt.
-        for evidence in self.policy_results.values():
-            if (evidence['scope'] == self.policy_scope and evidence['query'] == query
-                    and evidence['category'] == category and evidence['source_version'] == POLICY_SOURCE_VERSION):
-                self._record_event({'type': 'policy_reuse', 'origin': origin, 'outcome': evidence['outcome'],
-                                    'elapsed_ms': (time.monotonic() - started) * 1000,
-                                    'source_version': POLICY_SOURCE_VERSION, 'policy_ref': evidence['policy_ref']})
-                return {key: value for key, value in evidence.items() if key != 'scope'}
         evidence = {'request_id': self.policy_scope['request_id'], 'query': query,
-                    'category': category, 'source_name': POLICY_SOURCE_NAME, 'source_version': POLICY_SOURCE_VERSION}
+                    'category': category, 'source_name': None, 'source_version': None,
+                    'source_revision': None, 'index_revision': None}
         try:
-            result = search_policies(query, category)
+            check_budget(self.policy_deadline, self.policy_should_stop)
+            snapshot = source_snapshot()
+            evidence.update(snapshot)
+            # Exact text/category/request and the complete current index identity.
+            for existing in self.policy_results.values():
+                if (existing['scope'] == self.policy_scope and existing['query'] == query
+                        and existing['category'] == category
+                        and all(existing[key] == value for key, value in snapshot.items())):
+                    self.assert_current()
+                    check_budget(self.policy_deadline, self.policy_should_stop)
+                    self._record_event({'type': 'policy_reuse', 'origin': origin, 'outcome': existing['outcome'],
+                                        'elapsed_ms': (time.monotonic() - started) * 1000,
+                                        **snapshot, 'policy_ref': existing['policy_ref']})
+                    return {key: value for key, value in existing.items() if key not in ('scope', 'retrieval')}
+            result = search_policies(query, category, snapshot=snapshot,
+                                     deadline=self.policy_deadline, should_stop=self.policy_should_stop)
+            self.assert_current()
+            check_budget(self.policy_deadline, self.policy_should_stop)
         except Exception as exc:
             from app.services.guide_run_service import safe_failure_diagnostic
             LOGGER.warning('Policy fallback phase=policy_lookup run_id=%s request_id=%s causes=%s',
@@ -224,22 +234,27 @@ class PiProductRuntime:
             self.policy_attempts.append({**evidence, 'scope': dict(self.policy_scope)})
             self._record_event({'type': 'policy_lookup', 'origin': origin, 'outcome': 'error',
                                 'elapsed_ms': (time.monotonic() - started) * 1000,
-                                'source_version': POLICY_SOURCE_VERSION, 'reason': 'lookup_failed'})
-            # A real tool call also returns its failed attempt to the same Pi;
-            # it must remain able to finish the other parts of a mixed request.
+                                'source_version': evidence['source_version'],
+                                'source_revision': evidence['source_revision'],
+                                'index_revision': evidence['index_revision'], 'reason': 'lookup_failed'})
             return evidence
+        # Only a still-current, in-budget read reaches reference minting.
         ref = f'policy-{uuid4().hex}'
-        evidence.update(**result, policy_ref=ref, outcome='success' if result['data'] else 'empty',
+        evidence.update(**{key: value for key, value in result.items() if key != 'retrieval'},
+                        policy_ref=ref, outcome='success' if result['data'] else 'empty',
                         coverage='partial' if result['data'] else 'none')
-        # Owned by this Python runtime only; never reconstructed from model text.
-        self.policy_results[ref] = {**evidence, 'scope': dict(self.policy_scope)}
+        # Full raw retrieval stays host-side, not duplicated in every model turn.
+        self.policy_results[ref] = {**evidence, 'scope': dict(self.policy_scope),
+                                    'retrieval': result['retrieval']}
         self.policy_attempts.append(self.policy_results[ref])
         self._record_event({'type': 'policy_lookup', 'origin': origin, 'outcome': evidence['outcome'],
                             'elapsed_ms': (time.monotonic() - started) * 1000,
-                            'source_version': POLICY_SOURCE_VERSION, 'policy_ref': ref, 'reason': None})
+                            **snapshot, 'policy_ref': ref, 'reason': None})
         return evidence
 
     def prepare_policy(self, message: str, *, should_stop, on_phase, deadline):
+        self.policy_deadline = deadline
+        self.policy_should_stop = should_stop
         if should_stop():
             return self._close('stopped')
         if time.monotonic() >= deadline:
@@ -482,11 +497,15 @@ class PiProductRuntime:
         # success/empty resolves failure only for that exact real scope.
         latest = {}
         for attempt in self.policy_attempts:
-            latest[(attempt['query'], attempt['category'], attempt['source_version'])] = attempt
+            if attempt['outcome'] in ('success', 'empty'):
+                # A failed acquisition knew no source identity. Actual later
+                # evidence resolves it only for this same exact query/category.
+                latest.pop((attempt['query'], attempt['category'], None, None, None), None)
+            latest[(attempt['query'], attempt['category'], attempt['source_version'], attempt['source_revision'], attempt['index_revision'])] = attempt
         failures = [attempt for attempt in latest.values() if attempt['outcome'] == 'error']
         return '\n'.join(
             f"政策查询暂时失败，规则未知。查询范围：{json.dumps(attempt['query'], ensure_ascii=False)}；"
-            f"类别：{attempt['category'] or '未指定'}；来源：{attempt['source_name']}（版本 {attempt['source_version']}）。"
+            f"类别：{attempt['category'] or '未指定'}；来源：{attempt['source_name'] or '未知'}（版本 {attempt['source_version'] or '未知'}）。"
             '具体订单资格尚未核实；未提交任何申请。'
             for attempt in failures)
 
@@ -503,11 +522,15 @@ class PiProductRuntime:
         return '\n\n'.join(dict.fromkeys(messages))
 
     def _policy_message(self, ref):
-        from app.mercury.policy import policy_summary, POLICY_SOURCE_VERSION
+        from app.mercury.policy import policy_summary, source_snapshot
         if not isinstance(ref, str) or ref not in self.policy_results:
             raise AppError(422, 'PI_UNKNOWN_REFERENCE', '政策必须引用本次实际查询的规则')
         evidence = self.policy_results[ref]
-        if evidence['scope'] != self.policy_scope or evidence['source_version'] != POLICY_SOURCE_VERSION:
+        try:
+            snapshot = source_snapshot()
+        except Exception as exc:
+            raise AppError(422, 'PI_UNKNOWN_REFERENCE', '政策来源当前无法核实，请重新查询') from exc
+        if evidence['scope'] != self.policy_scope or any(evidence[key] != value for key, value in snapshot.items()):
             raise AppError(422, 'PI_UNKNOWN_REFERENCE', '政策引用的请求或来源版本已失效，请重新查询')
         text = (f"查询范围：{json.dumps(evidence['query'], ensure_ascii=False)}；"
                 f"类别：{evidence['category'] or '未指定'}。\n" + policy_summary(evidence['data']))
@@ -618,6 +641,6 @@ class PiProductRuntime:
         return '\n'.join(lines)
 
     def _close(self, status: str) -> dict[str, Any]:
-        explanation = {'stopped': '已停止本次查询。', 'deadline': '已达到 30 秒查询时限，未继续探索。', 'tool_budget': '已达到 5 轮工具查询上限，未继续探索。'}[status]
+        explanation = {'stopped': '已停止本次查询。', 'deadline': '已达到 15 秒查询时限，未继续探索。', 'tool_budget': '已达到 5 轮工具查询上限，未继续探索。'}[status]
         products = list(self.products.values())[:5]
         return {'status': status, 'message': explanation + ('\n' + self._facts(products) if products else ''), 'products': products}

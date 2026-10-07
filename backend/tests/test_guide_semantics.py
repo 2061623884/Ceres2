@@ -126,7 +126,7 @@ def test_stop_cancels_inflight_general_claim_checker_with_same_run(pi_client):
     requests.release.set()
 
 
-def test_slow_general_claim_check_uses_original_thirty_second_deadline(pi_client):
+def test_slow_general_claim_check_uses_original_fifteen_second_deadline(pi_client):
     client, requests = pi_client
     import time
     def delayed_check(body):
@@ -142,6 +142,6 @@ def test_slow_general_claim_check_uses_original_thirty_second_deadline(pi_client
     assert events[-1]['type'] == 'turn.completed'
     assert events[-1]['payload']['runtime_status'] == 'deadline'
     assert '彩虹来自' not in json.dumps(events, ensure_ascii=False)
-    assert 29.5 <= elapsed < 34
+    assert 14.5 <= elapsed < 19
     assert len(requests) == 3, 'No new summary or retry after verifier deadline'
     requests.release.set()

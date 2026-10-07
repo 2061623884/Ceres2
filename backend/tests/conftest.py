@@ -73,3 +73,68 @@ def controlled_kev_transport(monkeypatch):
         monkeypatch.setattr(kev_provider, 'client', lambda:fixture_client)
         monkeypatch.setattr(kev_provider, 'get_settings', lambda:SimpleNamespace(kev_base_url='http://kev-controlled.invalid'))
         yield control
+
+
+@pytest.fixture(autouse=True)
+def controlled_policy_source(tmp_path, monkeypatch):
+    """Offline worker-boundary double; this is NOT BGE retrieval verification.
+
+    Preserve real fixture/index provenance and production policy projection. Only
+    expensive model recall is controlled; production has no lexical fallback.
+    """
+    import shutil
+    import sqlite3
+    from app.core.config import ROOT_DIR
+    from app.knowledge.corpus import FIXTURE_NAMES, load_corpus
+    from app.knowledge.hybrid import build_parameters
+    from app.mercury import policy
+    from app.services.knowledge_service import knowledge, check_budget
+
+    root = tmp_path / 'controlled-policy'
+    fixtures = root / 'data/fixtures'
+    fixtures.mkdir(parents=True)
+    for name in FIXTURE_NAMES:
+        shutil.copyfile(ROOT_DIR / 'data/fixtures' / name, fixtures / name)
+    index = root / 'data/indexes/hybrid.sqlite3'
+    index.parent.mkdir()
+    control = {'root': root, 'calls': []}
+
+    def rebuild(version=None):
+        corpus = json.loads((fixtures / 'policies.json').read_text())
+        if version is not None:
+            corpus['version'] = version
+            (fixtures / 'policies.json').write_text(json.dumps(corpus, ensure_ascii=False))
+        _documents, manifest = load_corpus(fixtures)
+        manifest.update(build_parameters())
+        with sqlite3.connect(index) as db:
+            db.execute('CREATE TABLE IF NOT EXISTS manifest (content TEXT)')
+            db.execute('DELETE FROM manifest')
+            db.execute('INSERT INTO manifest VALUES (?)', (json.dumps(manifest),))
+        control.update(corpus=corpus, manifest=manifest)
+
+    def search(query, namespace, *, limit=10, allowed_ids=None, category=None,
+               deadline=None, should_stop=None, expected_index_revision=None):
+        if deadline is not None:
+            check_budget(deadline, should_stop)
+        assert namespace == 'policy', 'Controlled policy worker cannot simulate product or graph retrieval'
+        control['calls'].append((query, category))
+        keywords = {'refund': ('退款', '取消', '未发货', '仅退款'),
+                    'return': ('退货', '七天', '7天', '签收', '生鲜', '不可退'),
+                    'delivery': ('配送', '送达', '物流', '多久送到'),
+                    'price': ('价格', '优惠'), 'stock': ('库存', '缺货'),
+                    'order': ('订单修改', '购物车'), 'fulfillment': ('漏送', '错送', '破损'),
+                    'quality': ('品质', '新鲜', '质量'), 'safety': ('食品安全',), 'human': ('人工',)}
+        rows = [row for row in control['corpus']['policies']
+                if (category is None or row['category'] == category)
+                and any(word in query for word in keywords[row['category']])][:limit]
+        return {'manifest': control['manifest'], 'hits': [{'id': row['policy_id'], 'document': {
+            'id': row['policy_id'], 'namespace': 'policy', 'category': row['category'],
+            'title': row['title'], 'text': row['content'], 'source': {
+                'file': 'policies.json', 'record_id': row['policy_id'],
+                'version': control['corpus']['version'], 'name': control['corpus']['source_name']}}} for row in rows]}
+
+    rebuild()
+    control['change_version'] = rebuild
+    monkeypatch.setattr(policy, 'get_settings', lambda: SimpleNamespace(root_dir=root))
+    monkeypatch.setattr(knowledge, 'search', search)
+    return control

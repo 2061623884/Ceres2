@@ -61,9 +61,9 @@ def test_yes_prefetch_is_actual_low_trust_input_and_registered_policy_evidence(p
     lookups = []
     search = policy.search_policies
 
-    def observe(query, category=None):
+    def observe(query, category=None, **kwargs):
         lookups.append((query, category))
-        return search(query, category)
+        return search(query, category, **kwargs)
 
     monkeypatch.setattr(policy, 'search_policies', observe)
 
@@ -86,7 +86,7 @@ def test_yes_prefetch_is_actual_low_trust_input_and_registered_policy_evidence(p
     evidence = prefetched(first)
     assert evidence['query'] == original and evidence['category'] is None
     assert evidence['request_id'] == 'prefetch-first'
-    assert evidence['source_version'] == '2026-10-06'
+    assert evidence['source_version'] == '2026-10-07-demo-v1'
     assert evidence['outcome'] == 'success' and evidence['coverage'] == 'partial'
     assert evidence['policy_ref'].startswith('policy-')
     assert any(row['policy_id'] == 'P-RET-01' and '7 天' in row['content'] for row in evidence['data'])
@@ -96,7 +96,7 @@ def test_yes_prefetch_is_actual_low_trust_input_and_registered_policy_evidence(p
     assert 'search_after_sales_policy' in {tool['function']['name'] for tool in first['tools']}
     assert all('P-RET-01' in json.dumps(prefetched(body), ensure_ascii=False) for body in requests)
     text = result['message']
-    assert all(part in text for part in ('P-RET-01', '2026-10-06', '7 天', '未知', '具体订单资格尚未核实', '未提交任何申请'))
+    assert all(part in text for part in ('P-RET-01', '2026-10-07-demo-v1', '7 天', '未知', '具体订单资格尚未核实', '未提交任何申请'))
     judgment = next(event for event in result['runtime_events'] if event['type'] == 'policy_judgment')
     assert judgment['outcome'] == 'yes' and judgment['elapsed_ms'] >= 0
     assert judgment['rules_version'] and judgment['usage'] is None
@@ -117,9 +117,9 @@ def test_policy_judgment_fallback_keeps_ordinary_pi_policy_tools(pi_client, poli
     lookups = []
     search = policy.search_policies
 
-    def observe(query, category=None):
+    def observe(query, category=None, **kwargs):
         lookups.append((query, category))
-        return search(query, category)
+        return search(query, category, **kwargs)
 
     monkeypatch.setattr(policy, 'search_policies', observe)
 
@@ -156,14 +156,14 @@ def test_prefetch_lookup_failure_is_observable_and_the_same_pi_can_recover(pi_cl
     lookups = []
     search = policy.search_policies
 
-    def flaky(query, category=None):
+    def flaky(query, category=None, **kwargs):
         lookups.append((query, category))
         if len(lookups) == 1:
             try:
                 raise OSError('PRIVATE_POLICY_SOURCE_DETAIL')
             except OSError as cause:
                 raise RuntimeError('PRIVATE_POLICY_LOOKUP_DETAIL') from cause
-        return search(query, category)
+        return search(query, category, **kwargs)
 
     monkeypatch.setattr(policy, 'search_policies', flaky)
 
@@ -188,7 +188,7 @@ def test_prefetch_lookup_failure_is_observable_and_the_same_pi_can_recover(pi_cl
     assert lookups == [(original, None), ('退货政策', 'return')]
     acquisitions = [event for event in result['runtime_events'] if event['type'] == 'policy_lookup']
     assert [(event['origin'], event['outcome']) for event in acquisitions] == [('prefetch', 'error'), ('tool', 'success')]
-    assert all(event['elapsed_ms'] >= 0 and event['source_version'] == '2026-10-06' for event in acquisitions)
+    assert all(event['elapsed_ms'] >= 0 and event['source_version'] == '2026-10-07-demo-v1' for event in acquisitions)
     assert result['trace_id'] in caplog.text and 'policy_lookup' in caplog.text
     assert 'fingerprint' in caplog.text and 'OSError' in caplog.text and 'RuntimeError' in caplog.text
     assert 'PRIVATE_POLICY' not in caplog.text and 'PRIVATE_POLICY' not in json.dumps(events)
@@ -286,7 +286,7 @@ def test_empty_and_partial_policy_facts_never_claim_complete_coverage(pi_client,
     assert evidence['coverage'] == ('none' if outcome == 'empty' else 'partial')
     assert evidence['query'] == original and evidence['category'] is None
     text = result['message']
-    assert '来源' in text and '2026-10-06' in text and '未知' in text
+    assert '来源' in text and '2026-10-07-demo-v1' in text and '未知' in text
     assert '无条件永久可退' not in text and '已经退款到账' not in text
     if outcome == 'empty':
         assert '未找到匹配' in text and 'P-RET-01' not in text
@@ -309,9 +309,9 @@ def test_deadline_after_blocking_progress_prevents_the_next_policy_read(pi_clien
     lookups = []
     search = policy.search_policies
 
-    def observe(query, category=None):
+    def observe(query, category=None, **kwargs):
         lookups.append((query, category))
-        return search(query, category)
+        return search(query, category, **kwargs)
 
     monkeypatch.setattr(policy, 'search_policies', observe)
     delayed = threading.Event()
@@ -326,8 +326,8 @@ def test_deadline_after_blocking_progress_prevents_the_next_policy_read(pi_clien
         current_state = retrieving.is_set() and statement.startswith('SELECT guide_sessions')
         if not delayed.is_set() and ((guard == 'progress' and progress) or (guard == 'current_state' and current_state)):
             # Simulate a blocking public progress write crossing the unchanged
-            # 30-second deadline; only the runtime clock boundary is replaced.
-            clock['elapsed'] = 31.0
+            # 15-second deadline; only the runtime clock boundary is replaced.
+            clock['elapsed'] = 16.0
             delayed.set()
 
     def respond(body):
@@ -371,7 +371,7 @@ def test_policy_facts_cannot_publish_after_a_blocking_final_transaction(pi_clien
     def stall_clock(_connection, _cursor, statement, _parameters, _context, _many):
         target = statement.startswith('UPDATE guide_sessions') if boundary == 'publication_lock' else statement.startswith('INSERT INTO guide_messages')
         if answer_ready.is_set() and not delayed.is_set() and threading.current_thread().name.startswith('guide-') and target:
-            clock['elapsed'] = 31.0
+            clock['elapsed'] = 16.0
             delayed.set()
 
     requests.answer_hook = respond
@@ -424,7 +424,7 @@ def test_late_final_transaction_rolls_back_staged_business_writes(pi_client, pol
     def stall_clock(_connection, _cursor, statement, _parameters, _context, _many):
         target = 'INSERT INTO cart_items' if operation == 'cart' else 'INSERT INTO shopping_memories'
         if not delayed.is_set() and threading.current_thread().name.startswith('guide-') and statement.startswith(target):
-            clock['elapsed'] = 31.0
+            clock['elapsed'] = 16.0
             delayed.set()
 
     requests.answer_hook = respond
@@ -486,7 +486,7 @@ def test_expired_policy_preparation_cannot_commit_literal_confirmation(pi_client
     clock_source = SimpleNamespace(monotonic=lambda: time.monotonic() + clock['elapsed'])
     monkeypatch.setattr(pi_product_runtime, 'time', clock_source)
     monkeypatch.setattr(pi_product_turn_service, 'time', clock_source)
-    policy_transport['on_policy'] = lambda: clock.update(elapsed=31.0)
+    policy_transport['on_policy'] = lambda: clock.update(elapsed=16.0)
     before_judges, before_models = len(policy_transport['calls']), len(requests)
     events = purchase_turn(client, '就按这个加购', 'literal-after-deadline')
     assert events[-1]['type'] == 'turn.completed', events
@@ -504,7 +504,7 @@ def test_persistent_policy_failure_has_scoped_host_status_and_preserves_other_wo
     original = '说明退货条件' if primary == 'policy' else '帮我选饮品，包装还没决定，并说明退货条件'
     lookups = []
 
-    def unavailable(query, category=None):
+    def unavailable(query, category=None, **kwargs):
         lookups.append((query, category))
         raise RuntimeError('controlled private unavailable source')
 
@@ -526,7 +526,7 @@ def test_persistent_policy_failure_has_scoped_host_status_and_preserves_other_wo
     result = events[-1]['payload']
     assert result['runtime_status'] == ('completed' if primary == 'policy' else 'waiting')
     text = '\n'.join(row['content'] for row in result['messages'])
-    assert all(part in text for part in ('政策查询暂时失败', '规则未知', '未提交任何申请', original, '2026-10-06'))
+    assert all(part in text for part in ('政策查询暂时失败', '规则未知', '未提交任何申请', original, '2026-10-07-demo-v1'))
     assert '未找到匹配' not in text and 'P-RET-01' not in text and 'private' not in text
     if primary == 'waiting':
         assert '瓶装' in result['messages'][0]['content'] and len(result['messages']) == 2

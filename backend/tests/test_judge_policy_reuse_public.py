@@ -17,9 +17,9 @@ def test_prefetch_and_same_batch_exact_queries_return_the_same_complete_evidence
     lookups = []
     search = policy.search_policies
 
-    def observe(query, category=None):
+    def observe(query, category=None, **kwargs):
         lookups.append((query, category))
-        return search(query, category)
+        return search(query, category, **kwargs)
 
     monkeypatch.setattr(policy, 'search_policies', observe)
 
@@ -105,14 +105,14 @@ def test_a_later_subquestion_does_not_retire_an_earlier_applicable_reference(pi_
     assert acquisitions[0]['policy_ref'] != acquisitions[1]['policy_ref']
 
 
-def test_an_acquired_reference_expires_when_the_authoritative_source_version_changes(pi_client, policy_transport, monkeypatch):
+def test_an_acquired_reference_expires_when_the_authoritative_source_version_changes(pi_client, policy_transport, monkeypatch, controlled_policy_source):
     from app.mercury import policy
     client, requests = pi_client
 
     def respond(body):
         if not any(m['role'] == 'tool' for m in body['messages']):
             return call(body, 'guide_request', {'kind': 'question'})
-        monkeypatch.setattr(policy, 'POLICY_SOURCE_VERSION', 'controlled-v2')
+        controlled_policy_source['change_version']('controlled-v2')
         return answer({'status': 'completed', 'answer_kind': 'policy_result',
                        'policy_ref': prefetched(body)['policy_ref']})
 
@@ -125,7 +125,7 @@ def test_an_acquired_reference_expires_when_the_authoritative_source_version_cha
 
 
 @pytest.mark.parametrize('change', ['subquestion', 'condition', 'exact_text', 'category', 'version'])
-def test_only_the_exact_effective_query_scope_and_version_are_reused(pi_client, policy_transport, monkeypatch, change):
+def test_only_the_exact_effective_query_scope_and_version_are_reused(pi_client, policy_transport, monkeypatch, change, controlled_policy_source):
     from app.mercury import policy
     client, requests = pi_client
     original = '退货政策'
@@ -135,9 +135,9 @@ def test_only_the_exact_effective_query_scope_and_version_are_reused(pi_client, 
         arguments['category'] = 'return'
     lookups, search = [], policy.search_policies
 
-    def observe(query, category=None):
-        lookups.append((query, category, policy.POLICY_SOURCE_VERSION))
-        return search(query, category)
+    def observe(query, category=None, **kwargs):
+        lookups.append((query, category, policy.source_snapshot()['source_version']))
+        return search(query, category, **kwargs)
 
     monkeypatch.setattr(policy, 'search_policies', observe)
 
@@ -146,7 +146,7 @@ def test_only_the_exact_effective_query_scope_and_version_are_reused(pi_client, 
         if not rows:
             return call(body, 'guide_request', {'kind': 'question'})
         if len(rows) == 1 and change == 'version':
-            monkeypatch.setattr(policy, 'POLICY_SOURCE_VERSION', 'controlled-v2')
+            controlled_policy_source['change_version']('controlled-v2')
         if len(rows) < 3:
             return call(body, 'search_after_sales_policy', arguments)
         return answer({'status': 'completed', 'answer_kind': 'policy_result', 'policy_ref': rows[-1]['policy_ref']})
@@ -154,8 +154,8 @@ def test_only_the_exact_effective_query_scope_and_version_are_reused(pi_client, 
     requests.answer_hook = respond
     events = turn(client, original, 'scope-change-' + change)
     assert events[-1]['type'] == 'turn.completed', events
-    current_version = 'controlled-v2' if change == 'version' else '2026-10-06'
-    assert lookups == [(original, None, '2026-10-06'), (arguments['query'], arguments.get('category'), current_version)]
+    current_version = 'controlled-v2' if change == 'version' else '2026-10-07-demo-v1'
+    assert lookups == [(original, None, '2026-10-07-demo-v1'), (arguments['query'], arguments.get('category'), current_version)]
     rows = [json.loads(m['content']) for m in requests[-1]['messages'] if m['role'] == 'tool']
     assert rows[-1] == rows[-2] and rows[-1]['data']
     assert rows[-1]['policy_ref'] != prefetched(requests[0])['policy_ref']
@@ -172,11 +172,11 @@ def test_empty_is_reusable_but_actual_failed_attempts_never_are(pi_client, polic
     original = '火星定制条款' if state == 'empty' else '退货政策'
     lookups, search = [], policy.search_policies
 
-    def observe(query, category=None):
+    def observe(query, category=None, **kwargs):
         lookups.append((query, category))
         if state == 'error' or (state == 'recover' and len(lookups) == 1):
             raise OSError('controlled source failure')
-        return search(query, category)
+        return search(query, category, **kwargs)
 
     monkeypatch.setattr(policy, 'search_policies', observe)
 
@@ -222,9 +222,9 @@ def test_request_and_owner_boundaries_always_acquire_their_own_evidence(pi_clien
     client, requests = pi_client
     lookups, search, refs = [], policy.search_policies, []
 
-    def observe(query, category=None):
+    def observe(query, category=None, **kwargs):
         lookups.append((query, category))
-        return search(query, category)
+        return search(query, category, **kwargs)
 
     monkeypatch.setattr(policy, 'search_policies', observe)
 
@@ -255,9 +255,9 @@ def test_bounded_event_tail_does_not_erase_actual_request_accounting(pi_client, 
     client, requests = pi_client
     lookups, search = [], policy.search_policies
 
-    def observe(query, category=None):
+    def observe(query, category=None, **kwargs):
         lookups.append((query, category))
-        return search(query, category)
+        return search(query, category, **kwargs)
 
     monkeypatch.setattr(policy, 'search_policies', observe)
 
@@ -280,7 +280,7 @@ def test_bounded_event_tail_does_not_erase_actual_request_accounting(pi_client, 
     assert events[-1]['type'] == 'turn.completed', events
     result = events[-1]['payload']
     assert result['runtime_status'] == 'completed' and result['tool_rounds'] == 4
-    assert len(requests) == 5 and all(body['max_completion_tokens'] == 1536 for body in requests)
+    assert len(requests) == 5 and all(body['max_completion_tokens'] == 1536 for body in requests), [(body['max_completion_tokens'], len(json.dumps(body['messages'], ensure_ascii=False))) for body in requests]
     assert lookups == [('退货', None)] and 'P-RET-01' in result['message']
     assert len(result['runtime_events']) == 256
     assert not any(e['type'] == 'policy_judgment' for e in result['runtime_events'])
@@ -295,3 +295,29 @@ def test_bounded_event_tail_does_not_erase_actual_request_accounting(pi_client, 
     assert summary['policy_judgment']['elapsed_ms'] >= 0
     assert client.get(BASE + '/turns/roll-runtime-event-tail').json()['result']['runtime_summary'] == summary
     assert client.get('/api/v1/cart').json()['items'] == []
+
+
+@pytest.mark.parametrize('category,query,policy_id', [
+    ('price', '价格政策', 'P-PRI-01'), ('stock', '库存政策', 'P-STK-01'),
+    ('delivery', '配送政策', 'P-DEL-01'), ('order', '订单修改政策', 'P-ORD-01'),
+    ('refund', '退款政策', 'P-REF-01'), ('fulfillment', '漏送政策', 'P-FUL-01'),
+    ('quality', '品质政策', 'P-QUA-01'), ('return', '退货政策', 'P-RET-01'),
+    ('safety', '食品安全政策', 'P-SAF-01'), ('human', '人工政策', 'P-HUM-01')])
+def test_all_policy_categories_cross_real_pi_tool_schema(pi_client, policy_transport, category, query, policy_id):
+    client, requests = pi_client
+    policy_transport['choice'] = 'no'
+
+    def respond(body):
+        outputs = [json.loads(m['content']) for m in body['messages'] if m['role'] == 'tool']
+        if not outputs:
+            return call(body, 'guide_request', {'kind': 'question'})
+        if len(outputs) == 1:
+            return call(body, 'search_after_sales_policy', {'query': query, 'category': category})
+        assert outputs[-1]['category'] == category
+        assert outputs[-1]['data'][0]['policy_id'] == policy_id
+        return answer({'status': 'completed', 'answer_kind': 'policy_result', 'policy_ref': outputs[-1]['policy_ref']})
+
+    requests.answer_hook = respond
+    events = turn(client, query, 'category-' + category)
+    assert events[-1]['type'] == 'turn.completed', events
+    assert policy_id in events[-1]['payload']['message']

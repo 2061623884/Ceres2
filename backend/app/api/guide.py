@@ -203,7 +203,7 @@ def accept_run(db, owner_id, session_id, body, deadline):
 
 @router.post('/sessions/{session_id}/runs', status_code=202)
 def start_run(session_id: str, body: TurnRequest, request: Request, response: Response, db: Session = Depends(get_db)):
-    deadline = time.monotonic() + 30.0
+    deadline = time.monotonic() + 15.0
     owner_id = get_or_create_owner(request, response, db)
     run_id, _factory = accept_run(db, owner_id, session_id, body.model_dump(), deadline)
     return {'run_id': run_id, 'request_id': body.request_id}
@@ -211,7 +211,7 @@ def start_run(session_id: str, body: TurnRequest, request: Request, response: Re
 
 @router.post('/sessions/{session_id}/turns/stream')
 def stream_turn(session_id: str, body: TurnRequest, request: Request, response: Response, db: Session = Depends(get_db)):
-    deadline = time.monotonic() + 30.0
+    deadline = time.monotonic() + 15.0
     owner_id = get_or_create_owner(request, response, db)
     owned_session(db, owner_id, session_id)
     try:
