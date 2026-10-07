@@ -3,8 +3,9 @@ import { enterLightMealActivity } from './lib/activity'
 import QuestionChoices from './QuestionChoices'
 import { answerGuideQuestion, type GuideQuestion } from './lib/productQuestions'
 import './role-chat.css'
-import { openNavigation, closeOpening, routeText, ackPrompt, chooseRole, type BeforeText, type ChatRole, type Handoff, type Opening, type RouteDecision } from './lib/chatNavigation'
+import { openNavigation, closeOpening, routeText, ackPrompt, chooseRole, type BeforeText, type ChatRole, type Handoff, type Opening, type RouteDecision, type RoleSwitchAction } from './lib/chatNavigation'
 import ComparisonCards from './ComparisonCards'
+import ProductDetail from './ProductDetail'
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { MercuryChat } from './MercuryChat'
 import { HumanOperatorPage } from './HumanOperatorPage'
@@ -273,7 +274,7 @@ function DemoBadge() {
 }
 
 type Role = 'user' | 'ai'
-interface Msg { id: string; role: Role; text: string; question?: GuideQuestion; generalExplanation?: boolean; suggestions?: string[]; productCards?: ProductComparisonCard[] }
+interface Msg { navigationAction?: RoleSwitchAction; id: string; role: Role; text: string; question?: GuideQuestion; generalExplanation?: boolean; suggestions?: string[]; productCards?: ProductComparisonCard[] }
 
 const WELCOME_MSG: Msg = {
   id: 'welcome',
@@ -433,23 +434,23 @@ function CartDrawer({
 }
 
 // ── Shelf Screen ──────────────────────────────────────────────
-function ProductCard({ p, onAdd, adding }: { p: Product; onAdd: (skuId: string) => void; adding: boolean }) {
+function ProductCard({ p, onAdd, adding, onOpen }: { p: Product; onAdd: (skuId: string) => void; adding: boolean; onOpen: (skuId: string) => void }) {
   const [liked, setLiked] = useState(false)
   const displayName = p.name_zh || p.name
   const unitLabel = p.spec_unit ? `/${p.spec_unit}` : ''
   return (
     <article className="group flex flex-col overflow-hidden rounded-[22px] border border-black/[0.06] bg-white transition-colors duration-200 hover:border-black/[0.13]">
       <div className="relative aspect-[1/0.91] overflow-hidden bg-[#f2f2f4]">
-        <img src={productImageUrl(p.image_path)} alt={displayName} className="h-full w-full object-cover" loading="lazy" />
-        <span className="absolute left-3 top-3 rounded-md bg-white/95 px-2 py-1 text-[9px] font-medium tracking-[0.02em] text-[#5f655f]">产地可溯源</span>
+        <button className="h-full w-full" aria-label={`查看${displayName}详情`} onClick={()=>onOpen(p.sku_id)}><img src={productImageUrl(p.image_path)} alt={displayName} className="h-full w-full object-cover" loading="lazy" /></button>
+        <span className="absolute left-3 top-3 rounded-md bg-white/95 px-2 py-1 text-[9px] font-medium tracking-[0.02em] text-[#5f655f]">演示商品</span>
         <button onClick={() => setLiked(v => !v)} aria-label={liked ? `取消收藏${displayName}` : `收藏${displayName}`} className="absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full bg-white/95 text-[15px] text-[#4c554c] transition active:scale-90">
           {liked ? '♥' : '♡'}
         </button>
         <span className="absolute right-1 top-10 scale-90"><DemoBadge /></span>
       </div>
       <div className="flex flex-col gap-1.5 px-4 pb-4 pt-3.5">
-        <p className="line-clamp-2 text-[14px] font-semibold leading-tight text-[#20211f]">{displayName}</p>
-        <div className="flex items-center gap-1 text-[10px] font-medium tracking-[0.01em] text-[#8a8d85]"><span className="text-[#d98a37]">★</span> 4.9 <span className="text-[#c7c8c1]">·</span> 今日采摘</div>
+        <button className="line-clamp-2 text-left text-[14px] font-semibold leading-tight text-[#20211f]" onClick={()=>onOpen(p.sku_id)}>{displayName}</button>
+        <div className="text-[10px] font-medium text-[#8a8d85]">{p.spec_quantity}{p.spec_unit} · 模拟供给</div>
         <div className="mt-1.5 flex items-center justify-between">
           <span className="text-[15px] font-extrabold tracking-tight text-[#171816]" style={{ fontFamily: "'Instrument Sans', 'Noto Sans SC', sans-serif" }}>
             {yuan(p.price_fen ?? 0)}
@@ -495,6 +496,7 @@ function ShelfScreen({
   const [cartBusy, setCartBusy] = useState(false)
   const [cartError, setCartError] = useState<string | null>(null)
   const [addingSku, setAddingSku] = useState<string | null>(null)
+  const [detailSku, setDetailSku] = useState<string | null>(null)
   const productsRef = useRef<HTMLDivElement>(null)
 
   const PROMO_CARDS = [
@@ -690,7 +692,7 @@ function ShelfScreen({
         <div ref={productsRef} className="mb-3 flex items-end justify-between">
           <div>
             <h2 className="text-[19px] font-semibold tracking-[-0.06em] text-[#202124]">{search ? '搜索结果' : '人气鲜品'}</h2>
-            <p className="mt-0.5 text-[10px] font-medium tracking-[0.02em] text-[#7c7c80]">最快 30 分钟送达</p>
+            <p className="mt-0.5 text-[10px] font-medium tracking-[0.02em] text-[#7c7c80]">模拟配送进度见订单</p>
           </div>
           <button className="flex items-center gap-1 rounded-full border border-black/[0.08] bg-transparent px-3.5 py-2 text-[10px] font-medium text-[#505055] transition active:scale-95">综合排序⌄ <DemoBadge /></button>
         </div>
@@ -704,11 +706,12 @@ function ShelfScreen({
         {!loading && !error && products.length === 0 && <p className="py-8 text-center text-sm text-black/40">暂无商品</p>}
         <div className="grid grid-cols-2 gap-3">
           {products.map(p => (
-            <ProductCard key={p.sku_id} p={p} onAdd={handleAdd} adding={addingSku === p.sku_id} />
+            <ProductCard key={p.sku_id} p={p} onAdd={handleAdd} adding={addingSku === p.sku_id} onOpen={setDetailSku} />
           ))}
         </div>
       </div>
       <CartDrawer onCheckout={() => { setCartOpen(false); setCheckoutOpen(true) }} open={cartOpen} cart={cart} onClose={() => setCartOpen(false)} onUpdateQty={handleUpdateQty} loading={cartBusy} error={cartError} />
+      {detailSku && <ProductDetail skuId={detailSku} onClose={()=>setDetailSku(null)} onAdd={handleAdd} adding={addingSku===detailSku} />}
       {checkoutOpen && <SimulatedCheckout onCartChange={onCartChange} onClose={() => setCheckoutOpen(false)} onViewOrders={() => { setCheckoutOpen(false); onViewOrders() }} />}
     </div>
   )
@@ -1051,6 +1054,8 @@ function ChatScreen({
   beforeText,
   handoff,
   onHandoffDone,
+  onNavigate,
+  navigationBusy,
   active,
   interactionEpoch,
   interactionVersion,
@@ -1063,6 +1068,8 @@ function ChatScreen({
   beforeText: BeforeText
   handoff?: Handoff | null
   onHandoffDone: () => void
+  onNavigate: (action: RoleSwitchAction) => Promise<void>
+  navigationBusy: boolean
   viewContext: { page: string; category_id?: string | null }
   onCartRefresh: () => void
   cart: Cart | null
@@ -1254,7 +1261,7 @@ function ChatScreen({
       const chips = clarificationChipLabels(normalizePendingClarifications(turn.pending_clarifications ?? []))
       for (const [index, reply] of replies.entries()) {
         const question = acceptedSnapshotRef.current?.question_history?.find(item => item.question_id === reply.message_id)
-        const message: Msg = {id:reply.message_id,role:'ai',text:question?.question ?? reply.content,question,generalExplanation:turn.answer_kind === 'general_explanation', ...(index === replies.length - 1 ? {suggestions:chips,productCards:turn.product_cards?.filter(card => allowedRefs.has(card.ref))} : {})}
+        const message: Msg = {id:reply.message_id,role:'ai',text:question?.question ?? reply.content,question,generalExplanation:turn.answer_kind === 'general_explanation', ...(index === replies.length - 1 ? {suggestions:chips,productCards:turn.product_cards?.filter(card => allowedRefs.has(card.ref)),navigationAction:turn.navigation_action ?? undefined} : {})}
         next = next.some(item => item.id === message.id) ? next.map(item => item.id === message.id ? message : item) : [...next,message]
       }
       return next
@@ -1275,6 +1282,19 @@ function ChatScreen({
       const placeholder = current.findIndex(message => message.id === placeholderId)
       if (placeholder >= 0) return current.map((message,index) => index === placeholder ? {id:messageId,role:'ai',text,generalExplanation:payload?.answer_kind === 'general_explanation'} : message)
       return [...current,{id:messageId,role:'ai',text,generalExplanation:payload?.answer_kind === 'general_explanation'}]
+    })
+  }, [])
+
+  const receiveInterim = useCallback((placeholderId: string, event: {payload?: Record<string, unknown>}) => {
+    const id = event.payload?.message_id
+    const content = event.payload?.content
+    if (typeof id !== 'string' || typeof content !== 'string') return
+    setMsgs(current => {
+      if(current.some(message => message.id === id)) return current
+      const placeholder = current.findIndex(message => message.id === placeholderId)
+      const message: Msg = {id,role:'ai',text:content}
+      return placeholder < 0 ? [...current,message]
+        : [...current.slice(0,placeholder),message,...current.slice(placeholder)]
     })
   }, [])
 
@@ -1347,7 +1367,10 @@ function ChatScreen({
           if (run.input.kind === 'result_introduction') continue
           if (run.input.message && !knownRequests.has(run.request_id) && !next.some(message => message.id === `u-${run.request_id}`)) next.push({id:`u-${run.request_id}`,role:'user',text:run.input.message})
           for (const message of run.result?.messages ?? []) {
-            if (!next.some(item => item.id === message.message_id)) next.push({id:message.message_id,role:'ai',text:message.content,generalExplanation:run.result?.answer_kind === 'general_explanation'})
+            const navigationAction = message.message_id === run.result?.messages?.at(-1)?.message_id ? run.result?.navigation_action ?? undefined : undefined
+            const index = next.findIndex(item => item.id === message.message_id)
+            if (index < 0) next.push({id:message.message_id,role:'ai',text:message.content,generalExplanation:run.result?.answer_kind === 'general_explanation',navigationAction})
+            else if (navigationAction) next[index] = {...next[index],navigationAction}
           }
           if (['failed','interrupted'].includes(run.status)) {
             const id = `status-${run.run_id}`
@@ -1368,6 +1391,7 @@ function ChatScreen({
           signal:controller.signal,
           onProgress:event => updatePhase(run.request_id, String(event.payload?.phase ?? 'understanding')),
           onAnswerDelta:event => receiveDelta(placeholderId,event),
+          onInterimMessage:event => { if(!controller.signal.aborted) receiveInterim(placeholderId,event) },
         }).then(async turn => {
           const snapshot = await readSnapshot(getGuideSession(session.session_id, false))
           if (!controller.signal.aborted) mergeTerminalTurn(turn, snapshot, placeholderId)
@@ -1382,7 +1406,7 @@ function ChatScreen({
     } finally {
       if (generation === initializationRef.current) setRestoring(false)
     }
-  }, [viewContext.category_id, viewContext.page, applyAuthoritativeSnapshot, mergeTerminalTurn, finishTransport, receiveDelta, updatePhase, readSnapshot])
+  }, [viewContext.category_id, viewContext.page, applyAuthoritativeSnapshot, mergeTerminalTurn, finishTransport, receiveDelta, receiveInterim, updatePhase, readSnapshot])
 
   useEffect(() => { void initSession(); return () => { initializationRef.current += 1 } }, [initSession])
 
@@ -1412,6 +1436,7 @@ function ChatScreen({
         signal:controller.signal,
         onProgress:event => updatePhase(requestId,String(event.payload?.phase ?? 'understanding')),
         onAnswerDelta:event => receiveDelta(placeholderId,event),
+        onInterimMessage:event => { if(!controller.signal.aborted) receiveInterim(placeholderId,event) },
       }, displayedPlan, shownCandidates, routeId)
       if (controller.signal.aborted) return
       const latest = await readSnapshot(getGuideSession(sessionId, false))
@@ -1419,8 +1444,8 @@ function ChatScreen({
         const accepted = mergeTerminalTurn(turn, latest, placeholderId)
         const freshQuestion = turn.active_question?.question_id === turn.assistant_message_id && !!turn.active_question
         const eligible = turn.runtime_status === 'completed' && turn.answer_kind !== 'general_explanation' &&
-          (freshQuestion || !!turn.product_cards?.length || !!turn.product_evidence?.length || !!turn.confirmation_result ||
-           turn.no_matches === true || (turn.plan_effect === 'replace' && !!turn.plan))
+          ((freshQuestion && !!turn.active_question?.options.length) || !!turn.product_cards?.length || !!turn.confirmation_result ||
+           (turn.plan_effect === 'replace' && !!turn.plan))
         if (accepted && eligible) queueIntroduction({source_kind: 'turn', source_id: requestId}, latest, actionEpoch)
       }
       if (turn.confirmation_result) onCartRefresh()
@@ -1439,7 +1464,7 @@ function ChatScreen({
     } finally {
       finishTransport(requestId)
     }
-  }, [sessionId, confirming, restoring, viewContext, applyAuthoritativeSnapshot, mergeTerminalTurn, receiveDelta, updatePhase, finishTransport, onCartRefresh, readSnapshot, beforeText, onInteraction, queueIntroduction])
+  }, [sessionId, confirming, restoring, viewContext, applyAuthoritativeSnapshot, mergeTerminalTurn, receiveDelta, receiveInterim, updatePhase, finishTransport, onCartRefresh, readSnapshot, beforeText, onInteraction, queueIntroduction])
 
   const resumedHandoff = useRef<string | null>(null)
   useEffect(() => {
@@ -1499,7 +1524,16 @@ function ChatScreen({
 
   async function handleStop() {
     if (!sessionId || !activeRequests[0]) return
-    try { await stopGuideTurn(sessionId,activeRequests[0]) }
+    const requestId = activeRequests[0]
+    try {
+      const result = await stopGuideTurn(sessionId,requestId)
+      if (result.cancelled) {
+        streamRef.current.get(requestId)?.abort()
+        finishTransport(requestId)
+        setMsgs(current => current.filter(message => message.id !== `a-${requestId}` || message.text))
+      }
+      if (result.result) mergeTerminalTurn(result.result, await readSnapshot(getGuideSession(sessionId, false)), `a-${requestId}`)
+    }
     catch (error) { setError(error instanceof Error ? error.message : '停止失败') }
   }
 
@@ -1695,6 +1729,7 @@ function ChatScreen({
                   </span>
                 </div>
               ) : null}
+              {msg.navigationAction && <button type="button" disabled={navigationBusy || restoring || typing} onClick={() => void onNavigate(msg.navigationAction!)} className="guide-glass-chip rounded-full px-4 py-2 text-[12px] disabled:opacity-50">{msg.navigationAction.request.target_role === 'momo' ? '前往墨墨处理' : '返回可可选购'}</button>}
               {msg.question && <QuestionChoices
                 question={msg.question}
                 disabled={typing || confirming || restoring || questionBusy}
@@ -1944,7 +1979,9 @@ function ShoppingApp() {
   const [interactionVersion, setInteractionVersion] = useState(0)
   const trackInteraction = useCallback(() => {
     const epoch = ++interactionEpoch.current
-    setInteractionVersion(epoch)
+    // Invalidate stale introductions immediately, but let native control
+    // change handlers finish before a capture-phase parent render.
+    setTimeout(() => setInteractionVersion(epoch), 0)
     return epoch
   }, [])
   const activityNavigationEpoch = useRef(0)
@@ -1955,6 +1992,7 @@ function ShoppingApp() {
   const [navigationError, setNavigationError] = useState<string | null>(null)
   const [routePrompt, setRoutePrompt] = useState<RouteDecision | null>(null)
   const [navigationBusy, setNavigationBusy] = useState(false)
+  const navigationPending = useRef(false)
   const [handoff, setHandoff] = useState<(Handoff & {role: ChatRole}) | null>(null)
   const clearHandoff = useCallback(() => setHandoff(null), [])
   const chatOpen = view === 'keke' || view === 'momo'
@@ -1979,26 +2017,26 @@ function ShoppingApp() {
 
   const beforeText = useCallback<BeforeText>(async (role, message, requestId, selectedOrder, roleSessionId) => {
     const nav = navigationRef.current
+    if (navigationPending.current) return null
     if (!nav) { setNavigationError('正在恢复聊天，请稍后再试'); return null }
+    navigationPending.current = true
     setNavigationBusy(true)
     setNavigationError(null)
     setRoutePrompt(null)
     try {
       const result = await routeText(nav.sessionId, nav.opening.opening_id, role, message, requestId, selectedOrder, roleSessionId)
-      if (result.status === 'ready') return result.routing_request_id
-      if (result.status === 'navigation') {
-        setView(result.target_role)
-        setNavigation({...nav, opening:{...nav.opening, role:result.target_role}})
-        if (result.continue_original) setHandoff({...result, role:result.target_role})
-      } else if (result.status === 'switch') {
-        if (result.show_prompt) setRoutePrompt(result)
-        else setNavigationError('这次请求属于另一角色，可使用上方角色按钮继续。')
-      } else setNavigationError(result.message ?? '请重新说明需求')
+      if (result.status === 'ready') {
+        const outcome = result.entry_judgment?.outcome
+        if (outcome === 'error' || outcome === 'timeout') setNavigationError('角色判断暂时未完成，已交由可可继续处理完整请求。')
+        return result.routing_request_id
+      }
+      if (result.show_prompt) setRoutePrompt(result)
+      else setNavigationError('这次请求可以交给墨墨，请使用上方角色按钮。')
       return null
     } catch (error) {
       setNavigationError(error instanceof Error ? error.message : '职责判断暂时不可用，请使用角色按钮')
       return null
-    } finally { setNavigationBusy(false) }
+    } finally { navigationPending.current = false; setNavigationBusy(false) }
   }, [])
 
   useEffect(() => {
@@ -2010,13 +2048,15 @@ function ShoppingApp() {
   }, [routePrompt?.routing_request_id])
 
   async function switchChatRole(role: ChatRole, accept = true, requestId?: string) {
-    if (!navigation || navigationBusy) return
+    if (!navigation || navigationBusy || navigationPending.current) return
+    navigationPending.current = true
     setNavigationBusy(true)
     try {
       const result = await chooseRole(navigation.sessionId, navigation.opening.opening_id, role, accept, requestId)
       setNavigation({...navigation, opening:result})
       setRoutePrompt(null)
       setNavigationError(null)
+      setHandoff(null)
       if (accept) {
         setView(role)
         if (result.handoff) {
@@ -2025,7 +2065,16 @@ function ShoppingApp() {
         }
       }
     } catch (error) { setNavigationError(error instanceof Error ? error.message : '角色切换失败') }
-    finally { setNavigationBusy(false) }
+    finally { navigationPending.current = false; setNavigationBusy(false) }
+  }
+
+  async function navigateFromResult(action: RoleSwitchAction) {
+    const nav = navigationRef.current
+    if (!nav || nav.sessionId !== action.session_id || nav.opening.opening_id !== action.request.opening_id) {
+      setNavigationError('这条导航属于此前的聊天，请使用当前角色按钮。')
+      return
+    }
+    await switchChatRole(action.request.target_role)
   }
 
   async function leaveChat(target: ViewState) {
@@ -2145,7 +2194,7 @@ function ShoppingApp() {
               {navigation && <ChatScreen active={view === 'keke'} interactionEpoch={interactionEpoch} interactionVersion={interactionVersion} onInteraction={trackInteraction}
                 viewContext={guideViewContext} onCartRefresh={refreshCart}
                 cart={cart} onCartChange={setCart} onViewOrders={() => void leaveChat('orders')}
-                beforeText={beforeText} handoff={handoff?.role === 'keke' ? handoff : null} onHandoffDone={clearHandoff}
+                beforeText={beforeText} handoff={handoff?.role === 'keke' ? handoff : null} onHandoffDone={clearHandoff} onNavigate={navigateFromResult} navigationBusy={navigationBusy}
               />}
             </div>
             <div className={view === 'momo' ? '' : 'hidden'}>
