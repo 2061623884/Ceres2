@@ -188,6 +188,8 @@ def event_stream(factory, owner_id, session_id, run_id, after_sequence=0):
 def accept_run(db, owner_id, session_id, body, deadline):
     from app.services.navigation_service import authorize_text, consume_handoff
     route = authorize_text(db, owner_id, session_id, 'keke', body)
+    # Retained only in the admission digest so completed legacy runs replay.
+    # New entry decisions never use this field to select Pi context or tools.
     body['_route_capability'] = route['capability']
     factory = sessionmaker(bind=db.get_bind(), autoflush=False, expire_on_commit=False)
     receipt, is_new = admit(db, owner_id, session_id, body)

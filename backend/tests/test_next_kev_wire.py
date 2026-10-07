@@ -6,24 +6,24 @@ import pytest
 from app.services import kev_provider
 
 
-def test_joint_route_uses_one_systemone_choice_question(monkeypatch):
+def test_role_entry_uses_one_systemone_choice_question(monkeypatch):
     calls = []
     def transport(request):
         calls.append(request)
         return httpx.Response(200, json={'model':'kev-latest','answers':{'service':{
-            'type':'choice','choice':'momo','probabilities':{key:(1.0 if key=='momo' else 0.0) for key in kev_provider.CRITERIA}}}})
+            'type':'choice','choice':'yes','probabilities':{key:(1.0 if key=='yes' else 0.0) for key in kev_provider.CRITERIA}}}})
     monkeypatch.setattr(kev_provider, 'get_settings', lambda:SimpleNamespace(kev_base_url='http://fixture.invalid'))
     fixture_client = httpx.Client(transport=httpx.MockTransport(transport))
     monkeypatch.setattr(kev_provider, 'client', lambda:fixture_client)
     choice, raw = kev_provider.judge({'current_role':'keke','message':'看一下这笔订单','selected_object':None,'recent_dialogue':[]})
-    assert choice == 'momo'
+    assert choice == 'yes'
     assert len(calls) == 1
     assert calls[0].url.path == '/v1/systemone'
     payload = json.loads(calls[0].content)
     assert payload['model'] == 'kev-latest'
     assert list(payload['questions']) == ['service']
     assert payload['questions']['service']['type'] == 'choice'
-    assert set(payload['questions']['service']['criteria']) == set(kev_provider.CRITERIA)
+    assert set(payload['questions']['service']['criteria']) == {'yes', 'no', 'uncertain'}
     assert not any(key.startswith('momo_') for key in kev_provider.CRITERIA)
     fixture_client.close()
 

@@ -51,12 +51,14 @@ import pytest
 @pytest.fixture(autouse=True)
 def controlled_kev_transport(monkeypatch):
     from app.services import kev_provider
-    control = {'calls': [], 'choose': lambda state: 'momo' if state['current_role'] == 'momo' else 'keke_exploration'}
+    control = {'calls': [], 'choose': lambda state: 'no'}
     def handle(request):
         assert request.url == httpx.URL('http://kev-controlled.invalid/v1/systemone')
         payload = json.loads(request.content)
         control['calls'].append(payload)
         choice = control['choose'](payload['state'])
+        if isinstance(choice, httpx.HTTPError):
+            raise choice
         if isinstance(choice, Exception):
             raise httpx.ConnectError(str(choice), request=request)
         return httpx.Response(200, json={'model':'kev-latest', 'answers':{'service':{

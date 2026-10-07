@@ -56,7 +56,7 @@ from test_next_snack_public import seed_snacks
 from test_guide_lifecycle import BASE
 
 
-def test_purchase_checkout_application_then_explicit_compound_return_requeries_goods(
+def test_purchase_checkout_application_then_button_and_new_request_requery_goods(
         pi_client, controlled_kev_transport, tmp_path, monkeypatch):
     from app.core.config import get_settings
     from app.mercury.router import get_query_model
@@ -113,16 +113,21 @@ def test_purchase_checkout_application_then_explicit_compound_return_requeries_g
     opening = client.get(navigation + '/opening').json()
     assert client.post(navigation + '/switches', json={'opening_id': opening['opening_id'],
         'target_role': 'momo', 'accept': True}).status_code == 200
-    controlled_kev_transport['choose'] = lambda _: 'return_keke_exploration'
     original = '回到购物，换一种零食，预算二十元'
     calls_before = len(controlled_kev_transport['calls'])
     routed = client.post(navigation + '/routes', json={'opening_id': opening['opening_id'], 'request_id': 'journey-return',
         'role': 'momo', 'message': original, 'role_session_id': url.split('/')[-1],
         'selected_object': {'kind': 'order', 'id': order['order_id']}})
     assert routed.status_code == 200, routed.text
-    assert routed.json()['continue_original'] is True
+    assert routed.json()['status'] == 'ready' and routed.json()['authorized_role'] == 'momo'
+    assert routed.json()['continue_original'] is False
+    assert len(controlled_kev_transport['calls']) == calls_before
     assert routed.json()['original_message'] == original
     assert routed.json()['selected_object'] == {'kind': 'order', 'id': order['order_id']}
+    returned = client.post(navigation + '/switches', json={'opening_id': opening['opening_id'],
+        'target_role': 'keke', 'accept': True})
+    assert returned.status_code == 200 and returned.json()['handoff'] is None
+    original = '换一种零食，预算二十元'
     def replacement(body):
         outputs = [json.loads(m['content']) for m in body['messages'] if m['role'] == 'tool']
         if len(outputs) < 2:
@@ -133,7 +138,7 @@ def test_purchase_checkout_application_then_explicit_compound_return_requeries_g
             'exploration_ref': outputs[-1]['exploration_ref']})}, 'stop'
     requests.answer_hook = replacement
     current = client.get(BASE).json()
-    body = {'request_id': 'journey-return', 'routing_request_id': 'journey-return', 'message': original,
+    body = {'request_id': 'journey-new-shopping', 'message': original,
         'expected_task_id': current['task_id'], 'expected_state_version': current['state_version'],
         'expected_session_version': current['session_version']}
     continued = client.post(BASE + '/turns/stream', json=body)

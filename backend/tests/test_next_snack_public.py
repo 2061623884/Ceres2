@@ -220,8 +220,14 @@ def test_text_product_choice_asks_only_missing_quantity_then_prepares_without_ca
     assert [o['value'] for o in pending['options']] == ['snack-chips']
     assert client.get(BASE).json()['plan'] is None
     requests.answer_hook = selection_hook(pending['question_id'], [{'option_id':pending['options'][0]['option_id'], 'quantity':2}])
+    first_request = len(requests)
     events = turn(client, '两包', 'quantity-answer')
     assert events[-1]['type'] == 'turn.completed', events
+    from test_guide_clarification_context import context
+    initial_context = context(requests[first_request])
+    assert initial_context['active_question'] == pending
+    assert initial_context['current_task']['conditions'] == {'budget_fen':2000}
+    assert 'capability' not in initial_context
     state = client.get(BASE).json()
     assert state['active_question'] is None
     assert all(q['status'] == 'answered' for q in state['question_history'])

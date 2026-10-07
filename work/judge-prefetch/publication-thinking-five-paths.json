@@ -1,0 +1,22 @@
+{
+  "branch": "ceres2/judge-prefetch-rebuild-20261007",
+  "local_commit": "820aa8c88c64abb0036dd55ba30cc43d8e858d7a",
+  "local_tree": "d75cefe23e8682a299b4ddb4ecc9db8761704650",
+  "base_commit": "61172a49a850b41673bf5f988eaa0b9140f8772c",
+  "source_commits": [
+    "016680a3930b0aa27a29d3cb3276e653cb32d1e0",
+    "4944f7ea5ec02f1443685e6665154347ba9540d8",
+    "37f3ad88bdb7f1bf84aa83e0c78a9a67b6e2d3ea",
+    "820aa8c88c64abb0036dd55ba30cc43d8e858d7a"
+  ],
+  "verification": "All 241 captured product/test source files match Tester final GREEN after integration merge. Six changed-file hashes match before/after captures. Pi typecheck/build passed; 18 focused/provider and 12 regression tests passed. This is bounded five-path transport support; main Pi/validator remain pending.",
+  "remote_commit": "d5aba692d2c5bc6756ac35b513b2904c08a6758b",
+  "verified": true,
+  "phase": "five transport paths only",
+  "repository": "https://github.com/2061623884/Ceres2",
+  "remote_commit_url": "https://github.com/2061623884/Ceres2/commit/d5aba692d2c5bc6756ac35b513b2904c08a6758b",
+  "verification_date_utc": "2026-10-07",
+  "verification_owner": "Main integration coordinator",
+  "evidence": "Authorized GitHub connector read back the remote branch HEAD and full commit tree; remote tree exactly matches local published milestone tree.",
+  "scope": "Bounded five-path auxiliary DeepSeek transport support. Main Pi/validator, independent review and tickets 01–04 completion were not claimed."
+}

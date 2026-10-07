@@ -6,7 +6,8 @@ import { streamSimple } from '@earendil-works/pi-ai/api/openai-completions';
 import type { Model } from '@earendil-works/pi-ai';
 import { Type } from 'typebox';
 import { GENERAL_CLAIM_PROMPT } from './general-claim.js';
-import { composePrompt, selectTools, type PromptModules, type TurnContext } from './prompt-modules.js';
+import { officialDeepSeekSampling } from './official-deepseek.js';
+import { composePrompt, selectTools, type GuideRequestKind, type PromptModules, type TurnContext } from './prompt-modules.js';
 
 interface Start {
   type: 'start'; run_id: string; sequence: number; message: string; categories: Array<{ id: string; name_zh: string }>;
@@ -89,8 +90,7 @@ async function run(start: Start) {
   let status = 'completed';
   let errorCode: string | undefined;
   let validator: Agent | undefined;
-  let shoppingContext = false;
-  const deepSeekJsonOutput = new URL(start.model.baseUrl).hostname === 'api.deepseek.com';
+  let requestKind: GuideRequestKind | undefined;
   const model: Model<'openai-completions'> = {
     id: start.model.id, name: start.model.id, api: 'openai-completions', provider: 'ceres',
     baseUrl: start.model.baseUrl, reasoning: false, input: ['text'],
@@ -105,7 +105,7 @@ async function run(start: Start) {
       waiting.set(id, value => { signal?.removeEventListener('abort', abort); resolve(value); });
       send({ type: 'tool_call', id, name, arguments: args, round: toolRounds + 1 });
     });
-    if (name === 'guide_request' && ['new_goal', 'continue', 'amend'].includes((result as {kind:string}).kind)) shoppingContext = true;
+    if (name === 'guide_request') requestKind = (result as {kind:GuideRequestKind}).kind;
     return { content: [{ type: 'text' as const, text: JSON.stringify(result) }], details: result };
   };
   const tools: AgentTool[] = [
@@ -118,7 +118,10 @@ async function run(start: Start) {
         initialState: {model, thinkingLevel:'off', tools:[], systemPrompt:GENERAL_CLAIM_PROMPT},
         streamFn: (_model, context, options) => {
           beginProviderCall();
-          return streamSimple(model, context, {...options, apiKey:start.model.apiKey,maxTokens:256,fetch:providerFetch});
+          const samplingParams = officialDeepSeekSampling(start.model.baseUrl, options?.samplingParams);
+          return streamSimple(model, context, {...options, apiKey:start.model.apiKey,maxTokens:256,fetch:providerFetch,
+            ...(samplingParams ? {samplingParams} : {}),
+          });
         },
       });
       const abort = () => validator?.abort();
@@ -162,19 +165,19 @@ async function run(start: Start) {
   const agent = new Agent({
     initialState: {
       model, thinkingLevel: 'off', tools,
-      systemPrompt: composePrompt(start.promptModules, start.context, start.context.capability),
+      systemPrompt: composePrompt(start.promptModules, start.context),
     },
     streamFn: (_model, context, options) => {
       beginProviderCall();
+      const samplingParams = officialDeepSeekSampling(start.model.baseUrl, options?.samplingParams);
       return streamSimple(model, context, {
         ...options, apiKey: start.model.apiKey, maxTokens: 1536, fetch: providerFetch,
-        ...(deepSeekJsonOutput ? { samplingParams: { ...options?.samplingParams, response_format: { type: 'json_object' } } } : {}),
+        ...(samplingParams ? { samplingParams: { ...samplingParams, response_format: { type: 'json_object' } } } : {}),
       });
     },
     prepareRequest: ({context}) => {
-      const capability = shoppingContext ? 'exploration' : start.context.capability;
-      const selected = selectTools(tools, capability);
-      const prompt = composePrompt(start.promptModules, start.context, capability);
+      const selected = selectTools(tools, requestKind);
+      const prompt = composePrompt(start.promptModules, start.context, requestKind);
       return {context: {tools:selected, messages:context.messages.map((message,index) => index === 0 && message.role === 'system' ? {...message,content:prompt,toolsAdded:selected} : message)}};
     },
     toolExecution: 'sequential',

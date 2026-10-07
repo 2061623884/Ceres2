@@ -503,7 +503,7 @@ def test_actual_pi_stdio_contract_emits_sdk_events_and_scoped_tool_requests(pi_c
         child.stdin.write((json.dumps({**frame, 'run_id': 'ipc-proof-run', 'sequence': input_sequence}) + '\n').encode())
 
     try:
-        send({'type': 'start', 'message': '协议查可乐', 'categories': [{'id': 'beverage', 'name_zh': '饮料'}], 'context': {'capability': 'factual_qa', 'has_active_task': False, 'general_history': []}, 'promptModules': keke_modules(), 'model': {'id': settings.llm_model, 'baseUrl': settings.openai_base_url, 'apiKey': settings.openai_api_key}, 'maxToolRounds': 5, 'timeoutMs': 30000})
+        send({'type': 'start', 'message': '协议查可乐', 'categories': [{'id': 'beverage', 'name_zh': '饮料'}], 'context': {'role': 'keke', 'has_active_task': False, 'general_history': []}, 'promptModules': keke_modules(), 'model': {'id': settings.llm_model, 'baseUrl': settings.openai_base_url, 'apiKey': settings.openai_api_key}, 'maxToolRounds': 5, 'timeoutMs': 30000})
         until = time.monotonic() + 10
         while time.monotonic() < until:
             if not selector.select(timeout=0.2):

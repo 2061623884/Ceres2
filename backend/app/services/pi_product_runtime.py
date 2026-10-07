@@ -342,6 +342,12 @@ class PiProductRuntime:
 
     def _answer_value(self, answer):
         kind = answer.get('answer_kind')
+        if kind == 'role_boundary':
+            if not self.route_result or self.route_result['kind'] != 'question':
+                raise AppError(422, 'PI_ROUTE_INVALID', '具体售后说明不能修改购买任务')
+            return {'status': 'completed', 'answer_kind': 'role_boundary',
+                    'message': '具体订单、退款或退货事项由墨墨处理。这里尚未查询订单资格，也未提交申请；你可以点击角色按钮前往墨墨。',
+                    'products': []}
         if kind == 'question_selection':
             ref = answer.get('selection_ref')
             if not isinstance(ref, str) or ref not in self.question_selections:

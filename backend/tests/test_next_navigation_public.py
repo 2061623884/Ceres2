@@ -31,7 +31,7 @@ def test_opening_refresh_preserves_quota_and_only_close_reopens(tmp_path):
 
 def test_one_judgment_replay_ack_decline_manual_and_new_opening(tmp_path, controlled_kev_transport):
     calls = controlled_kev_transport['calls']
-    controlled_kev_transport['choose'] = lambda state: 'momo'
+    controlled_kev_transport['choose'] = lambda state: 'yes'
     bind = create_db_engine('sqlite:///' + str(tmp_path / 'route.sqlite3'))
     init_db(bind)
     factory = sessionmaker(bind=bind, expire_on_commit=False)
@@ -71,7 +71,7 @@ import pytest
 @pytest.fixture
 def navigation_client(tmp_path, controlled_kev_transport):
     calls = controlled_kev_transport['calls']
-    choice = {'value': 'momo'}
+    choice = {'value': 'yes'}
     controlled_kev_transport['choose'] = lambda state: choice['value']
     bind = create_db_engine('sqlite:///' + str(tmp_path / 'navigation-cases.sqlite3'))
     init_db(bind)
@@ -112,11 +112,12 @@ def test_new_text_invalidates_old_switch_and_failure_stays_visible(navigation_cl
     route(client, base, opening)
     choice['value'] = KevUnavailable('controlled unavailable')
     failure = route(client, base, opening, 'two').json()
-    assert failure['status'] == 'unavailable' and failure['authorized_role'] is None
+    assert failure['status'] == 'ready' and failure['authorized_role'] == 'keke'
+    assert failure['entry_judgment']['outcome'] == 'error'
     stale = client.post(base + '/switches', json={'opening_id':opening['opening_id'], 'target_role':'momo', 'accept':True, 'routing_request_id':'one'})
     assert stale.status_code == 409
     manual = client.post(base + '/switches', json={'opening_id':opening['opening_id'], 'target_role':'momo', 'accept':True})
-    assert manual.status_code == 200 and manual.json()['handoff']['routing_request_id'] == 'two'
+    assert manual.status_code == 200 and manual.json()['handoff'] is None
     assert len(calls) == 2
 
 
@@ -125,34 +126,32 @@ def test_ack_quota_survives_switch_and_close_is_the_only_reset(navigation_client
     route(client, base, opening)
     client.post(base + '/prompt-displayed', json={'opening_id':opening['opening_id'], 'routing_request_id':'one'})
     client.post(base + '/switches', json={'opening_id':opening['opening_id'], 'target_role':'momo', 'accept':True, 'routing_request_id':'one'})
-    choice['value'] = 'keke_exploration'
     second = route(client, base, opening, 'two', role='momo').json()
-    assert second['status'] == 'switch' and not second['show_prompt']
+    assert second['status'] == 'ready' and not second['show_prompt']
+    assert len(calls) == 1
     client.delete(base + '/opening/' + opening['opening_id'])
-    reopened = client.post(base + '/opening', json={'role':'momo'}).json()
-    assert route(client, base, reopened, 'three', role='momo').json()['show_prompt']
-    assert len(calls) == 3
+    reopened = client.post(base + '/opening', json={'role':'keke'}).json()
+    assert route(client, base, reopened, 'three').json()['show_prompt']
+    assert len(calls) == 2
 
 
-@pytest.mark.parametrize('capability', ['exploration','purchase_modification','factual_qa','chat'])
-def test_coco_only_capability_and_original_complex_text_preserved(navigation_client, capability):
+@pytest.mark.parametrize('text', ['预算二十元，选零食，保留原饮品，再说明退货政策', '把数量改成两件', '一般退货政策是什么', '你好'])
+def test_coco_original_text_preserved_without_capability_label(navigation_client, text):
     client, base, opening, calls, choice = navigation_client
-    choice['value'] = 'keke_' + capability
-    text = '预算二十元，选零食，保留原饮品，再说明退货政策'
+    choice['value'] = 'no'
     result = route(client, base, opening, message=text).json()
-    assert result['status'] == 'ready' and result['capability'] == capability
+    assert result['status'] == 'ready' and result['capability'] is None
     assert result['original_message'] == calls[0]['state']['message'] == text
     assert client.get(base.replace('/navigation/', '/guide/')).json()['task_id'] is None
 
 
-def test_explicit_return_navigates_without_confirmation(navigation_client):
+def test_return_words_stay_with_momo_without_judgment(navigation_client):
     client, base, opening, calls, choice = navigation_client
     client.post(base + '/switches', json={'opening_id':opening['opening_id'], 'target_role':'momo', 'accept':True})
-    choice['value'] = 'return_keke'
     result = route(client, base, opening, role='momo', message='回到购物').json()
-    assert result['status'] == 'navigation' and not result['show_prompt']
-    assert client.get(base + '/opening').json()['role'] == 'keke'
-    assert len(calls) == 1
+    assert result['status'] == 'ready' and not result['show_prompt']
+    assert client.get(base + '/opening').json()['role'] == 'momo'
+    assert calls == []
 
 
 def test_route_id_cannot_reuse_new_body_or_other_owner(navigation_client):
@@ -181,7 +180,7 @@ def test_mercury_replay_returns_same_result_without_rerouting_or_reexecution(nav
     assert first.status_code == 200 and '一般政策查询完成' in first.text, first.text
     replay = client.post(url, json=body)
     assert replay.status_code == 200 and '一般政策查询完成' in replay.text, replay.text
-    assert len(executed) == len(calls) == 1
+    assert len(executed) == 1 and calls == []
     assert client.post(url, json={**body, 'message':'另一条请求'}).status_code == 409
 
 
@@ -320,14 +319,15 @@ def test_task_changed_after_switch_invalidates_unadmitted_handoff(navigation_cli
     assert executed == []
 
 
-def test_manual_retry_can_resume_still_valid_unadmitted_accepted_request(navigation_client):
+def test_manual_button_clears_unadmitted_accepted_request(navigation_client):
     client, base, opening, calls, choice = navigation_client
     route(client,base,opening,message='查询原请求')
     first = client.post(base + '/switches',json={'opening_id':opening['opening_id'],'target_role':'momo','accept':True,'routing_request_id':'one'})
     assert first.status_code == 200
     retry = client.post(base + '/switches',json={'opening_id':opening['opening_id'],'target_role':'momo','accept':True})
     assert retry.status_code == 200
-    assert retry.json()['handoff'] == first.json()['handoff']
+    assert first.json()['handoff'] is not None and retry.json()['handoff'] is None
+    assert retry.json()['accepted_request_id'] is None
     assert len(calls) == 1
 
 
@@ -342,23 +342,22 @@ def test_visible_prompt_ack_after_decline_still_consumes_opening_quota(navigatio
     assert not route(client,base,opening,'two').json()['show_prompt']
 
 
-@pytest.mark.parametrize('capability,original', [
-    ('exploration','回到购物，买点零食，预算二十元，再告诉我退货政策'),
-    ('purchase_modification','回购物，把清单里的可乐改成两瓶，保留预算条件'),
-    ('factual_qa','回购物，告诉我这个包装的规格，再说明一般退货政策'),
-    ('chat','回到可可，我们继续刚才的聊天'),
+@pytest.mark.parametrize('original', [
+    '回到购物，买点零食，预算二十元，再告诉我退货政策',
+    '回购物，把清单里的可乐改成两瓶，保留预算条件',
+    '回购物，告诉我这个包装的规格，再说明一般退货政策',
+    '回到可可，我们继续刚才的聊天',
 ])
-def test_explicit_return_with_goal_preserves_original_intent_without_new_prompt(navigation_client, capability, original):
+def test_compound_return_text_remains_original_momo_request(navigation_client, original):
     client, base, opening, calls, choice = navigation_client
     client.post(base + '/switches',json={'opening_id':opening['opening_id'],'target_role':'momo','accept':True})
-    choice['value'] = 'return_keke_' + capability
     result = route(client,base,opening,role='momo',message=original).json()
-    assert result['status'] == 'navigation', result
-    assert result['target_role'] == result['authorized_role'] == 'keke'
-    assert result['capability'] == capability
-    assert result['continue_original'] and not result['show_prompt']
+    assert result['status'] == 'ready', result
+    assert result['target_role'] == result['authorized_role'] == 'momo'
+    assert result['capability'] is None
+    assert not result['continue_original'] and not result['show_prompt']
+    assert result['original_message'] == original
     restored = client.get(base + '/opening').json()
-    assert restored['role'] == 'keke'
-    assert restored['handoff']['original_message'] == original
-    assert len(calls) == 1
+    assert restored['role'] == 'momo' and restored['handoff'] is None
+    assert calls == []
     assert client.get(base.replace('/navigation/','/guide/')).json()['task_id'] is None
