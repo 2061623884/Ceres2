@@ -1,0 +1,755 @@
+{
+  "note": "All REDs, fixture failures, and superseded captures retained. Only final_repaired_gate entries certify the repaired03 scoped candidate. No full03 suite; final04 whole-phase suite is required separately.",
+  "runs": [
+    {
+      "label": "03-independent-offline-install",
+      "head": "0559d9ed17e65cb4f6f8dfab80b83152e6fe280e",
+      "command": [
+        [
+          "uv",
+          "venv",
+          "--python",
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "backend/.venv"
+        ],
+        [
+          "uv",
+          "pip",
+          "install",
+          "--offline",
+          "--link-mode",
+          "copy",
+          "--python",
+          "backend/.venv/bin/python",
+          "--index-url",
+          "https://pypi.org/simple",
+          "-r",
+          "backend/requirements.lock"
+        ],
+        [
+          "npm",
+          "ci",
+          "--offline",
+          "--registry=https://registry.npmjs.org",
+          "--no-audit",
+          "--no-fund"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 3.437,
+      "pytest_summary": null,
+      "source_manifest_sha256": "96dbf84e06007115c698cbed12426089fc48398cbd797ac8f2881af6ec4b1580",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": null,
+      "harness_sha256": null,
+      "record_sha256": "d44b8e60830acf6c8a48d1e37be17dee6d4e297e21ab71e4bff36fc9e493ceb1",
+      "output_sha256": "2d7605402e8c2ac44e17aa431e8b281289ba22584371ddba7ad271da1483d72b",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "03-initial-dependencies",
+      "head": "0559d9ed17e65cb4f6f8dfab80b83152e6fe280e",
+      "command": [
+        "bash",
+        "-c",
+        "uv pip check --python backend/.venv/bin/python && backend/.venv/bin/python -c 'from importlib.metadata import version; from pathlib import Path; pairs=[line.split(\"==\") for line in Path(\"backend/requirements.lock\").read_text().splitlines() if line and not line.startswith(\"#\")]; assert all(version(name)==expected for name,expected in pairs); print(f\"All {len(pairs)} locked Python versions match\")' && cd runtime/pi && npm ls --depth=0"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.469,
+      "pytest_summary": null,
+      "source_manifest_sha256": "96dbf84e06007115c698cbed12426089fc48398cbd797ac8f2881af6ec4b1580",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "9eca0e1b9df99f227b5f3738cd32ccd6b95db48a7ceb52a2a0736041c9f37ad0",
+      "output_sha256": "6bc6e0b3cf8278c9d71fd3b5743ff5fd44281635ed22f0c558f8678c17f37e6f",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "03-initial-pi-build",
+      "head": "0559d9ed17e65cb4f6f8dfab80b83152e6fe280e",
+      "command": [
+        "bash",
+        "-c",
+        "npm run typecheck && npm run build"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 7.279,
+      "pytest_summary": null,
+      "source_manifest_sha256": "96dbf84e06007115c698cbed12426089fc48398cbd797ac8f2881af6ec4b1580",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "c6740218a03754bf8dc0029ac11219a46e4a60d8ede4fc4ddb9a9f66d9e2e722",
+      "output_sha256": "e2df98651515bc2bdf7ded57bfdb21a18a37cf1c97b5b8b2ffc76b2efce266d0",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "03-initial-guard-smoke",
+      "head": "0559d9ed17e65cb4f6f8dfab80b83152e6fe280e",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "../work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py",
+        "tests/test_judge_policy_prefetch_public.py::test_yes_prefetch_is_actual_low_trust_input_and_registered_policy_evidence"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 6.343,
+      "pytest_summary": "3 passed in 4.70s",
+      "source_manifest_sha256": "96dbf84e06007115c698cbed12426089fc48398cbd797ac8f2881af6ec4b1580",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "e01a205e0d5fdc20092e0e331ea9ce55d5a86bbe29a7b472bf8f63a8be26aa7f",
+      "output_sha256": "731baa673fd65638173d66a1a72d74f12c351641a38378ca9c30e99f8784e033",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "03-query-reuse-red-01",
+      "head": "0559d9ed17e65cb4f6f8dfab80b83152e6fe280e",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_policy_reuse_public.py::test_prefetch_and_same_batch_exact_queries_return_the_same_complete_evidence"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 3.021,
+      "pytest_summary": "1 failed in 2.01s",
+      "source_manifest_sha256": "96dbf84e06007115c698cbed12426089fc48398cbd797ac8f2881af6ec4b1580",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "8e2f177eaf12f8df24d169315c43dcb320815bffda6c8fbfcfadd19abe5b4aa9",
+      "output_sha256": "143ea2ed2e4d9bf19dbf68c6c27cae92003f23878061edad240a6939c4e5bb7e",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "03-query-reuse-green-01",
+      "head": "0559d9ed17e65cb4f6f8dfab80b83152e6fe280e",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_policy_reuse_public.py::test_prefetch_and_same_batch_exact_queries_return_the_same_complete_evidence",
+        "tests/test_judge_policy_safety_public.py::test_same_scope_recovery_replaces_failure_with_actual_success_or_empty",
+        "tests/test_judge_policy_prefetch_public.py::test_prefetch_lookup_failure_is_observable_and_the_same_pi_can_recover"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 5.925,
+      "pytest_summary": "4 passed in 4.84s",
+      "source_manifest_sha256": "b19585fbfff872b64d3695efa07c79f8b55ca19f18f03dfc9237f9ae28c89f09",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "de5e5e9498ff41202475dad4a9779d3946f4f31e814dabc75c1f39c0edf5a8b9",
+      "output_sha256": "da4bdd23b0a1b8512fe64509e6a57d01b959fed8e0926223742406f057d00a50",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "03-query-reuse-red-02",
+      "head": "0559d9ed17e65cb4f6f8dfab80b83152e6fe280e",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_policy_reuse_public.py::test_a_later_subquestion_does_not_retire_an_earlier_applicable_reference"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 3.173,
+      "pytest_summary": "1 failed in 2.14s",
+      "source_manifest_sha256": "6278d5441bb5f2c7dde99ff9a59072b658ae13b4f27ec1f560fb06fcb6ae29a7",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "082407f1d4166b498aab8994ef01763493e144f5d6dcd18b5641c2a86e37da0d",
+      "output_sha256": "b78da31fdef9827aeb9968495b223570a049c94cd0fc3bb7e1311b3a733c20a8",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "03-query-reuse-green-02",
+      "head": "0559d9ed17e65cb4f6f8dfab80b83152e6fe280e",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_policy_reuse_public.py",
+        "tests/test_judge_policy_safety_public.py::test_policy_refs_never_cross_request_or_owner_or_become_model_claims"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 8.05,
+      "pytest_summary": "5 passed in 6.98s",
+      "source_manifest_sha256": "273c0d646f75fe9f584952eec76410cfb558dec35a292fcb8bf1894c29203758",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "b7b3a1439e2fc4f642a0c24e5c98ac7c75543bc074ff6fafa43e91167e7fc820",
+      "output_sha256": "2daae7645be0d94900887a457cb2914610d1c6599338d18f417fe9bb260b310e",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "03-query-reuse-red-03",
+      "head": "0559d9ed17e65cb4f6f8dfab80b83152e6fe280e",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_policy_reuse_public.py::test_an_acquired_reference_expires_when_the_authoritative_source_version_changes"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 3.249,
+      "pytest_summary": "1 failed in 2.09s",
+      "source_manifest_sha256": "d6526e420eae6ea36e39f747adc535ec2a16012f3d3b2b2215dfb59a1d455456",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "2f1d39ff0b83cd975f9fdbbd7264a73b13898b37cc80d9da119b13a900a19eb4",
+      "output_sha256": "9b0f0b883700ba4054341d40f868b7e7a8a63fc956d5012dd4364fad1eba3b43",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "03-query-reuse-green-03",
+      "head": "0559d9ed17e65cb4f6f8dfab80b83152e6fe280e",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_policy_reuse_public.py",
+        "tests/test_judge_policy_safety_public.py::test_policy_refs_never_cross_request_or_owner_or_become_model_claims"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 9.273,
+      "pytest_summary": "6 passed in 8.01s",
+      "source_manifest_sha256": "b28b0390c348d31d7fe7aa87dc34676d6fac33bf188d58132d4382bd319a394e",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "d669dbef14c34bade3ef929bd8823c3db5242509bf880b22dc383b81d7d2eaf0",
+      "output_sha256": "df12df3812d15e10c148d46aeda9c22af94875822459484062937729237bfc8b",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "03-query-reuse-red-04",
+      "head": "2cdc88f9400ccf5fe8a86cb55892601fa8bf4065",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_policy_reuse_public.py::test_multiple_policy_scopes_keep_all_actual_sources_and_query_boundaries"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 4.726,
+      "pytest_summary": "2 failed in 3.51s",
+      "source_manifest_sha256": "6353ffa915548a17d40183a9ae16e309c386cce450ba0d4b7376eb861b2b8700",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "dfeeb7d9e83e904393574bf8925c37ccb442615703b49ad878e9dfb41c04c385",
+      "output_sha256": "ba26b7c47f085d75abe509e1024b1df81307dcf2a94bf1a018cb25de112a9c08",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "03-query-reuse-build-04",
+      "head": "2cdc88f9400ccf5fe8a86cb55892601fa8bf4065",
+      "command": [
+        "bash",
+        "-c",
+        "npm run typecheck && npm run build"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 7.865,
+      "pytest_summary": null,
+      "source_manifest_sha256": "134e9e1dcf61105b363c3c2bf054c1f29188e41d1a707f42b4cede29f7e6e9d3",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "d4c21911b82fb14018dbcb357020c29c741d4c97e367936ff03b798f410c403c",
+      "output_sha256": "e2df98651515bc2bdf7ded57bfdb21a18a37cf1c97b5b8b2ffc76b2efce266d0",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "03-query-reuse-green-04",
+      "head": "2cdc88f9400ccf5fe8a86cb55892601fa8bf4065",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_policy_reuse_public.py",
+        "tests/test_judge_policy_prefetch_public.py",
+        "tests/test_judge_policy_safety_public.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 51.428,
+      "pytest_summary": "49 passed in 48.81s",
+      "source_manifest_sha256": "134e9e1dcf61105b363c3c2bf054c1f29188e41d1a707f42b4cede29f7e6e9d3",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "efbd929ee713b24a6f002d220863e673088f2fc63a1cda5fbbd54692f5d7d74b",
+      "output_sha256": "c895a92abf8fa78f6f2ed10301e431684966b8c03a1786ce4d938882757b41c7",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "03-query-reuse-acceptance-candidate",
+      "head": "2cdc88f9400ccf5fe8a86cb55892601fa8bf4065",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_policy_reuse_public.py",
+        "tests/test_judge_policy_reuse_safety_public.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 36.891,
+      "pytest_summary": "33 passed in 34.86s",
+      "source_manifest_sha256": "d6de148c8a6de7c4119b6f15a779cbc087c93ee68c3bdf761c1f0f1283f05b0a",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "c0ba23ce70f84226ded73f2b0ced9c2815b38ecf190920f552abd9571c1d6d24",
+      "output_sha256": "194d25470877f0f36ac0520fb3004c1d37d02d03b283c951f65935bce69d103c",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "03-final-dependencies",
+      "head": "2cdc88f9400ccf5fe8a86cb55892601fa8bf4065",
+      "command": [
+        "bash",
+        "-c",
+        "uv pip check --python backend/.venv/bin/python && backend/.venv/bin/python -c 'from importlib.metadata import version; from pathlib import Path; pairs=[line.split(\"==\") for line in Path(\"backend/requirements.lock\").read_text().splitlines() if line and not line.startswith(\"#\")]; assert all(version(name)==expected for name,expected in pairs); print(f\"All {len(pairs)} locked Python versions match\")' && cd runtime/pi && npm ls --depth=0"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.454,
+      "pytest_summary": null,
+      "source_manifest_sha256": "d6de148c8a6de7c4119b6f15a779cbc087c93ee68c3bdf761c1f0f1283f05b0a",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "d40277880253e591c1ec4b08ab0b7783b49260cffc51266e68ab3d2c0c2e6b94",
+      "output_sha256": "93e7e693607348642896aefb10a54a92880e7392da7ff409c0546af9adefb7e8",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "03-final-pi-build",
+      "head": "2cdc88f9400ccf5fe8a86cb55892601fa8bf4065",
+      "command": [
+        "bash",
+        "-c",
+        "npm run typecheck && npm run build"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 7.637,
+      "pytest_summary": null,
+      "source_manifest_sha256": "d6de148c8a6de7c4119b6f15a779cbc087c93ee68c3bdf761c1f0f1283f05b0a",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "8b99cc38d599e049ce4768df1140ee6674f025600ce1432404354846cb6aa893",
+      "output_sha256": "e2df98651515bc2bdf7ded57bfdb21a18a37cf1c97b5b8b2ffc76b2efce266d0",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "03-final-guard-proof",
+      "head": "2cdc88f9400ccf5fe8a86cb55892601fa8bf4065",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "../work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py",
+        "tests/test_controlled_test_isolation.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 3.444,
+      "pytest_summary": "3 passed in 2.42s",
+      "source_manifest_sha256": "d6de148c8a6de7c4119b6f15a779cbc087c93ee68c3bdf761c1f0f1283f05b0a",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "7ed2fd814ae7e890e1c129d00984340ec385f455eb4e2f56cf3d34649d53025f",
+      "output_sha256": "a64edca269c7fb2c285eecfd2eab528429e4c8e8d3c9916e0226c165555650ab",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "03-final-focused",
+      "head": "2cdc88f9400ccf5fe8a86cb55892601fa8bf4065",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_policy_reuse_public.py",
+        "tests/test_judge_policy_reuse_safety_public.py",
+        "tests/test_judge_policy_prefetch_public.py",
+        "tests/test_judge_policy_safety_public.py",
+        "tests/test_judge_role_entry_public.py",
+        "tests/test_judge_legacy_navigation_public.py",
+        "tests/test_next_shared_policy_public.py",
+        "tests/test_final_review_compound_public.py",
+        "tests/test_purchase_public.py",
+        "tests/test_purchase_confirmations.py",
+        "tests/test_memory_atomic.py",
+        "tests/test_official_deepseek_thinking.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 127.723,
+      "pytest_summary": "151 passed in 122.26s (0:02:02)",
+      "source_manifest_sha256": "d6de148c8a6de7c4119b6f15a779cbc087c93ee68c3bdf761c1f0f1283f05b0a",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "798e433d12067dd2b5afa4060ce5ea3c5ff68b18b149409d11434075e05b0487",
+      "output_sha256": "c89596bcbe81d9190a8d00a632863926586263c6210dc71fa11619398728a490",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "03-query-reuse-red-05",
+      "head": "2cdc88f9400ccf5fe8a86cb55892601fa8bf4065",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_policy_reuse_public.py::test_bounded_event_tail_does_not_erase_actual_request_accounting"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 3.65,
+      "pytest_summary": "1 failed in 2.54s",
+      "source_manifest_sha256": "2f1981e4e980429f7ab6c10c760cb3d09c6662321aecf7edb09d2f7fd05f853b",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "9a99c4eaa538f983cbab299a500f1d7a671a7c35b6e896af695227fe8061f283",
+      "output_sha256": "07fc85f2bd796c2d327c20283d269ef1f245867f3c03b504f74297dae47b13c0",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "03-query-reuse-red-05b",
+      "head": "2cdc88f9400ccf5fe8a86cb55892601fa8bf4065",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_policy_reuse_public.py::test_bounded_event_tail_does_not_erase_actual_request_accounting"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 3.606,
+      "pytest_summary": "1 failed in 2.41s",
+      "source_manifest_sha256": "918b257779dea14c24560be3ed5774d48e197184ae81f8bb1b7e1ac8e71b7463",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "405c949a69452c23dacd8bac25c83b58ef89605b78989859b2715560ca82ed5f",
+      "output_sha256": "205be758f674522cca2653611e6250569ccde08ee39b8939954742b768085e5d",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "03-accounting-green-probe",
+      "head": "2cdc88f9400ccf5fe8a86cb55892601fa8bf4065",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_policy_reuse_public.py::test_bounded_event_tail_does_not_erase_actual_request_accounting"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 3.507,
+      "pytest_summary": "1 passed in 2.37s",
+      "source_manifest_sha256": "7c86cf268f5f4d7055626d6db1e3970d23735bd313ed148f638ede0a02c4368f",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "ed256f8844ba6f229940baf461dc9ce49874edf75492ad099ac47f354bb6cdf0",
+      "output_sha256": "fd5c644bd995d9d5f3bc3a01770be3fd380026a99467db23f0f390a7b2e48ae3",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "03-query-reuse-green-05",
+      "head": "2cdc88f9400ccf5fe8a86cb55892601fa8bf4065",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_policy_reuse_public.py",
+        "tests/test_judge_policy_reuse_safety_public.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 36.947,
+      "pytest_summary": "34 passed in 35.16s",
+      "source_manifest_sha256": "7c86cf268f5f4d7055626d6db1e3970d23735bd313ed148f638ede0a02c4368f",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "ee6b3f2ffeb270c83995146881480c2a8174c077db50f850c8c7f7138f582a63",
+      "output_sha256": "49395fd32e0dcbc1305662559b33ce02cbd5e24d209c70c31782f81c25573601",
+      "final_repaired_gate": true
+    },
+    {
+      "label": "03-final-dependencies-repaired",
+      "head": "2cdc88f9400ccf5fe8a86cb55892601fa8bf4065",
+      "command": [
+        "bash",
+        "-c",
+        "uv pip check --python backend/.venv/bin/python && backend/.venv/bin/python -c 'from importlib.metadata import version; from pathlib import Path; pairs=[line.split(\"==\") for line in Path(\"backend/requirements.lock\").read_text().splitlines() if line and not line.startswith(\"#\")]; assert all(version(name)==expected for name,expected in pairs); print(f\"All {len(pairs)} locked Python versions match\")' && cd runtime/pi && npm ls --depth=0"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.431,
+      "pytest_summary": null,
+      "source_manifest_sha256": "7c86cf268f5f4d7055626d6db1e3970d23735bd313ed148f638ede0a02c4368f",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "8dfcb1308f5ab39f97f276e9c1130d303b7338ca2b004acff2e6c4629c80ad28",
+      "output_sha256": "f2bd8b9f75555fc875ac93e526e69fb950c68539ef49ae47caa2d86150397acd",
+      "final_repaired_gate": true
+    },
+    {
+      "label": "03-final-pi-build-repaired",
+      "head": "2cdc88f9400ccf5fe8a86cb55892601fa8bf4065",
+      "command": [
+        "bash",
+        "-c",
+        "npm run typecheck && npm run build"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 7.429,
+      "pytest_summary": null,
+      "source_manifest_sha256": "7c86cf268f5f4d7055626d6db1e3970d23735bd313ed148f638ede0a02c4368f",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "ea4cf67e58557cbd0ca6abcc20f577fa6ad6f9be577fa1c22e41294933d797ba",
+      "output_sha256": "e2df98651515bc2bdf7ded57bfdb21a18a37cf1c97b5b8b2ffc76b2efce266d0",
+      "final_repaired_gate": true
+    },
+    {
+      "label": "03-final-guard-proof-repaired",
+      "head": "2cdc88f9400ccf5fe8a86cb55892601fa8bf4065",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "../work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py",
+        "tests/test_controlled_test_isolation.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 3.565,
+      "pytest_summary": "3 passed in 2.47s",
+      "source_manifest_sha256": "7c86cf268f5f4d7055626d6db1e3970d23735bd313ed148f638ede0a02c4368f",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "4d2dc7e28a238e627f448fb2df92134c10dd5e69367938c3ad2c084f7231123c",
+      "output_sha256": "d8fb8da7c10d7efe075954083c30da16de52ea21142a58e7c89fad65d58f1670",
+      "final_repaired_gate": true
+    },
+    {
+      "label": "03-final-focused-repaired",
+      "head": "2cdc88f9400ccf5fe8a86cb55892601fa8bf4065",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_policy_reuse_public.py",
+        "tests/test_judge_policy_reuse_safety_public.py",
+        "tests/test_judge_policy_prefetch_public.py",
+        "tests/test_judge_policy_safety_public.py",
+        "tests/test_judge_role_entry_public.py",
+        "tests/test_judge_legacy_navigation_public.py",
+        "tests/test_next_shared_policy_public.py",
+        "tests/test_final_review_compound_public.py",
+        "tests/test_purchase_public.py",
+        "tests/test_purchase_confirmations.py",
+        "tests/test_memory_atomic.py",
+        "tests/test_official_deepseek_thinking.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 124.923,
+      "pytest_summary": "152 passed in 120.02s (0:02:00)",
+      "source_manifest_sha256": "7c86cf268f5f4d7055626d6db1e3970d23735bd313ed148f638ede0a02c4368f",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "320d65418bf38795955b4d356c5ddc1814bc139d33af28420e1c94f0e634a466",
+      "output_sha256": "86135db65bf86f30b9b6ff42d183887d9ddd7147acd0bac27ac27fe412c656c0",
+      "final_repaired_gate": true
+    }
+  ]
+}

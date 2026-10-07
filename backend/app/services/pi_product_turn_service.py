@@ -264,7 +264,7 @@ class PiProductTurnService:
                 'assistant_message_id': assistant_id, 'trace_id': run_id,
                 'action_results': [confirmation] if confirmation else [memory_result] if memory_result else [], 'confirmation_result':confirmation, 'committed': bool(confirmation or (memory_result and memory_result['action'] != 'list')), 'runtime': 'pi-agent-core',
                 'runtime_status': status, 'tool_rounds': runtime.tool_rounds,
-                'dish_candidates': outcome.get('dish_candidates', retained_context.get('dish_candidates', [])), 'runtime_events': runtime.events, 'product_evidence': outcome['products'], 'product_cards':cards,
+                'dish_candidates': outcome.get('dish_candidates', retained_context.get('dish_candidates', [])), 'runtime_events': runtime.events, 'runtime_summary': runtime.runtime_summary, 'product_evidence': outcome['products'], 'product_cards':cards,
                 'no_matches': outcome.get('no_matches', False),
                 'model_mode': 'live', 'business_data_mode': 'demo',
             }

@@ -1,6 +1,6 @@
 # 03：同范围复用与安全补查
 
-- 状态：待开始（02 云端技术依赖已释放，独立工作树已准备）
+- 状态：待验收（2026-10-07：云端专项与核心两轴审查已释放；04 同版全量和外部门槛仍开放）
 - 拆分：已批准；功能依赖保持 01 → 02 → 03 → 04
 - 执行授权：2026-10-07 用户已授权从 GitHub 基线重新 implement-spec／TDD／Agent Team 实施、可追溯提交及分支推送；前置功能与专职 Tester 门槛保留。
 - 负责人：03 唯一实现者接手工作树 `../worktrees/03-query-reuse`、分支 `ceres2/judge-prefetch-03-query-reuse-20261007`；专职 Tester 执行所有验证命令，Standards／Spec 独立只读审查。共享文件按 [执行决定](../docs/REBUILD-DECISIONS.md#4-写入所有权与可并行支持项) 交接。
@@ -39,6 +39,19 @@
 
 本票接收 02 的证据／引用契约及共享入口的单一修改权，独占复用守卫、范围身份与版本处理、多引用结果和对应 fixture。只按实际请求生命周期最小落实，不新增通用缓存管理器或无依据数据迁移。给 04 交付完整候选、行为用例、调用计数契约与已知限制；04 不负责补本票功能。
 
+## 2026-10-07 中间源码保全
+
+首个 03 WIP 已发布核实：本地 `2cdc88f9400ccf5fe8a86cb55892601fa8bf4065` 对应远端 `d8ac3ab627cf56560b13be6e2a7e436865bd02c5`，精确 tree 均为 `12bf09d9865fe2320b1113d215997aaab240fdd0`，独立分支 `ceres2/judge-prefetch-reuse-wip-20261007`；[映射](../work/judge-prefetch/publication-query-reuse-wip.json)。六项相关受控用例通过且 247 个 source hash／harness 无漂移，仅证明该时点精确重复复用、完整证据返回、独立 reuse 事件和早期／过期来源引用行为；多引用、最终安全回归与独立审查仍待完成。不合入已释放集成，不表示 03 验收或 04 依赖释放。
+
+## 2026-10-07 最终云端专项交付
+
+- 产品／测试提交 `35a30fab775764cfcbc01ee84599fb450b6411bd` 已合并为 `d6a40886926bf203b53c52db27d2177b1b3dcb80`；248 个 source hash 和最终 harness 与五项修复后门槛完全一致，提交／合并／独立 04 worktree 均未改变；[冻结证据](../work/judge-prefetch-rebuild/03-query-reuse-final-source.json)。
+- [Tester 报告](../work/judge-prefetch-rebuild/03-query-reuse-verification.md)：**152** 项受控专项通过，含重叠的 **34** 个复用／安全用例；依赖、Pi typecheck/build 与独立 guard proof 通过。没有另跑完整 03 backend；同版全量统一在 04 执行一次。旧 151 项和 33 项属于会计修复前候选，保留为历史。
+- 独立[核心 Standards 复审](../work/judge-prefetch-rebuild/reviews/standards-core-final-rereview.md)无新问题；[核心 Spec 复审](../work/judge-prefetch-rebuild/reviews/spec-core-final-rereview.md)闭合 256-event 尾部丢失完整计数 P2。
+- 已交付可信请求内精确 query/category/来源版本复用、成功与空结果完整材料恢复、失败仍可补查、所有显式单／多 ref 校验、早期有效引用与多范围宿主事实。没有跨请求缓存平台、模糊 query 合并、并发架构或增加预算。
+- 标准 result／receipt 的 runtime_summary 与有界 runtime_events 分离，固定计数为 policy_lookups、policy_lookup_outcomes、policy_tool_lookups、policy_reuses、tool_starts、primary_pi_turns，另保留实际 policy_judgment 与 events_truncated。tool-origin 是所有实际工具来源查询，不能一律称额外补查；SDK starts／turns 不是 HTTP、成功执行、tokens 或费用。硬错误可无 summary，缺值必须未知。
+- 04 接收同版核心并完成唯一全量验证；未完成的比较 runner／文档、真实 provider、用户前端／浏览器与本人验收不由本票代替。
+
 ## 下一步与证据
 
-从 02 集成提交 `7ea06a343f95043cc5c1948ef74fc139e0de2280` 的同一源码及后续交付文档接手。继承 current-request policy_scope、真实 evidence registry／attempts、query/category/source version、lookup outcome/coverage、规则判断／实际 lookup 观测；保留错误 attempt 无 ref 与所有晚到 freshness/cancel/deadline 守卫。当前仍每次查询实际执行、只认可最后 ref，03 必须完整实现自身复用／多引用语义。专职 Tester 沿公开行为验证实际计数与业务读回；本票尚无实现或通过证据。
+从 02 集成提交 `7ea06a343f95043cc5c1948ef74fc139e0de2280` 的同一源码及后续交付文档接手。继承 current-request policy_scope、真实 evidence registry／attempts、query/category/source version、lookup outcome/coverage、规则判断／实际 lookup 观测；保留错误 attempt 无 ref 与所有晚到 freshness/cancel/deadline 守卫。这些 02 继承限制已在上述 03 精确候选中按本票契约解除。专职 Tester 已沿公开行为验证实际计数与读回；04 继续同版全量及其独立交付边界。

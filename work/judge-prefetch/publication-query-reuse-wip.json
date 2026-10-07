@@ -1,0 +1,14 @@
+{
+  "remote_commit": "d8ac3ab627cf56560b13be6e2a7e436865bd02c5",
+  "local_commit": "2cdc88f9400ccf5fe8a86cb55892601fa8bf4065",
+  "tree": "12bf09d9865fe2320b1113d215997aaab240fdd0",
+  "branch": "ceres2/judge-prefetch-reuse-wip-20261007",
+  "verified": true,
+  "phase": "03WIP; not accepted",
+  "repository": "https://github.com/2061623884/Ceres2",
+  "remote_commit_url": "https://github.com/2061623884/Ceres2/commit/d8ac3ab627cf56560b13be6e2a7e436865bd02c5",
+  "verification_date_utc": "2026-10-07",
+  "verification_owner": "Main integration coordinator",
+  "evidence": "Authorized GitHub connector verified the separate reuse WIP branch and exact tree equality. All 247 source hashes and harness hashes matched the six-case GREEN03 snapshot before/after the two-file commit.",
+  "scope": "Incomplete ticket 03 backup only: exact request/query/category/current-source-version reuse and earlier-ref validation. Multi-reference outcomes, final guards/regressions and independent review remain pending. Accepted integration stays e434e1b5419dfadec9db65dea13b63974a9d701e; no technical gate release."
+}

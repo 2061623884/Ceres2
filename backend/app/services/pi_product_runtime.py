@@ -59,9 +59,35 @@ class PiProductRuntime:
         self.dishes = {}
         self.dishes_searched = False
         self.events: list[dict[str, Any]] = []
+        self.runtime_summary = {
+            'policy_lookups': 0, 'policy_tool_lookups': 0,
+            'policy_lookup_outcomes': {'success': 0, 'empty': 0, 'error': 0},
+            'policy_reuses': 0, 'tool_starts': 0, 'primary_pi_turns': 0,
+            'policy_judgment': None, 'events_truncated': False,
+        }
         self.tool_rounds = 0
         self.searched = False
         self.diagnostic_id = f"pi-{uuid4().hex[:16]}"
+
+    def _record_event(self, event):
+        # Fixed observed counts survive the bounded diagnostic tail. SDK turns
+        # are primary Pi turns, not provider HTTP calls, tokens or cost.
+        if event['type'] == 'policy_lookup':
+            self.runtime_summary['policy_lookups'] += 1
+            self.runtime_summary['policy_tool_lookups'] += int(event['origin'] == 'tool')
+            self.runtime_summary['policy_lookup_outcomes'][event['outcome']] += 1
+        elif event['type'] == 'policy_reuse':
+            self.runtime_summary['policy_reuses'] += 1
+        elif event['type'] == 'policy_judgment':
+            self.runtime_summary['policy_judgment'] = dict(event)
+        elif event['type'] == 'tool_execution_start':
+            self.runtime_summary['tool_starts'] += 1
+        elif event['type'] == 'turn_start':
+            self.runtime_summary['primary_pi_turns'] += 1
+        self.events.append(event)
+        if len(self.events) > 256:
+            self.runtime_summary['events_truncated'] = True
+            self.events = self.events[-256:]
 
     def _tool(self, name: str, arguments: dict[str, Any]) -> dict[str, Any]:
         if name == 'select_question_products':
@@ -177,6 +203,15 @@ class PiProductRuntime:
     def _query_policy(self, query, category, *, origin):
         from app.mercury.policy import search_policies, POLICY_SOURCE_VERSION, POLICY_SOURCE_NAME
         started = time.monotonic()
+        # The Pi scheduler is sequential. Reuse only actual successful/empty
+        # acquisitions in this trusted request, never a failed attempt.
+        for evidence in self.policy_results.values():
+            if (evidence['scope'] == self.policy_scope and evidence['query'] == query
+                    and evidence['category'] == category and evidence['source_version'] == POLICY_SOURCE_VERSION):
+                self._record_event({'type': 'policy_reuse', 'origin': origin, 'outcome': evidence['outcome'],
+                                    'elapsed_ms': (time.monotonic() - started) * 1000,
+                                    'source_version': POLICY_SOURCE_VERSION, 'policy_ref': evidence['policy_ref']})
+                return {key: value for key, value in evidence.items() if key != 'scope'}
         evidence = {'request_id': self.policy_scope['request_id'], 'query': query,
                     'category': category, 'source_name': POLICY_SOURCE_NAME, 'source_version': POLICY_SOURCE_VERSION}
         try:
@@ -187,7 +222,7 @@ class PiProductRuntime:
                            self.run_id, self.policy_scope['request_id'], safe_failure_diagnostic(exc))
             evidence.update(outcome='error', coverage='unknown', data=None, reason='lookup_failed')
             self.policy_attempts.append({**evidence, 'scope': dict(self.policy_scope)})
-            self.events.append({'type': 'policy_lookup', 'origin': origin, 'outcome': 'error',
+            self._record_event({'type': 'policy_lookup', 'origin': origin, 'outcome': 'error',
                                 'elapsed_ms': (time.monotonic() - started) * 1000,
                                 'source_version': POLICY_SOURCE_VERSION, 'reason': 'lookup_failed'})
             # A real tool call also returns its failed attempt to the same Pi;
@@ -199,7 +234,7 @@ class PiProductRuntime:
         # Owned by this Python runtime only; never reconstructed from model text.
         self.policy_results[ref] = {**evidence, 'scope': dict(self.policy_scope)}
         self.policy_attempts.append(self.policy_results[ref])
-        self.events.append({'type': 'policy_lookup', 'origin': origin, 'outcome': evidence['outcome'],
+        self._record_event({'type': 'policy_lookup', 'origin': origin, 'outcome': evidence['outcome'],
                             'elapsed_ms': (time.monotonic() - started) * 1000,
                             'source_version': POLICY_SOURCE_VERSION, 'policy_ref': ref, 'reason': None})
         return evidence
@@ -224,7 +259,7 @@ class PiProductRuntime:
             decision, reason = exc.outcome, exc.reason
             LOGGER.warning('Policy fallback phase=policy_judgment run_id=%s request_id=%s causes=%s',
                            self.run_id, self.policy_scope['request_id'], safe_failure_diagnostic(exc))
-        self.events.append({'type': 'policy_judgment', 'outcome': decision,
+        self._record_event({'type': 'policy_judgment', 'outcome': decision,
                             'elapsed_ms': (time.monotonic() - started) * 1000,
                             'reason': reason, 'rules_version': POLICY_CRITERIA_VERSION, 'usage': None})
         if should_stop():
@@ -333,8 +368,7 @@ class PiProductRuntime:
                     if not isinstance(frame, dict) or frame.get('run_id') != self.run_id or frame.get('sequence') != output_sequence:
                         raise AppError(502, 'PI_PROTOCOL_INVALID', 'Pi runtime 运行关联或帧序号错误')
                     if frame['type'] == 'event':
-                        self.events.append(frame['event'])
-                        self.events = self.events[-256:]
+                        self._record_event(frame['event'])
                     elif frame['type'] == 'tool_call':
                         if should_stop():
                             return self._close('stopped')
@@ -432,10 +466,11 @@ class PiProductRuntime:
         outcome = self._answer_value(answer)
         # Every successful primary result may carry independently acquired
         # policy facts, including a clarification or an explicit memory result.
-        if outcome['status'] in ('completed', 'waiting') and answer.get('answer_kind') != 'policy_result' and 'policy_ref' in answer:
-            outcome['policy_message'] = self._policy_message(answer['policy_ref'])
+        has_policy_refs = 'policy_ref' in answer or 'policy_refs' in answer
+        if outcome['status'] in ('completed', 'waiting') and answer.get('answer_kind') != 'policy_result' and has_policy_refs:
+            outcome['policy_message'] = self._policy_messages(answer)
         unavailable = self._policy_unavailable_message()
-        if unavailable and not (answer.get('answer_kind') == 'policy_result' and 'policy_ref' not in answer):
+        if unavailable and not (answer.get('answer_kind') == 'policy_result' and not has_policy_refs):
             outcome['policy_message'] = '\n'.join(filter(None, (outcome.get('policy_message'), unavailable)))
         if answer.get('role_boundary') is True and answer.get('answer_kind') != 'role_boundary':
             outcome['role_boundary'] = True
@@ -443,8 +478,8 @@ class PiProductRuntime:
         return outcome
 
     def _policy_unavailable_message(self):
-        # Projection only, not a cache: every requested lookup still executes.
-        # A later success/empty resolves failure only for that exact real scope.
+        # Only actual attempts affect unavailable projection. A later
+        # success/empty resolves failure only for that exact real scope.
         latest = {}
         for attempt in self.policy_attempts:
             latest[(attempt['query'], attempt['category'], attempt['source_version'])] = attempt
@@ -455,12 +490,27 @@ class PiProductRuntime:
             '具体订单资格尚未核实；未提交任何申请。'
             for attempt in failures)
 
+    def _policy_messages(self, answer):
+        refs = [answer['policy_ref']] if 'policy_ref' in answer else []
+        if 'policy_refs' in answer:
+            if not isinstance(answer['policy_refs'], list) or not answer['policy_refs']:
+                raise AppError(422, 'PI_UNKNOWN_REFERENCE', '政策引用列表必须包含本次实际查询的规则')
+            refs.extend(answer['policy_refs'])
+        if not refs:
+            raise AppError(422, 'PI_UNKNOWN_REFERENCE', '政策必须引用本次实际查询的规则')
+        # Validate every explicitly supplied value, including both wire forms.
+        messages = [self._policy_message(ref) for ref in refs]
+        return '\n\n'.join(dict.fromkeys(messages))
+
     def _policy_message(self, ref):
-        from app.mercury.policy import policy_summary
-        if not isinstance(ref, str) or not self.policy_results or ref != next(reversed(self.policy_results)):
+        from app.mercury.policy import policy_summary, POLICY_SOURCE_VERSION
+        if not isinstance(ref, str) or ref not in self.policy_results:
             raise AppError(422, 'PI_UNKNOWN_REFERENCE', '政策必须引用本次实际查询的规则')
         evidence = self.policy_results[ref]
-        text = policy_summary(evidence['data'])
+        if evidence['scope'] != self.policy_scope or evidence['source_version'] != POLICY_SOURCE_VERSION:
+            raise AppError(422, 'PI_UNKNOWN_REFERENCE', '政策引用的请求或来源版本已失效，请重新查询')
+        text = (f"查询范围：{json.dumps(evidence['query'], ensure_ascii=False)}；"
+                f"类别：{evidence['category'] or '未指定'}。\n" + policy_summary(evidence['data']))
         if evidence['outcome'] == 'empty':
             return f"{text} 来源：{evidence['source_name']}（版本 {evidence['source_version']}）。"
         return text + ' 本次仅展示检索命中的一般规则；未覆盖的条款或条件仍未知，不能视为完整问题已全部核实。'
@@ -488,9 +538,9 @@ class PiProductRuntime:
             result = self.explorations[ref]
             return {'status':'completed', 'message':result['question'], 'products':[], 'exploration':result}
         if kind == 'policy_result':
-            if 'policy_ref' not in answer and (unavailable := self._policy_unavailable_message()):
+            if 'policy_ref' not in answer and 'policy_refs' not in answer and (unavailable := self._policy_unavailable_message()):
                 return {'status': 'completed', 'message': unavailable, 'products': []}
-            return {'status':'completed', 'message':self._policy_message(answer.get('policy_ref')), 'products':[]}
+            return {'status':'completed', 'message':self._policy_messages(answer), 'products':[]}
         if kind == 'history_result':
             ref = answer.get('history_ref')
             if not isinstance(ref, str) or not self.history_results or ref != next(reversed(self.history_results)):

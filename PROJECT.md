@@ -1,12 +1,12 @@
 # Ceres2：角色判断与政策预取云端重建
 
-更新：2026-10-07。当前执行入口为 [judge-prefetch 总 TASK](tasks/ceres2-judge-prefetch.md) 与 [规格](docs/plans/ceres2-judge-prefetch-spec.md)。用户已批准从真实 GitHub `4bed9c891261e382122d424825b649989ea92c92` 新实现四票，使用 implement-spec、TDD、Agent Team、可追溯提交及分支推送；功能依赖保持 01 → 02 → 03 → 04。规划／基线及源码 WIP 已发布并核实。01 已完成同版云端实现、480 backend（专项 149 为其重叠子集）、Pi typecheck/build、依赖检查及独立两轴复审，云端技术门槛释放给 02；01 整体保持待验收，真实 provider、用户本地前端／浏览器与本人验收仍开放。01 里程碑已核实发布为远端 `19822b146637fbf9cbba75dcf499984d393a4605`；[发布映射](work/judge-prefetch/publication-role-entry-final.json)。02 已完成同版云端实现、524 backend（专项 44 为其重叠子集）、独立 guard proof、Pi typecheck/build、依赖及两轴复审；[报告](work/judge-prefetch-rebuild/02-policy-evidence-verification.md)。01–02 均保持待外部验收，03 独立工作树已准备，04 等待 03。
+更新：2026-10-07。当前执行入口为 [judge-prefetch 总 TASK](tasks/ceres2-judge-prefetch.md) 与 [规格](docs/plans/ceres2-judge-prefetch-spec.md)。用户已批准从真实 GitHub `4bed9c891261e382122d424825b649989ea92c92` 新实现四票，使用 implement-spec、TDD、Agent Team、可追溯提交及分支推送；功能依赖保持 01 → 02 → 03 → 04。规划／基线及源码 WIP 已发布并核实。01 已完成同版云端实现、480 backend（专项 149 为其重叠子集）、Pi typecheck/build、依赖检查及独立两轴复审，云端技术门槛释放给 02；01 整体保持待验收，真实 provider、用户本地前端／浏览器与本人验收仍开放。01 里程碑已核实发布为远端 `19822b146637fbf9cbba75dcf499984d393a4605`；[发布映射](work/judge-prefetch/publication-role-entry-final.json)。02 已完成同版云端实现、524 backend（专项 44 为其重叠子集）、独立 guard proof、Pi typecheck/build、依赖及两轴复审；[报告](work/judge-prefetch-rebuild/02-policy-evidence-verification.md)。02 里程碑已核实发布为 `e434e1b5419dfadec9db65dea13b63974a9d701e`；[映射](work/judge-prefetch/publication-policy-evidence-final.json)。03 已完成 152 项云端专项（含重叠 34 复用／安全用例）、依赖／Pi build／guard 与核心两轴复审，见[报告](work/judge-prefetch-rebuild/03-query-reuse-verification.md)。01–03 均保持待验收；04 已获准在独立冻结核心开展唯一全量，并准备独立支持／文档证据，外部验收仍开放。
 
 [执行决定](docs/REBUILD-DECISIONS.md) 固定授权时序、服务端兼容契约、共享文件所有权、官方 DeepSeek thinking 有界支持项、Prompt 来源、TDD 与分层证据要求。云端负责后端/runtime 与交接；前端由用户本地实现，typed UI／真实浏览器和本人验收条目保留待验收。旧 `f45c4ff` 不可得源码／测试、`0c752a2` 成绩和本地补丁成绩均不继承。
 
 [真实基线与来源记录](work/judge-prefetch/rebuild-bootstrap.md) 保留已发布 commit/tree 与源码 manifest；[参考源码清单](docs/references/ceres2-rebuild-reference-sources.md) 单独记录只读外部来源，参考项目不是运行依赖或当前实现权威。规划／功能里程碑只有在提交、授权分支发布、远端完整 SHA 与精确 tree 一致性核实后才报告已发布；connector 发布若生成不同 SHA，保留本地／远端提交映射回执。
 
-当前写入分工：01–02 已交付角色准入与真实政策证据，03 接手请求内复用／多引用所需最小 runtime／Prompt／fixture 文件；导航回归须单独协调，不并行改同一文件；专职 Tester 独占安装和验证命令；集成者独占 TASK／PROJECT 当前状态、合并和提交；前端文件由用户本地负责。每票实际状态只在总 TASK 与各票维护；[规划发布映射](work/judge-prefetch/publication-planning.json)保留可 checkout 的远端提交。
+当前写入分工：01–03 核心已冻结，04 维护最终同版证据和交接，新增核心缺陷退回原票最小修复；导航回归须单独协调，不并行改同一文件；专职 Tester 独占安装和验证命令；集成者独占 TASK／PROJECT 当前状态、合并和提交；前端文件由用户本地负责。每票实际状态只在总 TASK 与各票维护；[规划发布映射](work/judge-prefetch/publication-planning.json)保留可 checkout 的远端提交。
 
 以下为历史阶段原文，保留其业务来源和当时证据；其中“当前主线”“无 remote”“禁止推送”“仅某批票据”等时点描述不覆盖本段最新执行授权，也不构成本轮通过证明。
 

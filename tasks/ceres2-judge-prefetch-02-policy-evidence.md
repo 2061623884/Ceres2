@@ -49,6 +49,7 @@
 
 ## 2026-10-07 最终云端交付
 
+- 已发布核实：远端 `e434e1b5419dfadec9db65dea13b63974a9d701e` 对应本地交付 `0559d9ed17e65cb4f6f8dfab80b83152e6fe280e`，精确 tree 均为 `18b51049c0d847eed04fac3ec26ba36c4afe16fa`；[发布映射](../work/judge-prefetch/publication-policy-evidence-final.json)。
 - 产品／测试提交 `0aaffb39549db2704c6c0c414e3819277023e7a6`，集成 merge `7ea06a343f95043cc5c1948ef74fc139e0de2280`。246 个源码文件及修复后的 harness hash 与五项最终门槛前后完全一致，提交／合并未改变；[源码映射](../work/judge-prefetch-rebuild/02-policy-evidence-final-source.json)。
 - [Tester 报告](../work/judge-prefetch-rebuild/02-policy-evidence-verification.md)：完整 backend **524 passed**，其中重叠的政策专项 **44 passed**；另有两项 guard proof、Pi typecheck/build 和依赖检查通过。全套实际启动的 577 个 Node PID 均有 guard 加载记录，其中 541 个 Pi worker；旧 191 项预修复成绩保留为历史，不替代最终版本。
 - 独立 [Standards 复审](../work/judge-prefetch-rebuild/reviews/standards-02-rereview.md)无新问题；[Spec 复审](../work/judge-prefetch-rebuild/reviews/spec-02-rereview.md)已闭合阻塞查询返回后的当前请求检查 P2。原发现／失败及红绿轨迹保留，不删除。

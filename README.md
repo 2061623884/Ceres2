@@ -1,8 +1,8 @@
 # Ceres2 · 智能导购与受控售后
 
-> 2026-10-07 当前实施：从已发布基线重新执行[角色判断与政策预检索四票](tasks/ceres2-judge-prefetch.md)。先看[本轮决定与服务端契约](docs/REBUILD-DECISIONS.md)、[云端恢复入口副本](docs/recovery/CERES2-WORKSPACE.md)及[参考源码清单](docs/references/ceres2-rebuild-reference-sources.md)。前端由用户本地接手；下方 2026-10-06 验证结果仅适用于原历史候选，不是本次重建成绩。
+> 2026-10-07 当前阶段：[角色判断与政策预检索四票](tasks/ceres2-judge-prefetch.md)。以[本轮决定与公开合同](docs/REBUILD-DECISIONS.md)、[当前接手指南](docs/JUDGE-PREFETCH-HANDOFF.md)、[云端恢复入口](docs/recovery/CERES2-WORKSPACE.md)为准。前端由用户本地接手；旧 426／37 和旧 main 发布均属于历史候选，不是本次重建成绩。
 
-> 2026-10-06 本轮：下一阶段体验更新（10 票）。受控技术验证通过，真实模型、浏览器与用户验收仍开放。先看下方更新摘要，再读[接手与剩余验收](docs/NEXT-EXPERIENCE-HANDOFF.md)和[当前十票总 TASK](tasks/ceres2-next-experience.md)。
+> 历史阶段（2026-10-06）：[十票体验更新](tasks/ceres2-next-experience.md)及[旧接手指南](docs/NEXT-EXPERIENCE-HANDOFF.md)保留当时范围、结果与未测项；其中旧角色分类、返回和配置故障说明不覆盖当前四票合同。
 
 Ceres2 是一个面向商超购物场景的 AI 应用原型：帮助用户把“想做什么、有什么要求”转化为可检查、可修改、可明确确认的购买清单，并将模拟订单衔接到独立的售后流程。
 
@@ -13,9 +13,17 @@ Ceres2 是一个面向商超购物场景的 AI 应用原型：帮助用户把“
 
 普通商品浏览与搜索仍然保留。AI 负责理解需求、必要追问和解释；价格、库存、数量、订单与写入结果由业务服务提供和校验。**当前商品供给、结算、支付、配送和售后均为模拟业务，不涉及真实交易、资金执行或履约。**
 
-## 本轮更新：评审时先看这些
+## 当前架构与交付边界
 
-本轮在原有模拟购物生命周期上改进选购、角色导航和结果呈现，没有改变 Python 业务权威或明确确认要求：
+- **角色入口**：只有可可新自由文本进行一次是否转墨墨的入口判断；yes 等用户确认切换，no／uncertain／timeout／error 保留原文继续可可。墨墨文字和结构化按钮不新增角色或政策 Kev；返回购物只靠明确按钮，不自动续接旧购物授权。
+- **同一 Pi 与政策证据**：留在可可的文字使用独立政策判断，yes 按完整原文预取现有静态规则并提供真实引用、来源、版本和状态。首次 Pi 理解保留相关任务、问题与引用，不再依赖四能力标签；后续由 guide_request 控制相关上下文。
+- **事实与完整请求**：政策不是具体订单资格或提交授权；购物、澄清、普通解释、历史／记忆结果与政策及职责边界可同时保留。未匹配、部分和错误分别投影；Python 保留当前请求、取消、deadline 与事务保护。
+- **请求内复用／多引用**：03 已完成精确 scope/query/category/版本复用、有效早期引用及多范围宿主输出，并通过 152 项专项（含重叠 34 复用／安全用例）和核心两轴复审；[03 TASK](tasks/ceres2-judge-prefetch-03-query-reuse.md)保留精确候选。固定 runtime_summary 独立于 256-event 诊断尾部；硬错误缺值仍为未知。04 的同版全量与支持／文档门槛进行中，不把 scoped 通过当成全阶段验收。
+- **验证层级**：01 的 480 backend、02 的 524 backend 分别对应各自冻结版本；02 内含 44 政策专项，不与全套相加。当前已核实 02 远端为 `e434e1b5419dfadec9db65dea13b63974a9d701e`，详见[发布映射](work/judge-prefetch/publication-policy-evidence-final.json)和[02 报告](work/judge-prefetch-rebuild/02-policy-evidence-verification.md)。真实 provider、前端／浏览器和用户本人验收仍开放。
+
+## 历史体验更新（2026-10-06）
+
+以下描述当时十票候选，不是当前角色／政策入口合同；它在原有模拟购物生命周期上改进选购、角色导航和结果呈现，保留 Python 业务权威与明确确认要求：
 
 - **零食与饮品选购**：按实际模拟供给先选类、再筛选；问题和选项使用稳定身份，旧选项不能误用于新问题。支持预算、饮食限制、已知数量与跨货架明确搜索，选择商品不等于确认加购。
 - **角色导航与政策**：一次 Kev 请求联合判断职责和能力；跨角色跳转由用户选择。可可、墨墨均可回答无订单的一般政策；购物＋政策复合请求保留两部分结果。
@@ -27,12 +35,12 @@ Ceres2 是一个面向商超购物场景的 AI 应用原型：帮助用户把“
 
 ## 从哪里开始
 
-- **审查本轮**：[10 票总索引](tasks/ceres2-next-experience.md) → [规格](docs/plans/ceres2-next-experience-spec.md)／[决策](docs/plans/ceres2-next-experience-decisions.md) → 对应实现和证据；[TASK10](tasks/ceres2-next-10-candidate-evidence.md)集中列出验收边界。
-- **核对验证**：[最终 Tester 报告](work/next-experience/10/final-controlled-verification.md)、[源码等价记录](work/next-experience/10/final-controlled-equality.json)、[覆盖清单](work/next-experience/10/coverage-manifest.json)。
-- **本地运行或接手**：以[本轮接手指南](docs/NEXT-EXPERIENCE-HANDOFF.md)为当前入口；[旧 Ubuntu 指南](docs/HANDOFF-UBUNTU.md)仅补充安装背景，旧模型、65 商品与 41 项 live 记录不能套用本轮。
+- **审查当前四票**：[总 TASK](tasks/ceres2-judge-prefetch.md) → [规格](docs/plans/ceres2-judge-prefetch-spec.md)／[执行决定](docs/REBUILD-DECISIONS.md) → 单票合同、冻结源码和独立审查。
+- **核对当前证据**：[01 报告](work/judge-prefetch-rebuild/01-role-entry-verification.md)、[02 报告](work/judge-prefetch-rebuild/02-policy-evidence-verification.md)及各自源码／发布映射；后续门槛以总 TASK 的实际候选为准。[Node 隔离更正](work/judge-prefetch-rebuild/node-guard-correction.md)保留早期限制与新证明。
+- **本地运行或接手**：以[当前接手指南](docs/JUDGE-PREFETCH-HANDOFF.md)为入口，先核对准确分支／SHA并保护本地未提交修改；旧十票／Ubuntu 指南仅作历史背景，不沿用旧模型、商品数、41 live 或 426／37 成绩。
 - **了解产品与来源**：[PROJECT](PROJECT.md)、[产品定义](prd.md)、[参考项目与采用边界](docs/REFERENCES.md)。[原 16 票索引](tasks/ceres2-upgrade.md)保留原阶段范围与历史证据。
 
-部分 TASK 中的历史／中间执行证据链接指向仅保留在云端的未跟踪文件，未随公开仓库发布。最终候选的公开依据是上述最终报告、两轴审查，以及报告链接的四组 `fixture-final-*` 记录与日志；不将未发布的中间链接视为公开可访问证据。
+部分历史／中间证据仅保留在云端，未随公开仓库发布。当前公开依据是单票已提交的 curated 报告、source manifest、执行摘要、两轴审查与精确发布映射；原始日志／临时数据库不保证可从公开 checkout 取得，不能把失效的历史链接当作新版本证据。
 
 ## 系统如何分工
 
@@ -80,9 +88,9 @@ Pi 和 LangGraph 是采用的外部运行框架。Ceres2 的工程重点在于�
 
 当前也不做真实支付／退款与履约、自动整餐或营养规划、实时人工接管、完整客服运营平台、分布式调度或全量 TypeScript 重写。完整范围以 [PROJECT](PROJECT.md) 和 [实施规格](docs/plans/ceres2-proactive-upgrade-spec.md) 为准。
 
-## 当前进展与已知限制
+## 历史进展与仍开放的体验限制（2026-10-06）
 
-**同一云端冻结测试源码 `0c752a2b252d797297b4b073883571884ff6855a` 的受控技术验证通过，整体仍待验收。** 该 SHA 是云端测试来源标识，不保证可在 GitHub checkout。公开实现发布已推送至 main：[8d6d758](https://github.com/2061623884/Ceres2/commit/8d6d758228a5b9da50bf76ef7480e5cf517e6eed)，其文件树与经审查的本地发布候选 `358feb7589f5f8200c46a44de8365f2d88ae6c47` 完全一致。公开提交以原远程 `64ca7b6` 为父提交，保留公开历史；云端实施历史与公开集成历史有意不同。测试源码之后的变更为文档提交，不将这些提交冒称重新执行过产品验证。最终报告记录：
+**以下仅适用于历史源码，不代表当前四票通过。同一云端冻结测试源码 `0c752a2b252d797297b4b073883571884ff6855a` 的受控技术验证通过，整体仍待验收。** 该 SHA 是云端测试来源标识，不保证可在 GitHub checkout。公开实现发布已推送至 main：[8d6d758](https://github.com/2061623884/Ceres2/commit/8d6d758228a5b9da50bf76ef7480e5cf517e6eed)，其文件树与经审查的本地发布候选 `358feb7589f5f8200c46a44de8365f2d88ae6c47` 完全一致。公开提交以原远程 `64ca7b6` 为父提交，保留公开历史；云端实施历史与公开集成历史有意不同。测试源码之后的变更为文档提交，不将这些提交冒称重新执行过产品验证。最终报告记录：
 
 - 后端全量 **426/426** 通过，pytest 645.95 秒。
 - **37 个受控 DOM/client 场景**通过；这是受控 React DOM／客户端验证，不是真实浏览器。
@@ -92,7 +100,7 @@ Pi 和 LangGraph 是采用的外部运行框架。Ceres2 的工程重点在于�
 
 **仍未完成**：真实配置的 provider／Kev 与浏览器旅程、自然中文品质、真实 usage／时延、独立未见 holdout、冻结 V3 业务比较、真实记忆／Dream 长周期观察及用户本人验收。Prompt 指令长度实际增加，不能宣称成本优化。非阻塞 Vite 配置警告和受控 `ShelfScreen` render 期间更新 `ShoppingApp` 的 React 警告仍有记录，真实页面验收需关注。
 
-旧阶段曾完成 41/41 真实 API checks，也保留了更早 provider 错误、15 秒截止及未知引用失败；它们属于各自历史版本，**不构成本轮真实模型通过证据**。历史详情见[旧 Ubuntu 接力记录](docs/HANDOFF-UBUNTU.md)，本轮结论以[最终报告](work/next-experience/10/final-controlled-verification.md)与[当前接手指南](docs/NEXT-EXPERIENCE-HANDOFF.md)为准。
+旧阶段曾完成 41/41 真实 API checks，也保留了更早 provider 错误、15 秒截止及未知引用失败；它们属于各自历史版本，**不构成本轮真实模型通过证据**。历史详情见[旧 Ubuntu 接力记录](docs/HANDOFF-UBUNTU.md)，该历史阶段结论以[当时最终报告](work/next-experience/10/final-controlled-verification.md)为准；当前阶段另查[四票接手指南](docs/JUDGE-PREFETCH-HANDOFF.md)。
 
 ## 文件与目录管理
 
@@ -137,7 +145,7 @@ Ceres2/
 |   |   |   |-- seed_service.py        # 显式、幂等导入静态商品/门店/Offer
 |   |   |   |-- product_question_service.py # 稳定问题、候选选择与确认合同
 |   |   |   |-- navigation_service.py  # 单次职责判断与用户选择的角色跳转
-|   |   |   |-- kev_provider.py        # Kev /v1/systemone 联合职责／能力接缝
+|   |   |   |-- kev_provider.py        # Kev /v1/systemone 角色／政策两种独立判断
 |   |   |   |-- activity_service.py    # 已有活动与限定成品选购
 |   |   |   |-- result_introduction_service.py # 结果先行与受校验的介绍
 |   |   |   |-- pi_product_runtime.py  # Python 与 Node/Pi 的运行接缝
@@ -157,7 +165,7 @@ Ceres2/
 |       |-- tsconfig.json             # TypeScript 编译配置
 |       `-- src/
 |           |-- worker.ts             # 实际 Pi Agent、工具循环与进程协议
-|           |-- prompt-modules.ts     # 公共、角色与能力的按需 Prompt
+|           |-- prompt-modules.ts     # 首次角色上下文与 guide_request 后续选择
 |           `-- result-expression.ts  # 有界结果表达与事实保护
 |-- frontend/
 |   |-- AGENTS.md                     # 前端专属修改约定
@@ -176,19 +184,24 @@ Ceres2/
 |   |-- fixtures/                     # products/offers/recipes 与图片映射 JSON
 |   `-- images/                       # 已恢复并核验的静态商品图片
 |-- docs/
-|   |-- NEXT-EXPERIENCE-HANDOFF.md     # 本轮运行、准确候选与剩余验收
+|   |-- JUDGE-PREFETCH-HANDOFF.md      # 当前四票合同、启动与外部验收
+|   |-- NEXT-EXPERIENCE-HANDOFF.md     # 历史十票候选与剩余验收
 |   |-- HANDOFF-UBUNTU.md              # 原阶段 Ubuntu 安装与历史 live 记录
 |   |-- REFERENCES.md                  # 参考项目链接及采用边界，不携带整仓源码
 |   |-- plans/                        # 实施规格、拆分方案与技术研究
 |   |-- adr/                          # 架构决策及原因
 |   `-- agents/                       # 本项目任务管理与领域文档约定
 |-- tasks/
-|   |-- ceres2-next-experience.md      # 本轮 10 票总索引
-|   |-- ceres2-next-*.md               # 本轮任务、依赖、状态与证据
+|   |-- ceres2-judge-prefetch.md       # 当前四票总索引
+|   |-- ceres2-judge-prefetch-*.md     # 当前依赖、状态、合同与证据
+|   |-- ceres2-next-experience.md      # 历史 10 票总索引
+|   |-- ceres2-next-*.md               # 历史任务与适用版本证据
 |   |-- ceres2-upgrade.md              # 原阶段 16 项正式任务的总索引
 |   `-- ceres2-runtime-upgrade-*.md    # 各项范围、依赖、状态、验收和证据
 `-- work/
-    |-- next-experience/              # 本轮各票合同、脚本与评审证据
+    |-- judge-prefetch-rebuild/       # 当前受控 harness、冻结证据与审查
+    |-- judge-prefetch/               # 基线与可核对的发布映射
+    |-- next-experience/              # 历史十票合同、脚本与评审证据
     |   `-- 10/                       # 同候选最终验证、等价记录与独立审查
     |-- clean-rebuild/                # 原阶段交付说明、迁移来源与验证脚本
     `-- live-validation/
@@ -204,7 +217,7 @@ Ceres2/
 ```text
 Ceres2/
 |-- .env                              # 用户本地凭据与配置
-|-- .venv/                            # Python 虚拟环境
+|-- backend/.venv/                    # 本轮 Python 虚拟环境
 |-- data/runtime/                     # 业务数据库与 LangGraph checkpoint
 |-- runtime/pi/node_modules/          # Pi 的本地依赖
 |-- runtime/pi/dist/                  # 编译后的 Pi worker
@@ -223,12 +236,12 @@ Ceres2/
 
 当前实现依赖 Linux；原生 Windows 未适配。Python 声明为 `>=3.11`，Pi SDK 要求 Node `>=22.19.0`；本轮受控环境为 **Python 3.12.14、Node 24.19.0、npm 11.9.0**。新环境按 `backend/requirements.lock` 与两份 `package-lock.json` 独立安装，不借用旧项目依赖或数据库。协作期间安装、构建和执行验证由专职 Tester 负责。
 
-1. 从 [Ceres2 仓库](https://github.com/2061623884/Ceres2) 获取 main，核对下载版本；本轮完整代码与经审查文档已包含在[公开实现发布 8d6d758](https://github.com/2061623884/Ceres2/commit/8d6d758228a5b9da50bf76ef7480e5cf517e6eed)，之后可有仅文档更新。原 Ceres 保持不动。
+1. 从 [Ceres2 仓库](https://github.com/2061623884/Ceres2) 获取 `ceres2/judge-prefetch-rebuild-20261007`，按[总 TASK](tasks/ceres2-judge-prefetch.md)和发布映射核对完整 SHA／tree。在保护本地修改的独立 worktree 接手；旧 main 的 `8d6d758` 是历史体验阶段，不是当前四票候选。
 2. 从 `.env.example` 创建新的本地 `.env`，在可信本地编辑器填写获准的模型配置与凭据。不要上传 `.env`，不要复制旧数据库或 checkpoint。本轮没有重新选择 provider／模型。
-3. 自动新文字职责／能力判断另需 `KEV_BASE_URL`，服务必须支持当前 `/v1/systemone` 合同。空值或服务失败时会显示判断不可用，用户可明确手动选角色；手动继续不代表自动路由成功。人工入口另需 `HUMAN_OPERATOR_TOKEN`。
-4. 按[本轮接手指南的启动步骤](docs/NEXT-EXPERIENCE-HANDOFF.md)构建 Pi、显式 seed，再启动后端 `127.0.0.1:8012` 和前端 `127.0.0.1:8443`。健康检查成功不证明 provider 可用。
+3. `KEV_BASE_URL` 必须支持当前 `/v1/systemone` 的角色 service 与政策 policy 两种独立 yes/no/uncertain 判断。可可入口配置缺失／故障保留真实诊断并继续可可，政策判断故障不预取但保留同一 Pi 的政策工具；墨墨／结构化动作零新增 Kev。它不是旧 11 类职责／能力接口，也不再以缺 Kev 阻断后要求手动续接。模板中的旧注释不能覆盖此合同。人工入口另需 `HUMAN_OPERATOR_TOKEN`。
+4. 按[当前接手指南](docs/JUDGE-PREFETCH-HANDOFF.md)准备独立 `backend/.venv`、Pi dist 与隔离数据库，显式 seed，再由用户启动后端 `127.0.0.1:8012` 和前端 `127.0.0.1:8443`。启动 FastAPI 会启动 MemoryWorker，可能调用真实模型；健康检查不等于无费用探针或 provider 已验收。
 5. 启动和对话可能调用真实模型、后台记忆任务并产生费用；由用户在同意数据发送与费用后亲自操作，或另行明确授权。按接手指南只补剩余真实旅程和本人验收，不拿旧 live runner 的固定模型／41 项成绩替代本轮验证。
 
 公开仓库仅发布源码、静态模拟素材与经检查的必要证据；不发布凭据、私有状态、依赖／构建目录、大量原始执行日志或外部 reference 整仓副本。测试使用受控 provider／Kev 边界，不能据此推断任意启动脚本也已隔离。
 
-部分历史文档记录当时“无 remote／不推送”的条件。本次已按用户授权发布到独立 Ceres2 仓库，并核对[公开实现发布](https://github.com/2061623884/Ceres2/commit/8d6d758228a5b9da50bf76ef7480e5cf517e6eed)的完整文件树；这些旧条件不再描述当前发布状态。GitHub 发布不代表已经部署，也不代表真实模型、浏览器或用户验收通过。
+部分历史文档记录“无 remote／不推送”的时点条件。本次授权发布到独立集成分支，每个里程碑保留本地／远端 SHA 和相同 tree 的映射；WIP 备份与已释放里程碑分开。GitHub 发布不表示合并 main、部署、真实模型、浏览器或本人验收通过。
