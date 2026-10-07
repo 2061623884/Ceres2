@@ -1,0 +1,535 @@
+{
+  "correction": "Earlier Node guard inheritance claims were too broad because the production subprocess environment omitted NODE_OPTIONS. Historical controlled fake-credential/loopback fixtures and Python enforcement remain distinct facts. No earlier record is relabeled.",
+  "checks": [
+    {
+      "label": "02-node-guard-probe",
+      "head": "4b3533cc7abdf4f4d3d776dfbce923fa2e3faf7b",
+      "command": [
+        "backend/.venv/bin/python",
+        "-c",
+        "import os,subprocess; code=\"const net=require(\\\"node:net\\\"),fs=require(\\\"node:fs\\\"); let blocked=0; try{new net.Socket().connect({host:\\\"guard-probe.invalid\\\",port:443})}catch(e){if(e.message===\\\"Controlled verification forbids non-loopback Node sockets\\\") blocked++} try{fs.readFileSync(\\\"guard-probe/.env\\\")}catch(e){if(e.message===\\\"Controlled verification forbids dotenv reads\\\") blocked++} if(blocked!==2) process.exit(1); console.log(\\\"Node child without NODE_OPTIONS: network and dotenv guards enforced\\\");\"; env={key:os.environ[key] for key in (\"PATH\",\"HOME\",\"NO_PROXY\")}; assert \"NODE_OPTIONS\" not in env; subprocess.run([\"node\",\"-e\",code],env=env,check=True)"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.057,
+      "source_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "82c3494f9bc9e67e42bbae098edfb4aee65fe59c57cdb3a0bacc376e6dafd172",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "3876b30037466298b8ad2ff73e8c3f7dab2c3f63d54d06e7a6fcf4feb7321e63"
+      },
+      "summary": "Passed: child without NODE_OPTIONS denied non-loopback socket and dotenv read",
+      "source_manifest_sha256": "d2942f83a35e95ad7cc18f51f5aa3ca609886b257220ee406fce736ee6525a28",
+      "node_guard_launcher": {
+        "path": "work/judge-prefetch-rebuild/tmp/02-node-guard-probe/guarded-bin/node",
+        "sha256": "15d6273a9444ff295601e352b76b2aba21ee30d51141270b3a7cbfb871183013",
+        "runtime": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node"
+      },
+      "node_guard_events": [],
+      "record_sha256": "b63c45676e3b038b6ddb00e71938f67742833383ea3e3b19ae81cd2868b1c0bd",
+      "output_sha256": "815bbc75a5842e90db64af0639f6d77bbb7c8ef47bab3f247119ceced747f049"
+    },
+    {
+      "label": "02-node-guard-regression",
+      "head": "4b3533cc7abdf4f4d3d776dfbce923fa2e3faf7b",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "../work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py",
+        "tests/test_judge_policy_prefetch_public.py::test_yes_prefetch_is_actual_low_trust_input_and_registered_policy_evidence",
+        "tests/test_runtime_pi_product_query.py::test_product_query_uses_pi_search_then_details_and_persists_grounded_reply"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 4.949,
+      "source_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "595d2998ddf890e43597986591bc62453383eab7f089fd0cafaf8d2426c5b41b",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "81360bf2d28558f26b6361e33262cdde6fb2c40be033306d2eb9d030eedaeadd"
+      },
+      "summary": "1 failed, 3 passed; bad-port probe did not reach socket guard",
+      "source_manifest_sha256": "d2942f83a35e95ad7cc18f51f5aa3ca609886b257220ee406fce736ee6525a28",
+      "node_guard_launcher": {
+        "path": "work/judge-prefetch-rebuild/tmp/02-node-guard-regression/guarded-bin/node",
+        "sha256": "505e1da349906685d1a6c2111f8c0d4473492a47e963aec9f1f74830374f0ec1",
+        "runtime": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "invocations": [
+          "8 -e",
+          "21 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "35 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "61 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js"
+        ]
+      },
+      "node_guard_events": [
+        {
+          "event": "loaded",
+          "pid": 8
+        },
+        {
+          "event": "blocked_non_loopback_socket",
+          "pid": 8
+        },
+        {
+          "event": "blocked_dotenv_read",
+          "pid": 8
+        },
+        {
+          "event": "loaded",
+          "pid": 21
+        },
+        {
+          "event": "loaded",
+          "pid": 35
+        },
+        {
+          "event": "loaded",
+          "pid": 61
+        }
+      ],
+      "record_sha256": "99d4e7b46d75a21b187dc66d4b3504c48ecd3bd8f38b806a3901d99a44512d9c",
+      "output_sha256": "6192a693aaf0047b83a4d8a9fa3f63b9fb0eaa87c6e9e6c1cf4d5f9b9424689e"
+    },
+    {
+      "label": "02-node-guard-regression-02",
+      "head": "4b3533cc7abdf4f4d3d776dfbce923fa2e3faf7b",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "../work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py",
+        "tests/test_judge_policy_prefetch_public.py::test_yes_prefetch_is_actual_low_trust_input_and_registered_policy_evidence",
+        "tests/test_runtime_pi_product_query.py::test_product_query_uses_pi_search_then_details_and_persists_grounded_reply"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 5.174,
+      "source_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "3c56cb5192996c5dde31cffa4b5ddec37e56c1966cb4d267a877f99af078c6d7",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "81360bf2d28558f26b6361e33262cdde6fb2c40be033306d2eb9d030eedaeadd",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "dd4e796e955150c02b33ea6fee67b505220375c3b1f1c69a695d431e1a4c5e1f"
+      },
+      "summary": "4 passed; actual worker block and loopback journeys verified",
+      "source_manifest_sha256": "d2942f83a35e95ad7cc18f51f5aa3ca609886b257220ee406fce736ee6525a28",
+      "node_guard_launcher": {
+        "path": "work/judge-prefetch-rebuild/tmp/02-node-guard-regression-02/guarded-bin/node",
+        "sha256": "ebd0c8d81b85daf9dcca0054199f93728ed90d3516a0ca96a501b41e10f0ba11",
+        "runtime": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "invocations": [
+          "8 -e",
+          "21 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "35 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "61 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js"
+        ]
+      },
+      "node_guard_events": [
+        {
+          "event": "loaded",
+          "pid": 8
+        },
+        {
+          "event": "blocked_non_loopback_socket",
+          "pid": 8
+        },
+        {
+          "event": "blocked_dotenv_read",
+          "pid": 8
+        },
+        {
+          "event": "loaded",
+          "pid": 21
+        },
+        {
+          "event": "blocked_non_loopback_socket",
+          "pid": 21
+        },
+        {
+          "event": "loaded",
+          "pid": 35
+        },
+        {
+          "event": "loaded",
+          "pid": 61
+        }
+      ],
+      "record_sha256": "85c7c3d87081a2110366500618235afd9418a10cddef2d5b8a9b500b56baa98a",
+      "output_sha256": "2c4b4fd0db3b0b8aa4bcf8c8947b35f81e2867beddce83921384a636fc10d0d5"
+    },
+    {
+      "label": "02-policy-evidence-red-04",
+      "head": "4b3533cc7abdf4f4d3d776dfbce923fa2e3faf7b",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_policy_prefetch_public.py"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 9.36,
+      "source_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "3c56cb5192996c5dde31cffa4b5ddec37e56c1966cb4d267a877f99af078c6d7",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "81360bf2d28558f26b6361e33262cdde6fb2c40be033306d2eb9d030eedaeadd",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "dd4e796e955150c02b33ea6fee67b505220375c3b1f1c69a695d431e1a4c5e1f"
+      },
+      "summary": "1 expected feature failure, 6 passed under repaired guard",
+      "source_manifest_sha256": "d2942f83a35e95ad7cc18f51f5aa3ca609886b257220ee406fce736ee6525a28",
+      "node_guard_launcher": {
+        "path": "work/judge-prefetch-rebuild/tmp/02-policy-evidence-red-04/guarded-bin/node",
+        "sha256": "b4f8ac8214bef65a6665d22e8af6ac831e62444cd0cbe12cfb425fa92107ba1a",
+        "runtime": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "invocations": [
+          "17 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "45 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "68 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "92 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "115 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "138 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "162 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js"
+        ]
+      },
+      "node_guard_events": [
+        {
+          "event": "loaded",
+          "pid": 17
+        },
+        {
+          "event": "loaded",
+          "pid": 45
+        },
+        {
+          "event": "loaded",
+          "pid": 68
+        },
+        {
+          "event": "loaded",
+          "pid": 92
+        },
+        {
+          "event": "loaded",
+          "pid": 115
+        },
+        {
+          "event": "loaded",
+          "pid": 138
+        },
+        {
+          "event": "loaded",
+          "pid": 162
+        }
+      ],
+      "record_sha256": "b0273f8fc6dc33a26aa5623179909843b758eba76e5a08f67f9918dbce711a16",
+      "output_sha256": "f76d4406c035ac1ef70279e2c35af117c4b2426cb6df20c0c4243e0f7c1643da"
+    },
+    {
+      "label": "02-node-lookalike-guard-red",
+      "head": "db99fc21dcad4bf1f5545b16c5e5e879ca0293a6",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "../work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py::test_node_launcher_guards_child_without_node_options"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 0.799,
+      "source_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "3c56cb5192996c5dde31cffa4b5ddec37e56c1966cb4d267a877f99af078c6d7",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "81360bf2d28558f26b6361e33262cdde6fb2c40be033306d2eb9d030eedaeadd",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "summary": "1 failed; no-network sentinel reproduced unsafe hostname-prefix acceptance",
+      "source_manifest_sha256": "d540b533c4b2e36b4cd07e42ea39fbec018d3f4b0eb4caaffe8389df2f2fb384",
+      "node_guard_launcher": {
+        "path": "work/judge-prefetch-rebuild/tmp/02-node-lookalike-guard-red/guarded-bin/node",
+        "sha256": "a1b0b8cc7980a0ac0d9848fe2e8f0dddddfd211dd66fc52d8ec5e92de7be82f2",
+        "runtime": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "invocations": [
+          "8 -e"
+        ]
+      },
+      "node_guard_events": [
+        {
+          "event": "loaded",
+          "pid": 8
+        },
+        {
+          "event": "blocked_non_loopback_socket",
+          "pid": 8
+        },
+        {
+          "event": "blocked_dotenv_read",
+          "pid": 8
+        },
+        {
+          "event": "loaded",
+          "pid": 8
+        }
+      ],
+      "after_harness_sha256": null,
+      "harness_changes_during_run": null,
+      "record_sha256": "a7e33a89812673f9042aa58203915cbb05fa562adcf90a796fd0d5171452c5d4",
+      "output_sha256": "b4ad590eca0ac5f104dc3b17d9e77380e237a0d700ad9de87f595826a07f4c8f"
+    },
+    {
+      "label": "02-policy-evidence-green-05",
+      "head": "db99fc21dcad4bf1f5545b16c5e5e879ca0293a6",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "tests/test_judge_policy_prefetch_public.py",
+        "tests/test_guide_semantics.py",
+        "../work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 47.725,
+      "source_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "3c56cb5192996c5dde31cffa4b5ddec37e56c1966cb4d267a877f99af078c6d7",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "summary": "17 passed, including strict-loopback guard, all current prefetch tests and complete guide semantics",
+      "source_manifest_sha256": "d540b533c4b2e36b4cd07e42ea39fbec018d3f4b0eb4caaffe8389df2f2fb384",
+      "node_guard_launcher": {
+        "path": "work/judge-prefetch-rebuild/tmp/02-policy-evidence-green-05/guarded-bin/node",
+        "sha256": "b2e2332a2d0e6e0715c00db00a4420b8b5b33214a5c53ad7dfa33f3c8cca5536",
+        "runtime": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "invocations": [
+          "17 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "44 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "67 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "90 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "114 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "138 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "162 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "190 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "213 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "239 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "258 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "281 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "295 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "326 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "345 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "366 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "385 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "408 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "421 -e",
+          "434 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js"
+        ]
+      },
+      "node_guard_events": [
+        {
+          "event": "loaded",
+          "pid": 17
+        },
+        {
+          "event": "loaded",
+          "pid": 44
+        },
+        {
+          "event": "loaded",
+          "pid": 67
+        },
+        {
+          "event": "loaded",
+          "pid": 90
+        },
+        {
+          "event": "loaded",
+          "pid": 114
+        },
+        {
+          "event": "loaded",
+          "pid": 138
+        },
+        {
+          "event": "loaded",
+          "pid": 162
+        },
+        {
+          "event": "loaded",
+          "pid": 190
+        },
+        {
+          "event": "loaded",
+          "pid": 213
+        },
+        {
+          "event": "loaded",
+          "pid": 239
+        },
+        {
+          "event": "loaded",
+          "pid": 258
+        },
+        {
+          "event": "loaded",
+          "pid": 281
+        },
+        {
+          "event": "loaded",
+          "pid": 295
+        },
+        {
+          "event": "loaded",
+          "pid": 326
+        },
+        {
+          "event": "loaded",
+          "pid": 345
+        },
+        {
+          "event": "loaded",
+          "pid": 366
+        },
+        {
+          "event": "loaded",
+          "pid": 385
+        },
+        {
+          "event": "loaded",
+          "pid": 408
+        },
+        {
+          "event": "loaded",
+          "pid": 421
+        },
+        {
+          "event": "blocked_non_loopback_socket",
+          "pid": 421
+        },
+        {
+          "event": "blocked_dotenv_read",
+          "pid": 421
+        },
+        {
+          "event": "loaded",
+          "pid": 421
+        },
+        {
+          "event": "blocked_non_loopback_socket",
+          "pid": 421
+        },
+        {
+          "event": "loaded",
+          "pid": 434
+        },
+        {
+          "event": "blocked_non_loopback_socket",
+          "pid": 434
+        }
+      ],
+      "after_harness_sha256": null,
+      "harness_changes_during_run": null,
+      "record_sha256": "27458a0ac2d6d3c9621bef647ea9fadd791d5e68b569fbc78c660fd648bb0ff2",
+      "output_sha256": "e70dc3ee8f32cba5dee68b067a775a024336ff1da477be57fd623f453cc0ba29"
+    },
+    {
+      "label": "02-node-guard-final-proof",
+      "head": "db99fc21dcad4bf1f5545b16c5e5e879ca0293a6",
+      "command": [
+        "bash",
+        "-c",
+        ".venv/bin/python -c 'import sitecustomize; assert sitecustomize.local(\"127.0.0.1\"); assert sitecustomize.local(\"::1\"); assert not sitecustomize.local(\"127.guard-probe.invalid\"); assert not sitecustomize.local(\"192.0.2.1\"); print(\"Python strict-loopback predicate verified without any socket request\")' && .venv/bin/python -m pytest -p pytest_asyncio.plugin -q ../work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py tests/test_judge_policy_prefetch_public.py::test_yes_prefetch_is_actual_low_trust_input_and_registered_policy_evidence tests/test_runtime_pi_product_query.py::test_product_query_uses_pi_search_then_details_and_persists_grounded_reply"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 5.224,
+      "source_changes_during_run": [],
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "summary": "4 passed plus direct Python strict-loopback predicate probe; final narrow guard proof",
+      "source_manifest_sha256": "2d17f1692c9d45e0666a62d16b65913258e4bf34a321c952ebd9251c2ee28451",
+      "node_guard_launcher": {
+        "path": "work/judge-prefetch-rebuild/tmp/02-node-guard-final-proof/guarded-bin/node",
+        "sha256": "9627eccccf49371c81f5360051fc7d4fe27af1f5038a15d8a9a31c669f69fac7",
+        "runtime": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "after_sha256": "9627eccccf49371c81f5360051fc7d4fe27af1f5038a15d8a9a31c669f69fac7",
+        "invocations": [
+          "9 -e",
+          "22 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "36 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js",
+          "61 /workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/02-policy-evidence/runtime/pi/dist/worker.js"
+        ]
+      },
+      "node_guard_events": [
+        {
+          "event": "loaded",
+          "pid": 9
+        },
+        {
+          "event": "blocked_non_loopback_socket",
+          "pid": 9
+        },
+        {
+          "event": "blocked_dotenv_read",
+          "pid": 9
+        },
+        {
+          "event": "loaded",
+          "pid": 9
+        },
+        {
+          "event": "blocked_non_loopback_socket",
+          "pid": 9
+        },
+        {
+          "event": "loaded",
+          "pid": 22
+        },
+        {
+          "event": "blocked_non_loopback_socket",
+          "pid": 22
+        },
+        {
+          "event": "loaded",
+          "pid": 36
+        },
+        {
+          "event": "loaded",
+          "pid": 61
+        }
+      ],
+      "after_harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "harness_changes_during_run": [],
+      "record_sha256": "27f7f2952ee7b68c68e656133145b3e4d6f1177e771f3fe69e2d6cd4345df2cb",
+      "output_sha256": "96dd8e68d75e8221bbdd6db985102c6f68beffedfe12ff0a309f006d5d135a9a"
+    }
+  ],
+  "final_proof_label": "02-node-guard-final-proof",
+  "current_harness_sha256": {
+    "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+    "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+    "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+    "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+  },
+  "current_bytes_match_final_proof": true
+}

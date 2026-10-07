@@ -1,6 +1,7 @@
 """Static, versioned query policy facts; no demo database dependency."""
 # Rules selectively carried from the user's Mercury seed; all fulfillment remains simulated.
 POLICY_SOURCE_VERSION = '2026-10-06'
+POLICY_SOURCE_NAME = 'Ceres 模拟售后规则'
 POLICIES = [
     ('P-REF-01', 'refund', '未发货订单退款',
      '未发货订单可申请整单模拟退款；已发货或已签收的订单不支持仅退款，签收后可查询退货资格。',
@@ -26,7 +27,7 @@ def search_policies(query, category=None):
         hits = rows
     return {'ok': True, 'data': [{
         **dict(zip(('policy_id', 'category', 'title', 'content'), row[:4])),
-        'source': {'name': 'Ceres 模拟售后规则', 'version': POLICY_SOURCE_VERSION, 'policy_id': row[0]},
+        'source': {'name': POLICY_SOURCE_NAME, 'version': POLICY_SOURCE_VERSION, 'policy_id': row[0]},
     } for row in hits]}
 
 

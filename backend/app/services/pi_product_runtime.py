@@ -63,7 +63,6 @@ class PiProductRuntime:
         self.diagnostic_id = f"pi-{uuid4().hex[:16]}"
 
     def _tool(self, name: str, arguments: dict[str, Any]) -> dict[str, Any]:
-        self.assert_current()
         if name == 'select_question_products':
             if not self.route_result or self.route_result['kind'] not in ('new_goal', 'continue', 'amend'):
                 raise AppError(422, 'PI_ROUTE_INVALID', '请先明确当前购买目标')
@@ -79,7 +78,7 @@ class PiProductRuntime:
             self.explorations[ref] = result
             return {**result, 'exploration_ref':ref}
         if name == 'search_after_sales_policy':
-            return self._query_policy(arguments['query'], arguments.get('category'))
+            return self._query_policy(arguments['query'], arguments.get('category'), origin='tool')
         if name == 'history_command':
             result = self.history_command(arguments)
             self.history_results[result['history_ref']] = result
@@ -174,16 +173,33 @@ class PiProductRuntime:
             return {'product': self.products[ref], 'is_demo': True}
         raise AppError(422, 'PI_TOOL_FORBIDDEN', '本次运行仅允许查询商品')
 
-    def _query_policy(self, query, category):
-        from app.mercury.policy import search_policies, POLICY_SOURCE_VERSION
-        result = search_policies(query, category)
+    def _query_policy(self, query, category, *, origin):
+        from app.mercury.policy import search_policies, POLICY_SOURCE_VERSION, POLICY_SOURCE_NAME
+        started = time.monotonic()
+        evidence = {'request_id': self.policy_scope['request_id'], 'query': query,
+                    'category': category, 'source_name': POLICY_SOURCE_NAME, 'source_version': POLICY_SOURCE_VERSION}
+        try:
+            result = search_policies(query, category)
+        except Exception as exc:
+            from app.services.guide_run_service import safe_failure_diagnostic
+            LOGGER.warning('Policy fallback phase=policy_lookup run_id=%s request_id=%s causes=%s',
+                           self.run_id, self.policy_scope['request_id'], safe_failure_diagnostic(exc))
+            evidence.update(outcome='error', coverage='unknown', data=None, reason='lookup_failed')
+            self.events.append({'type': 'policy_lookup', 'origin': origin, 'outcome': 'error',
+                                'elapsed_ms': (time.monotonic() - started) * 1000,
+                                'source_version': POLICY_SOURCE_VERSION, 'reason': 'lookup_failed'})
+            if origin == 'tool':
+                raise
+            # Failed prefetch is an actual attempt, never empty evidence or a ref.
+            return evidence
         ref = f'policy-{uuid4().hex}'
-        evidence = {**result, 'policy_ref': ref, 'request_id': self.policy_scope['request_id'],
-                    'query': query, 'category': category, 'source_version': POLICY_SOURCE_VERSION,
-                    'outcome': 'success' if result['data'] else 'empty',
-                    'coverage': 'partial' if result['data'] else 'none'}
+        evidence.update(**result, policy_ref=ref, outcome='success' if result['data'] else 'empty',
+                        coverage='partial' if result['data'] else 'none')
         # Owned by this Python runtime only; never reconstructed from model text.
         self.policy_results[ref] = {**evidence, 'scope': dict(self.policy_scope)}
+        self.events.append({'type': 'policy_lookup', 'origin': origin, 'outcome': evidence['outcome'],
+                            'elapsed_ms': (time.monotonic() - started) * 1000,
+                            'source_version': POLICY_SOURCE_VERSION, 'policy_ref': ref, 'reason': None})
         return evidence
 
     def run(self, message: str, *, should_stop: Callable[[], bool], on_phase: Callable[[str], None], deadline: float) -> dict[str, Any]:
@@ -196,6 +212,11 @@ class PiProductRuntime:
             raise AppError(503, 'PI_PROVIDER_UNCONFIGURED', 'Pi 模型配置不完整')
         if not WORKER.is_file():
             raise AppError(503, 'PI_WORKER_UNBUILT', 'Pi runtime 尚未构建')
+        self.assert_current()
+        if should_stop():
+            return self._close('stopped')
+        if time.monotonic() >= deadline:
+            return self._close('deadline')
         from app.services.kev_provider import judge_policy, KevUnavailable, POLICY_CRITERIA_VERSION
         started = time.monotonic()
         reason = None
@@ -214,14 +235,26 @@ class PiProductRuntime:
         if time.monotonic() >= deadline:
             return self._close('deadline')
         self.assert_current()
+        if should_stop():
+            return self._close('stopped')
+        if time.monotonic() >= deadline:
+            return self._close('deadline')
         if decision == 'yes':
             on_phase('retrieve')
-            self.policy_prefetch = self._query_policy(message, None)
+            self.assert_current()
+            if should_stop():
+                return self._close('stopped')
+            if time.monotonic() >= deadline:
+                return self._close('deadline')
+            self.policy_prefetch = self._query_policy(message, None, origin='prefetch')
         if should_stop():
             return self._close('stopped')
         if time.monotonic() >= deadline:
             return self._close('deadline')
         categories = self.catalog.get_categories()
+        self.assert_current()
+        if should_stop():
+            return self._close('stopped')
         if time.monotonic() >= deadline:
             return self._close('deadline')
         # The child gets no inherited API keys or database configuration.
@@ -244,6 +277,7 @@ class PiProductRuntime:
             child.stdin.write((json.dumps(frame, ensure_ascii=False) + '\n').encode())
             child.stdin.flush()
         try:
+            self.assert_current()
             if should_stop():
                 return self._close('stopped')
             if time.monotonic() >= deadline:
@@ -255,6 +289,10 @@ class PiProductRuntime:
                 if time.monotonic() >= deadline:
                     return self._close('deadline')
                 self.assert_current()
+                if should_stop():
+                    return self._close('stopped')
+                if time.monotonic() >= deadline:
+                    return self._close('deadline')
                 ready = selector.select(timeout=min(0.05, max(0, deadline - time.monotonic())))
                 if not ready:
                     if child.poll() is not None:
@@ -293,6 +331,13 @@ class PiProductRuntime:
                             return self._close('tool_budget')
                         self.tool_rounds = max(self.tool_rounds, frame['round'])
                         on_phase('speaking' if frame['name'] == 'validate_general_text' else 'understanding' if frame['name'] == 'guide_request' else 'retrieve')
+                        # Both progress persistence and freshness reads can block.
+                        # Recheck after them, before any ordinary tool/read starts.
+                        self.assert_current()
+                        if should_stop():
+                            return self._close('stopped')
+                        if time.monotonic() >= deadline:
+                            return self._close('deadline')
                         result = self._tool(frame['name'], frame['arguments'])
                         if should_stop():
                             return self._close('stopped')
@@ -308,6 +353,11 @@ class PiProductRuntime:
                             raise AppError(422, code, '这段解释未通过事实边界核对，本次未展示。商家信息需要通过业务查询确认。')
                         self.approved_general.add(ref)
                     elif frame['type'] == 'result':
+                        self.assert_current()
+                        if should_stop():
+                            return self._close('stopped')
+                        if time.monotonic() >= deadline:
+                            return self._close('deadline')
                         if frame['status'] in ('tool_budget', 'deadline', 'stopped'):
                             return self._close(frame['status'])
                         return self._answer(frame['answer'])
@@ -366,9 +416,9 @@ class PiProductRuntime:
         if 'role_boundary' in answer and type(answer['role_boundary']) is not bool:
             raise AppError(502, 'PI_ANSWER_INVALID', '售后职责标记必须为布尔值')
         outcome = self._answer_value(answer)
-        # A shopping result may carry one independently queried policy. Each
-        # reference is validated before the host publishes either result.
-        if answer.get('answer_kind') in ('exploration', 'question_selection', 'products', 'comparison', 'purchase_plan') and 'policy_ref' in answer:
+        # Every successful primary result may carry independently acquired
+        # policy facts, including a clarification or an explicit memory result.
+        if outcome['status'] in ('completed', 'waiting') and answer.get('answer_kind') != 'policy_result' and 'policy_ref' in answer:
             outcome['policy_message'] = self._policy_message(answer['policy_ref'])
         if answer.get('role_boundary') is True and answer.get('answer_kind') != 'role_boundary':
             outcome['role_boundary'] = True
@@ -379,7 +429,11 @@ class PiProductRuntime:
         from app.mercury.policy import policy_summary
         if not isinstance(ref, str) or not self.policy_results or ref != next(reversed(self.policy_results)):
             raise AppError(422, 'PI_UNKNOWN_REFERENCE', '政策必须引用本次实际查询的规则')
-        return policy_summary(self.policy_results[ref]['data'])
+        evidence = self.policy_results[ref]
+        text = policy_summary(evidence['data'])
+        if evidence['outcome'] == 'empty':
+            return f"{text} 来源：{evidence['source_name']}（版本 {evidence['source_version']}）。"
+        return text + ' 本次仅展示检索命中的一般规则；未覆盖的条款或条件仍未知，不能视为完整问题已全部核实。'
 
     def _answer_value(self, answer):
         kind = answer.get('answer_kind')

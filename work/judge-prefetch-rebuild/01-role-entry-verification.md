@@ -49,6 +49,10 @@ All captures used the committed `run_check.py` and guards: a sanitized child env
 - No repository lint script is configured; lint is not claimed as passed.
 - Tickets 02–04 and their final integrated whole-phase gates remain separate. Independent Standards/Spec review results and publication mapping are maintained by the integrator, not inferred from passing tests.
 
+## Later isolation wording correction
+
+The [Node guard correction](node-guard-correction.md), discovered during ticket 02 on 2026-10-07, qualifies the earlier blanket Node-enforcement statement above: Pi's explicit child environment omitted NODE_OPTIONS, so the old Node guard was not inherited by that worker. Synthetic credentials/endpoints, Python isolation, test outcomes and source equality remain distinct verified facts. Earlier raw records are preserved; they are not relabeled as stronger-harness runs. All subsequent/final whole-phase verification uses the corrected task-local Node launcher and its direct real-worker enforcement regression.
+
 ## Integration carry-forward to ticket 02
 
 The independent Spec re-review closes the ticket 01 role-boundary composition finding. The pre-existing five-kind policy attachment gate can still omit policy evidence for waiting/general and other unsupported primary outcomes. Ticket 02 must cover complete policy-plus-primary-result composition, including waiting + policy + role boundary. This is a known baseline gap assigned to 02, not a new 01 regression or a claim that 01 solved all mixed-policy rendering.
