@@ -114,14 +114,14 @@ def test_purchase_checkout_application_then_button_and_new_request_requery_goods
     assert client.post(navigation + '/switches', json={'opening_id': opening['opening_id'],
         'target_role': 'momo', 'accept': True}).status_code == 200
     original = '回到购物，换一种零食，预算二十元'
-    calls_before = len(controlled_kev_transport['calls'])
+    calls_before = len(controlled_kev_transport['entry_calls'])
     routed = client.post(navigation + '/routes', json={'opening_id': opening['opening_id'], 'request_id': 'journey-return',
         'role': 'momo', 'message': original, 'role_session_id': url.split('/')[-1],
         'selected_object': {'kind': 'order', 'id': order['order_id']}})
     assert routed.status_code == 200, routed.text
     assert routed.json()['status'] == 'ready' and routed.json()['authorized_role'] == 'momo'
     assert routed.json()['continue_original'] is False
-    assert len(controlled_kev_transport['calls']) == calls_before
+    assert len(controlled_kev_transport['entry_calls']) == calls_before
     assert routed.json()['original_message'] == original
     assert routed.json()['selected_object'] == {'kind': 'order', 'id': order['order_id']}
     returned = client.post(navigation + '/switches', json={'opening_id': opening['opening_id'],
@@ -146,7 +146,7 @@ def test_purchase_checkout_application_then_button_and_new_request_requery_goods
     assert events[-1]['type'] == 'turn.completed', events
     assert events[-1]['payload']['active_question']['kind'] == 'category'
     assert client.get(BASE).json()['conditions']['budget_fen'] == 2000
-    assert len(controlled_kev_transport['calls']) == calls_before + 1
+    assert len(controlled_kev_transport['entry_calls']) == calls_before + 1
     assert client.get('/api/v1/cart').json()['items'] == []
     assert client.get(url + '/aftersales').json()['receipts'] == [receipt]
     assert client.get('/api/v1/orders/' + order['order_id']).json() == original_order

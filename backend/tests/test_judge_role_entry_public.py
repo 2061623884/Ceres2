@@ -205,7 +205,7 @@ def test_first_pi_request_keeps_task_question_and_entire_mixed_second_choice(
     assert state['question_history'][0]['selected_option_ids'] == [selected['option_id']]
     assert all(option['product']['product_type'] == selected['value'] for option in state['active_question']['options'])
     assert state['plan'] is None and client.get('/api/v1/cart').json()['items'] == []
-    assert len(controlled_kev_transport['calls']) == 2
+    assert len(controlled_kev_transport['entry_calls']) == 2
 
 
 @pytest.mark.parametrize('provider_choice,outcome,reason', [
@@ -240,7 +240,7 @@ def test_non_transfer_and_entry_failures_continue_original_pi_once(
     replay = client.post(BASE + '/turns/stream', json=body)
     replay_events = [json.loads(line[6:]) for line in replay.text.splitlines() if line.startswith('data: ')]
     assert replay_events[-1]['payload'] == events[-1]['payload']
-    assert len(requests) == count and len(controlled_kev_transport['calls']) == 1
+    assert len(requests) == count and len(controlled_kev_transport['entry_calls']) == 1
     assert client.get(nav + '/opening').json()['role'] == 'keke'
     assert client.get('/api/v1/cart').json()['items'] == []
 
@@ -274,7 +274,7 @@ def test_specific_order_fallback_explains_boundary_with_explicit_typed_entry(
     assert action['request'] == {'opening_id': opening['opening_id'], 'target_role': 'momo',
                                  'accept': True, 'routing_request_id': None}
     assert original in json.dumps(requests[0]['messages'], ensure_ascii=False)
-    assert len(controlled_kev_transport['calls']) == 1
+    assert len(controlled_kev_transport['entry_calls']) == 1
     assert result['committed'] is False and result['action_results'] == []
     assert client.get('/api/v1/orders').json() == before
     assert client.get('/api/v1/cart').json()['items'] == []
@@ -284,7 +284,7 @@ def test_specific_order_fallback_explains_boundary_with_explicit_typed_entry(
     chosen = client.post(nav + '/switches', json=action['request'])
     assert chosen.status_code == 200 and chosen.json()['role'] == 'momo'
     assert chosen.json()['handoff'] is None
-    assert len(controlled_kev_transport['calls']) == 1
+    assert len(controlled_kev_transport['entry_calls']) == 1
 
 
 def test_public_navigation_schema_types_ready_switch_and_real_entry_diagnostics(role_client):
@@ -424,7 +424,7 @@ def test_mixed_fallback_retains_shopping_and_explicit_order_boundary(
     replay = client.post(BASE + '/turns/stream', json=body)
     replay_events = [json.loads(line[6:]) for line in replay.text.splitlines() if line.startswith('data: ')]
     assert replay_events[-1]['payload'] == result
-    assert len(requests) == count and len(controlled_kev_transport['calls']) == 1
+    assert len(requests) == count and len(controlled_kev_transport['entry_calls']) == 1
     chosen = client.post(nav + '/switches', json=action['request'])
     assert chosen.status_code == 200 and chosen.json()['role'] == 'momo'
     assert chosen.json()['handoff'] is None

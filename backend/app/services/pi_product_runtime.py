@@ -26,7 +26,7 @@ ROLE_BOUNDARY_MESSAGE = '具体订单、退款或退货事项由墨墨处理。�
 
 
 class PiProductRuntime:
-    def __init__(self, catalog: CatalogService, assert_current: Callable[[], None], *, run_id: str, route_request: Callable[[dict], dict], context: dict, memory_command: Callable[[dict], dict], product_search: Callable[[dict], tuple], comparison_search: Callable[[dict], tuple], candidate_resolve: Callable[[str], dict], history_command: Callable[[dict], dict], explore_products: Callable[[dict], dict], select_question_products: Callable[[dict], dict], activity_active: Callable[[], bool]):
+    def __init__(self, catalog: CatalogService, assert_current: Callable[[], None], *, run_id: str, policy_scope: dict, route_request: Callable[[dict], dict], context: dict, memory_command: Callable[[dict], dict], product_search: Callable[[dict], tuple], comparison_search: Callable[[dict], tuple], candidate_resolve: Callable[[str], dict], history_command: Callable[[dict], dict], explore_products: Callable[[dict], dict], select_question_products: Callable[[dict], dict], activity_active: Callable[[], bool]):
         self.activity_active = activity_active
         self.select_question_products = select_question_products
         self.question_selections = {}
@@ -35,6 +35,8 @@ class PiProductRuntime:
         self.history_command = history_command
         self.history_results = {}
         self.policy_results = {}
+        self.policy_scope = policy_scope
+        self.policy_prefetch = None
         self.run_id = run_id
         self.route_request = route_request
         self.memory_command = memory_command
@@ -77,11 +79,7 @@ class PiProductRuntime:
             self.explorations[ref] = result
             return {**result, 'exploration_ref':ref}
         if name == 'search_after_sales_policy':
-            from app.mercury.policy import search_policies
-            result = search_policies(arguments['query'], arguments.get('category'))
-            ref = f'policy-{uuid4().hex}'
-            self.policy_results[ref] = result
-            return {**result, 'policy_ref':ref}
+            return self._query_policy(arguments['query'], arguments.get('category'))
         if name == 'history_command':
             result = self.history_command(arguments)
             self.history_results[result['history_ref']] = result
@@ -176,6 +174,18 @@ class PiProductRuntime:
             return {'product': self.products[ref], 'is_demo': True}
         raise AppError(422, 'PI_TOOL_FORBIDDEN', '本次运行仅允许查询商品')
 
+    def _query_policy(self, query, category):
+        from app.mercury.policy import search_policies, POLICY_SOURCE_VERSION
+        result = search_policies(query, category)
+        ref = f'policy-{uuid4().hex}'
+        evidence = {**result, 'policy_ref': ref, 'request_id': self.policy_scope['request_id'],
+                    'query': query, 'category': category, 'source_version': POLICY_SOURCE_VERSION,
+                    'outcome': 'success' if result['data'] else 'empty',
+                    'coverage': 'partial' if result['data'] else 'none'}
+        # Owned by this Python runtime only; never reconstructed from model text.
+        self.policy_results[ref] = {**evidence, 'scope': dict(self.policy_scope)}
+        return evidence
+
     def run(self, message: str, *, should_stop: Callable[[], bool], on_phase: Callable[[str], None], deadline: float) -> dict[str, Any]:
         if should_stop():
             return self._close('stopped')
@@ -186,6 +196,31 @@ class PiProductRuntime:
             raise AppError(503, 'PI_PROVIDER_UNCONFIGURED', 'Pi 模型配置不完整')
         if not WORKER.is_file():
             raise AppError(503, 'PI_WORKER_UNBUILT', 'Pi runtime 尚未构建')
+        from app.services.kev_provider import judge_policy, KevUnavailable, POLICY_CRITERIA_VERSION
+        started = time.monotonic()
+        reason = None
+        try:
+            decision, _raw = judge_policy({'message': message}, remaining_seconds=deadline - started)
+        except KevUnavailable as exc:
+            from app.services.guide_run_service import safe_failure_diagnostic
+            decision, reason = exc.outcome, exc.reason
+            LOGGER.warning('Policy fallback phase=policy_judgment run_id=%s request_id=%s causes=%s',
+                           self.run_id, self.policy_scope['request_id'], safe_failure_diagnostic(exc))
+        self.events.append({'type': 'policy_judgment', 'outcome': decision,
+                            'elapsed_ms': (time.monotonic() - started) * 1000,
+                            'reason': reason, 'rules_version': POLICY_CRITERIA_VERSION, 'usage': None})
+        if should_stop():
+            return self._close('stopped')
+        if time.monotonic() >= deadline:
+            return self._close('deadline')
+        self.assert_current()
+        if decision == 'yes':
+            on_phase('retrieve')
+            self.policy_prefetch = self._query_policy(message, None)
+        if should_stop():
+            return self._close('stopped')
+        if time.monotonic() >= deadline:
+            return self._close('deadline')
         categories = self.catalog.get_categories()
         if time.monotonic() >= deadline:
             return self._close('deadline')
@@ -213,7 +248,7 @@ class PiProductRuntime:
                 return self._close('stopped')
             if time.monotonic() >= deadline:
                 return self._close('deadline')
-            send({'type': 'start', 'message': message, 'categories': categories, 'context': self.context, 'promptModules': keke_modules(), 'model': {'baseUrl': settings.openai_base_url, 'apiKey': settings.openai_api_key, 'id': settings.llm_model}, 'maxToolRounds': MAX_TOOL_ROUNDS, 'timeoutMs': max(1, int((deadline - time.monotonic()) * 1000))})
+            send({'type': 'start', 'message': message, 'categories': categories, 'context': self.context, 'policyEvidence': self.policy_prefetch, 'promptModules': keke_modules(), 'model': {'baseUrl': settings.openai_base_url, 'apiKey': settings.openai_api_key, 'id': settings.llm_model}, 'maxToolRounds': MAX_TOOL_ROUNDS, 'timeoutMs': max(1, int((deadline - time.monotonic()) * 1000))})
             while True:
                 if should_stop():
                     return self._close('stopped')

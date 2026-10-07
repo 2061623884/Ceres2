@@ -13,6 +13,7 @@ interface Start {
   type: 'start'; run_id: string; sequence: number; message: string; categories: Array<{ id: string; name_zh: string }>;
   model: { id: string; baseUrl: string; apiKey: string };
   context: TurnContext;
+  policyEvidence: Record<string, unknown> | null;
   promptModules: PromptModules;
   maxToolRounds: number; timeoutMs: number;
 }
@@ -212,7 +213,16 @@ async function run(start: Start) {
     }
   });
   try {
-    await agent.prompt(start.message);
+    if (start.policyEvidence) {
+      // Acquired host facts are a lower-priority data message. No model tool
+      // call occurred, so this must never masquerade as a tool result.
+      await agent.prompt([
+        {role: 'user', content: [{type: 'text', text: 'CERES_POLICY_EVIDENCE\n' + JSON.stringify(start.policyEvidence)}], timestamp: Date.now()},
+        {role: 'user', content: [{type: 'text', text: start.message}], timestamp: Date.now()},
+      ]);
+    } else {
+      await agent.prompt(start.message);
+    }
     if (errorCode) return sendError(errorCode, new Error(errorCode));
     if (status !== 'completed') return send({ type: 'result', status });
     const last = [...agent.state.messages].reverse().find(message => message.role === 'assistant');

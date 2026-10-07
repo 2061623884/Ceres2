@@ -41,6 +41,8 @@ get_settings.cache_clear()
 # New role ingress always executes the production Kev parser/transport contract.
 # Inherited business tests use a controlled current-role response, not live routing
 # acceptance. Dedicated routing tests explicitly replace this transport's chooser.
+# Both decisions execute the same production parser/transport. calls contains ALL
+# actual requests; entry_calls/policy_calls are purpose-aware views for exact counts.
 # No test-name switches, external network fallbacks, or business-service bypasses.
 import json
 from types import SimpleNamespace
@@ -51,17 +53,20 @@ import pytest
 @pytest.fixture(autouse=True)
 def controlled_kev_transport(monkeypatch):
     from app.services import kev_provider
-    control = {'calls': [], 'choose': lambda state: 'no'}
+    control = {'calls': [], 'entry_calls': [], 'policy_calls': [],
+               'choose': lambda state: 'no', 'choose_policy': lambda state: 'no'}
     def handle(request):
         assert request.url == httpx.URL('http://kev-controlled.invalid/v1/systemone')
         payload = json.loads(request.content)
         control['calls'].append(payload)
-        choice = control['choose'](payload['state'])
+        purpose = next(iter(payload['questions']))
+        control['policy_calls' if purpose == 'policy' else 'entry_calls'].append(payload)
+        choice = control['choose_policy' if purpose == 'policy' else 'choose'](payload['state'])
         if isinstance(choice, httpx.HTTPError):
             raise choice
         if isinstance(choice, Exception):
             raise httpx.ConnectError(str(choice), request=request)
-        return httpx.Response(200, json={'model':'kev-latest', 'answers':{'service':{
+        return httpx.Response(200, json={'model':'kev-latest', 'answers':{purpose:{
             'type':'choice', 'choice':choice,
             'probabilities':{key:float(key == choice) for key in kev_provider.CRITERIA}}}})
     with httpx.Client(transport=httpx.MockTransport(handle)) as fixture_client:

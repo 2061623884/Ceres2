@@ -17,18 +17,18 @@ def test_compound_return_does_not_replay_shopping_after_button(pi_client, contro
         'opening_id': opening['opening_id'], 'role': 'momo', 'message': original}).json()
     assert result['status'] == 'ready' and result['authorized_role'] == 'momo', result
     assert not result['continue_original'] and not result['show_prompt']
-    assert controlled_kev_transport['calls'] == [] and requests == []
+    assert controlled_kev_transport['entry_calls'] == [] and requests == []
     blocked = turn(client, original, 'return-text')
     assert blocked[-1]['type'] == 'error' and requests == []
     returned = client.post(nav + '/switches', json={'opening_id': opening['opening_id'],
         'target_role': 'keke', 'accept': True})
     assert returned.status_code == 200 and returned.json()['handoff'] is None
-    assert requests == [] and controlled_kev_transport['calls'] == []
+    assert requests == [] and controlled_kev_transport['entry_calls'] == []
     completed = turn(client, '来点零食，预算二十元，保留其他条件', 'fresh-shopping')
     assert completed[-1]['type'] == 'turn.completed', completed
-    assert len(controlled_kev_transport['calls']) == 1
+    assert len(controlled_kev_transport['entry_calls']) == 1
     before = len(requests)
     replay = turn(client, '来点零食，预算二十元，保留其他条件', 'fresh-shopping')
     assert replay[-1]['payload'] == completed[-1]['payload']
-    assert len(requests) == before and len(controlled_kev_transport['calls']) == 1
+    assert len(requests) == before and len(controlled_kev_transport['entry_calls']) == 1
     assert client.get('/api/v1/cart').json()['items'] == []
