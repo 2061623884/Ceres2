@@ -1,6 +1,6 @@
 # T06：显式 GraphRAG 与规范菜谱事实
 
-- 状态：进行中（backend-only 阶段已释放；Pi 接线及整票验收仍等待 T04）
+- 状态：进行中（A已技术合入；T04已放行，B阶段接管Pi/runtime）
 - 负责人：knowledge/runtime owner (T04→T06 交接)；主会话绑定实际 worker/worktree 后方可写入
 - 规格：[本轮规格](../docs/plans/ceres2-local-cloud-integration-spec.md)
 - 总任务：[集成 TASK](ceres2-local-cloud-integration.md)
@@ -47,3 +47,5 @@ Tester 各固定 pin：`2ad494c` 官方库受控41例，`26028b3` CLI诊断增�
 [证据摘要](../work/local-cloud-integration/t06a/verification-summary.json)、[源码等价](../work/local-cloud-integration/t06a/source-equivalence.json)。真实embedding验证不替代真实LLM、图模型质量、Pi接线、前端或用户本人验收。T06-B仍等待T04正式交接runtime。
 
 最终测试-only审查与source binding已保存；fresh索引副本植入旧源码hash证明stale拒绝，不声称旧历史索引实际成功。[固定postmerge](../work/local-cloud-integration/t06a/postmerge-minimum.json)、[最终绑定](../work/local-cloud-integration/t06a/final-source-binding.json)。
+
+T04已在canonical `e0f57cd` 通过37例共存postmerge与runtime build；T06-B正式接管runtime/Prompt/Pi协议与独立tests。frontend归T05，不并写；shared conftest/DB/schema变更仍须逐文件协调。B候选完成后同版验证、两轴审查及整票验收仍必须独立完成。

@@ -135,7 +135,51 @@ class PiProductTurnService:
             task = db.get(GuideTask, current.current_task_id) if current.current_task_id else None
             return bool(task and json.loads(task.conditions_json).get('activity_id'))
 
-        runtime = PiProductRuntime(CatalogService(db, store_id, deadline=deadline, should_stop=should_stop), assert_current, run_id=run_id, policy_scope={'owner_id': self.owner_id, 'session_id': session_id, 'request_id': body['request_id'], 'run_id': run_id}, route_request=route_request, context=context, memory_command=memory_turn.prepare, product_search=lambda arguments: ComparisonService(db, self.owner_id, deadline=deadline, should_stop=should_stop).search(session_id, arguments, scope_to_page=False), comparison_search=lambda arguments: ComparisonService(db, self.owner_id, deadline=deadline, should_stop=should_stop).search(session_id, arguments, body.get('view_context')), candidate_resolve=lambda ref: ComparisonService(db, self.owner_id, deadline=deadline, should_stop=should_stop).resolve(session_id, ref, body.get('displayed_candidate_refs', []), body.get('view_context')), history_command=history_turn.prepare, explore_products=lambda arguments: questions.explore(session_id, arguments), select_question_products=lambda arguments: questions.select_products(session_id, arguments), activity_active=activity_active)
+        def publish_interim(identity, text):
+            if should_stop() or time.monotonic() >= deadline:
+                return False
+            assert_current(final=True)
+            # Publish history/events only. Never commit the runtime Session's
+            # staged shopping or memory changes as a side effect of prose.
+            with Session(db.get_bind()) as publication:
+                fenced = publication.execute(update(GuideSession).where(
+                    GuideSession.session_id == session_id, GuideSession.owner_id == self.owner_id,
+                    GuideSession.session_version == anchor[0], GuideSession.current_task_id == anchor[1],
+                ).values(session_version=GuideSession.session_version))
+                if fenced.rowcount != 1:
+                    raise AppError(409, 'STALE_STATE', '发布过程消息时会话已变化')
+                if anchor[1] is not None:
+                    task_fence = publication.execute(update(GuideTask).where(
+                        GuideTask.task_id == anchor[1], GuideTask.owner_id == self.owner_id,
+                        GuideTask.session_id == session_id, GuideTask.state_version == anchor[2],
+                    ).values(state_version=GuideTask.state_version))
+                    if task_fence.rowcount != 1:
+                        raise AppError(409, 'STALE_STATE', '发布过程消息时购买条件已变化')
+                current_receipt = publication.get(GuideTurnReceipt, run_id)
+                if current_receipt.status != 'running' or run_cancelled(run_id) or time.monotonic() >= deadline:
+                    return False
+                existing = publication.get(GuideMessage, identity)
+                if existing is not None:
+                    if (existing.owner_id, existing.session_id, existing.request_id, existing.content) != (self.owner_id, session_id, body['request_id'], text):
+                        raise AppError(502, 'PI_PROTOCOL_INVALID', '过程消息身份对应不同内容')
+                    return True
+                sequence = publication.scalar(select(func.max(GuideMessage.sequence)).where(GuideMessage.session_id == session_id)) or 0
+                user = publication.scalar(select(GuideMessage).where(GuideMessage.session_id == session_id,
+                    GuideMessage.owner_id == self.owner_id, GuideMessage.request_id == body['request_id'], GuideMessage.role == 'user'))
+                if user is None:
+                    sequence += 1
+                    publication.add(GuideMessage(message_id=f'msg-{uuid4().hex}', session_id=session_id,
+                        owner_id=self.owner_id, task_id=anchor[1], sequence=sequence, role='user',
+                        kind='text', content=body['message'], request_id=body['request_id']))
+                publication.add(GuideMessage(message_id=identity, session_id=session_id, owner_id=self.owner_id,
+                    task_id=anchor[1], sequence=sequence + 1, role='assistant', kind='interim', content=text, request_id=body['request_id']))
+                append_event(publication, current_receipt, 'message.interim', {'message_id':identity, 'content':text})
+                if run_cancelled(run_id) or time.monotonic() >= deadline:
+                    return False
+                publication.commit()
+                return True
+
+        runtime = PiProductRuntime(CatalogService(db, store_id, deadline=deadline, should_stop=should_stop), assert_current, run_id=run_id, policy_scope={'owner_id': self.owner_id, 'session_id': session_id, 'request_id': body['request_id'], 'run_id': run_id}, route_request=route_request, context=context, memory_command=memory_turn.prepare, product_search=lambda arguments: ComparisonService(db, self.owner_id, deadline=deadline, should_stop=should_stop).search(session_id, arguments, scope_to_page=False), comparison_search=lambda arguments: ComparisonService(db, self.owner_id, deadline=deadline, should_stop=should_stop).search(session_id, arguments, body.get('view_context')), candidate_resolve=lambda ref: ComparisonService(db, self.owner_id, deadline=deadline, should_stop=should_stop).resolve(session_id, ref, body.get('displayed_candidate_refs', []), body.get('view_context')), history_command=history_turn.prepare, explore_products=lambda arguments: questions.explore(session_id, arguments), select_question_products=lambda arguments: questions.select_products(session_id, arguments), activity_active=activity_active, publish_interim=publish_interim)
         try:
             progress('understanding')
             explicit_confirm = body['message'].strip().rstrip('。！!') in ('就按这个加购', '确认加购', '确认把当前清单加入购物车')
@@ -241,9 +285,13 @@ class PiProductTurnService:
                 if outcome.get(field):
                     message_units.append((outcome[field], 'text'))
             public_messages = [{'message_id': assistant_id if index == 0 else f'msg-{uuid4().hex}', 'content': content} for index, (content, _kind) in enumerate(message_units)]
-            db.add(GuideMessage(message_id=f'msg-{uuid4().hex}', session_id=session_id, owner_id=self.owner_id, task_id=anchor[1], sequence=sequence + 1, role='user', kind='text', content=body['message'], request_id=body['request_id']))
+            user = db.scalar(select(GuideMessage).where(GuideMessage.session_id == session_id,
+                GuideMessage.owner_id == self.owner_id, GuideMessage.request_id == body['request_id'], GuideMessage.role == 'user'))
+            if user is None:
+                sequence += 1
+                db.add(GuideMessage(message_id=f'msg-{uuid4().hex}', session_id=session_id, owner_id=self.owner_id, task_id=anchor[1], sequence=sequence, role='user', kind='text', content=body['message'], request_id=body['request_id']))
             for index, message in enumerate(public_messages):
-                db.add(GuideMessage(message_id=message['message_id'], session_id=session_id, owner_id=self.owner_id, task_id=anchor[1], sequence=sequence + index + 2, role='assistant', kind=message_units[index][1], content=message['content'], request_id=body['request_id']))
+                db.add(GuideMessage(message_id=message['message_id'], session_id=session_id, owner_id=self.owner_id, task_id=anchor[1], sequence=sequence + index + 1, role='assistant', kind=message_units[index][1], content=message['content'], request_id=body['request_id']))
             if outcome.get('exploration'):
                 question = questions.publish(session_id, outcome['exploration'], assistant_id)
                 db.flush()

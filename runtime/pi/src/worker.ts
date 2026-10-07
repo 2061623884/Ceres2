@@ -5,7 +5,7 @@ import { Agent, type AgentTool } from '@earendil-works/pi-agent-core';
 import { streamSimple } from '@earendil-works/pi-ai/api/openai-completions';
 import type { Model } from '@earendil-works/pi-ai';
 import { Type } from 'typebox';
-import { GENERAL_CLAIM_PROMPT } from './general-claim.js';
+import { GENERAL_CLAIM_PROMPT, INTERIM_CLAIM_PROMPT } from './general-claim.js';
 import { officialDeepSeekSampling } from './official-deepseek.js';
 import { composePrompt, selectTools, type GuideRequestKind, type PromptModules, type TurnContext } from './prompt-modules.js';
 
@@ -93,6 +93,8 @@ async function run(start: Start) {
   let validator: Agent | undefined;
   let requestKind: GuideRequestKind | undefined;
   let finalAnswer: string | undefined;
+  let interimChecks: Promise<void> = Promise.resolve();
+  let interimNumber = 0;
   const model: Model<'openai-completions'> = {
     id: start.model.id, name: start.model.id, api: 'openai-completions', provider: 'ceres',
     baseUrl: start.model.baseUrl, reasoning: false, input: ['text'],
@@ -100,6 +102,7 @@ async function run(start: Start) {
     contextWindow: 32768, maxTokens: 1536,
   };
   const remote = async (name: string, id: string, args: unknown, signal?: AbortSignal) => {
+    await interimChecks;
     const result = await new Promise<unknown>((resolve, reject) => {
       const abort = () => { waiting.delete(id); reject(new Error('aborted')); };
       if (signal?.aborted) return abort();
@@ -236,6 +239,71 @@ async function run(start: Start) {
           errorCode = 'PI_TOOL_FORBIDDEN'; agent.abort();
         }
       }
+      // Only ordinary public text accompanying a non-final tool turn can be
+      // proposed. Thinking blocks and completion prose are never candidates.
+      if (!errorCode && event.message.stopReason !== 'error' && event.message.stopReason !== 'aborted' && calls.some(block=>block.name!=='finish_response')) {
+        const raw = event.message.content.filter(block=>block.type==='text').map(block=>block.text).join('').trim();
+        let candidate: string | undefined;
+        if (raw.startsWith('{') || raw.startsWith('[')) {
+          try {
+            const value = JSON.parse(raw);
+            if (value && Object.keys(value).length === 1 && typeof value.interim_message === 'string' && value.interim_message.trim()) candidate=value.interim_message.trim();
+          } catch (error) {
+            send({type:'event',event:{type:'interim_candidate_rejected',diagnostic:diagnostic(error)}});
+          }
+        } else if (raw) candidate=raw;
+        if (candidate) {
+          const text=candidate;
+          const messageId=`${runId}:interim:${++interimNumber}`;
+          const auditId=`${runId}:interim-audit:${interimNumber}`;
+          interimChecks=interimChecks.then(async()=>{
+            if (status!=='completed' || errorCode) return;
+            const startedAt=performance.now();
+            let usage: {input:number;output:number;cacheRead:number;cacheWrite:number;totalTokens:number} | null=null;
+            let approved=false;
+            let outcome: 'approved' | 'rejected' | 'error'='error';
+            let auditDiagnostic: ReturnType<typeof diagnostic> | null=null;
+            send({type:'event',event:{type:'interim_audit_start',audit_id:auditId,message_id:messageId,model:start.model.id}});
+            validator=new Agent({
+              initialState:{model,thinkingLevel:'off',tools:[],systemPrompt:INTERIM_CLAIM_PROMPT},
+              streamFn:(_model,context,options)=>{
+                beginProviderCall();
+                const samplingParams=officialDeepSeekSampling(start.model.baseUrl,options?.samplingParams);
+                return streamSimple(model,context,{...options,apiKey:start.model.apiKey,maxTokens:256,fetch:providerFetch,...(samplingParams?{samplingParams}:{})});
+              },
+            });
+            try {
+              await validator.prompt(JSON.stringify([text]));
+              const last=[...validator.state.messages].reverse().find(message=>message.role==='assistant');
+              if(last?.role==='assistant') {
+                // SDK default zero does not establish observed provider usage.
+                if(last.usage.totalTokens>0) {
+                  const {input,output,cacheRead,cacheWrite,totalTokens}=last.usage;
+                  usage={input,output,cacheRead,cacheWrite,totalTokens};
+                }
+              }
+              if (!last || last.role!=='assistant' || last.stopReason==='error' || last.stopReason==='aborted') {
+                const cause=new Error(last?.role==='assistant'?last.errorMessage:validator.state.errorMessage);
+                cause.name=last?.role==='assistant' && last.stopReason==='aborted'?'AbortError':'ProviderError';
+                throw cause;
+              }
+              const verdict=JSON.parse(last.content.filter(block=>block.type==='text').map(block=>block.text).join(''));
+              if (!verdict || Object.keys(verdict).length!==3 || ['merchant_claims','execution_claims','private_content'].some(key=>typeof verdict[key]!=='boolean')) {
+                throw new TypeError('Invalid interim audit verdict schema');
+              }
+              approved=verdict.merchant_claims===false && verdict.execution_claims===false && verdict.private_content===false;
+              outcome=approved?'approved':'rejected';
+            } catch (error) {
+              // Optional recovery remains fail-closed, but retain the same
+              // bounded causal diagnostics as other runtime failures.
+              auditDiagnostic=diagnostic(error);
+            }
+            finally { validator=undefined; }
+            send({type:'event',event:{type:'interim_audit_end',audit_id:auditId,message_id:messageId,approved,outcome,diagnostic:auditDiagnostic,model:start.model.id,duration_ms:performance.now()-startedAt,usage,cost:null}});
+            if(approved && status==='completed' && !errorCode) send({type:'interim_message',message_id:messageId,text,approved:true});
+          });
+        }
+      }
     }
     if (event.type === 'tool_execution_end' && event.isError) {
       errorCode ??= 'PI_TOOL_INVALID'; agent.abort();
@@ -252,6 +320,7 @@ async function run(start: Start) {
     } else {
       await agent.prompt(start.message);
     }
+    await interimChecks;
     if (errorCode) return sendError(errorCode, new Error(errorCode));
     if (status !== 'completed') return send({ type: 'result', status });
     if (finalAnswer !== undefined) return send({type:'result',status,answer:finalAnswer});

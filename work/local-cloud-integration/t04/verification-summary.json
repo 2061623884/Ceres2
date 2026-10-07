@@ -1,0 +1,146 @@
+[
+  {
+    "label": "t04-approved-interim-red",
+    "head": "1334bcd997841c4e7cbaae2874024662e053711b",
+    "command": [
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_integration_reviewed_interim_public.py::test_approved_interim_persists_once_with_real_event_time_and_native_finish",
+      "-q",
+      "-p",
+      "pytest_asyncio.plugin"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T04-interim/backend",
+    "exit_code": 1,
+    "elapsed_seconds": 7.378,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "f66815cdc431ca057da44a301aa53a7136d095a0a8003276e662d4f1e20539b4",
+    "output_tail": ".loads(line[6:]) for line in response.text.splitlines() if line.startswith('data: ')]\n        ended = time.time()*1000\n        assert events[-1]['type']=='turn.completed', events\n        published = [event for event in events if event['type']=='message.interim']\n>       assert len(published)==1\nE       assert 0 == 1\nE        +  where 0 = len([])\n\ntests/test_integration_reviewed_interim_public.py:39: AssertionError\n=========================== short test summary info ============================\nFAILED tests/test_integration_reviewed_interim_public.py::test_approved_interim_persists_once_with_real_event_time_and_native_finish\n1 failed in 5.44s\n"
+  },
+  {
+    "label": "t04-safe-diagnostic-red",
+    "head": "63412fe97a75302acb715d1ef8adbf8df3dd9de3",
+    "command": [
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_integration_reviewed_interim_public.py::test_optional_parse_failure_keeps_safe_cause_without_leaking_or_faking_audit",
+      "-q",
+      "-p",
+      "pytest_asyncio.plugin"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T04-interim/backend",
+    "exit_code": 1,
+    "elapsed_seconds": 9.627,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "7381d2da536d7296a82a5c64ab7549a32eb84f4129baad33c414532a03e6fcc3",
+    "output_tail": "ult['runtime_summary']['interim_audits'][0]\n>           assert audit['outcome']=='error' and audit['approved'] is False\n                   ^^^^^^^^^^^^^^^^\nE           KeyError: 'outcome'\n\ntests/test_integration_reviewed_interim_public.py:308: KeyError\n=========================== short test summary info ============================\nFAILED tests/test_integration_reviewed_interim_public.py::test_optional_parse_failure_keeps_safe_cause_without_leaking_or_faking_audit[candidate_json]\nFAILED tests/test_integration_reviewed_interim_public.py::test_optional_parse_failure_keeps_safe_cause_without_leaking_or_faking_audit[audit_json]\n2 failed in 8.29s\n"
+  },
+  {
+    "label": "t04-safe-diagnostic-green",
+    "head": "39adf78abcfbc49f4efb6b25cb066fbd6fbedb4b",
+    "command": [
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_integration_reviewed_interim_public.py",
+      "-q",
+      "-p",
+      "pytest_asyncio.plugin"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T04-interim/backend",
+    "exit_code": 0,
+    "elapsed_seconds": 46.247,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "bd6eade99108325014e74e4840284a8c7afedbd30f720aeb6eea942771268b61",
+    "output_tail": ".................                                                        [100%]\n17 passed in 43.26s\n"
+  },
+  {
+    "label": "t04-final-affected",
+    "head": "0c77e59f36649dc27e98e1c90552fc8ecf0c4ab1",
+    "command": [
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_integration_reviewed_interim_public.py",
+      "tests/test_integration_native_finish_public.py",
+      "tests/test_guide_deadline_contract.py",
+      "tests/test_guide_lifecycle.py",
+      "tests/test_guide_recovery.py",
+      "tests/test_runtime_pi_product_query.py",
+      "tests/test_official_deepseek_thinking.py",
+      "-q",
+      "-p",
+      "pytest_asyncio.plugin"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T04-interim/backend",
+    "exit_code": 1,
+    "elapsed_seconds": 171.434,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "faf60b943af90b4b075282f32cc1def9580b31cdbc346e002969164d636ab30e",
+    "output_tail": "['tools'])\n                if official:\n>                   assert body['response_format'] == {'type': 'json_object'}\n                           ^^^^^^^^^^^^^^^^^^^^^^^\nE                   KeyError: 'response_format'\n\ntests/test_official_deepseek_thinking.py:364: KeyError\n=========================== short test summary info ============================\nFAILED tests/test_official_deepseek_thinking.py::test_main_pi_and_validator_disable_thinking_on_actual_sdk_wire[official]\nFAILED tests/test_official_deepseek_thinking.py::test_main_pi_and_validator_disable_thinking_on_actual_sdk_wire[normalized-official]\n2 failed, 90 passed in 167.92s (0:02:47)\n"
+  },
+  {
+    "label": "t04-final-wire-aligned-green",
+    "head": "4cf49a72f1a6e07c94204a02f1220ad054d03b24",
+    "command": [
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_integration_reviewed_interim_public.py",
+      "tests/test_integration_native_finish_public.py",
+      "tests/test_guide_deadline_contract.py",
+      "tests/test_guide_lifecycle.py",
+      "tests/test_guide_recovery.py",
+      "tests/test_runtime_pi_product_query.py",
+      "tests/test_official_deepseek_thinking.py",
+      "-q",
+      "-p",
+      "pytest_asyncio.plugin"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T04-interim/backend",
+    "exit_code": 0,
+    "elapsed_seconds": 166.813,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "eb2789433cf6d009015e3c35c82280a3fd78df11ce5090420da1f865855d334f",
+    "output_tail": "........................................................................ [ 78%]\n....................                                                     [100%]\n92 passed in 161.64s (0:02:41)\n"
+  },
+  {
+    "label": "t04-final-build",
+    "head": "0c77e59f36649dc27e98e1c90552fc8ecf0c4ab1",
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T04-interim/runtime/pi",
+    "exit_code": 0,
+    "elapsed_seconds": 6.085,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "991d002e634b78864236cbbf20559a6a0478509ef03c1a7ab18e28ff384ef686",
+    "output_tail": "\n> ceres2-pi-runtime@0.1.0 build\n> tsc\n\n"
+  },
+  {
+    "label": "t04-final-typecheck",
+    "head": "0c77e59f36649dc27e98e1c90552fc8ecf0c4ab1",
+    "command": [
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T04-interim/runtime/pi",
+    "exit_code": 0,
+    "elapsed_seconds": 6.312,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "f3e203729c3a1a452980e3696c5f2a4d4631617c06c5d09f0dfa6cff111cb8d7",
+    "output_tail": "\n> ceres2-pi-runtime@0.1.0 typecheck\n> tsc --noEmit\n\n"
+  }
+]

@@ -26,7 +26,9 @@ ROLE_BOUNDARY_MESSAGE = '具体订单、退款或退货事项由墨墨处理。�
 
 
 class PiProductRuntime:
-    def __init__(self, catalog: CatalogService, assert_current: Callable[[], None], *, run_id: str, policy_scope: dict, route_request: Callable[[dict], dict], context: dict, memory_command: Callable[[dict], dict], product_search: Callable[[dict], tuple], comparison_search: Callable[[dict], tuple], candidate_resolve: Callable[[str], dict], history_command: Callable[[dict], dict], explore_products: Callable[[dict], dict], select_question_products: Callable[[dict], dict], activity_active: Callable[[], bool]):
+    def __init__(self, catalog: CatalogService, assert_current: Callable[[], None], *, run_id: str, policy_scope: dict, route_request: Callable[[dict], dict], context: dict, memory_command: Callable[[dict], dict], product_search: Callable[[dict], tuple], comparison_search: Callable[[dict], tuple], candidate_resolve: Callable[[str], dict], history_command: Callable[[dict], dict], explore_products: Callable[[dict], dict], select_question_products: Callable[[dict], dict], activity_active: Callable[[], bool], publish_interim: Callable[[str, str], bool]):
+        self.publish_interim = publish_interim
+        self.interim_messages = {}
         self.activity_active = activity_active
         self.select_question_products = select_question_products
         self.question_selections = {}
@@ -64,6 +66,7 @@ class PiProductRuntime:
             'policy_lookup_outcomes': {'success': 0, 'empty': 0, 'error': 0},
             'policy_reuses': 0, 'tool_starts': 0, 'primary_pi_turns': 0,
             'policy_judgment': None, 'events_truncated': False,
+            'interim_audit_attempts': 0, 'interim_messages': 0, 'interim_audits': [],
         }
         self.tool_rounds = 0
         self.searched = False
@@ -72,7 +75,13 @@ class PiProductRuntime:
     def _record_event(self, event):
         # Fixed observed counts survive the bounded diagnostic tail. SDK turns
         # are primary Pi turns, not provider HTTP calls, tokens or cost.
-        if event['type'] == 'policy_lookup':
+        if event['type'] == 'interim_audit_start':
+            self.runtime_summary['interim_audit_attempts'] += 1
+            self.runtime_summary['interim_audits'].append({**event, 'approved': None, 'outcome': None, 'diagnostic': None, 'duration_ms': None, 'usage': None, 'cost': None})
+        elif event['type'] == 'interim_audit_end':
+            audit = next(row for row in self.runtime_summary['interim_audits'] if row['audit_id'] == event['audit_id'])
+            audit.update(event)
+        elif event['type'] == 'policy_lookup':
             self.runtime_summary['policy_lookups'] += 1
             self.runtime_summary['policy_tool_lookups'] += int(event['origin'] == 'tool')
             self.runtime_summary['policy_lookup_outcomes'][event['outcome']] += 1
@@ -384,6 +393,21 @@ class PiProductRuntime:
                         raise AppError(502, 'PI_PROTOCOL_INVALID', 'Pi runtime 运行关联或帧序号错误')
                     if frame['type'] == 'event':
                         self._record_event(frame['event'])
+                    elif frame['type'] == 'interim_message':
+                        identity, text = frame['message_id'], frame['text']
+                        if (frame['approved'] is not True or not isinstance(identity, str)
+                                or not identity.startswith(self.run_id + ':interim:')
+                                or not isinstance(text, str) or not text.strip()):
+                            raise AppError(502, 'PI_PROTOCOL_INVALID', '过程消息合同错误')
+                        if identity in self.interim_messages:
+                            if self.interim_messages[identity] != text:
+                                raise AppError(502, 'PI_PROTOCOL_INVALID', '过程消息身份对应不同内容')
+                            continue
+                        if not should_stop() and time.monotonic() < deadline:
+                            self.assert_current()
+                            if self.publish_interim(identity, text):
+                                self.interim_messages[identity] = text
+                                self.runtime_summary['interim_messages'] += 1
                     elif frame['type'] == 'tool_call':
                         if should_stop():
                             return self._close('stopped')

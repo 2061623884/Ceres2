@@ -1,6 +1,6 @@
 # Ceres2 local-cloud integration
 
-- 状态：进行中（T01/T02/T03/T07 已技术合入并发布；T04 与 T06 后端阶段进行中，最终验收开放）
+- 状态：进行中（T01/T02/T03/T04/T07与T06-A技术合入；T05和T06-B已释放，最终验收开放）
 - 主责任：主会话；集成分支唯一写入者为 Merger
 - Spec：[规格](../docs/plans/ceres2-local-cloud-integration-spec.md)
 - Workspace：[恢复说明](../CERES2-WORKSPACE.md)
@@ -105,3 +105,5 @@ T06 工程依赖细化已批准：T02 放行后 backend-only knowledge/graph/pro
 T02/T03 已发布核实：local `d9cbb180380515d5d10d0b76fc1bbba299db7385` → remote `beb83658e991c7fc641828c94149ceb7fe18880a`，tree `2f83ca49ada9984ad6998a060b4b43ddfac397f3`。回执已保存，后续发布以此为基。当前 docs-only `333e0bd` 的 T06 阶段细化尚未单独发布，将随下一实际变更。
 
 T06-A后端合入 `3069728`，固定postmerge47例/6.63s通过、源码/harness无漂移。A技术门槛关闭，T06-B仍等T04 runtime交接；真实BGE公开开发检索不替代真实图LLM与最终质量验收。
+
+T04合入 `e0f57cd` 与T06-A共存postmerge37例/46.30s及runtime安装/build稳定通过。正式并行释放T05 frontend和T06-B runtime；唯一文件所有权保持，二者不得并写。发布不阻塞下一票。

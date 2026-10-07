@@ -360,10 +360,10 @@ def test_main_pi_and_validator_disable_thinking_on_actual_sdk_wire(
             assert 'response_format' not in body
         else:
             assert any(tool['function']['name'] == 'validate_general_text' for tool in body['tools'])
-            if official:
-                assert body['response_format'] == {'type': 'json_object'}
-            else:
-                assert 'response_format' not in body
+            # T03 native primary completion uses tools, not forced JSON mode.
+            # The separate 256-token validator contract remains above.
+            assert body['tool_choice'] == 'auto'
+            assert 'response_format' not in body
     assert requests[2]['messages'][-1]['role'] == 'tool'
     assert json.loads(requests[2]['messages'][-1]['content']) == {
         'general_ref': 'general-wire', 'approved': True}

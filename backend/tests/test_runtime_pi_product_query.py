@@ -75,7 +75,7 @@ def pi_client(tmp_path, monkeypatch):
                 delta = {'role': 'assistant', 'content': '[]'}
                 reason = 'stop'
             elif any('帮我选可乐包装' in json.dumps(m.get('content'), ensure_ascii=False) for m in body['messages'] if m['role'] == 'user'):
-                delta = {'role': 'assistant', 'content': json.dumps({'status': 'waiting', 'product_refs': [], 'clarification_slot': 'packaging', 'question': '你想看罐装还是瓶装可乐？'})}
+                delta = {'role': 'assistant', 'content': json.dumps({'status': 'waiting', 'clarification_slot': 'packaging', 'question': '你想看罐装还是瓶装可乐？'})}
                 reason = 'stop'
             elif any('一直查可乐' in json.dumps(m.get('content'), ensure_ascii=False) for m in body['messages'] if m['role'] == 'user'):
                 delta = {'role': 'assistant', 'tool_calls': [{'index': 0, 'id': f'search-{len(tool_messages)}', 'type': 'function', 'function': {'name': 'search_products', 'arguments': json.dumps({'query': '可乐'})}}]}

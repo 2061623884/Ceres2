@@ -1,0 +1,23 @@
+{
+  "label": "t04-postmerge-coexistence-minimum",
+  "head": "e0f57cd450d07810a74556b9478f76918b83aaf8",
+  "command": [
+    "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/test_integration_reviewed_interim_public.py",
+    "tests/test_graph_cli_public.py",
+    "tests/test_policy_snapshot_contract.py",
+    "tests/test_integration_shopping_budget_public.py",
+    "-q",
+    "-p",
+    "pytest_asyncio.plugin"
+  ],
+  "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-t04-merge-e0f57cd/backend",
+  "exit_code": 0,
+  "elapsed_seconds": 47.586,
+  "source_changes_during_run": [],
+  "harness_changes_during_run": [],
+  "raw_record_sha256": "2b754b08b16ff4de06d81072447e7737683fd3a3682575acf55d8f49bd69bd9a",
+  "output_tail": ".....................................                                    [100%]\n37 passed in 46.30s\n"
+}
