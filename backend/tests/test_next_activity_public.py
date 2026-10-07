@@ -61,7 +61,7 @@ def test_existing_activity_entry_returns_only_finished_demo_products_without_mod
     assert state['plan'] is None
     assert client.get('/api/v1/cart').json() == cart_before
     assert len(requests) == 0
-    assert controlled_kev_transport['calls'] == []
+    assert controlled_kev_transport['entry_calls'] == []
     repeated = client.post(BASE+'/activities/light-meal', json=body)
     assert repeated.status_code == 200 and repeated.json() == state
     assert client.get(BASE).json()['active_question'] == question
@@ -155,7 +155,7 @@ def test_activity_model_composes_selected_finished_skus_then_separate_confirmati
     assert {r['sku_id']:r['quantity'] for r in state['plan']['items']} == choices
     prices = {o['value']:o['product']['price_fen'] for o in question['options']}
     assert state['plan']['selected_total_fen'] == sum(prices[sku]*quantity for sku, quantity in choices.items())
-    assert len(controlled_kev_transport['calls']) == 1
+    assert len(controlled_kev_transport['entry_calls']) == 1
     assert client.get('/api/v1/cart').json()['items'] == []
     confirmed = confirm_activity(client, state, 'activity-confirm')
     repeated = confirm_activity(client, state, 'activity-confirm')

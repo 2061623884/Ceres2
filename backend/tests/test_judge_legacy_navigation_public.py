@@ -122,7 +122,7 @@ def test_completed_legacy_cart_receipt_replays_without_navigation_or_duplicate_w
         db.commit()
     assert client.delete(nav + '/opening/' + opening['opening_id']).status_code == 200
     reopened = client.post(nav + '/opening', json={'role': 'momo'}).json()
-    before_calls, before_models = len(controlled_kev_transport['calls']), len(requests)
+    before_calls, before_models = len(controlled_kev_transport['entry_calls']), len(requests)
     route_replay = client.post(nav + '/routes', json=route_body)
     assert route_replay.status_code == 200, route_replay.text
     assert route_replay.json()['status'] == 'ready'
@@ -135,4 +135,4 @@ def test_completed_legacy_cart_receipt_replays_without_navigation_or_duplicate_w
     current = client.get(nav + '/opening').json()
     assert current['opening_id'] == reopened['opening_id'] and current['role'] == 'momo'
     assert current['handoff'] is None
-    assert len(controlled_kev_transport['calls']) == before_calls and len(requests) == before_models
+    assert len(controlled_kev_transport['entry_calls']) == before_calls and len(requests) == before_models

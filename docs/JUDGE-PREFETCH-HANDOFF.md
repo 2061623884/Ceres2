@@ -9,7 +9,7 @@
 - 新实现起点：公开 `main` 的 `4bed9c891261e382122d424825b649989ea92c92`。不需要等待不可得的历史 `f45c4ff92f96f535d156a2f88053ae10e8486fa1` 才开始本次重建；也没有恢复、合并或验收该旧候选。
 - 集成分支：`ceres2/judge-prefetch-rebuild-20261007`。**01 技术交付发布已核实**：远端 `19822b146637fbf9cbba75dcf499984d393a4605` 对应本地文档后继 `4b576321317d6755cb2ef5845ceca6f89ba3e2b5`，完整 tree 均为 `cfb1028c1330537bc703bfff27591e109e61ea13`；见[发布映射](../work/judge-prefetch/publication-role-entry-final.json)。这仅是 01 里程碑，不是四票最终候选。
 - 01 修复 `9f2eff1265c373736cc5f8683c8ccaa680959c30` 已合入 `46f3fcf47d544e0c0ecead0abc13cb23d63a38b8`。480/480 backend、其中重叠的 149 项 focused、Pi typecheck/build 和依赖检查对应同一 244 文件冻结源码，两轴复审关闭原问题；01 状态仍为“待验收”。见[Tester 报告](../work/judge-prefetch-rebuild/01-role-entry-verification.md)、[源文件等价记录](../work/judge-prefetch-rebuild/01-role-entry-final-source.json)及[01 TASK](../tasks/ceres2-judge-prefetch-01-role-entry.md)。
-- 旧独立 WIP `f323d15751c141e0ded4763a3881bbda6355eae3` 仅供源码保全，不能代替已审查修复。02 已释放实施，03／04 仍等依赖；其最终结果及全阶段发布尚未交付。
+- 旧独立 WIP `f323d15751c141e0ded4763a3881bbda6355eae3` 仅供源码保全，不能代替已审查修复。02 云端技术门槛现已完成，产品提交 `0aaffb39549db2704c6c0c414e3819277023e7a6` 已合入 `7ea06a343f95043cc5c1948ef74fc139e0de2280`，准确远端里程碑待本次发布核实后登记；03 可接手，04 等待 03。四票最终候选仍未交付。
 - 最终交接须由集成者登记：准确远端分支／完整 commit、对应本地受测源码或完整 diff、tree 等价证明、各层报告及用户前端 commit。缺少最终冻结信息时，不开始四票整体验收；可以按已交付的 01 合同准备本地前端适配。
 
 用户现有本地 Ceres2 保留了 **24 文件未提交补丁**，以及本地 `.env`、数据库与前端改动，必须原地保护。最终发布核实后，从用户已配置并核实的 Ceres2 remote fetch 最终分支，按确认的完整 SHA **另建独立本地 worktree** 验收；不要在脏工作树上 reset／checkout 覆盖、强制 stash、清理或整包套用补丁。新 worktree 使用独立安装与新隔离数据库；不要复制在用数据库、索引、session、订单或凭据。凭据仍由用户在本地管理，不要求上传或迁入云端。
@@ -31,7 +31,7 @@ Python 继续独占业务事实、权限、确认和事务；导航、政策结�
 
 分别记录以下层级，不写笼统的“全绿”：
 
-- **受控服务端/runtime 与 wire**：01 技术门槛见上述同源报告，[Standards](../work/judge-prefetch-rebuild/reviews/standards-01-rereview.md)／[Spec](../work/judge-prefetch-rebuild/reviews/spec-01-rereview.md)两轴复审均关闭原问题；02–04 最终集成仍待完成。有限[基线烟测](../work/judge-prefetch-rebuild/baseline-verification.md)不替代功能验收。
+- **受控服务端/runtime 与 wire**：01 技术门槛见上述同源报告，[Standards](../work/judge-prefetch-rebuild/reviews/standards-01-rereview.md)／[Spec](../work/judge-prefetch-rebuild/reviews/spec-01-rereview.md)两轴复审均关闭原问题；02 同版 524 backend（含重叠专项 44）、guard proof、Pi build/typecheck、依赖与两轴复审已完成，见[02 报告](../work/judge-prefetch-rebuild/02-policy-evidence-verification.md)；03–04 最终集成仍待完成。有限[基线烟测](../work/judge-prefetch-rebuild/baseline-verification.md)不替代功能验收。
 - **测试隔离更正**：旧 Node guard 因生产子进程不继承 NODE_OPTIONS 而未在实际 Pi worker 强制加载。旧源码／测试成绩不改写；测试 harness 已修复并有四项真实子进程守卫证明，最终全阶段验证使用新 launcher。详见[更正与证据](../work/judge-prefetch-rebuild/node-guard-correction.md)。
 - **真实模型／Kev／语言品质／usage／时延**：本交接未执行，须用户冻结配置、有限用例及整次额度后亲自运行。
 - **typed DOM／真实浏览器**：前端由用户本地实现，本轮云端不修改 `frontend/` 文件；构建或 HTTP fixture 不能替代浏览器结果。
@@ -72,9 +72,20 @@ Python 继续独占业务事实、权限、确认和事务；导航、政策结�
 
 该 host action 是明确纯导航，响应 `handoff: null`，不能自动重放已由可可处理的原文。它与 yes 建议携带 `routing_request_id` 后接受并续接原文是两类动作。`show_prompt: false` 也不能成为隐式续接的许可。现有接入点是 `frontend/src/App.tsx` 的 `beforeText`／`switchChatRole`、`chatNavigation.ts` 的 `chooseRole` 及 Guide 结果处理器；云端没有修改这些文件。
 
-公共行为依据：[01 HTTP/SSE/typed action fixtures](../backend/tests/test_judge_role_entry_public.py)、[旧导航回执 fixtures](../backend/tests/test_judge_legacy_navigation_public.py)。01 已覆盖 completed／waiting 主结果与职责边界并存；**waiting + policy + role boundary 的政策证据保留由 02 接续实现与验证**，不能冒称 01 已覆盖。02／03 接受后仍须补齐其实际政策来源、多引用与结果类型差异，不预造新事件或 API。
+公共行为依据：[01 HTTP/SSE/typed action fixtures](../backend/tests/test_judge_role_entry_public.py)、[旧导航回执 fixtures](../backend/tests/test_judge_legacy_navigation_public.py)。01 已覆盖 completed／waiting 主结果与职责边界并存；**waiting + policy + role boundary，以及 general/dish/history/memory 的政策组合已由 02 接续实现并同版验证**，不能把它记入 01 的旧范围。03 完成后仍须补齐多引用差异，不预造新事件或 API。
 
 浏览器门槛见第 5 节；旧 capability 按钮曾成功续接原文，不能替代新合同的验收。
+
+### 02 已交付的政策与失败呈现
+
+02 保持现有 Guide/SSE 事件和事实投影形状，没有要求前端消费新的预取专用事件。宿主 `messages` 可包含原购物／澄清／普通解释／明确记忆结果，再附真实政策及职责边界；须完整呈现消息单位和确认按钮，不能只取 `message` 第一条。政策与职责说明不写成 `general` 历史。
+
+- `runtime_events` 中的 `policy_judgment` 记录 outcome、elapsed_ms、reason、rules_version 与未知 usage；`policy_lookup` 区分 origin 为 prefetch/tool、success/empty/error、source_version 和真实 policy_ref（失败没有 ref）。这些诊断不等于写入授权。
+- 预取以完整原文和未指定 category 查询。成功／空保留真实来源、版本及范围；命中只表示部分可用规则，无匹配仍未知；检索异常是实际 attempt，不能显示成无条件允许。未恢复的真实失败由宿主在相关范围投影为暂时失败，不采用模型自行声称的失败／资格／到账事实。
+- 纯政策结果与合法 completed/waiting 主结果可并存；补查失败不会强迫丢弃购物或澄清。最终发布前 request freshness、取消与原 deadline 均复查；`PI_DEADLINE_EXCEEDED` 表示待发布结果和事务内暂存 cart/memory 修改已回滚，页面不得显示已写入成功。
+- 同请求去重、有效早期 ref 和多范围结果仍是 03 待交付范围，02 的同版成绩不覆盖这些行为。
+
+依据：[02 fixture](../backend/tests/test_judge_policy_prefetch_public.py)、[安全 fixture](../backend/tests/test_judge_policy_safety_public.py)、[最终源码证据](../work/judge-prefetch-rebuild/02-policy-evidence-final-source.json)。公开 action 与 wire role 合同沿用 01。
 
 ## 4. 本地配置与启动，只由用户操作
 

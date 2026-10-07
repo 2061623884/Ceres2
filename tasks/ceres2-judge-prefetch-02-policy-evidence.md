@@ -1,6 +1,6 @@
 # 02：政策预检索与同 Pi 回答
 
-- 状态：进行中（2026-10-07：01 云端技术依赖已发布核实，02 独立工作树已获准逐行为 TDD）
+- 状态：待验收（2026-10-07：云端技术门槛已释放；真实 provider、用户本地前端／浏览器与本人验收仍开放）
 - 拆分：已批准；功能依赖保持 01 → 02 → 03 → 04
 - 执行授权：2026-10-07 用户已授权从 GitHub 基线重新 implement-spec／TDD／Agent Team 实施、可追溯提交及分支推送；前置功能与专职 Tester 门槛保留。
 - 负责人：02 唯一实现者接手工作树 `../worktrees/02-policy-evidence`、分支 `ceres2/judge-prefetch-02-policy-evidence-20261007`；专职 Tester 执行所有验证命令，Standards／Spec 独立只读审查。共享文件按 [执行决定](../docs/REBUILD-DECISIONS.md#4-写入所有权与可并行支持项) 交接。
@@ -45,8 +45,18 @@
 
 政策 yes 预取与 no／uncertain／timeout／error 回退的中间版本已独立保存：本地 `4b3533cc7abdf4f4d3d776dfbce923fa2e3faf7b` 对应远端 `b8922a8eaf08fadc973ff75adc3abc5ede346f0d`，精确 tree 均为 `ad0a82d362c2f74fff87b4f87a24988bbc732d18`，分支 `ceres2/judge-prefetch-policy-wip-20261007`；[核实映射](../work/judge-prefetch/publication-policy-wip.json)。快照时 34 项相关受控测试通过且 245 个 source hash 无漂移，但检索错误／空／部分结果、完整混合呈现、晚到取消／deadline 守卫和最终审查仍未完成。该 WIP 不合入已释放集成，不表示 02 验收或 03 依赖释放；实现已继续。
 
+后续同一 WIP 分支已 fast-forward 保存到远端 `b4ab956a2c4ddf823c4d9f354436ae9fbf8ddd38`，对应本地 `79d34be1037a5fd910fd49bdb735afbea99b17b0`，精确 tree 均为 `200b6b5c901660625233f3ff351604aee4fae923`；[第二快照映射](../work/judge-prefetch/publication-policy-wip-02.json)。该时点 19 项相关测试通过，覆盖 lookup／mixed projection 与晚到发布事务回滚；仍待 fresh-text 准备修正、最终安全／混合回归和独立审查，02 状态不升级，也不释放 03。
+
+## 2026-10-07 最终云端交付
+
+- 产品／测试提交 `0aaffb39549db2704c6c0c414e3819277023e7a6`，集成 merge `7ea06a343f95043cc5c1948ef74fc139e0de2280`。246 个源码文件及修复后的 harness hash 与五项最终门槛前后完全一致，提交／合并未改变；[源码映射](../work/judge-prefetch-rebuild/02-policy-evidence-final-source.json)。
+- [Tester 报告](../work/judge-prefetch-rebuild/02-policy-evidence-verification.md)：完整 backend **524 passed**，其中重叠的政策专项 **44 passed**；另有两项 guard proof、Pi typecheck/build 和依赖检查通过。全套实际启动的 577 个 Node PID 均有 guard 加载记录，其中 541 个 Pi worker；旧 191 项预修复成绩保留为历史，不替代最终版本。
+- 独立 [Standards 复审](../work/judge-prefetch-rebuild/reviews/standards-02-rereview.md)无新问题；[Spec 复审](../work/judge-prefetch-rebuild/reviews/spec-02-rereview.md)已闭合阻塞查询返回后的当前请求检查 P2。原发现／失败及红绿轨迹保留，不删除。
+- 已交付完整原文且 category 为 None 的真实预取、当前请求真实 policy_ref 和来源／版本、同一 Pi 低信任输入、全部判断 fallback、空／部分／异常区别、合法 completed/waiting 主结果与政策／职责边界并存，以及当前请求／取消／deadline 和事务回滚保护。失败 attempt 无 policy_ref；宿主只能投影真实发生且未被同范围成功覆盖的失败，不能由模型宣称制造失败。
+- 03 接收 policy_scope、policy_results、policy_attempts 与实际 query/category/source_version/outcome/coverage、policy_judgment／policy_lookup 观测契约。当前每次工具查询仍实际执行，引用仍限最后有效 ref；请求内去重／早期有效引用／多范围输出属于 03，不能从 02 通过推导已完成。前端与真实效果门槛继续开放。
+
 ## 下一步与证据
 
-从 01 集成提交 `46f3fcf47d544e0c0ecead0abc13cb23d63a38b8` 的同一源码与后续状态文档接手。验证接缝沿用公开 HTTP/SSE、typed UI 和模型边界观测；本票尚无实现或测试结果。
+02 已从 01 同版集成接手并完成上述云端门槛。03 从当前已核实 source map 的集成提交接手；验证接缝继续使用公开 HTTP/SSE、模型实际输入、检索计数及权威业务读回。
 
-01 Spec 复审明确向本票移交既有完整性缺口：waiting + 有效 policy_ref + 售后职责边界必须同时保留澄清问题、政策证据及显式入口，不能用仅 completed 的五类结果附加门槛丢弃政策；该缺口在基线已存在，不作为 01 新回归。其他合法主结果（包括 general/history/memory）与政策证据组合按当前本票完整请求契约验证，不能把政策事实写入闲聊历史来绕过引用权威。
+01 移交的 waiting + policy + role boundary 及 general/history/memory 组合缺口已由本票同版公开 fixture 闭合；普通解释历史与宿主政策消息的来源分类分别保留。这不表示 03 多范围引用已完成。

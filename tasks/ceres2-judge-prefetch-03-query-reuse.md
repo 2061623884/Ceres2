@@ -1,9 +1,9 @@
 # 03：同范围复用与安全补查
 
-- 状态：待开始
+- 状态：待开始（02 云端技术依赖已释放，独立工作树已准备）
 - 拆分：已批准；功能依赖保持 01 → 02 → 03 → 04
 - 执行授权：2026-10-07 用户已授权从 GitHub 基线重新 implement-spec／TDD／Agent Team 实施、可追溯提交及分支推送；前置功能与专职 Tester 门槛保留。
-- 负责人：主会话绑定本票唯一实现者／worktree；专职 Tester 执行所有验证命令，Standards／Spec 独立只读审查。共享文件按 [执行决定](../docs/REBUILD-DECISIONS.md#4-写入所有权与可并行支持项) 交接。
+- 负责人：03 唯一实现者接手工作树 `../worktrees/03-query-reuse`、分支 `ceres2/judge-prefetch-03-query-reuse-20261007`；专职 Tester 执行所有验证命令，Standards／Spec 独立只读审查。共享文件按 [执行决定](../docs/REBUILD-DECISIONS.md#4-写入所有权与可并行支持项) 交接。
 - 上级：[总 TASK](ceres2-judge-prefetch.md)；依据：[规格](../docs/plans/ceres2-judge-prefetch-spec.md)。本票不得继承旧版通过成绩。
 
 ## 2026-10-07 当前执行差异
@@ -19,7 +19,7 @@
 
 ## Blocked by
 
-[02 政策预检索与同 Pi 回答](ceres2-judge-prefetch-02-policy-evidence.md)：需要实际注入、证据注册及错误状态，不以假想缓存独立建设。交付阻塞 [04 同版集成与调用对照](ceres2-judge-prefetch-04-candidate-evidence.md)。2026-10-07 实施授权已具备；仍须前票交付。
+[02 政策预检索与同 Pi 回答](ceres2-judge-prefetch-02-policy-evidence.md)：需要实际注入、证据注册及错误状态，不以假想缓存独立建设。交付阻塞 [04 同版集成与调用对照](ceres2-judge-prefetch-04-candidate-evidence.md)。2026-10-07 前票云端门槛已完成并经两轴复审，详见 02 最终同版证据；外部验收仍开放。
 
 ## 数据与 fixture
 
@@ -41,4 +41,4 @@
 
 ## 下一步与证据
 
-等待 02 云端契约／受控证据交付。由 Tester 从公开行为验证实际检索计数和业务读回；只读取源码的审查不能代替这些结果。当前无测试证据。
+从 02 集成提交 `7ea06a343f95043cc5c1948ef74fc139e0de2280` 的同一源码及后续交付文档接手。继承 current-request policy_scope、真实 evidence registry／attempts、query/category/source version、lookup outcome/coverage、规则判断／实际 lookup 观测；保留错误 attempt 无 ref 与所有晚到 freshness/cancel/deadline 守卫。当前仍每次查询实际执行、只认可最后 ref，03 必须完整实现自身复用／多引用语义。专职 Tester 沿公开行为验证实际计数与业务读回；本票尚无实现或通过证据。

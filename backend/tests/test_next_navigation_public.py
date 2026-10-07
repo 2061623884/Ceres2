@@ -30,7 +30,7 @@ def test_opening_refresh_preserves_quota_and_only_close_reopens(tmp_path):
 
 
 def test_one_judgment_replay_ack_decline_manual_and_new_opening(tmp_path, controlled_kev_transport):
-    calls = controlled_kev_transport['calls']
+    calls = controlled_kev_transport['entry_calls']
     controlled_kev_transport['choose'] = lambda state: 'yes'
     bind = create_db_engine('sqlite:///' + str(tmp_path / 'route.sqlite3'))
     init_db(bind)
@@ -70,7 +70,7 @@ import pytest
 
 @pytest.fixture
 def navigation_client(tmp_path, controlled_kev_transport):
-    calls = controlled_kev_transport['calls']
+    calls = controlled_kev_transport['entry_calls']
     choice = {'value': 'yes'}
     controlled_kev_transport['choose'] = lambda state: choice['value']
     bind = create_db_engine('sqlite:///' + str(tmp_path / 'navigation-cases.sqlite3'))

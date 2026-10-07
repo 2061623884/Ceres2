@@ -1,0 +1,15 @@
+{
+  "remote_commit": "b4ab956a2c4ddf823c4d9f354436ae9fbf8ddd38",
+  "local_commit": "79d34be1037a5fd910fd49bdb735afbea99b17b0",
+  "tree": "200b6b5c901660625233f3ff351604aee4fae923",
+  "branch": "ceres2/judge-prefetch-policy-wip-20261007",
+  "verified": true,
+  "phase": "second02WIP; not accepted",
+  "repository": "https://github.com/2061623884/Ceres2",
+  "remote_commit_url": "https://github.com/2061623884/Ceres2/commit/b4ab956a2c4ddf823c4d9f354436ae9fbf8ddd38",
+  "verification_date_utc": "2026-10-07",
+  "verification_owner": "Main integration coordinator",
+  "parent_remote_commit": "b8922a8eaf08fadc973ff75adc3abc5ede346f0d",
+  "evidence": "Authorized GitHub connector verified same policy WIP branch fast-forward and exact commit tree. All 245 source hashes and repaired harness hashes equal the 19-test GREEN08 snapshot.",
+  "scope": "Second incomplete ticket 02 WIP backup. Fresh-text preparation correction, final safety/mixed regressions and independent reviews remain pending. Accepted integration remains remote 99bdcc03de6cd26a70f31d2a16cc77b94e12d0f9; no ticket 03 release."
+}

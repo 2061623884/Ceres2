@@ -1,6 +1,6 @@
 # 可可角色判断与政策预检索：总 TASK
 
-- 状态：进行中（01 云端技术门槛已释放且整体待验收；02 已启动逐行为 TDD，03–04 等待依赖）
+- 状态：进行中（01–02 云端技术门槛已释放且整体待验收；03 工作树就绪，04 等待功能依赖）
 - 拆分：已批准；功能依赖保持 01 → 02 → 03 → 04
 - 执行授权：2026-10-07 用户已批准从真实 GitHub 基线重新 implement-spec／TDD／Agent Team 实施、可追溯提交与分支推送。前端由用户本地处理；详见 [执行决定](../docs/REBUILD-DECISIONS.md)。
 - 负责人：主会话维护状态、权限与集成候选；各票唯一实现者按交接绑定，专职 Tester 独占验证，集成者独占提交／合并。
@@ -45,6 +45,12 @@
 
 01 保持“待验收”，云端技术依赖已释放给 02；前端、真实 provider／浏览器及本人验收仍开放。02 已获准逐行为 TDD，工作树为 `../worktrees/02-policy-evidence`，共享产品文件在显式交接后只由 02 维护；集成者继续独占 TASK／PROJECT 和合并／提交，Tester 继续独占所有安装／验证。03–04 仍等待各自功能前置，不以局部通过提前验收。
 
+## 2026-10-07 02 云端技术交付
+
+02 最终产品提交 `0aaffb39549db2704c6c0c414e3819277023e7a6` 已合并为 `7ea06a343f95043cc5c1948ef74fc139e0de2280`。同一 246 文件 source map 通过完整 backend **524**、重叠专项 **44**、另行 guard proof、Pi typecheck/build 与依赖检查；[Tester 报告](../work/judge-prefetch-rebuild/02-policy-evidence-verification.md)、[源码与提交映射](../work/judge-prefetch-rebuild/02-policy-evidence-final-source.json)。两轴复审闭合当前发现，等待本地前端／真实 provider／浏览器及本人验收，不称整体已验收。
+
+03 可接手真实证据及引用生命周期，工作树 `../worktrees/03-query-reuse`；每次工具查询仍实际检索、仅最后 ref 有效的旧限制由 03 修改。02 交付不包含去重或多范围引用；04 仍等待 03，旁路比较脚本准备不释放其业务依赖。
+
 ## 当前局部支持证据
 
 官方 DeepSeek 五条辅助请求路径的有界支持已集成，详见 [04 支持项记录](ceres2-judge-prefetch-04-candidate-evidence.md#2026-10-07-有界传输支持项)及[Tester 报告](../work/judge-prefetch-rebuild/thinking-transport-verification.md)。主 Pi／validator 两条路径随后已由 01 串行接入，并在最终同版专项／完整套件重新验证全部七路径；04 的业务依赖没有释放。当前只报告有边界的受控结果，不宣称完整功能、独立审查或真实 provider 通过。
@@ -53,10 +59,12 @@
 
 [Tester 更正说明](../work/judge-prefetch-rebuild/node-guard-correction.md)记录：旧 runner 仅设置 NODE_OPTIONS，但生产 Pi 子进程的明确环境白名单会移除它，因此旧“全部 Node 子进程均受强制 loopback／dotenv 守卫”的表述过强。旧测试数量、源码 hash、合成凭据与 loopback fixture 事实保留，不追溯改称旧守卫已生效。现已只在测试 harness 的 PATH 放置强制加载 guard 的 Node launcher，生产权限未扩大；[新鲜四项证明与失败探针](../work/judge-prefetch-rebuild/node-guard-verification.json)包含实际 worker PID 关联。02 当前及以后工作树的受控验证必须使用该修复，最终全阶段门槛重新冻结后运行。
 
+隔离修复／交接文档 checkpoint 已发布并核实：远端 `99bdcc03de6cd26a70f31d2a16cc77b94e12d0f9` 对应本地 `d9981f3ad0a46b684144e9f3769090a0c24e5994`，精确 tree 均为 `47af6713701ebf40f7d6a6e7be390db48f42e041`；[发布映射](../work/judge-prefetch/publication-node-guard-docs.json)。244 个已释放 01 产品／测试源码未变，02 最终发布以此集成 checkpoint 为远端基底；不使用独立 WIP 分支代替集成或验收。
+
 ## 总体验收与证据
 
 各票全部验收项、同候选安全回归、独立 Standards／Spec 审查及真实调用对照分别记录。受控测试、真实模型、真实浏览器、本人验收分层；未满足者保留待验收或阻塞。性能无未经确认的阈值，未知用量不填零。旧阶段未闭合证据仍由[原总 TASK](ceres2-next-experience.md)维护，不借本任务宣称解决。
 
 ## 阻塞／下一步
 
-02 从已验证 01 集成候选的独立工作树接手政策证据；03／04 继续等待各自前置云端交付。官方 DeepSeek thinking 是 04 记录的有界传输支持项，可提前准备但不释放 04 功能验收。真实 provider 采样须先核实配置及有限额度；前端由用户本地接手。各里程碑在本地 commit、授权分支发布、远端完整 SHA 读取与精确 tree 一致性核实后发布；GitHub connector 生成不同提交 SHA 时保留本地／远端 SHA 的持久映射回执，01 云端技术结论如上；其余功能与外部门槛不继承该结论。
+03 从已验证 02 集成候选的独立工作树接手请求内复用与安全多引用；04 继续等待前置云端交付。官方 DeepSeek thinking 是 04 记录的有界传输支持项，可提前准备但不释放 04 功能验收。真实 provider 采样须先核实配置及有限额度；前端由用户本地接手。各里程碑在本地 commit、授权分支发布、远端完整 SHA 读取与精确 tree 一致性核实后发布；GitHub connector 生成不同提交 SHA 时保留本地／远端 SHA 的持久映射回执，01–02 云端技术结论如上；03–04 与外部门槛不继承该结论。

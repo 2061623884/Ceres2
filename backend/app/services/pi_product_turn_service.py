@@ -1,6 +1,7 @@
 """Read-only Pi query with one authoritative final history/receipt transaction."""
 from __future__ import annotations
 import json
+import time
 from uuid import uuid4
 from sqlalchemy import func, select, update
 from app.core.errors import AppError
@@ -133,14 +134,16 @@ class PiProductTurnService:
             task = db.get(GuideTask, current.current_task_id) if current.current_task_id else None
             return bool(task and json.loads(task.conditions_json).get('activity_id'))
 
-        runtime = PiProductRuntime(CatalogService(db, store_id), assert_current, run_id=run_id, route_request=route_request, context=context, memory_command=memory_turn.prepare, product_search=lambda arguments: ComparisonService(db, self.owner_id).search(session_id, arguments, scope_to_page=False), comparison_search=lambda arguments: ComparisonService(db, self.owner_id).search(session_id, arguments, body.get('view_context')), candidate_resolve=lambda ref: ComparisonService(db, self.owner_id).resolve(session_id, ref, body.get('displayed_candidate_refs', []), body.get('view_context')), history_command=history_turn.prepare, explore_products=lambda arguments: questions.explore(session_id, arguments), select_question_products=lambda arguments: questions.select_products(session_id, arguments), activity_active=activity_active)
+        runtime = PiProductRuntime(CatalogService(db, store_id), assert_current, run_id=run_id, policy_scope={'owner_id': self.owner_id, 'session_id': session_id, 'request_id': body['request_id'], 'run_id': run_id}, route_request=route_request, context=context, memory_command=memory_turn.prepare, product_search=lambda arguments: ComparisonService(db, self.owner_id).search(session_id, arguments, scope_to_page=False), comparison_search=lambda arguments: ComparisonService(db, self.owner_id).search(session_id, arguments, body.get('view_context')), candidate_resolve=lambda ref: ComparisonService(db, self.owner_id).resolve(session_id, ref, body.get('displayed_candidate_refs', []), body.get('view_context')), history_command=history_turn.prepare, explore_products=lambda arguments: questions.explore(session_id, arguments), select_question_products=lambda arguments: questions.select_products(session_id, arguments), activity_active=activity_active)
         try:
             progress('understanding')
             explicit_confirm = body['message'].strip().rstrip('。！!') in ('就按这个加购', '确认加购', '确认把当前清单加入购物车')
-            if explicit_confirm:
-                outcome = {'status':'completed', 'message':'已按确认清单加入购物车（模拟业务）。', 'products':[]}
-            elif body['message'].strip().rstrip('。！!') in ('好的', '可以'):
-                outcome = {'status':'waiting', 'message':'你是要确认当前清单加购，还是继续修改？确认时请说“就按这个加购”。', 'products':[]}
+            ambiguous_confirmation = body['message'].strip().rstrip('。！!') in ('好的', '可以')
+            if explicit_confirm or ambiguous_confirmation:
+                outcome = runtime.prepare_policy(body['message'], should_stop=should_stop, on_phase=progress, deadline=deadline)
+                if outcome is None:
+                    outcome = {'status':'completed', 'message':'已按确认清单加入购物车（模拟业务）。', 'products':[]} if explicit_confirm else {
+                        'status':'waiting', 'message':'你是要确认当前清单加购，还是继续修改？确认时请说“就按这个加购”。', 'products':[]}
             else:
                 outcome = runtime.run(body['message'], should_stop=should_stop, on_phase=progress, deadline=deadline)
             if run_cancelled(run_id):
@@ -167,7 +170,17 @@ class PiProductTurnService:
                 raise AppError(409, 'RUN_INTERRUPTED', '这次处理已中断')
             if receipt.status == 'stop_requested':
                 outcome = runtime._close('stopped')
+            elif time.monotonic() >= deadline:
+                outcome = runtime._close('deadline')
             status = outcome['status']
+
+            def require_publication_budget():
+                if run_cancelled(run_id):
+                    raise AppError(409, 'RUN_INTERRUPTED', '这次处理已中断')
+                if status in ('completed', 'waiting') and time.monotonic() >= deadline:
+                    # The outer exception path rolls back this one publication
+                    # transaction, including staged cart/memory/receipt rows.
+                    raise AppError(408, 'PI_DEADLINE_EXCEEDED', '处理时限已到，本次结果和待提交修改未发布，请重新确认后继续。')
             memory_result = memory_turn.commit() if status == 'completed' and outcome.get('memory_result') else None
             if memory_result:
                 outcome['message'] = memory_result['message']
@@ -221,14 +234,15 @@ class PiProductTurnService:
             if status in ('deadline', 'tool_budget'):
                 ComparisonService(db, self.owner_id).clear(session_id, comparison_snapshot_refs)
             cards = ComparisonService(db, self.owner_id).publish(session_id, outcome['products'], assistant_id, body.get('view_context')) if status == 'completed' and outcome.get('comparison') else []
-            if outcome.get('policy_message'):
-                outcome['messages'] = [outcome['message'], outcome['policy_message']]
-            if outcome.get('role_boundary_message'):
-                outcome['messages'] = [*outcome.get('messages', [outcome['message']]), outcome['role_boundary_message']]
-            public_messages = [{'message_id': assistant_id if index == 0 else f'msg-{uuid4().hex}', 'content': content} for index, content in enumerate(outcome.get('messages', [outcome['message']]))]
+            ordinary_kind = 'general' if outcome.get('answer_kind') == 'general_explanation' else 'text'
+            message_units = [(content, ordinary_kind) for content in outcome.get('messages', [outcome['message']])]
+            for field in ('policy_message', 'role_boundary_message'):
+                if outcome.get(field):
+                    message_units.append((outcome[field], 'text'))
+            public_messages = [{'message_id': assistant_id if index == 0 else f'msg-{uuid4().hex}', 'content': content} for index, (content, _kind) in enumerate(message_units)]
             db.add(GuideMessage(message_id=f'msg-{uuid4().hex}', session_id=session_id, owner_id=self.owner_id, task_id=anchor[1], sequence=sequence + 1, role='user', kind='text', content=body['message'], request_id=body['request_id']))
             for index, message in enumerate(public_messages):
-                db.add(GuideMessage(message_id=message['message_id'], session_id=session_id, owner_id=self.owner_id, task_id=anchor[1], sequence=sequence + index + 2, role='assistant', kind='general' if outcome.get('answer_kind') == 'general_explanation' else 'text', content=message['content'], request_id=body['request_id']))
+                db.add(GuideMessage(message_id=message['message_id'], session_id=session_id, owner_id=self.owner_id, task_id=anchor[1], sequence=sequence + index + 2, role='assistant', kind=message_units[index][1], content=message['content'], request_id=body['request_id']))
             if outcome.get('exploration'):
                 question = questions.publish(session_id, outcome['exploration'], assistant_id)
                 db.flush()
@@ -263,6 +277,7 @@ class PiProductTurnService:
                     request=SwitchRequest(opening_id=route['opening_id'], target_role='momo', accept=True),
                 ).model_dump()
             result.update(questions.projection(session_id))
+            require_publication_budget()
             receipt.status = {'stopped': 'stopped', 'waiting': 'waiting_clarification', 'deadline': 'protected', 'tool_budget': 'protected'}.get(status, 'completed')
             if status == 'completed' and (purchase or history_selection) and result['plan']:
                 receipt.status = 'waiting_confirmation'
@@ -273,6 +288,8 @@ class PiProductTurnService:
             if status == 'completed' and not memory_result:
                 from app.services.memory_background import enqueue_extraction
                 enqueue_extraction(db, owner_id=self.owner_id, role='keke', source_id=receipt.run_id, source_text=body['message'])
+            db.flush()
+            require_publication_budget()
             db.commit()
             return result
         except Exception as exc:

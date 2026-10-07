@@ -38,6 +38,6 @@ def test_compound_shopping_policy_keeps_both_results_and_reference_fences(pi_cli
         restored = client.get(BASE, params={'include_messages':True}).json()
         assert restored['active_question'] == question
         assert any(message['content'] == policy for message in restored['messages'])
-    assert len(controlled_kev_transport['calls']) == 1
+    assert len(controlled_kev_transport['entry_calls']) == 1
     assert client.get(BASE).json()['plan'] is None
     assert client.get('/api/v1/cart').json()['items'] == []

@@ -46,7 +46,7 @@ def test_same_four_journeys_preserve_public_business_semantics(pi_client, contro
         assert '彩虹' in result['message'] and state['task_id'] is None
     assert state['plan'] is None
     assert client.get('/api/v1/cart').json() == before_cart
-    assert len(controlled_kev_transport['calls']) == 1
+    assert len(controlled_kev_transport['entry_calls']) == 1
 
 
 def test_chat_uses_relevant_context_while_preserving_pending_shopping(pi_client, controlled_kev_transport):
@@ -73,7 +73,7 @@ def test_chat_uses_relevant_context_while_preserving_pending_shopping(pi_client,
     next_tools = {tool['function']['name'] for tool in requests[1]['tools']}
     next_system = next(m['content'] for m in requests[1]['messages'] if m['role'] == 'system')
     assert 'propose_dish' not in next_tools and question['question_id'] not in next_system
-    assert len(controlled_kev_transport['calls']) == 2
+    assert len(controlled_kev_transport['entry_calls']) == 2
 
 
 def test_role_first_context_preserves_mixed_request_and_shopping_after_pi_understanding(pi_client, controlled_kev_transport):
@@ -103,7 +103,7 @@ def test_role_first_context_preserves_mixed_request_and_shopping_after_pi_unders
     next_tools = {t['function']['name'] for t in requests[1]['tools']}
     assert 'explore_products' in first_tools and 'explore_products' in next_tools
     assert original in json.dumps(requests[0]['messages'], ensure_ascii=False)
-    assert len(controlled_kev_transport['calls']) == 1
+    assert len(controlled_kev_transport['entry_calls']) == 1
     assert state['plan'] is None and client.get('/api/v1/cart').json()['items'] == []
 
 
@@ -130,4 +130,4 @@ def test_factual_recipe_question_keeps_read_only_dish_facts_without_purchase_tas
     assert [d['dish_id'] for d in events[-1]['payload']['dish_candidates']] == ['dish-fanqie-chao-dan']
     assert client.get(BASE).json()['task_id'] is None
     assert client.get('/api/v1/cart').json()['items'] == []
-    assert len(controlled_kev_transport['calls']) == 1
+    assert len(controlled_kev_transport['entry_calls']) == 1
