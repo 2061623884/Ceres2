@@ -1,6 +1,6 @@
 # T09：同版回归两轴审查与交接
 
-- 状态：待开始
+- 状态：进行中（冻结81b02f9，全部同版门槛与两轴并行执行）
 - 负责人：Tester + 独立 Standards/Spec；Merger 只整合；主会话绑定实际 worker/worktree 后方可写入
 - 规格：[本轮规格](../docs/plans/ceres2-local-cloud-integration-spec.md)
 - 总任务：[集成 TASK](ceres2-local-cloud-integration.md)
@@ -20,4 +20,6 @@
 
 ## 当前阻塞、下一步、证据
 
-尚未实现；等待上列依赖交付。本票是可独立演示/验证的业务切片，不允许只搬文件并宣称完成。Tester 和两轴审查证据由主会话在收到后登记；历史来源报告不能代替本票结果。
+固定候选 `81b02f956298361cf9044ee289c0821a8275fab8`：backend/runtime等于T08-B `c1a99cf`，frontend等于T05 `4278eea`，合并无冲突。Tester在独立冻结工作树执行最终backend full、Pi/frontend严格编译/build及相关DOM/HTTP/wire；两轴并行审查 `37c984...81b02f9` 全范围。
+
+实际浏览器保持BLOCKED（IPC权限/跨环境host不可达，未进入UI），真实provider与用户验收NOT RUN。test-support launcher的进程组清理P2由独立owner修复，若仅support变化则单独固定源/测试/审查绑定，不冒充产品全量已包含该后继。未有终态报告的项保持PENDING。[冻结清单](../work/local-cloud-integration/t09/frozen-source.json)。

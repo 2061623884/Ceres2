@@ -100,10 +100,28 @@ class KnowledgeService:
 
     def search(self, query, namespace, *, limit=10, allowed_ids=None, category=None,
                deadline=None, should_stop=None, expected_index_revision=None):
-        return self._query({'action': 'hybrid', 'query': query, 'namespace': namespace,
+        from app.services.runtime_observation import retrieval_observer
+        from app.knowledge.corpus import manifest_revision
+        observer = retrieval_observer()
+        identity, started = uuid4().hex, time.monotonic()
+        event = {'retrieval_id': identity, 'namespace': namespace}
+        if observer is not None:
+            event['run_id'] = observer[0]
+            observer[1]({'type': 'retrieval_start', **event})
+        result = None
+        try:
+            result = self._query({'action': 'hybrid', 'query': query, 'namespace': namespace,
                             'limit': limit, 'allowed_ids': allowed_ids, 'category': category,
                             'expected_index_revision': expected_index_revision},
                            deadline=deadline, should_stop=should_stop)
+            return result
+        finally:
+            if observer is not None:
+                observer[1]({'type': 'retrieval_end', **event,
+                    'outcome': 'error' if result is None else 'success' if result['hits'] else 'empty',
+                    'elapsed_ms': (time.monotonic() - started) * 1000,
+                    'source_revision': result['manifest'].get('corpus_revision') if result is not None else None,
+                    'index_revision': manifest_revision(result['manifest']) if result is not None else None})
 
     def graph(self, query, method='local', *, deadline, should_stop=None):
         if method not in ('local', 'global'):

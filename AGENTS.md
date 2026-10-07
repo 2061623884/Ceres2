@@ -51,6 +51,10 @@
 
 采用 single-context：按需维护根目录 `GLOSSARY.md` 和 `docs/adr/`，读取规则见 `docs/agents/domain.md`。
 
+## 本轮已授权阶段说明（2026-10-07）
+
+当前任务为 `tasks/ceres2-local-cloud-integration.md` 的九票集成；本轮用户已授权选择性集成、前端适配与主会话通过授权工具发布独立集成/WIP分支。下节“仅16票”“新Git无remote”描述先前重建时点，仅这两项范围/状态已由本轮规格替代；其原文保留用于历史溯源。此说明不授权worker shell push、main合并、部署或覆盖原工程，也不改变Tester独占执行、Python业务权威、隔离和唯一文件所有权规则。
+
 ## 干净重建硬边界
 
 - `../archive/` 与 `../reference/` 只读；禁止 runtime import、PYTHONPATH、配置、构建或符号链接依赖其中内容。新工程单独安装依赖，不借旧 node_modules/.venv。

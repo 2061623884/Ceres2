@@ -1,5 +1,6 @@
 /** A bounded actual Pi Agent. Business facts and authority stay in Python. */
 import { createHash } from 'node:crypto';
+import { readFileSync, readdirSync } from 'node:fs';
 import { createInterface } from 'node:readline';
 import { Agent, type AgentTool } from '@earendil-works/pi-agent-core';
 import { streamSimple } from '@earendil-works/pi-ai/api/openai-completions';
@@ -7,6 +8,7 @@ import type { Model } from '@earendil-works/pi-ai';
 import { Type } from 'typebox';
 import { GENERAL_CLAIM_PROMPT, INTERIM_CLAIM_PROMPT } from './general-claim.js';
 import { officialDeepSeekSampling } from './official-deepseek.js';
+import { observeProviderUsage, type ObservedUsage } from './provider-observation.js';
 import { composePrompt, selectTools, type GuideRequestKind, type PromptModules, type TurnContext } from './prompt-modules.js';
 
 interface Start {
@@ -95,6 +97,39 @@ async function run(start: Start) {
   let finalAnswer: string | undefined;
   let interimChecks: Promise<void> = Promise.resolve();
   let interimNumber = 0;
+  const buildFiles = readdirSync(new URL('.', import.meta.url)).filter(name=>name.endsWith('.js')).sort();
+  const build = buildFiles.map(name=>[name,createHash('sha256').update(readFileSync(new URL(name, import.meta.url))).digest('hex')]);
+  send({type:'event',event:{type:'runtime_version',
+    build_revision:createHash('sha256').update(JSON.stringify(build)).digest('hex'),build_scope:'worker_disk_at_start',
+    prompt_revision:createHash('sha256').update(JSON.stringify([start.promptModules,GENERAL_CLAIM_PROMPT,INTERIM_CLAIM_PROMPT])).digest('hex')}});
+  type Stage = 'primary_pi' | 'general_audit' | 'interim_audit';
+  type Call = {call_id:string;stage:Stage;started:number;ended:boolean;usage:ObservedUsage|null};
+  let providerNumber=0;
+  const currentCalls = new Map<Stage,Call>();
+  const endCall = (call:Call,status:string) => {
+    if(call.ended) return;
+    call.ended=true;
+    send({type:'event',event:{type:'provider_call_end',call_id:call.call_id,stage:call.stage,status,
+      duration_ms:performance.now()-call.started,usage:call.usage,cost:null}});
+  };
+  const finishProvider = (stage:Stage,status:string) => {
+    const call=currentCalls.get(stage);
+    if(call) endCall(call,status);
+  };
+  const observedFetch = (stage:Stage): typeof globalThis.fetch => async (...args) => {
+    const call:Call={call_id:`${runId}:provider:${++providerNumber}`,stage,started:performance.now(),ended:false,usage:null};
+    currentCalls.set(stage,call);
+    send({type:'event',event:{type:'provider_call_start',call_id:call.call_id,stage,
+      model:start.model.id,provider_host:new URL(start.model.baseUrl).hostname}});
+    try {
+      const response=await providerFetch(...args);
+      if(!response.ok || !response.body) {
+        endCall(call,response.ok?'empty_response':'http_error');
+        return response;
+      }
+      return observeProviderUsage(response,usage=>{call.usage=usage;});
+    } catch(error) { endCall(call,'transport_error'); throw error; }
+  };
   const model: Model<'openai-completions'> = {
     id: start.model.id, name: start.model.id, api: 'openai-completions', provider: 'ceres',
     baseUrl: start.model.baseUrl, reasoning: false, input: ['text'],
@@ -146,11 +181,12 @@ async function run(start: Start) {
         streamFn: (_model, context, options) => {
           beginProviderCall();
           const samplingParams = officialDeepSeekSampling(start.model.baseUrl, options?.samplingParams);
-          return streamSimple(model, context, {...options, apiKey:start.model.apiKey,maxTokens:256,fetch:providerFetch,
+          return streamSimple(model, context, {...options, apiKey:start.model.apiKey,maxTokens:256,fetch:observedFetch('general_audit'),
             ...(samplingParams ? {samplingParams} : {}),
           });
         },
       });
+      validator.subscribe(event=>{if(event.type==='message_end' && event.message.role==='assistant') finishProvider('general_audit',event.message.stopReason);});
       const abort = () => validator?.abort();
       signal?.addEventListener('abort',abort,{once:true});
       send({type:'event',event:{type:'general_validation_start',model_calls:1}});
@@ -200,7 +236,7 @@ async function run(start: Start) {
       const toolSampling = {...options?.samplingParams, tool_choice:'auto'};
       const samplingParams = officialDeepSeekSampling(start.model.baseUrl, toolSampling) ?? toolSampling;
       return streamSimple(model, context, {
-        ...options, apiKey: start.model.apiKey, maxTokens: 1536, fetch: providerFetch,
+        ...options, apiKey: start.model.apiKey, maxTokens: 1536, fetch: observedFetch('primary_pi'),
         samplingParams,
       });
     },
@@ -231,6 +267,7 @@ async function run(start: Start) {
       } });
     }
     if (event.type === 'message_end' && event.message.role === 'assistant') {
+      finishProvider('primary_pi',event.message.stopReason);
       const calls = event.message.content.filter(block=>block.type==='toolCall');
       if(calls.some(block=>block.name==='finish_response') && calls.length !== 1) {
         errorCode='PI_TOOL_INVALID'; agent.abort();
@@ -260,7 +297,7 @@ async function run(start: Start) {
           interimChecks=interimChecks.then(async()=>{
             if (status!=='completed' || errorCode) return;
             const startedAt=performance.now();
-            let usage: {input:number;output:number;cacheRead:number;cacheWrite:number;totalTokens:number} | null=null;
+            let usage: ObservedUsage | null=null;
             let approved=false;
             let outcome: 'approved' | 'rejected' | 'error'='error';
             let auditDiagnostic: ReturnType<typeof diagnostic> | null=null;
@@ -270,19 +307,14 @@ async function run(start: Start) {
               streamFn:(_model,context,options)=>{
                 beginProviderCall();
                 const samplingParams=officialDeepSeekSampling(start.model.baseUrl,options?.samplingParams);
-                return streamSimple(model,context,{...options,apiKey:start.model.apiKey,maxTokens:256,fetch:providerFetch,...(samplingParams?{samplingParams}:{})});
+                return streamSimple(model,context,{...options,apiKey:start.model.apiKey,maxTokens:256,fetch:observedFetch('interim_audit'),...(samplingParams?{samplingParams}:{})});
               },
             });
+            validator.subscribe(event=>{if(event.type==='message_end' && event.message.role==='assistant') finishProvider('interim_audit',event.message.stopReason);});
             try {
               await validator.prompt(JSON.stringify([text]));
               const last=[...validator.state.messages].reverse().find(message=>message.role==='assistant');
-              if(last?.role==='assistant') {
-                // SDK default zero does not establish observed provider usage.
-                if(last.usage.totalTokens>0) {
-                  const {input,output,cacheRead,cacheWrite,totalTokens}=last.usage;
-                  usage={input,output,cacheRead,cacheWrite,totalTokens};
-                }
-              }
+              usage=currentCalls.get('interim_audit')?.usage ?? null;
               if (!last || last.role!=='assistant' || last.stopReason==='error' || last.stopReason==='aborted') {
                 const cause=new Error(last?.role==='assistant'?last.errorMessage:validator.state.errorMessage);
                 cause.name=last?.role==='assistant' && last.stopReason==='aborted'?'AbortError':'ProviderError';

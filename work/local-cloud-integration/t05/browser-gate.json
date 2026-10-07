@@ -1,0 +1,16 @@
+{
+  "status": "BLOCKED",
+  "entered_product_ui": false,
+  "findings": [
+    "exec Chromium launch still fails with Unix socket EPERM after explicit single-command escalation",
+    "official CUA unique-host health URL refuses connection before UI/cookie access",
+    "health pulse within synthetic fixture is healthy; separate exec and CUA cannot reach that fixture host"
+  ],
+  "evidence_scope": "Root-coordinated Tester/official CUA attempts; retained external raw records, no claim of layout/interaction execution",
+  "technical_merge_disposition": "Root approved technical code gates continuing with browser gate explicitly open",
+  "remaining": [
+    "actual browser layout/navigation/cookie/UI journey",
+    "real provider quality",
+    "user acceptance"
+  ]
+}

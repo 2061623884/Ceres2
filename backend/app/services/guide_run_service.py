@@ -80,7 +80,8 @@ def interrupt_run(db, run_id):
     if changed.rowcount:
         receipt = db.get(GuideTurnReceipt, run_id)
         error = {'code': 'RUN_INTERRUPTED', 'message': '服务关闭，这次处理未完成，已有结果仍保留。请决定是否继续。', 'http_status': 409}
-        receipt.result_json = json.dumps(error, ensure_ascii=False)
+        from app.services.runtime_observation import retained_observation
+        receipt.result_json = json.dumps({**retained_observation(receipt.result_json), **error}, ensure_ascii=False)
         append_event(db, receipt, 'error', error)
 
 
@@ -191,6 +192,19 @@ def admit(db, owner_id, session_id, body):
     from app.services.history_service import HistoryService
     HistoryService(db, owner_id).dismiss_reminder(session_id, anchor[1], 'ignored')
     receipt = GuideTurnReceipt(run_id=f'run-{uuid4().hex}', owner_id=owner_id, session_id=session_id, request_id=body['request_id'], digest=digest, input_json=json.dumps(body, ensure_ascii=False), anchor_json=json.dumps({'session_version': anchor[0], 'task_id': anchor[1], 'state_version': anchor[2]}), execution_id=EXECUTION_ID, started_at=time.time())
+    from app.models.guide import GuideCommandReceipt
+    from app.services.runtime_observation import admission_version
+    route_row = db.get(GuideCommandReceipt, (session_id, 'route:' + body['request_id']))
+    entry = None
+    if route_row is not None:
+        route = json.loads(route_row.result_json)
+        # Admission follows authorize_text under the same owned-session lock.
+        # Never borrow the most recent route or a different request's decision.
+        if (route['routing_request_id'] == body['request_id'] and route['original_message'] == body['message']
+                and route['authorized_role'] == 'keke' and route.get('entry_judgment') is not None):
+            entry = {key: route['entry_judgment'][key] for key in ('outcome', 'elapsed_ms', 'reason')}
+            entry.update(routing_request_id=body['request_id'], rules_version=route['criteria_version'], usage=None)
+    receipt.result_json = json.dumps({'runtime_version': admission_version(), 'entry_judgment': entry})
     db.add(receipt)
     db.flush()
     append_event(db, receipt, 'accepted', {'request_id': body['request_id']})
@@ -237,7 +251,8 @@ def recover_interrupted_runs(bind):
             changed = db.execute(update(GuideTurnReceipt).where(GuideTurnReceipt.run_id == receipt.run_id, GuideTurnReceipt.status.in_(['running', 'stop_requested'])).values(status='interrupted'))
             if changed.rowcount:
                 error = {'code': 'RUN_INTERRUPTED', 'message': '服务重启中断了这次处理，已有结果仍保留。请决定是否继续。', 'http_status': 409}
-                receipt.result_json = json.dumps(error, ensure_ascii=False)
+                from app.services.runtime_observation import retained_observation
+                receipt.result_json = json.dumps({**retained_observation(receipt.result_json), **error}, ensure_ascii=False)
                 append_event(db, receipt, 'error', error)
         db.commit()
 

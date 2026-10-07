@@ -1,6 +1,6 @@
 # T08：统一评测事件与运行版本
 
-- 状态：进行中（A已技术放行；B接管runtime实施中，整票仍等T05）
+- 状态：待验收（A/B技术门槛及阶段两轴已过并合入，T09最终同版验证/验收进行中）
 - 负责人：evaluation/runtime owner (T06→T08 交接)；主会话绑定实际 worker/worktree 后方可写入
 - 规格：[本轮规格](../docs/plans/ceres2-local-cloud-integration-spec.md)
 - 总任务：[集成 TASK](ceres2-local-cloud-integration.md)
@@ -43,3 +43,7 @@ T06在canonical `b9138af` 固定postmerge12例及runtime build稳定通过，T08
 A只接受当前policy/interim summary、owner过滤/精确join/显式人工标签/unknown及独立导出源码快照。B的新graph/provider summary schema投影和运行版本采集仍需独立实现/测试/复审。T05同版最终整合依赖保留。[验证](../work/local-cloud-integration/t08a/verification-summary.json)、[源码](../work/local-cloud-integration/t08a/source-equivalence.json)。
 
 固定detached `a60b6b5` 导出/标注postmerge11例/3.73s通过、源码/harness无漂移。A技术门槛关闭，B正式接管runtime/Prompt及evaluation投影；此CLI-only检查未重新执行runtime，不替代B整合验证。[postmerge](../work/local-cloud-integration/t08a/postmerge-minimum.json)。
+
+B所有权细化：guide_run_service.py转交用于已有receipt/event运行时证据，不新增schema/DB。navigation_service.py目前只读，须先说明确切调用需求再分配写入；frontend仍属T05。
+
+最终B `c1a99cf`256例/321.10s受影响验证与build绑定稳定，两项观察范围/graph method P2均复审关闭。无冲突合入T05组合 `81b02f9`，backend/runtime与受测pin零差异；同版T09全量检查和全范围两轴已启动，不能将阶段256视作最终全量。[验证](../work/local-cloud-integration/t08b/verification-summary.json)、[build绑定](../work/local-cloud-integration/t08b/final-build-binding.json)。

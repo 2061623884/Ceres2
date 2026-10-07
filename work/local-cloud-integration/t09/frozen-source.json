@@ -1,0 +1,16 @@
+{
+  "candidate": "81b02f956298361cf9044ee289c0821a8275fab8",
+  "baseline": "37c98400e7152b89e4a58f02fff3bceaa73b0eac",
+  "backend_runtime_source": "c1a99cf27f54647bce32b9d07c4511bdd7a65941",
+  "frontend_source": "4278eea1fc8a546b0fbf316110a229040c0f9dc8",
+  "backend_runtime_diff": [],
+  "frontend_diff": [],
+  "merge_conflicts": false,
+  "state": "frozen; full Tester and independent baseline-to-candidate reviews in progress",
+  "helper_status": "process-group cleanup P2 pending support-only fix; does not change product source",
+  "open_acceptance": [
+    "actual browser blocked by environment",
+    "real provider not run",
+    "user acceptance not run"
+  ]
+}

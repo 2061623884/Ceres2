@@ -11,10 +11,21 @@ DIAGNOSTIC_FIELDS = frozenset('''type kind call_id audit_id message_id outcome a
 origin elapsed_ms duration_ms model provider_host policy_ref source_name source_version
 source_revision index_revision rules_version reason code name fingerprint length
 input output cacheRead cacheWrite totalTokens success empty error count sequence
-turn round tool_name model_calls status'''.split())
+turn round tool_name toolName toolCallId isError model_calls status stage run_id routing_request_id
+attempt_id graph_query_id graph_status official_graph_calls provider_calls embedding_calls
+calls calls_truncated graph_index_revision query_revision selection entity_numbers
+model_selected_entity_ids canonical_scope canonical_entity_ids recipe_ids
+graph_revision corpus_revision provider_revision embedding_revision usage_source response_model
+prompt_tokens completion_tokens total_tokens cached_tokens prompt_tokens_details completion_tokens_details
+primary_pi general_audit interim_audit started completed usage_observed usage_missing
+observed_usage usage_complete upstream_http_status transport_phase transport_error_class transport_error_code'''.split())
+DIAGNOSTIC_FIELDS = DIAGNOSTIC_FIELDS | {'namespace', 'retrieval_id', 'product', 'recipe', 'policy', 'method'}
 SUMMARY_FIELDS = frozenset('''policy_lookups policy_tool_lookups policy_reuses tool_starts
-primary_pi_turns events_truncated interim_audit_attempts interim_messages'''.split())
-VERSION_FIELDS = ('source_revision', 'build_revision', 'prompt_revision')
+primary_pi_turns events_truncated interim_audit_attempts interim_messages general_audit_attempts
+graph_tool_attempts graph_official_calls graph_provider_calls graph_embedding_calls
+provider_records_truncated provider_calls_complete'''.split())
+VERSION_FIELDS = ('source_revision', 'build_revision', 'prompt_revision', 'source_scope', 'build_scope',
+                  'captured_at_ms', 'loaded_code_equivalence')
 
 
 def diagnostic(value):
@@ -33,7 +44,8 @@ def summary(value):
     if value is None:
         return None
     result = {key: value[key] for key in SUMMARY_FIELDS if key in value}
-    for key in ('policy_lookup_outcomes', 'policy_judgment', 'interim_audits'):
+    for key in ('policy_lookup_outcomes', 'policy_judgment', 'policy_sources', 'interim_audits', 'graph_queries',
+                'provider_calls', 'provider_call_records', 'retrieval_calls', 'retrieval_sources'):
         if key in value:
             result[key] = diagnostic(value[key])
     return result
@@ -75,8 +87,7 @@ def export_runs(owner_id: str, output: Path):
                 'runtime_events': diagnostic(runtime),
                 'runtime_events_note': 'Diagnostic tail only; never complete run counts or usage totals.',
                 'runtime_version': {key: version[key] for key in VERSION_FIELDS if key in version} if version is not None else None,
-                # No stored exact navigation linkage exists in this capture stage.
-                'entry_judgment': None,
+                'entry_judgment': diagnostic(result.get('entry_judgment')),
                 'events': [{'sequence': event.sequence, 'type': event.type,
                             'recorded_at_ms': event.recorded_at_ms,
                             'elapsed_ms': event.recorded_at_ms - start if event.recorded_at_ms is not None and start is not None else None}

@@ -46,6 +46,40 @@ class PiProductTurnService:
         self.db, self.owner_id = db, owner_id
 
     def process(self, session_id, body, *, run_id, deadline, progress):
+        from app.services.runtime_observation import (begin_retrieval_observation, end_retrieval_observation,
+            retrieval_summary, record_retrieval, retained_observation)
+        observation = {'runtime': None, 'events': [], 'summary': {**retrieval_summary(), 'events_truncated': False}}
+
+        def record(event):
+            if observation['runtime'] is not None:
+                observation['runtime']._record_event(event)
+            else:
+                record_retrieval(observation['summary'], event)
+                observation['events'].append(event)
+                if len(observation['events']) > 256:
+                    del observation['events'][0]
+                    observation['summary']['events_truncated'] = True
+
+        token = begin_retrieval_observation(run_id, record)
+        try:
+            return self._process(session_id, body, run_id=run_id, deadline=deadline, progress=progress, observation=observation)
+        except Exception:
+            # Context projection can fail before Pi exists. Preserve only its
+            # observed reads; unobserved Pi/provider counters remain absent.
+            if observation['runtime'] is None and observation['events']:
+                self.db.rollback()
+                receipt = self.db.scalar(select(GuideTurnReceipt).where(GuideTurnReceipt.run_id == run_id,
+                    GuideTurnReceipt.owner_id == self.owner_id, GuideTurnReceipt.session_id == session_id,
+                    GuideTurnReceipt.status.in_(['running', 'stop_requested'])))
+                if receipt is not None:
+                    receipt.result_json = json.dumps({**retained_observation(receipt.result_json),
+                        'runtime_summary': observation['summary'], 'runtime_events': observation['events']})
+                    self.db.commit()
+            raise
+        finally:
+            end_retrieval_observation(token)
+
+    def _process(self, session_id, body, *, run_id, deadline, progress, observation):
         db = self.db
         session = owned_session(db, self.owner_id, session_id)
         from app.services.guide_run_service import digest_body, append_event, publish_result, log_host_failure, run_cancelled
@@ -54,6 +88,8 @@ class PiProductTurnService:
         if receipt is None or receipt.owner_id != self.owner_id or receipt.session_id != session_id or receipt.digest != digest:
             raise AppError(409, 'IDEMPOTENCY_CONFLICT', '运行登记与输入不一致')
         original = json.loads(receipt.anchor_json)
+        from app.services.runtime_observation import retained_observation
+        admission_observation = retained_observation(receipt.result_json)
         anchor = (original['session_version'], original['task_id'], original['state_version'])
         store_id = session.supply_store_id or json.loads(session.entry_context_json)['store_id']
         db.rollback()
@@ -180,6 +216,10 @@ class PiProductTurnService:
                 return True
 
         runtime = PiProductRuntime(CatalogService(db, store_id, deadline=deadline, should_stop=should_stop), assert_current, run_id=run_id, policy_scope={'owner_id': self.owner_id, 'session_id': session_id, 'request_id': body['request_id'], 'run_id': run_id}, route_request=route_request, context=context, memory_command=memory_turn.prepare, product_search=lambda arguments: ComparisonService(db, self.owner_id, deadline=deadline, should_stop=should_stop).search(session_id, arguments, scope_to_page=False), comparison_search=lambda arguments: ComparisonService(db, self.owner_id, deadline=deadline, should_stop=should_stop).search(session_id, arguments, body.get('view_context')), candidate_resolve=lambda ref: ComparisonService(db, self.owner_id, deadline=deadline, should_stop=should_stop).resolve(session_id, ref, body.get('displayed_candidate_refs', []), body.get('view_context')), history_command=history_turn.prepare, explore_products=lambda arguments: questions.explore(session_id, arguments), select_question_products=lambda arguments: questions.select_products(session_id, arguments), activity_active=activity_active, publish_interim=publish_interim)
+        runtime.runtime_version = admission_observation.get('runtime_version')
+        runtime.runtime_summary.update(observation['summary'])
+        runtime.events.extend(observation['events'])
+        observation['runtime'] = runtime
         try:
             progress('understanding')
             explicit_confirm = body['message'].strip().rstrip('。！!') in ('就按这个加购', '确认加购', '确认把当前清单加入购物车')
@@ -313,7 +353,8 @@ class PiProductTurnService:
                 'assistant_message_id': assistant_id, 'trace_id': run_id,
                 'action_results': [confirmation] if confirmation else [memory_result] if memory_result else [], 'confirmation_result':confirmation, 'committed': bool(confirmation or (memory_result and memory_result['action'] != 'list')), 'runtime': 'pi-agent-core',
                 'runtime_status': status, 'tool_rounds': runtime.tool_rounds,
-                'dish_candidates': outcome.get('dish_candidates', retained_context.get('dish_candidates', [])), 'runtime_events': runtime.events, 'runtime_summary': runtime.runtime_summary, 'product_evidence': outcome['products'], 'product_cards':cards,
+                'dish_candidates': outcome.get('dish_candidates', retained_context.get('dish_candidates', [])), 'runtime_events': runtime.events, 'runtime_summary': runtime.runtime_summary,
+                'runtime_version': runtime.runtime_version, 'entry_judgment': admission_observation.get('entry_judgment'), 'product_evidence': outcome['products'], 'product_cards':cards,
                 'no_matches': outcome.get('no_matches', False),
                 'model_mode': 'live', 'business_data_mode': 'demo',
             }
@@ -348,7 +389,9 @@ class PiProductTurnService:
             if run_cancelled(run_id):
                 raise
             detail = exc.detail['error'] if isinstance(exc, AppError) else {'code': 'PI_QUERY_FAILED', 'message': 'Pi 查询失败'}
-            failed = db.execute(update(GuideTurnReceipt).where(GuideTurnReceipt.run_id == run_id, GuideTurnReceipt.status.in_(['running', 'stop_requested'])).values(status='failed', result_json=json.dumps({**detail, 'http_status': exc.status_code if isinstance(exc, AppError) else 502})))
+            failed = db.execute(update(GuideTurnReceipt).where(GuideTurnReceipt.run_id == run_id, GuideTurnReceipt.status.in_(['running', 'stop_requested'])).values(status='failed', result_json=json.dumps({**detail, 'http_status': exc.status_code if isinstance(exc, AppError) else 502,
+                'runtime_summary': runtime.runtime_summary, 'runtime_events': runtime.events,
+                'runtime_version': runtime.runtime_version, 'entry_judgment': admission_observation.get('entry_judgment')})))
             if failed.rowcount:
                 ComparisonService(db, self.owner_id, deadline=deadline, should_stop=should_stop).clear(session_id, comparison_snapshot_refs)
                 receipt = db.get(GuideTurnReceipt, run_id)

@@ -1,8 +1,6 @@
 # Ceres2 · 智能导购与受控售后
 
-> 2026-10-07 当前阶段：[角色判断与政策预检索四票](tasks/ceres2-judge-prefetch.md)。以[本轮决定与公开合同](docs/REBUILD-DECISIONS.md)、[当前接手指南](docs/JUDGE-PREFETCH-HANDOFF.md)、[云端恢复入口](docs/recovery/CERES2-WORKSPACE.md)为准。前端由用户本地接手；旧 426／37 和旧 main 发布均属于历史候选，不是本次重建成绩。
-
-> 历史阶段（2026-10-06）：[十票体验更新](tasks/ceres2-next-experience.md)及[旧接手指南](docs/NEXT-EXPERIENCE-HANDOFF.md)保留当时范围、结果与未测项；其中旧角色分类、返回和配置故障说明不覆盖当前四票合同。
+> 2026-10-07 当前阶段：[本地能力与云端入口九票集成](tasks/ceres2-local-cloud-integration.md)。以[本轮规格](docs/plans/ceres2-local-cloud-integration-spec.md)和[Ubuntu 交接准备稿](docs/LOCAL-CLOUD-INTEGRATION-HANDOFF.md)为准。T05 实际浏览器受环境阻塞，T08-B 与 T09 最终同版门槛仍开放，未完成整体验收。四票、十票及旧 main/live 成绩仅适用于历史候选。
 
 Ceres2 是一个面向商超购物场景的 AI 应用原型：帮助用户把“想做什么、有什么要求”转化为可检查、可修改、可明确确认的购买清单，并将模拟订单衔接到独立的售后流程。
 
@@ -13,7 +11,21 @@ Ceres2 是一个面向商超购物场景的 AI 应用原型：帮助用户把“
 
 普通商品浏览与搜索仍然保留。AI 负责理解需求、必要追问和解释；价格、库存、数量、订单与写入结果由业务服务提供和校验。**当前商品供给、结算、支付、配送和售后均为模拟业务，不涉及真实交易、资金执行或履约。**
 
-## 当前架构与交付边界
+## 当前阶段：本地能力与云端入口九票集成
+
+2026-10-07：以云端 `37c98400e7152b89e4a58f02fff3bceaa73b0eac` 为基线，选择性整合 incoming `6734c7fe79e670df2dae12b065dcc49c0b10a307`。当前独立分支为 `ceres2/local-cloud-integration-20261007`，不合并 main，不覆盖原本地工作树。
+
+- 保留可可新文字一次角色判断、确认后切换、政策预取与请求内复用；墨墨独立处理售后，返回购物使用明确按钮。
+- 加入 BM25/BGE/RRF 候选检索，仍由 Python 校验 canonical 条件与当前 Offer；同一 Pi 原生完成、混合引用和经审校的可选过程消息；显式 GraphRAG 与规范菜谱事实分开。
+- 售后包含问题包装数量、受范围保护的照片及精确工单证据关联。商品、金额、库存、支付、退款、配送全部为模拟；检索或模型回答不构成写入授权。
+- 本地 UI 适配与运行观测尚在完成，不能把 WIP 备份或已通过的技术分片视为最终交付。T01/02/03/04/06/07 技术门槛及 T08-A 已放行；T05、T08-B、T09 最终同版门槛见 TASK 最新状态。
+
+最新已核实里程碑：local `a835bd411f96285f15d67a75dd0c0abfdb1d1640` 对应 remote `7eaeda0cc1e27b96baaf235a1fede1ad47261a79`，相同 tree `66387dff204483a016931cfbb75cbe42f00f4100`，见[发布回执](work/local-cloud-integration/t06b-t08a-integration-publication-receipt.json)。SHA 不同而 tree 相同只证明该快照源码内容一致，不证明后来提交、构建、配置或运行状态一致。
+
+
+## 历史四票架构与证据（2026-10-07 早期）
+
+以下保留历史阶段，不代表本轮已验收状态；其中“当前”指该历史候选。
 
 - **角色入口**：只有可可新自由文本进行一次是否转墨墨的入口判断；yes 等用户确认切换，no／uncertain／timeout／error 保留原文继续可可。墨墨文字和结构化按钮不新增角色或政策 Kev；返回购物只靠明确按钮，不自动续接旧购物授权。
 - **同一 Pi 与政策证据**：留在可可的文字使用独立政策判断，yes 按完整原文预取现有静态规则并提供真实引用、来源、版本和状态。首次 Pi 理解保留相关任务、问题与引用，不再依赖四能力标签；后续由 guide_request 控制相关上下文。
@@ -37,14 +49,9 @@ Ceres2 是一个面向商超购物场景的 AI 应用原型：帮助用户把“
 
 ## 从哪里开始
 
-- **审查当前四票**：[总 TASK](tasks/ceres2-judge-prefetch.md) → [规格](docs/plans/ceres2-judge-prefetch-spec.md)／[执行决定](docs/REBUILD-DECISIONS.md) → 单票合同、冻结源码和独立审查。
-- **核对当前证据**：[01 报告](work/judge-prefetch-rebuild/01-role-entry-verification.md)、[02 报告](work/judge-prefetch-rebuild/02-policy-evidence-verification.md)、[03 报告](work/judge-prefetch-rebuild/03-query-reuse-verification.md)、[04 核心报告](work/judge-prefetch-rebuild/04-core-verification.md)及各自源码／发布映射；后续门槛以总 TASK 的实际候选为准。[Node 隔离更正](work/judge-prefetch-rebuild/node-guard-correction.md)保留早期限制与新证明。
-- **本地运行或接手**：以[当前接手指南](docs/JUDGE-PREFETCH-HANDOFF.md)为入口，先核对准确分支／SHA并保护本地未提交修改；旧十票／Ubuntu 指南仅作历史背景，不沿用旧模型、商品数、41 live 或 426／37 成绩。
-- **了解产品与来源**：[PROJECT](PROJECT.md)、[产品定义](prd.md)、[参考项目与采用边界](docs/REFERENCES.md)。[原 16 票索引](tasks/ceres2-upgrade.md)保留原阶段范围与历史证据。
-
-核心 README／TASK／交接与证据已通过[文档 Standards](work/judge-prefetch-rebuild/reviews/standards-core-documentation.md)和[文档 Spec](work/judge-prefetch-rebuild/reviews/spec-core-docs-final.md)独立审查；comparison 不在早先核心文档审查范围内，现由独立[支持 Standards](work/judge-prefetch-rebuild/reviews/standards-comparison-support-final.md)／[Spec](work/judge-prefetch-rebuild/reviews/spec-comparison-support-final.md)审阅，测试后最终文档 hash 单独保留。
-
-部分历史／中间证据仅保留在云端，未随公开仓库发布。当前公开依据是单票已提交的 curated 报告、source manifest、执行摘要、两轴审查与精确发布映射；原始日志／临时数据库不保证可从公开 checkout 取得，不能把失效的历史链接当作新版本证据。
+- [九票总 TASK](tasks/ceres2-local-cloud-integration.md) → [集成规格](docs/plans/ceres2-local-cloud-integration-spec.md) → 各票固定证据与独立 Standards/Spec 审查。
+- [本轮 Ubuntu 交接](docs/LOCAL-CLOUD-INTEGRATION-HANDOFF.md)：独立 worktree、锁依赖、BGE 模型与新索引、启动、迁移与剩余验收。
+- [产品定义](prd.md)、[项目安排](PROJECT.md)、[参考项目与采用边界](docs/REFERENCES.md)。四票、十票和原 Ubuntu 指南是历史来源，其旧模型、分支、30 秒条件、商品数和 live 成绩不覆盖本轮。
 
 ## 系统如何分工
 
@@ -124,7 +131,7 @@ Pi 和 LangGraph 是采用的外部运行框架。Ceres2 的工程重点在于�
 
 ### 仓库目录结构
 
-下面按当前公开文件清单列出主要入口，省略同类业务文件和测试文件；注释说明职责，不表示该目录下所有场景均已验收。
+下列目录表保留早期基础工程入口，新增 knowledge/evaluation 与本轮结构见[当前交接项目树](docs/LOCAL-CLOUD-INTEGRATION-HANDOFF.md#2-项目树与职责)；目录存在不代表场景已验收。
 
 ```text
 Ceres2/
@@ -238,14 +245,10 @@ Ceres2/
 
 ## 在 Ubuntu 开始
 
-当前实现依赖 Linux；原生 Windows 未适配。Python 声明为 `>=3.11`，Pi SDK 要求 Node `>=22.19.0`；本轮受控环境为 **Python 3.12.14、Node 24.19.0、npm 11.9.0**。新环境按 `backend/requirements.lock` 与两份 `package-lock.json` 独立安装，不借用旧项目依赖或数据库。协作期间安装、构建和执行验证由专职 Tester 负责。
+按新交接逐步执行。业务环境放根目录 `.venv`，知识 worker 固定使用根目录 `.venv-graphrag/bin/python`；使用业务锁、知识锁及两个 npm lock 独立安装。BGE 从固定本地缓存加载，缺依赖、模型或索引不会自动下载或退化成“空结果”。原 `.env`、数据库、checkpoint、索引和主工作树 53 项 dirty 全部留原处。
 
-1. 从 [Ceres2 仓库](https://github.com/2061623884/Ceres2) 获取 `ceres2/judge-prefetch-rebuild-20261007`，按[总 TASK](tasks/ceres2-judge-prefetch.md)和发布映射核对完整 SHA／tree。在保护本地修改的独立 worktree 接手；旧 main 的 `8d6d758` 是历史体验阶段，不是当前四票候选。
-2. 从 `.env.example` 创建新的本地 `.env`，在可信本地编辑器填写获准的模型配置与凭据。不要上传 `.env`，不要复制旧数据库或 checkpoint。本轮没有重新选择 provider／模型。
-3. `KEV_BASE_URL` 必须支持当前 `/v1/systemone` 的角色 service 与政策 policy 两种独立 yes/no/uncertain 判断。可可入口配置缺失／故障保留真实诊断并继续可可，政策判断故障不预取但保留同一 Pi 的政策工具；墨墨／结构化动作零新增 Kev。它不是旧 11 类职责／能力接口，也不再以缺 Kev 阻断后要求手动续接。模板中的旧注释不能覆盖此合同。人工入口另需 `HUMAN_OPERATOR_TOKEN`。
-4. 按[当前接手指南](docs/JUDGE-PREFETCH-HANDOFF.md)准备独立 `backend/.venv`、Pi dist 与隔离数据库，显式 seed，再由用户启动后端 `127.0.0.1:8012` 和前端 `127.0.0.1:8443`。启动 FastAPI 会启动 MemoryWorker，可能调用真实模型；健康检查不等于无费用探针或 provider 已验收。
-5. 启动和对话可能调用真实模型、后台记忆任务并产生费用；由用户在同意数据发送与费用后亲自操作，或另行明确授权。按接手指南只补剩余真实旅程和本人验收，不拿旧 live runner 的固定模型／41 项成绩替代本轮验证。
+Guide 本次处理预算由基线 30 秒改为 15 秒，最多 5 轮工具；直接请求含同步角色授权，独立导航预检与用户等待不合并成一个跨请求预算。独立 build-graph 必须另给有限正数 `--timeout-seconds`，不沿用 Guide 15 秒，也不承诺该时间足够完成图构建。
 
-公开仓库仅发布源码、静态模拟素材与经检查的必要证据；不发布凭据、私有状态、依赖／构建目录、大量原始执行日志或外部 reference 整仓副本。测试使用受控 provider／Kev 边界，不能据此推断任意启动脚本也已隔离。
+模型仍为用户当前批准配置；不因模板或旧文档而换 provider/model。只有规范化 hostname 精确为 `api.deepseek.com` 才发送 thinking disabled。启动后端会启动 MemoryWorker；图构建、图查询和页面操作可能调用真实 provider 并产生费用，须由用户亲自执行或另有明确授权。本轮未执行真实 provider 测试。
 
-部分历史文档记录“无 remote／不推送”的时点条件。本次授权发布到独立集成分支，每个里程碑保留本地／远端 SHA 和相同 tree 的映射；WIP 备份与已释放里程碑分开。GitHub 发布不表示合并 main、部署、真实模型、浏览器或本人验收通过。
+最终验收：待 T09 固定候选、backend full、Pi typecheck/build、frontend strict TypeScript/build 与两轴报告填入。实际 Chromium/CUA 浏览器当前因权限/跨执行环境连通性受阻，保留待验，DOM/HTTP 不能替代。真实模型、真实用户浏览器、Memory/Dream 与用户本人接受单独记录，不能继承历史通过。

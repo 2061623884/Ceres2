@@ -533,8 +533,17 @@ def test_actual_pi_stdio_contract_emits_sdk_events_and_scoped_tool_requests(pi_c
         assert terminal['status'] == 'completed'
         assert json.loads(terminal['answer'])['product_refs'] == [product['ref']]
         events = [frame['event']['type'] for frame in frames if frame['type'] == 'event']
-        assert events[0] == 'agent_start'
-        assert events[-1] == 'agent_end'
+        assert events[0] == 'runtime_version'
+        version = frames[0]['event']
+        assert set(version) == {'type', 'build_revision', 'build_scope', 'prompt_revision'}
+        assert version['build_scope'] == 'worker_disk_at_start'
+        assert all(len(version[key]) == 64 and all(character in '0123456789abcdef' for character in version[key])
+                   for key in ('build_revision', 'prompt_revision'))
+        sdk_events = [event for event in events if event not in ('runtime_version', 'provider_call_start', 'provider_call_end')]
+        assert sdk_events[0] == 'agent_start'
+        assert sdk_events[-1] == 'agent_end'
+        assert sdk_events.index('agent_start') < sdk_events.index('turn_start') < sdk_events.index('tool_execution_start')
+        assert sdk_events.index('tool_execution_start') < sdk_events.index('tool_execution_end') < sdk_events.index('agent_end')
         assert events.count('tool_execution_end') == 2
         assert len(requests) == 3
         assert settings.openai_api_key not in json.dumps(frames)

@@ -1,6 +1,6 @@
 # T05：本地界面适配新入口与协议
 
-- 状态：进行中（T02/T04/T07技术依赖已放行，frontend owner接管）
+- 状态：待验收（技术源码/DOM/HTTP与两轴已合入；实际浏览器BLOCKED，最终同版/本人验收开放）
 - 负责人：frontend owner；主会话绑定实际 worker/worktree 后方可写入
 - 规格：[本轮规格](../docs/plans/ceres2-local-cloud-integration-spec.md)
 - 总任务：[集成 TASK](ceres2-local-cloud-integration.md)
@@ -25,3 +25,10 @@ T02/T04/T07已技术放行，frontend owner从最新canonical接管全frontend�
 恢复检查：T05 WIP `a9c9c51151ffb67934c9d922c949a0bfa379c94e` 已将14份frontend源文件和3份独立UI harness提交，工作树干净；独立备份payload已准备，未合canonical，未验收。已恢复的5项受控检查不能替代完整DOM/实际Chromium/后端fixture旅程及两轴。远端备份是否成功以主会话回执为准。
 
 独立WIP备份已核实：remote `58db7fef475bab34e4c5b53bc3a1e4ba6408dfbb` ↔ local `a9c9c5` / tree `34da6207b0d26c566d99b9750cf13b71bde7a0bb`；回执已保存。此为独立备份分支，不是canonical合入或验收。
+
+
+## 当前技术合入与未验边界
+
+最终 `4278eea`（production与已审`656cfef`相同）在两轴测试-only绑定清除后，经主会话明确批准无冲突合入 `a871400`；frontend及05 harness与交付pin零差异。受控DOM、strictTS/build及fresh安全fixture21个实际HTTP请求通过，迟到订单response P2有独立RED/GREEN。不同pin/范围分列，不声称一次全量。
+
+实际Chromium/CUA浏览器仍BLOCKED：IPC EPERM及跨执行环境host拒连，未进入产品UI。该阻塞是明确保留的未验门槛，DOM/HTTP不是替代；技术合入不代表浏览器或用户接受。最终T09同版验证与整体现有前端回归仍需执行。[证据摘要](../work/local-cloud-integration/t05/verification-summary.json)、[源码](../work/local-cloud-integration/t05/source-equivalence.json)、[浏览器边界](../work/local-cloud-integration/t05/browser-gate.json)。

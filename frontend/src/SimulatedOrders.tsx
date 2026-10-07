@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { ApiError, getCart, yuan, type Cart } from './lib/saleGuide'
-import { confirmCheckout, getOrder, listOrders, previewCheckout, type CheckoutPreview, type SimulatedOrder } from './lib/orders'
+import { advanceDemoOrder, confirmCheckout, getOrder, listOrders, previewCheckout, type CheckoutPreview, type SimulatedOrder } from './lib/orders'
 
 const button = 'rounded-full bg-[#171716] px-5 py-3 text-sm font-semibold text-white disabled:opacity-40'
 
@@ -82,6 +82,8 @@ export function SimulatedOrdersScreen({ onContactOrder }: { onContactOrder: (ord
   const [orders, setOrders] = useState<SimulatedOrder[]>([])
   const [selected, setSelected] = useState<SimulatedOrder | null>(null)
   const [loading, setLoading] = useState(true)
+  const [advancing, setAdvancing] = useState(false)
+  const viewGeneration = useRef(0)
   const [error, setError] = useState<string | null>(null)
   async function load() {
     setLoading(true)
@@ -90,22 +92,43 @@ export function SimulatedOrdersScreen({ onContactOrder }: { onContactOrder: (ord
     catch (err) { setError(err instanceof Error ? err.message : '订单加载失败') }
     finally { setLoading(false) }
   }
-  useEffect(() => { void load() }, [])
+  useEffect(() => { void load(); return () => { viewGeneration.current += 1 } }, [])
   async function open(orderId: string) {
+    const generation = ++viewGeneration.current
     setError(null)
-    try { setSelected(await getOrder(orderId)) }
-    catch (err) { setError(err instanceof Error ? err.message : '订单加载失败') }
+    try {
+      const order = await getOrder(orderId)
+      if (generation === viewGeneration.current) setSelected(order)
+    }
+    catch (err) { if (generation === viewGeneration.current) setError(err instanceof Error ? err.message : '订单加载失败') }
+  }
+  async function advance(status: 'shipped' | 'delivered') {
+    if (!selected || advancing) return
+    const generation = viewGeneration.current
+    const orderId = selected.order_id
+    setAdvancing(true); setError(null)
+    try {
+      const current = await advanceDemoOrder(selected, status)
+      setOrders(rows => rows.map(row => row.order_id === current.order_id ? current : row))
+      if (generation === viewGeneration.current) setSelected(shown => shown?.order_id === orderId ? current : shown)
+    } catch (error) {
+      if (generation === viewGeneration.current) {
+        setError(error instanceof Error ? error.message : '模拟状态更新失败')
+        setSelected(shown => shown?.order_id === orderId ? null : shown)
+      }
+    } finally { setAdvancing(false) }
   }
   return <section className="flex h-full flex-col bg-[#fcfbf8] p-5">
     <h2 className="mb-3 text-2xl font-semibold">我的模拟订单</h2>
     <p className="mb-4 text-xs text-black/45">模拟数据，不代表真实支付或配送</p>
     {error && <p role="alert" className="text-sm text-red-700">{error} <button onClick={load}>重试</button></p>}
     {selected ? <article data-order-id={selected.order_id} className="space-y-4 overflow-y-auto rounded-3xl bg-[#f7f6f2] p-4">
-      <button onClick={() => setSelected(null)}>← 返回订单列表</button>
+      <button onClick={() => { viewGeneration.current += 1; setSelected(null); setError(null) }}>← 返回订单列表</button>
       <p className="break-all font-semibold">{selected.order_id}</p>
       <p className="text-xs">{new Date(selected.created_at).toLocaleString()} · 模拟状态：{selected.status === 'submitted' ? '已提交' : selected.status}</p>
       {selected.items.map(item => <div key={item.sku_id} className="text-sm"><p>{item.name} × {item.quantity}</p><p>{yuan(item.unit_price_fen)} / 件 · {yuan(item.line_total_fen)}</p></div>)}
       <p className="text-lg font-semibold">合计 {yuan(selected.total_fen)}</p>
+      {['submitted','shipped'].includes(selected.status) && <button className={button} disabled={advancing} onClick={()=>void advance(selected.status === 'submitted' ? 'shipped' : 'delivered')}>{selected.status === 'submitted' ? '模拟推进至配送中' : '模拟签收'}</button>}
       <button className={button} data-contact-order-id={selected.order_id} onClick={() => onContactOrder(selected.order_id)}>联系墨墨</button>
     </article> : <div className="space-y-3 overflow-y-auto">
       {loading && <p role="status">正在读取订单…</p>}

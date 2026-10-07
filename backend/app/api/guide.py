@@ -164,7 +164,8 @@ def launch_run(factory, owner_id, session_id, body, run_id, deadline):
                         log_host_failure(run_id, exc)
                     error = exc.detail['error'] if isinstance(exc, AppError) else {'code': 'PI_QUERY_FAILED', 'message': 'Pi 查询失败', 'retryable': False}
                     receipt.status = 'failed'
-                    receipt.result_json = json.dumps(error)
+                    from app.services.runtime_observation import retained_observation
+                    receipt.result_json = json.dumps({**retained_observation(receipt.result_json), **error})
                     append_event(worker_db, receipt, 'error', error)
                     worker_db.commit()
     start_worker(factory.kw['bind'], run_id, deadline, work)

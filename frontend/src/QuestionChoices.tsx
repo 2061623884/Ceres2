@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useRef, useState} from 'react'
 import type {GuideQuestion} from './lib/productQuestions'
 
 interface Props {
@@ -11,14 +11,17 @@ interface Props {
 export default function QuestionChoices({question, disabled, onAnswer}: Props) {
   const [selected, setSelected] = useState<string[]>(question.kind === 'quantity' ? question.options.map(option=>option.option_id) : [])
   const [quantities, setQuantities] = useState<Record<string,string>>(Object.fromEntries(Object.entries(question.known_quantities ?? {}).map(([id,quantity])=>[id,String(quantity)])))
+  const submission = useRef(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const inactive = disabled || submitting || question.status !== 'active'
   async function submit(ids: string[], counts: Record<string,number>) {
+    if (submission.current || disabled || question.status !== 'active') return
+    submission.current = true
     setSubmitting(true);setError(null)
     try {await onAnswer(ids, counts)}
     catch (reason) {setError(reason instanceof Error ? reason.message : '选择未完成，请查看当前问题后重试。')}
-    finally {setSubmitting(false)}
+    finally {submission.current = false;setSubmitting(false)}
   }
   const selectedNow = question.status === 'answered' ? question.selected_option_ids : selected
   // A task total is unambiguous for one selected SKU only. Explicit edits,
@@ -30,7 +33,10 @@ export default function QuestionChoices({question, disabled, onAnswer}: Props) {
     {question.kind === 'products' && !!question.filter_options?.length && <div aria-label="按已知商品属性筛选" className="flex flex-wrap gap-2">{question.filter_options.map(option => <button key={option.option_id} type="button" disabled={inactive} aria-pressed={question.selected_option_ids.includes(option.option_id)} onClick={()=>void submit([option.option_id],{})} className="guide-glass-chip rounded-full px-3 py-2 text-[12px] disabled:opacity-50">{option.label}</button>)}</div>}
     {question.kind === 'category' ? <div className="flex flex-wrap gap-2">{question.options.map(option => <button key={option.option_id} type="button" disabled={inactive} aria-pressed={question.selected_option_ids.includes(option.option_id)} onClick={()=>void submit([option.option_id],{})} className="guide-glass-chip rounded-full px-3 py-2 text-[12px] disabled:opacity-50">{option.label}</button>)}</div> : <>
       {question.options.map(option => <div key={option.option_id} className="guide-glass-bubble rounded-2xl px-4 py-3">
-        <label className="flex items-center gap-2 text-[12px] font-semibold"><input type="checkbox" aria-label={`选择 ${option.label}`} checked={selectedNow.includes(option.option_id)} disabled={inactive} onChange={event=>setSelected(ids=>event.target.checked?[...ids,option.option_id]:ids.filter(id=>id!==option.option_id))}/>{option.label}</label>
+        <label className="flex items-center gap-2 text-[12px] font-semibold"><input type="checkbox" aria-label={`选择 ${option.label}`} checked={selectedNow.includes(option.option_id)} disabled={inactive} onChange={event=>{
+          const checked = event.currentTarget.checked
+          setSelected(ids=>checked?[...ids,option.option_id]:ids.filter(id=>id!==option.option_id))
+        }}/>{option.label}</label>
         {option.product && <>
           <p className="mt-1 text-[11px] text-black/55">品牌：{option.product.brand ?? '未知'} · 规格：{option.product.spec_quantity == null || !option.product.spec_unit ? '未知' : `${option.product.spec_quantity}${option.product.spec_unit}`}</p>
           <p className="mt-1 text-[11px] text-black/55">每销售包装：{option.product.price_fen == null ? '报价未知' : `¥${(option.product.price_fen/100).toFixed(2)}`} · 包装件数：{option.product.metadata.pack_count ?? '未知'}</p>

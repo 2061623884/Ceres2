@@ -15,11 +15,18 @@ export interface Handoff {
   selected_object: {kind: 'order' | 'product'; id: string} | null
 }
 export interface RouteDecision extends Handoff {
-  status: 'ready' | 'switch' | 'clarify' | 'unavailable' | 'navigation'
+  status: 'ready' | 'switch'
+  capability: null
+  entry_judgment: {outcome: 'yes' | 'no' | 'uncertain' | 'timeout' | 'error' | 'not_attempted'; elapsed_ms: number | null; reason: string | null} | null
   target_role: ChatRole
   show_prompt: boolean
-  continue_original: boolean
+  continue_original: false
   message?: string
+}
+export interface RoleSwitchAction {
+  type: 'switch_role'
+  session_id: string
+  request: {opening_id: string; target_role: ChatRole; accept: boolean; routing_request_id: null}
 }
 export type BeforeText = (role: ChatRole, message: string, requestId: string, selectedOrder?: string, roleSessionId?: string) => Promise<string | null>
 async function api<T>(sessionId: string, path: string, method = 'GET', body?: unknown): Promise<T> {

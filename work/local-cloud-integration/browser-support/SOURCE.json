@@ -1,0 +1,15 @@
+{
+  "source_commit": "ce90cc8c19e2e0c616a6a738759e17bb97eba239",
+  "source_purpose": "Tester-controlled synthetic browser/API fixture support",
+  "files_sha256": {
+    "launch_browser_fixture.py": "8d3bb1b69eb78ebaa86a7400ab03f153a330b83493d382d980e881a859e12117",
+    "fixture_backend.py": "bfc3428c9a3360c276d888b56df63b74ca05a868fdfaed4cc83392ada99fa49e",
+    "api_smoke.py": "67de61fdd6ce00b9c59cf65975177445ea7f3e9ee2e70e81cffbe18a6f3a9888",
+    "cua_http_contract.py": "238970c893b077d60f6610fac894ffa1dae879c983df5a0aec633bd5c89367ca",
+    "test_launcher_contract.py": "e813beacb02dcd0f346c9dc45d6724967d87471da2d5f2def4b4d034968b60c4",
+    "README.md": "7d914eaa408051ffa10b52ebd5f534d457a536f7fe066a8db7b26a6222b1e9cd"
+  },
+  "inclusion": "Exact frozen source only; no nested repository, generated state, DB, logs or dependencies",
+  "relocation_verification": "pending at repository path",
+  "browser_acceptance": "blocked externally; never inferred from HTTP or DOM"
+}

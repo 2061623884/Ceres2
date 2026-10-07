@@ -17,6 +17,7 @@ from app.core.config import get_settings
 from app.core.errors import AppError
 from app.services.catalog_service import CatalogService
 from app.prompts.experience import keke_modules
+from app.services.runtime_observation import retrieval_summary, record_retrieval
 
 MAX_TOOL_ROUNDS = 5
 EXPLORATION_SECONDS = 15.0
@@ -63,14 +64,24 @@ class PiProductRuntime:
         self.graph_results = {}
         self.dishes_searched = False
         self.events: list[dict[str, Any]] = []
+        self.runtime_version = None
+        self._provider_calls = {}
         self.runtime_summary = {
             'policy_lookups': 0, 'policy_tool_lookups': 0,
             'policy_lookup_outcomes': {'success': 0, 'empty': 0, 'error': 0},
             'policy_reuses': 0, 'tool_starts': 0, 'primary_pi_turns': 0,
             'policy_judgment': None, 'events_truncated': False,
+            'policy_sources': [],
             'graph_tool_attempts': 0, 'graph_official_calls': 0, 'graph_provider_calls': 0,
             'graph_embedding_calls': 0, 'graph_queries': [],
             'interim_audit_attempts': 0, 'interim_messages': 0, 'interim_audits': [],
+            'general_audit_attempts': 0,
+            'provider_calls': {stage: {'started': 0, 'completed': 0, 'usage_observed': 0,
+                'usage_missing': 0, 'observed_usage': None, 'usage_complete': True, 'cost': None}
+                for stage in ('primary_pi', 'general_audit', 'interim_audit')},
+            'provider_call_records': [], 'provider_records_truncated': False,
+            'provider_calls_complete': False,
+            **retrieval_summary(),
         }
         self.tool_rounds = 0
         self.searched = False
@@ -79,17 +90,28 @@ class PiProductRuntime:
     def _record_event(self, event):
         # Fixed observed counts survive the bounded diagnostic tail. SDK turns
         # are primary Pi turns, not provider HTTP calls, tokens or cost.
-        if event['type'] == 'graph_query_start':
+        if event['type'] in ('retrieval_start', 'retrieval_end'):
+            record_retrieval(self.runtime_summary, event)
+        elif event['type'] == 'runtime_version':
+            if self.runtime_version is not None:
+                self.runtime_version.update({key: event[key] for key in ('build_revision', 'build_scope', 'prompt_revision')})
+        elif event['type'] in ('provider_call_start', 'provider_call_end'):
+            self._record_provider(event)
+        elif event['type'] == 'general_validation_start':
+            self.runtime_summary['general_audit_attempts'] += 1
+        elif event['type'] == 'graph_query_start':
             self.runtime_summary['graph_tool_attempts'] += 1
-            self.runtime_summary['graph_queries'].append({**event, 'outcome': None})
+            self.runtime_summary['graph_queries'].append({**event, 'outcome': None,
+                'official_graph_calls': None, 'provider_calls': None, 'embedding_calls': None})
+            for field in ('graph_official_calls', 'graph_provider_calls', 'graph_embedding_calls'):
+                self.runtime_summary[field] = None
         elif event['type'] == 'graph_query_end':
             query = next(row for row in self.runtime_summary['graph_queries'] if row['attempt_id'] == event['attempt_id'])
             query.update(event)
             for total, field in (('graph_official_calls', 'official_graph_calls'),
                                  ('graph_provider_calls', 'provider_calls'), ('graph_embedding_calls', 'embedding_calls')):
-                observed = event[field]
-                self.runtime_summary[total] = (self.runtime_summary[total] + observed
-                    if self.runtime_summary[total] is not None and observed is not None else None)
+                values = [row[field] for row in self.runtime_summary['graph_queries']]
+                self.runtime_summary[total] = sum(values) if all(value is not None for value in values) else None
         elif event['type'] == 'interim_audit_start':
             self.runtime_summary['interim_audit_attempts'] += 1
             self.runtime_summary['interim_audits'].append({**event, 'approved': None, 'outcome': None, 'diagnostic': None, 'duration_ms': None, 'usage': None, 'cost': None})
@@ -100,6 +122,9 @@ class PiProductRuntime:
             self.runtime_summary['policy_lookups'] += 1
             self.runtime_summary['policy_tool_lookups'] += int(event['origin'] == 'tool')
             self.runtime_summary['policy_lookup_outcomes'][event['outcome']] += 1
+            source = {key: event.get(key) for key in ('source_name', 'source_version', 'source_revision', 'index_revision')}
+            if source not in self.runtime_summary['policy_sources']:
+                self.runtime_summary['policy_sources'].append(source)
         elif event['type'] == 'policy_reuse':
             self.runtime_summary['policy_reuses'] += 1
         elif event['type'] == 'policy_judgment':
@@ -112,6 +137,42 @@ class PiProductRuntime:
         if len(self.events) > 256:
             self.runtime_summary['events_truncated'] = True
             self.events = self.events[-256:]
+
+    def _record_provider(self, event):
+        identity = event['call_id']
+        if event['type'] == 'provider_call_start':
+            if identity in self._provider_calls:
+                return
+            row = {**event, 'status': 'started', 'duration_ms': None, 'usage': None, 'cost': None}
+            self._provider_calls[identity] = row
+            records = self.runtime_summary['provider_call_records']
+            records.append(row)
+            if len(records) > 64:
+                del records[0]
+                self.runtime_summary['provider_records_truncated'] = True
+            counts = self.runtime_summary['provider_calls'][event['stage']]
+            counts['started'] += 1
+            counts['usage_missing'] += 1
+            counts['usage_complete'] = False
+        else:
+            row = self._provider_calls[identity]
+            if row['status'] != 'started':
+                return
+            row.update(event)
+            counts = self.runtime_summary['provider_calls'][event['stage']]
+            counts['completed'] += 1
+            usage = event['usage']
+            if usage is not None:
+                counts['usage_observed'] += 1
+                counts['usage_missing'] -= 1
+                if counts['observed_usage'] is None:
+                    counts['observed_usage'] = dict(usage)
+                else:
+                    for key, value in usage.items():
+                        previous = counts['observed_usage'][key]
+                        counts['observed_usage'][key] = previous + value if previous is not None and value is not None else None
+            counts['usage_complete'] = (counts['usage_missing'] == 0 and counts['observed_usage'] is not None
+                                       and all(value is not None for value in counts['observed_usage'].values()))
 
     def _tool(self, name: str, arguments: dict[str, Any]) -> dict[str, Any]:
         if name == 'select_question_products':
@@ -272,6 +333,8 @@ class PiProductRuntime:
             'embedding_calls': counts['embedding'] if counts is not None else None,
             'calls': graph.get('calls'), 'calls_truncated': graph.get('calls_truncated'),
             'manifest': graph.get('manifest'), 'graph_index_revision': graph.get('graph_index_revision'),
+            'graph_revision': (graph.get('manifest') or {}).get('graph_revision'),
+            'corpus_revision': (graph.get('manifest') or {}).get('corpus_revision'),
             'query_revision': graph.get('query_revision'), 'selection': graph.get('selection'),
             'model_selected_entity_ids': graph.get('model_selected_entity_ids'),
             'canonical_scope': graph.get('canonical_scope'),
@@ -533,6 +596,7 @@ class PiProductRuntime:
                             raise AppError(422, code, '这段解释未通过事实边界核对，本次未展示。商家信息需要通过业务查询确认。')
                         self.approved_general.add(ref)
                     elif frame['type'] == 'result':
+                        self.runtime_summary['provider_calls_complete'] = True
                         self.assert_current()
                         if should_stop():
                             return self._close('stopped')
@@ -542,6 +606,7 @@ class PiProductRuntime:
                             return self._close(frame['status'])
                         return self._answer(frame['answer'])
                     elif frame['type'] == 'error':
+                        self.runtime_summary['provider_calls_complete'] = True
                         self._fail(frame['code'], frame['diagnostic'])
                     else:
                         raise AppError(502, 'PI_PROTOCOL_INVALID', 'Pi runtime 协议错误')
