@@ -1,0 +1,12 @@
+{
+  "repository": "2061623884/Ceres2",
+  "branch": "ceres2/local-cloud-integration-20261007",
+  "remote_commit": "90c8eab89397ee85454ce9b909206ffed7552e3e",
+  "local_commit": "2135db13f8ac8f0aa5c38bd87f5059131f18252e",
+  "tree": "9872cda48df31d8af3178a26f836812fa7e4d6b0",
+  "final_product_commit": "f963017587b3eab30965ffcd3aab90fcc3852f3e",
+  "status": "Technical implementation and controlled verification complete. Full backend81b02f9:746passed/5skipped, same-pin knowledge environment covers skips. Narrow correction3a9fede:183affected; final productf963017:4minimum+build. Full/delta two-axis findings closed; helper cleanup fixed and final-path4passed. Actual browserBLOCKED, real provider/holdout/user acceptance NOT RUN; no main merge/deployment.",
+  "previous_remote": "f268d48cbdeea512f866404be6413a77a1ae9c7b",
+  "verified": "Branch SHA read back; full created Git tree equals local tree",
+  "url": "https://github.com/2061623884/Ceres2/commit/90c8eab89397ee85454ce9b909206ffed7552e3e"
+}

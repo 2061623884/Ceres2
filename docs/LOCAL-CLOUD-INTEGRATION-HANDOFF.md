@@ -7,7 +7,8 @@
 - [cloud baseline 37c98400](https://github.com/2061623884/Ceres2/tree/37c98400e7152b89e4a58f02fff3bceaa73b0eac)
 - [incoming 6734c7fe](https://github.com/2061623884/Ceres2/tree/6734c7fe79e670df2dae12b065dcc49c0b10a307)，冻结 tag `ceres2-incoming-20261007-frozen`
 - [正式集成分支](https://github.com/2061623884/Ceres2/tree/ceres2/local-cloud-integration-20261007)
-- 最近已读回候选checkpoint：[f268d48](https://github.com/2061623884/Ceres2/tree/f268d48cbdeea512f866404be6413a77a1ae9c7b)，remote `f268d48cbdeea512f866404be6413a77a1ae9c7b` ↔ local `4e728c7fa9ede8d3ddaec593b4f2f5c01a4811a5`，tree `388b6dbe136748d20f0c8b5051e3c7d10c94489c`，[回执](../work/local-cloud-integration/complete-candidate-checkpoint-publication-receipt.json)。该checkpoint保存最终修复前候选，不能替代随最终交付提供的新回执。
+- 已发布并读回的代码交付／checkout目标：[remote `90c8eab89397ee85454ce9b909206ffed7552e3e`](https://github.com/2061623884/Ceres2/tree/90c8eab89397ee85454ce9b909206ffed7552e3e) ↔ local `2135db13f8ac8f0aa5c38bd87f5059131f18252e`，精确tree `9872cda48df31d8af3178a26f836812fa7e4d6b0`；[最终代码发布回执](../work/local-cloud-integration/final-integration-publication-receipt.json)。本次后继只更新文档，不改变产品。
+- 历史修复前候选checkpoint：[f268d48](https://github.com/2061623884/Ceres2/tree/f268d48cbdeea512f866404be6413a77a1ae9c7b)，remote `f268d48cbdeea512f866404be6413a77a1ae9c7b` ↔ local `4e728c7fa9ede8d3ddaec593b4f2f5c01a4811a5`，tree `388b6dbe136748d20f0c8b5051e3c7d10c94489c`，[回执](../work/local-cloud-integration/complete-candidate-checkpoint-publication-receipt.json)。该checkpoint保存最终修复前候选，不能替代上列最终代码发布回执。
 - [T05 WIP 58db7fe](https://github.com/2061623884/Ceres2/tree/58db7fef475bab34e4c5b53bc3a1e4ba6408dfbb) 是独立备份，不是正式候选或已验收版本，不应当作启动目标。
 
 九票技术实现、运行采集、受控验证与两轴修复闭环完成。最终产品 `f963017587b3eab30965ffcd3aab90fcc3852f3e`；实际浏览器、真实provider与用户本人验收仍开放，不增加“总通过数”或把不同pin重叠测试相加。
@@ -20,7 +21,8 @@
 - Pi typecheck/build、frontend strict TypeScript/build、相关DOM、受控真实Pi/LangGraph HTTP和21请求模拟业务journey：通过，源码/build/harness固定。
 - baseline到完整候选两轴及最后产品/helper修复delta：clear，无未关闭技术问题。
 - 实际浏览器：BLOCKED，未进入UI；真实provider、真实图LLM质量、用户本人/Memory-Dream验收：NOT RUN。
-- 最终发布SHA/tree：主会话读回后随最终交付提供回执；本节固定产品来源不因发布文档commit不同而改变。前述旧里程碑不能代替最终回执。
+- 最终代码发布SHA `90c8eab89397ee85454ce9b909206ffed7552e3e`／tree `9872cda48df31d8af3178a26f836812fa7e4d6b0` 已读回核实，见上列回执；产品来源不因文档后继而改变。
+- 远端CI：statuses `[]`、Actions运行数 `0`、仓库无workflow，属于未配置（not configured），不是CI通过。
 
 [完整验证报告](../work/local-cloud-integration/t09/FINAL-VERIFICATION.md)、[源/build映射](../work/local-cloud-integration/t09/final-source-map.json)、[终态记录](../work/local-cloud-integration/t09/verification-history.json)。
 
@@ -81,12 +83,12 @@ Guide 从 cloud 基线 30 秒改为整次处理 15 秒、最多 5 轮工具。�
 
 原本地 main 的 53 项 dirty 与本轮文件差异统计不是同一口径。全部保留原处，不 reset、不 stash、不清理、不覆盖、不合并 main；不读/迁入原 `.env`、数据库、checkpoint、session 或索引。
 
-由本地负责人在原仓库执行以下 Git 步骤，只创建新的兄弟 worktree。先将 FINAL_REMOTE_SHA 替换为最终发布回执的完整远端 SHA；未有最终回执时不要把当前里程碑当最终版本。
+由本地负责人在原仓库执行以下 Git 步骤，只创建新的兄弟 worktree。以下固定到已读回核实的代码交付SHA；分支后续文档提交不改变此体验目标。
 
 ```bash
 git status --short
 git fetch origin refs/heads/ceres2/local-cloud-integration-20261007
-FINAL_REMOTE_SHA='REPLACE_WITH_VERIFIED_FINAL_REMOTE_SHA'
+FINAL_REMOTE_SHA='90c8eab89397ee85454ce9b909206ffed7552e3e'
 git worktree add --detach ../Ceres2-integration "$FINAL_REMOTE_SHA"
 cd ../Ceres2-integration
 git rev-parse HEAD
@@ -94,7 +96,7 @@ git rev-parse 'HEAD^{tree}'
 git status --short
 ```
 
-目标目录须不存在；核对 tree 与回执，不能只看分支名。若 Git 对象未取到，停止核查来源，不改 main。不以 shell push 发布。本地使用 detach 足以体验；新工作需要独立分支时由负责人安排。
+目标目录须不存在；HEAD须为 `90c8eab89397ee85454ce9b909206ffed7552e3e`，tree须为 `9872cda48df31d8af3178a26f836812fa7e4d6b0`，与最终代码发布回执一致，不能只看分支名。若 Git 对象未取到，停止核查来源，不改 main。不以 shell push 发布。本地使用 detach 足以体验；新工作需要独立分支时由负责人安排。
 
 ## 5. 独立依赖、模型与索引
 

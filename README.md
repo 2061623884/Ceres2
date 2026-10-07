@@ -46,7 +46,9 @@ Guide预算从基线30秒改为本次处理15秒、最多5轮；直接请求包�
 
 来源：cloud `37c98400e7152b89e4a58f02fff3bceaa73b0eac` 与冻结incoming `6734c7fe79e670df2dae12b065dcc49c0b10a307`。正式独立分支为`ceres2/local-cloud-integration-20261007`。
 
-最后已读回的候选checkpoint为remote `f268d48cbdeea512f866404be6413a77a1ae9c7b` ↔ local `4e728c7`，[回执](work/local-cloud-integration/complete-candidate-checkpoint-publication-receipt.json)。它不是最终修复版本；最终发布的完整SHA/tree以随交付提供的最终回执为准。文档后继SHA可以不同于受测产品SHA，源码映射明确各自范围。
+已发布并读回核实的代码交付／checkout目标：[remote `90c8eab89397ee85454ce9b909206ffed7552e3e`](https://github.com/2061623884/Ceres2/tree/90c8eab89397ee85454ce9b909206ffed7552e3e) ↔ local `2135db13f8ac8f0aa5c38bd87f5059131f18252e`，精确tree `9872cda48df31d8af3178a26f836812fa7e4d6b0`；[最终代码发布回执](work/local-cloud-integration/final-integration-publication-receipt.json)。产品来源仍为 `f963017587b3eab30965ffcd3aab90fcc3852f3e`，本次文档后继不改变产品或测试适用版本。旧修复前候选 `f268d48` 的[历史回执](work/local-cloud-integration/complete-candidate-checkpoint-publication-receipt.json)保留溯源，不作为启动目标。
+
+远端CI：statuses `[]`、Actions运行数 `0`、仓库无workflow，结论为未配置（not configured），不是CI通过。
 
 目录职责：backend管Python业务/LangGraph/知识/evaluation，runtime/pi管真实Node Pi，frontend管React与HTTP/SSE，data/fixtures只含静态模拟来源，work/local-cloud-integration保存可复现支持与固定证据。[完整项目树](docs/LOCAL-CLOUD-INTEGRATION-HANDOFF.md#2-项目树与职责)。
 
