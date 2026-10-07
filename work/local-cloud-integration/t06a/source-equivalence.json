@@ -1,0 +1,9 @@
+{
+  "production_pin": "26028b3786c136f5c56010059671cfe0998de841",
+  "delivery_pin": "14b6ad11c0c92d2b816f8b01c87b0a9c8a3253e6",
+  "delivery_delta": "Only opt-in real BGE test helper; no production difference",
+  "merge_pin": "306972820046b943908d4d9931b7bc689b3c4a3e",
+  "merge_conflicts": false,
+  "product_directory_diff_from_delivery": [],
+  "meaning": "Static Git equivalence; individual validation source pins remain distinct"
+}

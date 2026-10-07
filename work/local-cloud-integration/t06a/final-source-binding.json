@@ -1,0 +1,57 @@
+{
+  "candidate": "14b6ad11c0c92d2b816f8b01c87b0a9c8a3253e6",
+  "rows": [
+    {
+      "label": "t06-final-official-affected",
+      "tested_head": "2ad494c424ec5f7fda348176063e24376430cd1a",
+      "exit_code": 0,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "captured_file_differences_to_candidate": [
+        "backend/app/knowledge/cli.py",
+        "backend/tests/test_graph_cli_public.py"
+      ],
+      "record_sha256": "67b0922869a766a88da5fc77ab1e2865a03b82626a93345e16510620fce581d3"
+    },
+    {
+      "label": "t06-cli-private-cause-green",
+      "tested_head": "26028b3786c136f5c56010059671cfe0998de841",
+      "exit_code": 0,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "captured_file_differences_to_candidate": [],
+      "record_sha256": "7e2da4bee7287a6a266b970115009bda499b823432ff18f8fcdcfedd58f5b53b"
+    },
+    {
+      "label": "real-bge-hybrid-build-green",
+      "tested_head": "2ad494c424ec5f7fda348176063e24376430cd1a",
+      "exit_code": 0,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "captured_file_differences_to_candidate": [
+        "backend/app/knowledge/cli.py",
+        "backend/tests/test_graph_cli_public.py"
+      ],
+      "record_sha256": "0ca16cbf7585e0746527c28468638d190b288b33541b68128da74321ad988ca9"
+    },
+    {
+      "label": "real-bge-smoke-dev-cold-warm",
+      "tested_head": "14b6ad11c0c92d2b816f8b01c87b0a9c8a3253e6",
+      "exit_code": 0,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "captured_file_differences_to_candidate": [],
+      "record_sha256": "420b964dd3a1d9b3088903eaba40d7bbfde64efcf81b3c3af348e8a78f39be9d"
+    },
+    {
+      "label": "real-bge-default-thread-cold-warm",
+      "tested_head": "14b6ad11c0c92d2b816f8b01c87b0a9c8a3253e6",
+      "exit_code": 0,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "captured_file_differences_to_candidate": [],
+      "record_sha256": "10ff2a94c3b04ce513e0121e763257fe2b2e2a0a568ee8927fed2495ce9d4fd8"
+    }
+  ],
+  "new_candidate_test_only_file": "backend/tests/test_graph_real_bge.py"
+}

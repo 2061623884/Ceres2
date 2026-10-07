@@ -6,6 +6,7 @@ import selectors
 import subprocess
 import threading
 import time
+from uuid import uuid4
 
 from app.core.config import ROOT_DIR
 from app.core.errors import AppError
@@ -72,6 +73,17 @@ class KnowledgeService:
                         response += chunk
             check_budget(deadline, should_stop)
             result = json.loads(response)
+            if request['action'] == 'graph':
+                if not isinstance(result, dict) or result.get('graph_query_id') != request['graph_query_id'] or result.get('method') != request['method']:
+                    raise AppError(503, 'GRAPH_UNAVAILABLE', '图查询结果无法归属于本次请求')
+                if result.get('error'):
+                    code = result['error'] if result['error'] in ('GRAPH_INDEX_MISSING', 'KNOWLEDGE_STALE', 'KNOWLEDGE_TIMEOUT', 'GRAPH_UNAVAILABLE') else 'GRAPH_UNAVAILABLE'
+                    raise AppError(503, code, '本次图查询未取得有效证据', graph_observation=result)
+                if (result.get('graph_status') != 'success' or not isinstance(result.get('canonical_facts'), list)
+                        or not isinstance(result.get('selection'), dict) or not isinstance(result.get('manifest'), dict)):
+                    raise AppError(503, 'GRAPH_UNAVAILABLE', '图查询未返回可核对证据')
+                check_budget(deadline, should_stop)
+                return result
             if isinstance(result, dict) and result.get('error') == 'KNOWLEDGE_STALE':
                 raise AppError(503, 'KNOWLEDGE_STALE', '知识索引与本次来源快照不一致，请重新查询')
             if not isinstance(result, dict) or result.get('error') or not isinstance(result.get('hits'), list) or not isinstance(result.get('manifest'), dict):
@@ -92,6 +104,24 @@ class KnowledgeService:
                             'limit': limit, 'allowed_ids': allowed_ids, 'category': category,
                             'expected_index_revision': expected_index_revision},
                            deadline=deadline, should_stop=should_stop)
+
+    def graph(self, query, method='local', *, deadline, should_stop=None):
+        if method not in ('local', 'global'):
+            raise AppError(422, 'GRAPH_METHOD_INVALID', '图查询方法必须为 local 或 global')
+        identity, started = uuid4().hex, time.monotonic()
+        try:
+            return self._query({'action': 'graph', 'query': query, 'method': method,
+                                'deadline': deadline, 'graph_query_id': identity},
+                               deadline=deadline, should_stop=should_stop)
+        except AppError as error:
+            if 'graph_observation' not in error.detail:
+                # Killing a worker can hide actual provider calls. Unknown is not zero.
+                error.detail['graph_observation'] = {
+                    'graph_query_id': identity, 'method': method, 'graph_status': 'unobserved',
+                    'error': error.detail['error']['code'], 'official_graph_calls': None,
+                    'calls': None, 'call_counts': None, 'duration_ms': (time.monotonic()-started)*1000}
+            raise
+
 
 
 knowledge = KnowledgeService()

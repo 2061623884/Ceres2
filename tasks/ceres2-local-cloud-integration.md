@@ -1,6 +1,6 @@
 # Ceres2 local-cloud integration
 
-- 状态：进行中（T01 和 T07 核心已合入；T07 Mercury 已合入并核验；T02/T03 进行中）
+- 状态：进行中（T01/T02/T03/T07 已技术合入并发布；T04 与 T06 后端阶段进行中，最终验收开放）
 - 主责任：主会话；集成分支唯一写入者为 Merger
 - Spec：[规格](../docs/plans/ceres2-local-cloud-integration-spec.md)
 - Workspace：[恢复说明](../CERES2-WORKSPACE.md)
@@ -99,3 +99,9 @@ T07 Mercury 固定 `4616798` postmerge 11 passed / 7.25s，无源码/harness 漂
 T02/T03 组合 `8950b08` 已122例+Pi typecheck/build稳定通过并无冲突合入 `4fd13b3`；两轴无阻断，T02 留一个非阻断 helper 命名 P3待最终集中修复。与该组合相比仅已验过的 Mercury 三文件增量不同，固定 postmerge 已交 Tester。通过即释放 T04，不需等待发布。详细候选、来源等价及证据在各票。
 
 固定 `4fd13b3` postmerge 独立锁离线安装/build与37例/45.43s通过，无源码/harness漂移。T04 的 T03依赖已解除并交接 runtime owner；T05/T06仍等待T04。所有受控与最终/真实/本人验收分开。
+
+T06 工程依赖细化已批准：T02 放行后 backend-only knowledge/graph/provider/CLI/DishService 阶段可与 T04 并行；Pi 注册/refs/Prompt阶段仍严格等 T04 转交，T06整票/T08依赖不提前完成。唯一文件所有权、禁写范围与门槛见 T06 TASK。
+
+T02/T03 已发布核实：local `d9cbb180380515d5d10d0b76fc1bbba299db7385` → remote `beb83658e991c7fc641828c94149ceb7fe18880a`，tree `2f83ca49ada9984ad6998a060b4b43ddfac397f3`。回执已保存，后续发布以此为基。当前 docs-only `333e0bd` 的 T06 阶段细化尚未单独发布，将随下一实际变更。
+
+T06-A后端合入 `3069728`，固定postmerge47例/6.63s通过、源码/harness无漂移。A技术门槛关闭，T06-B仍等T04 runtime交接；真实BGE公开开发检索不替代真实图LLM与最终质量验收。

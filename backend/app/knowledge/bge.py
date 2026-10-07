@@ -13,7 +13,9 @@ class BgeEncoder:
         from huggingface_hub import snapshot_download
         from transformers import AutoModel, AutoTokenizer
         snapshot = snapshot_download(MODEL_ID, revision=MODEL_REVISION,
-            cache_dir=ROOT / '.cache/huggingface', local_files_only=True, token=False)
+            cache_dir=ROOT / '.cache/huggingface', local_files_only=True, token=False,
+            allow_patterns=['config.json', 'model.safetensors', 'tokenizer.json',
+                            'tokenizer_config.json', 'special_tokens_map.json', 'vocab.txt'])
         self.tokenizer = AutoTokenizer.from_pretrained(snapshot, local_files_only=True, trust_remote_code=False)
         self.model = AutoModel.from_pretrained(snapshot, local_files_only=True,
             trust_remote_code=False, use_safetensors=True).to('cpu').eval()
