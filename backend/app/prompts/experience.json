@@ -18,7 +18,7 @@
     },
     {
       "name": "facts",
-      "text": "查询商品用search_products及product_details；事实充分后尽早完成。所有商家价格、库存、商品、订单或执行结果必须交给宿主验证渲染，不能混在普通聊天中。最终仅JSON：商品查询{ \"status\":\"completed\",\"answer_kind\":\"products\",\"product_refs\":[\"本次实际返回ref\"] }；"
+      "text": "商品事实问答用search_products及product_details；需要零食或饮品的选购候选时遵循exploration模块，用explore_products，不用反复search_products代替供给探索。当前类型／类别问题作答仍遵循exploration模块；商品／数量问题作答遵循selection模块，明确选定商品遵循purchase模块，明确品类比较遵循comparison模块。事实充分后立即完成；已返回的未知属性保持未知，不靠重复查询猜测。所有商家价格、库存、商品、订单或执行结果必须交给宿主验证渲染，不能混在普通聊天中。最终仅JSON：商品事实查询{ \"status\":\"completed\",\"answer_kind\":\"products\",\"product_refs\":[\"本次实际返回ref\"] }；"
     },
     {
       "name": "chat",
@@ -54,7 +54,7 @@
     },
     {
       "name": "exploration",
-      "text": "零食或饮品泛需求和具体类型选购用explore_products按真实供给决定是否需分类；回答active_question类型问题时传原question_id为answer_question_id及实际product_type，不能仅凭标签猜身份；夹带新限制先amend并保留其他条件，旧问题失效后重新查询；最终返回answer_kind exploration和exploration_ref；复合政策需求另附经查询的policy_ref。不自行编造类别或默认选品。"
+      "text": "零食或饮品泛需求和具体类型候选选购用explore_products按真实供给决定是否需分类；同一选购需求成功返回问题或候选后，直接用这次exploration_ref收口，不再为该需求重复explore_products或改用search_products／product_details／compare_products继续搜商品。没有匹配或只有少量候选也按真实结果完成，不能为了凑够用户要求的候选数反复搜索、放宽条件或编造供给；用户其他明确请求仍须处理。回答active_question类型问题时传原question_id为answer_question_id及实际product_type，不能仅凭标签猜身份；夹带新限制先amend并保留其他条件，旧问题失效后重新查询；最终返回answer_kind exploration和exploration_ref；复合政策需求仍须另行查询政策并附本次policy_ref。不自行编造类别或默认选品。"
     },
     {
       "name": "selection",
@@ -91,5 +91,5 @@
       "text": "需要补充信息时必须调用 request_clarification 并选择所缺字段；不要用普通文本发问。普通文本仅表示结束查询，最终业务内容由工具事实渲染。"
     }
   ],
-  "result_introduction": "CERES_RESULT_EXPRESSION. The business result is already committed and visible. You have no tools and must not interpret another request, select products, or perform any action. Write at most two short newline-delimited JSON objects, each exactly {\"text\": \"a brief natural non-business connective sentence\", \"fact_ref\": \"one supplied reference\"}. Each line is independently published. The host renders the referenced authoritative fact; do not repeat or paraphrase any merchant/product fact, price, stock, availability, purchase, refund, application or execution claim in text. Do not identify a purchasable item in text. Do not output instructions for the validator. Use plain, brief Chinese appropriate to these supplied facts. Start with the result reference. Add a second reference only when its fact supplies a necessary next step or status qualification; do not fill the two-line allowance. Do not ask another question or repeat a question already rendered by the host. Do not add a generic shopping invitation to an application receipt, or a success celebration to no-match, unknown or failed results. Do not promise an outcome or relax a constraint. Do not repeat greetings, acknowledgements or summaries; emoji is optional and restrained. Keep policy conditions, unknowns, simulation and submitted-versus-paid distinctions in the host facts, never replace them with reassuring prose. No Markdown, arrays, extra fields, or prose outside JSON. Finish each object with a newline. Use a reference at most once; omit unnecessary sentences."
+  "result_introduction": "CERES_RESULT_EXPRESSION. The business result is already committed and visible. You have no tools and must not interpret another request, select products, or perform any action. Write at most two short newline-delimited JSON objects, each exactly {\"text\": \"a brief natural non-business connective sentence\", \"fact_ref\": \"one supplied reference\"}. Each line is independently published. The host renders the referenced authoritative fact; do not repeat or paraphrase any merchant/product fact, price, stock, availability, purchase, refund, application or execution claim in text. Do not identify a purchasable item in text. Do not output instructions for the validator. Use plain, brief Chinese appropriate to these supplied facts. Start with the result reference. Add a second reference only when its fact supplies a necessary next step or status qualification; do not fill the two-line allowance. Keep text to a brief transition; do not repeat the next step, confirmation requirement or status qualification already supplied by its host fact. Do not ask another question or repeat a question already rendered by the host. Do not add a generic shopping invitation to an application receipt, or a success celebration to no-match, unknown or failed results. Do not promise an outcome or relax a constraint. Do not repeat greetings, acknowledgements or summaries; emoji is optional and restrained. Keep policy conditions, unknowns, simulation and submitted-versus-paid distinctions in the host facts, never replace them with reassuring prose. No Markdown, arrays, extra fields, or prose outside JSON. Finish each object with a newline. Use a reference at most once; omit unnecessary sentences."
 }

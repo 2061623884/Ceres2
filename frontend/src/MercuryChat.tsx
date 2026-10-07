@@ -54,6 +54,7 @@ export function MercuryChat({ initialOrderId, entrySequence = 0, onOrderEntryCon
   const [selecting, setSelecting] = useState(false)
   const [caseRefresh, setCaseRefresh] = useState(0)
   const generationRef = useRef(0)
+  const readyGenerationRef = useRef<number | null>(null)
   const [interactionVersion, setInteractionVersion] = useState(0)
   const [input, setInput] = useState('')
   const [typing, setTyping] = useState(false)
@@ -61,6 +62,9 @@ export function MercuryChat({ initialOrderId, entrySequence = 0, onOrderEntryCon
   const [error, setError] = useState<string | null>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
   const appliedEntryRef = useRef<string | null>(null)
+  // Consuming an order entry clears the prop, not the initialized case.
+  const requestedEntry = initialOrderId ? `${entrySequence}:${initialOrderId}` : null
+  const initializationEntry = requestedEntry ?? appliedEntryRef.current
 
   useEffect(() => {
     if (visible) {
@@ -68,7 +72,7 @@ export function MercuryChat({ initialOrderId, entrySequence = 0, onOrderEntryCon
     }
   }, [msgs, typing, visible])
 
-  const initSession = useCallback(async (fresh = false, targetOrderId?: string) => {
+  const initSession = useCallback(async (fresh = false, targetOrderId?: string, orderEntry?: string) => {
     const generation = ++generationRef.current
     setTyping(false)
     setSelecting(false)
@@ -82,7 +86,7 @@ export function MercuryChat({ initialOrderId, entrySequence = 0, onOrderEntryCon
       if (generation !== generationRef.current) return
       if (!restored) restored = await readMercurySession(sid)
       if (generation !== generationRef.current) return
-      if (targetOrderId && restored) {
+      if (targetOrderId && restored && restored.order_id !== targetOrderId) {
         restored = await selectMercuryOrder(sid, targetOrderId, restored.selection_version)
       }
       if (generation !== generationRef.current) return
@@ -96,6 +100,8 @@ export function MercuryChat({ initialOrderId, entrySequence = 0, onOrderEntryCon
         id: `restored-${index}`, role: message.role === 'assistant' ? 'ai' : 'user', text: message.content,
       })) : [WELCOME_MSG])
       setOrders(availableOrders)
+      if (orderEntry) appliedEntryRef.current = orderEntry
+      readyGenerationRef.current = generation
       return true
     } catch (error) {
       if (generation !== generationRef.current) return
@@ -110,26 +116,22 @@ export function MercuryChat({ initialOrderId, entrySequence = 0, onOrderEntryCon
 
   useEffect(() => {
     if (!visible) return
-    const entry = initialOrderId ? `${entrySequence}:${initialOrderId}` : null
-    const target = entry !== appliedEntryRef.current ? initialOrderId : undefined
-    void initSession(false, target).then(restored => {
-      if (restored) {
-        appliedEntryRef.current = entry
-        if (target) onOrderEntryConsumed?.(entrySequence)
-      }
+    const target = initializationEntry !== appliedEntryRef.current ? initialOrderId : undefined
+    void initSession(false, target, requestedEntry ?? undefined).then(restored => {
+      if (restored && target) onOrderEntryConsumed?.(entrySequence)
     })
     return () => { generationRef.current += 1 }
-  }, [initSession, initialOrderId, entrySequence, onOrderEntryConsumed, visible])
+  }, [initSession, initializationEntry, onOrderEntryConsumed, visible])
 
   const send = useCallback(
     async (text: string, routedRequestId?: string) => {
-      if (!text.trim() || !sessionId || typing || restoring || selecting) return
+      if (!text.trim() || !sessionId || typing || restoring || selecting || readyGenerationRef.current !== generationRef.current) return
       setInteractionVersion(value => value + 1)
       const generation = generationRef.current
       const trimmed = text.trim()
       const requestId = routedRequestId ?? crypto.randomUUID()
       const routeId = routedRequestId ?? (beforeText ? await beforeText('momo', trimmed, requestId, selectedOrder, sessionId) : requestId)
-      if (!routeId) return
+      if (!routeId || generation !== generationRef.current) return
       setMsgs((p) => [...p, { id: `u-${Date.now()}`, role: 'user', text: trimmed }])
       setInput('')
       setTyping(true)
@@ -196,7 +198,7 @@ export function MercuryChat({ initialOrderId, entrySequence = 0, onOrderEntryCon
   const resumedHandoff = useRef<string | null>(null)
   useEffect(() => {
     if (!handoff) { resumedHandoff.current = null; return }
-    if (!visible || restoring || !sessionId || selecting || resumedHandoff.current === handoff.routing_request_id) return
+    if (!visible || restoring || !sessionId || selecting || readyGenerationRef.current !== generationRef.current || resumedHandoff.current === handoff.routing_request_id) return
     resumedHandoff.current = handoff.routing_request_id
     void send(handoff.original_message, handoff.routing_request_id).finally(() => onHandoffDone?.())
   }, [handoff, visible, restoring, sessionId, selecting, send, onHandoffDone])

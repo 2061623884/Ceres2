@@ -120,6 +120,7 @@ def test_installed_openai_sdk_uses_two_independent_nonstreaming_memory_calls(pi_
             assert worker.run_once()
         assert [body['model'] for body in captured] == ['qwen3.8-27b','qwen3.8-27b']
         assert all(body.get('stream',False) is False for body in captured)
+        assert all('thinking' not in body and 'reasoning_effort' not in body for body in captured)
         assert 'text' in json.loads(captured[0]['messages'][-1]['content'])
         assert 'records' in json.loads(captured[1]['messages'][-1]['content'])
         records = memory_turn(client,requests,'查看全部记忆',{'action':'list'},'http-model-list')['records']

@@ -61,6 +61,7 @@ def test_public_query_uses_installed_sdk_http_tool_contract(mercury_client, monk
     assert '999' not in payloads[-1]['final_text'] and '已退款到账' not in payloads[-1]['final_text']
     assert len(requests) == 2
     assert all(request['model'] == 'qwen3.8-27b' for request in requests)
+    assert all('thinking' not in request and 'reasoning_effort' not in request for request in requests)
     assert all(not tool['function']['name'].startswith('create_') for tool in requests[0]['tools'])
     assert requests[1]['messages'][-1]['role'] == 'tool'
     assert json.loads(requests[1]['messages'][-1]['content'])['data']['total'] == '15.00'

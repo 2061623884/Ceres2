@@ -1944,7 +1944,9 @@ function ShoppingApp() {
   const [interactionVersion, setInteractionVersion] = useState(0)
   const trackInteraction = useCallback(() => {
     const epoch = ++interactionEpoch.current
-    setInteractionVersion(epoch)
+    // Invalidate stale introductions immediately, but let native control
+    // change handlers finish before a capture-phase parent render.
+    setTimeout(() => setInteractionVersion(epoch), 0)
     return epoch
   }, [])
   const activityNavigationEpoch = useRef(0)

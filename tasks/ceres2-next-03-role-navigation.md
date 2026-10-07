@@ -4,6 +4,8 @@
 
 阶段：受控技术完成；外部验收待完成
 
+本地真实验收更新（2026-10-06）：用户授权本批跳过 Kev 自动判断，使用已发布的手动角色续接。真实浏览器捕获同角色订单 handoff 的初始化／查询竞态，重复 PUT order 409；原 case 与订单归属有效，未提交申请。当前 `MercuryChat.tsx` dirty 修复初始化完成前禁止消费 handoff，保留 entry 的稳定身份，已选同订单不重新关联；等待两轴独立复审及真实／受控复验。此修复与手动路径结果均不证明 Kev 自动判断通过。证据入口：[本地真实验收](../work/next-experience/live-acceptance/README.md)。
+
 技术放行：已放行
 
 放行范围：仅受控技术依赖。主会话条件批准，Tester于2026-10-06 09:16 UTC确认最终52public／10DOM／build/typecheck源码合入一致。真实provider／浏览器／本人验收仍待验证。

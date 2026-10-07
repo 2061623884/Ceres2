@@ -4,6 +4,8 @@
 
 阶段：最终修正候选受控验证通过；外部验收待完成
 
+本地真实浏览器更新（2026-10-06）：`4bed9c8` 发布版在 Chromium 原生点击时出现复选框 `true → false` 重置，阻断生成清单；未触发业务写入。当前 dirty 修复同步读取 checkbox 值，并把 `App.tsx` capture 阶段父组件状态通知移到本次事件结束后，交互 epoch 仍同步失效。Tester 已观察同一复选框保持选中；完整清单／确认旅程、键盘及受影响回归仍进行中，不能继承下方历史受控结果作为本次修复通过。证据入口：[本地真实验收](../work/next-experience/live-acceptance/README.md)。
+
 技术放行：已放行
 
 最终恢复放行（2026-10-06 12:03 UTC）：独立Standards／Spec及fixture窄复核均闭合；同一不可变候选`0c752a2`完整backend426/426、37受控DOM/client、runtime/frontend build/strict checks及OS restart1/1通过。Tester比对238backend源／280build-UI源与integration无差异。受影响受控技术门槛恢复，真实provider／浏览器／语言品质／holdout／V3比较／本人验收仍开放。以下旧审查记录保留历史，不覆盖本段当前状态。详见[最终验证](../work/next-experience/10/final-controlled-verification.md)。

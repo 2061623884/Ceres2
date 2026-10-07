@@ -37,3 +37,4 @@ def test_query_provider_closes_client_and_uses_shared_configuration(monkeypatch,
     assert captured['client']['timeout'] == 15
     assert captured['request']['model'] == 'qwen3.8-27b'
     assert captured['request']['tool_choice'] == 'auto'
+    assert 'extra_body' not in captured['request']
