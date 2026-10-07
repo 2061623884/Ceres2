@@ -1,10 +1,16 @@
 # T06：显式 GraphRAG 与规范菜谱事实
 
-- 状态：待验收（A/B技术门槛已合入且固定postmerge通过；真实图LLM/最终本人验收开放）
+- 状态：待验收（技术实现与受控门槛完成；实际浏览器/真实provider/用户本人验收未完成）
 - 负责人：knowledge/runtime owner (T04→T06 交接)；主会话绑定实际 worker/worktree 后方可写入
 - 规格：[本轮规格](../docs/plans/ceres2-local-cloud-integration-spec.md)
 - 总任务：[集成 TASK](ceres2-local-cloud-integration.md)
 - Blocked by：[T02 Canonical 商品召回与当前 Offer](ceres2-local-cloud-integration-02-canonical-shopping.md)；[T04 可选审校过程消息与 SSE](ceres2-local-cloud-integration-04-reviewed-interim-sse.md)
+
+## 最终当前结论（2026-10-07）
+
+本票技术实现已进入最终产品 `f963017587b3eab30965ffcd3aab90fcc3852f3e`，受控验证/两轴修复闭环见[最终报告](../work/local-cloud-integration/t09/FINAL-VERIFICATION.md)。全量746通过/5跳过属于`81b02f9`；同版知识环境补齐跳过项，最终狭窄修复183例及合入4例另行绑定，不声称最终pin重新全量。实际浏览器BLOCKED、真实provider/用户本人验收NOT RUN，不能把技术完成等同于整体验收。
+
+以下阶段记录按各自固定pin保留，旧“待实现/待交接”等描述属于历史过程，不推翻本节当前结论。
 
 ## What to build / 合同
 
@@ -12,11 +18,11 @@
 
 ## 验收
 
-- [ ] 以上端到端业务合同完整实现，保留来源与安全边界。
-- [ ] 显式图查询 vs 普通 recipe_facts；规范用量和 unknown；缺索引/图失败；当前商品证据、官方/非官方 transport；真实 GraphRAG 和 BGE 只有 Tester 授权环境实际执行才记通过。
-- [ ] 实现者准备 RED/GREEN 用例，专职 Tester 执行并绑定精确 source/build；未经执行不报通过。
-- [ ] 共享入口/schema/DB/Prompt 改动逐文件由唯一 owner 处理；交付前合入最新集成 tip，处理冲突后重新请求受影响验证。
-- [ ] 不改变模型配置/额度，不读 holdout/原工作树数据，不做收费请求或 shell push。
+- [x] 以上端到端业务合同完整实现，保留来源与安全边界。
+- [x] 显式图查询 vs 普通 recipe_facts；规范用量和 unknown；缺索引/图失败；当前商品证据、官方/非官方 transport；真实 GraphRAG 和 BGE 只有 Tester 授权环境实际执行才记通过。
+- [x] 实现者准备 RED/GREEN 用例，专职 Tester 执行并绑定精确 source/build；未经执行不报通过。
+- [x] 共享入口/schema/DB/Prompt 改动逐文件由唯一 owner 处理；交付前合入最新集成 tip，处理冲突后重新请求受影响验证。
+- [x] 不改变模型配置/额度，不读 holdout/原工作树数据，不做收费请求或 shell push。
 
 ## 当前阻塞、下一步、证据
 
@@ -60,3 +66,5 @@ T04已在canonical `e0f57cd` 通过37例共存postmerge与runtime build；T06-B�
 [证据](../work/local-cloud-integration/t06b/verification-summary.json)、[等价](../work/local-cloud-integration/t06b/source-equivalence.json)、[Spec](../work/local-cloud-integration/reviews/t06b-spec-0e74a82.md)、[Standards](../work/local-cloud-integration/reviews/t06b-standards-0e74a82.md)。
 
 固定detached `b9138af` postmerge12例/30.38s及独立锁runtime安装/build通过，无源码/harness漂移。T06整票技术依赖已解除，Pi/runtime/Prompt转交T08-B；真实图LLM质量、最终同版全量、前端与本人验收不继承受控结果。[postmerge](../work/local-cloud-integration/t06b/postmerge-minimum.json)。
+
+- [ ] 剩余实际浏览器、获准的真实provider与用户本人验收按最终报告独立完成；不由受控结果自动勾选。

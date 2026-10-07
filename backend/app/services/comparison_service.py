@@ -4,7 +4,7 @@ from uuid import uuid4
 from app.models.comparison import ComparisonDisplay
 from app.services.catalog_service import CatalogService
 from app.core.errors import AppError
-from app.services.product_constraints import safety_mismatch, drink_filter_mismatch, offer_mismatch, product_type_matches, packaging_matches
+from app.services.product_constraints import safety_mismatch, product_filter_mismatch, offer_mismatch, product_type_matches, packaging_matches
 
 
 def comparison_card(product):
@@ -54,7 +54,7 @@ class ComparisonService:
         while True:
             products, total = catalog.search_products(q=filters.get('query'), category_id=category, page=page, page_size=100)
             for product in products:
-                if safety_mismatch(product, conditions) or drink_filter_mismatch(product, conditions) or offer_mismatch(product, conditions):
+                if safety_mismatch(product, conditions) or product_filter_mismatch(product, conditions) or offer_mismatch(product, conditions):
                     continue
                 if conditions.get('product_type') is not None and not product_type_matches(product['product_type'], conditions['product_type']):
                     continue

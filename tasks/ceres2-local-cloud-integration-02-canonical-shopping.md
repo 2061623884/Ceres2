@@ -1,10 +1,16 @@
 # T02：Canonical 商品召回与当前 Offer
 
-- 状态：待验收（受控技术门槛及两轴无阻断，已合入；固定 postmerge 已通过，最终验收开放）
+- 状态：待验收（技术实现与受控门槛完成；实际浏览器/真实provider/用户本人验收未完成）
 - 负责人：prepare_shopping_filter_slice（shopping owner）；主会话绑定实际 worker/worktree 后方可写入
 - 规格：[本轮规格](../docs/plans/ceres2-local-cloud-integration-spec.md)
 - 总任务：[集成 TASK](ceres2-local-cloud-integration.md)
 - Blocked by：[T01 Hybrid 政策与有界预取复用](ceres2-local-cloud-integration-01-policy-hybrid-deadline.md)
+
+## 最终当前结论（2026-10-07）
+
+本票技术实现已进入最终产品 `f963017587b3eab30965ffcd3aab90fcc3852f3e`，受控验证/两轴修复闭环见[最终报告](../work/local-cloud-integration/t09/FINAL-VERIFICATION.md)。全量746通过/5跳过属于`81b02f9`；同版知识环境补齐跳过项，最终狭窄修复183例及合入4例另行绑定，不声称最终pin重新全量。实际浏览器BLOCKED、真实provider/用户本人验收NOT RUN，不能把技术完成等同于整体验收。
+
+以下阶段记录按各自固定pin保留，旧“待实现/待交接”等描述属于历史过程，不推翻本节当前结论。
 
 ## What to build / 合同
 
@@ -12,11 +18,11 @@
 
 ## 验收
 
-- [ ] 以上端到端业务合同完整实现，保留来源与安全边界。
-- [ ] 公开 products 与 Pi 商品工具：品类+检索、多合法候选被全局 top-k 挤出、未知 SKU、当前 Offer 变动、重复 seed 不重置库存、明确加购。
-- [ ] 实现者准备 RED/GREEN 用例，专职 Tester 执行并绑定精确 source/build；未经执行不报通过。
-- [ ] 共享入口/schema/DB/Prompt 改动逐文件由唯一 owner 处理；交付前合入最新集成 tip，处理冲突后重新请求受影响验证。
-- [ ] 不改变模型配置/额度，不读 holdout/原工作树数据，不做收费请求或 shell push。
+- [x] 以上端到端业务合同完整实现，保留来源与安全边界。
+- [x] 公开 products 与 Pi 商品工具：品类+检索、多合法候选被全局 top-k 挤出、未知 SKU、当前 Offer 变动、重复 seed 不重置库存、明确加购。
+- [x] 实现者准备 RED/GREEN 用例，专职 Tester 执行并绑定精确 source/build；未经执行不报通过。
+- [x] 共享入口/schema/DB/Prompt 改动逐文件由唯一 owner 处理；交付前合入最新集成 tip，处理冲突后重新请求受影响验证。
+- [x] 不改变模型配置/额度，不读 holdout/原工作树数据，不做收费请求或 shell push。
 
 ## 当前阻塞、下一步、证据
 
@@ -38,3 +44,5 @@ T02 最终 `4efd809` 的66例验证与324个捕获源码文件等价核对已完
 组合 `8950b08` 无冲突合入 canonical `4fd13b3`。T02/T03 源码与受测 pin 相同；仅三份 Mercury 文件来自先前已通过门槛的 T07。固定 detached `4fd13b3` postmerge 独立锁离线安装/build及37例/45.43s通过，无源码/harness漂移。T04 已技术放行。独立真实 BGE/模型/前端/最终全量验收仍未完成。[验证摘要](../work/local-cloud-integration/t02-t03/verification-summary.json)、[源码关系](../work/local-cloud-integration/t02-t03/source-equivalence.json)。
 
 Standards 留一个非阻断 P3：drink_filter_mismatch 名称现覆盖通用品类条件。主会话决定最终整合集中修复时考虑 product_filter_mismatch，届时统一调用方并复验；不在冻结候选并发重命名。
+
+- [ ] 剩余实际浏览器、获准的真实provider与用户本人验收按最终报告独立完成；不由受控结果自动勾选。

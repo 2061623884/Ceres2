@@ -42,7 +42,7 @@ def packaging_matches(metadata, requested):
     return metadata.get('packaging') == CONTAINER_ALIASES.get(requested, requested)
 
 
-def drink_filter_mismatch(product, conditions):
+def product_filter_mismatch(product, conditions):
     """Shared candidate constraints; flavor and volume remain drink-specific."""
     if conditions.get('category_id') is not None and product['category_id'] != conditions['category_id']:
         return True

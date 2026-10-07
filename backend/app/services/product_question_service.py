@@ -6,7 +6,7 @@ from sqlalchemy import select
 from app.core.errors import AppError
 from app.models.guide import GuideMessage, GuideTask
 from app.services.catalog_service import CatalogService
-from app.services.product_constraints import drink_filter_values, drink_filter_mismatch, product_type_matches, packaging_matches, offer_mismatch
+from app.services.product_constraints import drink_filter_values, product_filter_mismatch, product_type_matches, packaging_matches, offer_mismatch
 from app.services.pi_product_turn_service import owned_session, session_anchor
 
 
@@ -51,7 +51,7 @@ class ProductQuestionService:
                 if safety_reason:
                     safety_reasons.add(safety_reason)
                     continue
-                if drink_filter_mismatch(product, conditions):
+                if product_filter_mismatch(product, conditions):
                     continue
                 if offer_mismatch(product, conditions):
                     continue

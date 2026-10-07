@@ -21,17 +21,41 @@ def refuse_dotenv(source):
 
 def stop_owned(process):
     if process is None:
-        return
-    try:
-        os.killpg(process.pid, signal.SIGTERM)
-    except ProcessLookupError:
-        pass
-    if process.poll() is None:
+        return {'pgid':None,'stopped':True,'leader_returncode':None,'sent_signals':[]}
+    # Both launcher children use start_new_session=True. This exact ID is the
+    # owned group, even when its original leader has already exited.
+    pgid=process.pid
+    result={'pgid':pgid,'stopped':False,'leader_returncode':None,'sent_signals':[]}
+    def present():
         try:
-            process.wait(timeout=5)
-        except subprocess.TimeoutExpired:
-            os.killpg(process.pid, signal.SIGKILL)
-            process.wait(timeout=5)
+            os.killpg(pgid,0)
+        except ProcessLookupError:
+            return False
+        return True
+    try:
+        for stop_signal in (signal.SIGTERM,signal.SIGKILL):
+            process.poll()  # Reap this known leader without deciding group liveness.
+            if not present():
+                break
+            try:
+                os.killpg(pgid,stop_signal)
+                result['sent_signals'].append(stop_signal.name)
+            except ProcessLookupError:
+                break
+            deadline=time.monotonic()+5
+            while time.monotonic()<deadline:
+                process.poll()
+                if not present():
+                    break
+                time.sleep(.05)
+        result['leader_returncode']=process.poll()
+        result['stopped']=not present() and result['leader_returncode'] is not None
+        if not result['stopped']:
+            result['reason']='owned_group_still_present_after_bounded_cleanup'
+    except OSError as error:
+        # Continue cleanup of the other owned group, preserving the OS cause.
+        result['error']={'kind':type(error).__name__,'errno':error.errno,'message':str(error)}
+    return result
 
 
 def main():
@@ -127,10 +151,11 @@ def main():
         finally:
             for signum in (signal.SIGINT,signal.SIGTERM):
                 signal.signal(signum,signal.SIG_IGN)
-            stop_owned(browser)
-            stop_owned(child)
+            browser_cleanup=stop_owned(browser)
+            backend_cleanup=stop_owned(child)
+            stopped=browser_cleanup['stopped'] and backend_cleanup['stopped']
             after=hashes()
-            lifecycle={'fixture_stopped':True,'backend_returncode':child.returncode if child else None,
+            lifecycle={'fixture_stopped':stopped,'browser_cleanup':browser_cleanup,'backend_cleanup':backend_cleanup,'backend_returncode':child.returncode if child else None,
                 'browser_returncode':browser.returncode if browser else None,'support_before_sha256':before,
                 'support_after_sha256':after,'support_source_stable':before==after,'evidence_dir':str(evidence)}
             for name in ('backend.log','ready.json'):
@@ -138,6 +163,9 @@ def main():
                     shutil.copyfile(runtime/name,evidence/name)
             (evidence/'lifecycle.json').write_text(json.dumps(lifecycle,indent=2))
             print(json.dumps(lifecycle),flush=True)
+            if not stopped:
+                print('FIXTURE_CLEANUP_INCOMPLETE',file=sys.stderr)
+                return 75
             if before!=after:
                 return 70
 

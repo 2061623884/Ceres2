@@ -1,10 +1,16 @@
 # T08：统一评测事件与运行版本
 
-- 状态：待验收（A/B技术门槛及阶段两轴已过并合入，T09最终同版验证/验收进行中）
+- 状态：待验收（技术实现与受控门槛完成；实际浏览器/真实provider/用户本人验收未完成）
 - 负责人：evaluation/runtime owner (T06→T08 交接)；主会话绑定实际 worker/worktree 后方可写入
 - 规格：[本轮规格](../docs/plans/ceres2-local-cloud-integration-spec.md)
 - 总任务：[集成 TASK](ceres2-local-cloud-integration.md)
 - Blocked by：[T05 本地界面适配新入口与协议](ceres2-local-cloud-integration-05-integrated-ui.md)；[T06 显式 GraphRAG 与规范菜谱事实](ceres2-local-cloud-integration-06-explicit-graphrag.md)；[T07 售后数量照片与工单证据范围](ceres2-local-cloud-integration-07-aftersales-ticket-evidence.md)
+
+## 最终当前结论（2026-10-07）
+
+本票技术实现已进入最终产品 `f963017587b3eab30965ffcd3aab90fcc3852f3e`，受控验证/两轴修复闭环见[最终报告](../work/local-cloud-integration/t09/FINAL-VERIFICATION.md)。全量746通过/5跳过属于`81b02f9`；同版知识环境补齐跳过项，最终狭窄修复183例及合入4例另行绑定，不声称最终pin重新全量。实际浏览器BLOCKED、真实provider/用户本人验收NOT RUN，不能把技术完成等同于整体验收。
+
+以下阶段记录按各自固定pin保留，旧“待实现/待交接”等描述属于历史过程，不推翻本节当前结论。
 
 ## What to build / 合同
 
@@ -12,11 +18,11 @@ policy judgment/lookup/reuse/summary、model usage、retrieval、graph retrieval
 
 ## 验收
 
-- [ ] 以上端到端业务合同完整实现，保留来源与安全边界。
-- [ ] 运行事件→导出→人工标签：usage 去重/缺失、事件尾裁剪计数、runtime/export 版本不同、owner join、失败登记不自动训练，安全输出无凭据。
-- [ ] 实现者准备 RED/GREEN 用例，专职 Tester 执行并绑定精确 source/build；未经执行不报通过。
-- [ ] 共享入口/schema/DB/Prompt 改动逐文件由唯一 owner 处理；交付前合入最新集成 tip，处理冲突后重新请求受影响验证。
-- [ ] 不改变模型配置/额度，不读 holdout/原工作树数据，不做收费请求或 shell push。
+- [x] 以上端到端业务合同完整实现，保留来源与安全边界。
+- [x] 运行事件→导出→人工标签：usage 去重/缺失、事件尾裁剪计数、runtime/export 版本不同、owner join、失败登记不自动训练，安全输出无凭据。
+- [x] 实现者准备 RED/GREEN 用例，专职 Tester 执行并绑定精确 source/build；未经执行不报通过。
+- [x] 共享入口/schema/DB/Prompt 改动逐文件由唯一 owner 处理；交付前合入最新集成 tip，处理冲突后重新请求受影响验证。
+- [x] 不改变模型配置/额度，不读 holdout/原工作树数据，不做收费请求或 shell push。
 
 ## 当前阻塞、下一步、证据
 
@@ -47,3 +53,5 @@ A只接受当前policy/interim summary、owner过滤/精确join/显式人工标�
 B所有权细化：guide_run_service.py转交用于已有receipt/event运行时证据，不新增schema/DB。navigation_service.py目前只读，须先说明确切调用需求再分配写入；frontend仍属T05。
 
 最终B `c1a99cf`256例/321.10s受影响验证与build绑定稳定，两项观察范围/graph method P2均复审关闭。无冲突合入T05组合 `81b02f9`，backend/runtime与受测pin零差异；同版T09全量检查和全范围两轴已启动，不能将阶段256视作最终全量。[验证](../work/local-cloud-integration/t08b/verification-summary.json)、[build绑定](../work/local-cloud-integration/t08b/final-build-binding.json)。
+
+- [ ] 剩余实际浏览器、获准的真实provider与用户本人验收按最终报告独立完成；不由受控结果自动勾选。

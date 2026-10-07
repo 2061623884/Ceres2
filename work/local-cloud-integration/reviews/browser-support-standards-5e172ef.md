@@ -1,0 +1,11 @@
+# Browser support Standards review
+
+Canonical pin: 5e172ef1983f858fd25bd153f24c7af213e59c19, support source declared ce90cc8c19e2e0c616a6a738759e17bb97eba239. Scope: newly added work/local-cloud-integration/browser-support files only, exact commit diff saved alongside report. Root AGENTS, ADR 0002 lifecycle principle, T09 verification scope and code-review smell baseline apply.
+
+## Findings
+
+P2 correctness/design judgment: work/local-cloud-integration/browser-support/launch_browser_fixture.py:29–34 waits for the process-group leader, not for the owned group to disappear. After SIGTERM, if the browser launcher/backend exits but a descendant remains (e.g. a browser child that does not finish on TERM), process.wait succeeds or poll is already non-null; the SIGKILL branch is skipped. The launcher then deletes its temporary runtime and unconditionally emits fixture_stopped=true at lines 133–135 although that descendant can remain alive. This contradicts the helper's bounded whole-group cleanup claim and can contaminate subsequent isolated verification. Track/check the owned process group independently of leader status, apply bounded escalation to surviving group members, and report cleanup failure rather than unconditional success. Have Tester add a regression with a leader that exits on TERM and a descendant that ignores TERM. This review did not execute that regression.
+
+No other independent finding established. Source refuses project dotenv before application imports; subprocess environment is allowlisted with fresh HOME/TMPDIR/database/checkpoint and synthetic credentials; fixture network is loopback-only, with actual Node guard verification explicitly delegated to Tester. Unique nonce localhost origin and exact Host-gated bootstrap prevent shared-host cookie collision; CSP limits browser requests. Scripted provider, controlled retrieval, disabled memory and browser gate remain honestly scoped. Source hashes, relocation pending status and raw evidence separation support reproduction without copying databases or old indexes. The launcher requires externally installed guard/toolchain, so this is not a standalone hermetic sandbox claim.
+
+Outcome: one open P2 judgment finding, no hard documented-style violations. No tests/builds/servers/installs or product edits performed. Final baseline-to-product Standards review remains pending.

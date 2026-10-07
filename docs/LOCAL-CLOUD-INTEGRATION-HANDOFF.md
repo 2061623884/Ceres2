@@ -1,31 +1,32 @@
 # Ceres2 九票集成：Ubuntu 本地交接
 
-交接准备稿日期：2026-10-07；最终候选尚未冻结。本文件为新入口，旧 `HANDOFF-UBUNTU.md`、`NEXT-EXPERIENCE-HANDOFF.md`、`JUDGE-PREFETCH-HANDOFF.md` 保留其历史范围。状态以[九票总 TASK](../tasks/ceres2-local-cloud-integration.md)及各票为准；本草稿不是验收通过声明。
+技术交接日期：2026-10-07；最终产品已固定，剩余真实验收见下文。本文件为新入口，旧 `HANDOFF-UBUNTU.md`、`NEXT-EXPERIENCE-HANDOFF.md`、`JUDGE-PREFETCH-HANDOFF.md` 保留其历史范围。状态以[九票总 TASK](../tasks/ceres2-local-cloud-integration.md)及各票为准；本文不是实际浏览器/真实provider/用户本人验收通过声明。
 
 ## 1. 固定来源与当前交付边界
 
 - [cloud baseline 37c98400](https://github.com/2061623884/Ceres2/tree/37c98400e7152b89e4a58f02fff3bceaa73b0eac)
 - [incoming 6734c7fe](https://github.com/2061623884/Ceres2/tree/6734c7fe79e670df2dae12b065dcc49c0b10a307)，冻结 tag `ceres2-incoming-20261007-frozen`
 - [正式集成分支](https://github.com/2061623884/Ceres2/tree/ceres2/local-cloud-integration-20261007)
-- 最近已读回的[正式里程碑 7eaeda0](https://github.com/2061623884/Ceres2/tree/7eaeda0cc1e27b96baaf235a1fede1ad47261a79)：remote `7eaeda0cc1e27b96baaf235a1fede1ad47261a79` ↔ local `a835bd411f96285f15d67a75dd0c0abfdb1d1640`，tree `66387dff204483a016931cfbb75cbe42f00f4100`，见[原始回执](../work/local-cloud-integration/t06b-t08a-integration-publication-receipt.json)。本地和 GitHub 历史不同，不能用短 SHA 相等作要求；必须核对完整 SHA、tree 和受测来源绑定。
+- 最近已读回候选checkpoint：[f268d48](https://github.com/2061623884/Ceres2/tree/f268d48cbdeea512f866404be6413a77a1ae9c7b)，remote `f268d48cbdeea512f866404be6413a77a1ae9c7b` ↔ local `4e728c7fa9ede8d3ddaec593b4f2f5c01a4811a5`，tree `388b6dbe136748d20f0c8b5051e3c7d10c94489c`，[回执](../work/local-cloud-integration/complete-candidate-checkpoint-publication-receipt.json)。该checkpoint保存最终修复前候选，不能替代随最终交付提供的新回执。
 - [T05 WIP 58db7fe](https://github.com/2061623884/Ceres2/tree/58db7fef475bab34e4c5b53bc3a1e4ba6408dfbb) 是独立备份，不是正式候选或已验收版本，不应当作启动目标。
 
-当前已放行 T01/02/03/04/06/07 技术分片与 T08-A。T05 浏览器门槛、T08-B 运行采集及 T09 最终整合仍开放。此处不能增加“总通过数”或把不同 pin 的重叠测试相加。
+九票技术实现、运行采集、受控验证与两轴修复闭环完成。最终产品 `f963017587b3eab30965ffcd3aab90fcc3852f3e`；实际浏览器、真实provider与用户本人验收仍开放，不增加“总通过数”或把不同pin重叠测试相加。
 
-本准备稿纳入时 canonical 源码为 `623066a09bcf80586bcfb8df932d6cd651166f3c`（后继仅文档/ignore/恢复副本，不等于最终产品候选）。
+最终技术交付登记：
 
-最终交付登记（Merger 收到实际结果后填写，未填即 pending）：
+- 最终产品merge：`f963017587b3eab30965ffcd3aab90fcc3852f3e`，与受测修复`3a9fede`产品目录相同。
+- backend full：`81b02f9`746 passed /5 skipped，1066.71s；同pin严格知识环境官方库24例/真实BGE4例补齐skip。
+- 修复验证：`3a9fede`183 affected；最终merge`f963017`4例与runtime build；不声称最后pin重跑全量。
+- Pi typecheck/build、frontend strict TypeScript/build、相关DOM、受控真实Pi/LangGraph HTTP和21请求模拟业务journey：通过，源码/build/harness固定。
+- baseline到完整候选两轴及最后产品/helper修复delta：clear，无未关闭技术问题。
+- 实际浏览器：BLOCKED，未进入UI；真实provider、真实图LLM质量、用户本人/Memory-Dream验收：NOT RUN。
+- 最终发布SHA/tree：主会话读回后随最终交付提供回执；本节固定产品来源不因发布文档commit不同而改变。前述旧里程碑不能代替最终回执。
 
-- 最终受测 source/build pin：PENDING
-- backend full / Pi typecheck+build / frontend strict TypeScript+build：PENDING
-- 同版 DOM、wire、跨域回归：PENDING；实际 Chromium/CUA 浏览器：BLOCKED（环境权限/连通性，详见第 8 节）
-- baseline...最终候选 Standards / Spec 与修复复验：PENDING
-- 最终 local SHA → remote SHA / 相同 tree / 回执：PENDING
-- 真实 provider / 用户真实浏览器 / Memory-Dream / 本人接受：NOT RUN 或 PENDING，逐项记录
+[完整验证报告](../work/local-cloud-integration/t09/FINAL-VERIFICATION.md)、[源/build映射](../work/local-cloud-integration/t09/final-source-map.json)、[终态记录](../work/local-cloud-integration/t09/verification-history.json)。
 
 ## 2. 项目树与职责
 
-下列是已存在的主要源码入口，省略同类文件；不是逐文件全量清单。本文件已纳入仓库，但最终交付登记仍待同版门槛。生成目录另列，不能据树形图推断已经安装或验收。
+下列是已存在的主要源码入口，省略同类文件；不是逐文件全量清单。本文件已纳入仓库，技术门槛与真实验收边界见第一节。生成目录另列，不能据树形图推断已经安装或验收。
 
 ```text
 Ceres2/
@@ -189,7 +190,7 @@ seed 建 schema、导入静态 catalog/Offer，不重置已有可变 Offer；不
 - 用户浏览器重点：明确切换与返回、商品详情/加购/模拟 checkout/订单推进、售后包装数量/照片/确认与精确工单范围、重复点击幂等、停止后不再发布、刷新重连不重复气泡/写入；最终由用户本人接受。
 - Memory 的提取/读取/更正/删除/重启不复活，以及 Dream 的真实模型、阈值/冷却/时钟边界仍需独立证据。短聊天或 observed extraction 不证明 Dream 完成。保留原任务未关闭的生命周期门槛。
 
-运行观测应分别报告入口判断、政策判断/检索/复用、主 Pi、审校、GraphRAG 和实际 provider usage。T08-B 尚未放行，不能声称已经完整采集。导出时源码 hash 不冒充运行时版本；裁剪事件尾部不作总数，未知时间/usage/费用不填 0。导出含用户消息，分享前检查脱敏，不上传 DB/private-state 或原始 provider 日志。
+运行观测应分别报告入口判断、政策判断/检索/复用、主 Pi、审校、GraphRAG 和实际 provider usage。T08-B已实现并通过受控/最终修复验证；真实provider未执行，不能据此声称已取得真实usage/质量样本。导出时源码 hash 不冒充运行时版本；裁剪事件尾部不作总数，未知时间/usage/费用不填 0。导出含用户消息，分享前检查脱敏，不上传 DB/private-state 或原始 provider 日志。
 
 ## 9. 依据与参考来源
 

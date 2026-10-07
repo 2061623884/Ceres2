@@ -1,10 +1,16 @@
 # T03：同 Pi 原生完成与混合引用
 
-- 状态：待验收（受控技术门槛及两轴无阻断，已合入；固定 postmerge 已通过，最终验收开放）
+- 状态：待验收（技术实现与受控门槛完成；实际浏览器/真实provider/用户本人验收未完成）
 - 负责人：runtime owner (T01→T03 交接)；主会话绑定实际 worker/worktree 后方可写入
 - 规格：[本轮规格](../docs/plans/ceres2-local-cloud-integration-spec.md)
 - 总任务：[集成 TASK](ceres2-local-cloud-integration.md)
 - Blocked by：[T01 Hybrid 政策与有界预取复用](ceres2-local-cloud-integration-01-policy-hybrid-deadline.md)
+
+## 最终当前结论（2026-10-07）
+
+本票技术实现已进入最终产品 `f963017587b3eab30965ffcd3aab90fcc3852f3e`，受控验证/两轴修复闭环见[最终报告](../work/local-cloud-integration/t09/FINAL-VERIFICATION.md)。全量746通过/5跳过属于`81b02f9`；同版知识环境补齐跳过项，最终狭窄修复183例及合入4例另行绑定，不声称最终pin重新全量。实际浏览器BLOCKED、真实provider/用户本人验收NOT RUN，不能把技术完成等同于整体验收。
+
+以下阶段记录按各自固定pin保留，旧“待实现/待交接”等描述属于历史过程，不推翻本节当前结论。
 
 ## What to build / 合同
 
@@ -12,11 +18,11 @@
 
 ## 验收
 
-- [ ] 以上端到端业务合同完整实现，保留来源与安全边界。
-- [ ] 受控真实 Node JSONL 与 Guide HTTP/SSE：原生终止、混合 refs、非法/陈旧 refs、waiting+policy+role boundary、取消/超时与零业务副作用。
-- [ ] 实现者准备 RED/GREEN 用例，专职 Tester 执行并绑定精确 source/build；未经执行不报通过。
-- [ ] 共享入口/schema/DB/Prompt 改动逐文件由唯一 owner 处理；交付前合入最新集成 tip，处理冲突后重新请求受影响验证。
-- [ ] 不改变模型配置/额度，不读 holdout/原工作树数据，不做收费请求或 shell push。
+- [x] 以上端到端业务合同完整实现，保留来源与安全边界。
+- [x] 受控真实 Node JSONL 与 Guide HTTP/SSE：原生终止、混合 refs、非法/陈旧 refs、waiting+policy+role boundary、取消/超时与零业务副作用。
+- [x] 实现者准备 RED/GREEN 用例，专职 Tester 执行并绑定精确 source/build；未经执行不报通过。
+- [x] 共享入口/schema/DB/Prompt 改动逐文件由唯一 owner 处理；交付前合入最新集成 tip，处理冲突后重新请求受影响验证。
+- [x] 不改变模型配置/额度，不读 holdout/原工作树数据，不做收费请求或 shell push。
 
 ## 当前阻塞、下一步、证据
 
@@ -33,3 +39,5 @@ T03 候选 `e315c38` 已借入 T02 shopping 提交的 patch-equivalent 副本（
 T02 最终 `4efd809` 的66例验证与324个捕获源码文件等价核对已完成。T03 `09ed3a3` 修复 optional recipe facts 与非主引用两项 P2，独立两轴复审关闭；原始失败与报告保留。实际 T02 ancestry 合入 T03 得到 `8950b08`，122例/13文件受影响验证与 Pi typecheck/build 均通过、源码/harness 稳定。
 
 组合 `8950b08` 无冲突合入 canonical `4fd13b3`。T02/T03 源码与受测 pin 相同；仅三份 Mercury 文件来自先前已通过门槛的 T07。固定 detached `4fd13b3` postmerge 独立锁离线安装/build及37例/45.43s通过，无源码/harness漂移。T04 已技术放行。独立真实 BGE/模型/前端/最终全量验收仍未完成。[验证摘要](../work/local-cloud-integration/t02-t03/verification-summary.json)、[源码关系](../work/local-cloud-integration/t02-t03/source-equivalence.json)。
+
+- [ ] 剩余实际浏览器、获准的真实provider与用户本人验收按最终报告独立完成；不由受控结果自动勾选。

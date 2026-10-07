@@ -52,3 +52,60 @@ def test_controlled_provider_accepts_actual_sdk_text_block_envelopes(scenario):
             assert json.loads(delta['content'])['fact_ref']=='result'
     finally:
         provider.shutdown();provider.server_close()
+
+
+def test_cli_reaps_owned_term_resistant_descendant_after_leader_exit(tmp_path):
+    """Exercise the public launcher, not its private stop helper."""
+    import os
+    import signal
+    import time
+    source=Path(os.environ['CERES_BROWSER_TEST_SOURCE'])
+    frontend=Path(os.environ['CERES_BROWSER_TEST_DIST'])
+    identity=tmp_path/'owned-descendant.json'
+    program=r'''
+import json,os,signal,sys,time
+from pathlib import Path
+read_fd,write_fd=os.pipe()
+pid=os.fork()
+if pid==0:
+    os.close(read_fd)
+    signal.signal(signal.SIGTERM,signal.SIG_IGN)
+    null=os.open(os.devnull,os.O_RDWR)
+    for descriptor in (0,1,2):
+        os.dup2(null,descriptor)
+    os.close(null)
+    Path(sys.argv[1]).write_text(json.dumps({'pid':os.getpid(),'pgid':os.getpgrp()}))
+    os.write(write_fd,b'R');os.close(write_fd)
+    while True:
+        time.sleep(.1)
+os.close(write_fd)
+assert os.read(read_fd,1)==b'R'
+os.close(read_fd)
+os._exit(0)
+'''
+    owned=None
+    try:
+        result=subprocess.run([sys.executable,str(LAUNCHER),'--source',str(source),
+            '--frontend-dist',str(frontend),'--artifacts',str(tmp_path/'evidence'),'--lifetime','30',
+            '--',sys.executable,'-c',program,str(identity)],text=True,capture_output=True,timeout=50)
+        owned=json.loads(identity.read_text())
+        lifecycle=next(json.loads(line) for line in reversed(result.stdout.splitlines()) if '"fixture_stopped"' in line)
+        assert result.returncode==0,(result.stdout,result.stderr)
+        assert lifecycle['fixture_stopped'] is True,lifecycle
+        try:
+            os.kill(owned['pid'],0)
+        except ProcessLookupError:
+            alive=False
+        else:
+            alive=True
+        assert not alive,'Launcher reported stopped while its known TERM-resistant child still exists'
+    finally:
+        # Repair only this test's exactly recorded owned group after expected RED.
+        if owned is None and identity.exists():
+            owned=json.loads(identity.read_text())
+        if owned:
+            try:
+                if os.getpgid(owned['pid'])==owned['pgid']:
+                    os.killpg(owned['pgid'],signal.SIGKILL)
+            except ProcessLookupError:
+                pass

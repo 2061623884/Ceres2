@@ -136,7 +136,9 @@ class PiProductRuntime:
         self.events.append(event)
         if len(self.events) > 256:
             self.runtime_summary['events_truncated'] = True
-            self.events = self.events[-256:]
+            # Final projections can emit reads after result takes this list.
+            # Preserve that reference while keeping the diagnostic tail bounded.
+            del self.events[:-256]
 
     def _record_provider(self, event):
         identity = event['call_id']

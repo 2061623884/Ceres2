@@ -1,0 +1,611 @@
+[
+  {
+    "label": "t09-backend-full",
+    "head": "81b02f956298361cf9044ee289c0821a8275fab8",
+    "command": [
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "-m",
+      "pytest",
+      "tests",
+      "-q",
+      "-ra",
+      "-p",
+      "pytest_asyncio.plugin"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9/backend",
+    "exit_code": 0,
+    "elapsed_seconds": 1091.403,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "db3e44dc6ca05bff9c07c542fe6ea38df661708a9cfdc171753ea52dbc05f72d",
+    "terminal_test_summaries": [
+      "SKIPPED [1] tests/test_graph_official_library.py:13: Official locked GraphRAG environment required",
+      "SKIPPED [1] tests/test_graph_real_bge.py:26: Tester must supply a fresh authorized real-BGE index",
+      "SKIPPED [1] tests/test_graph_real_bge.py:46: Tester must supply a fresh authorized real-BGE index",
+      "SKIPPED [1] tests/test_graph_real_bge.py:60: Tester must supply a fresh authorized real-BGE index",
+      "SKIPPED [1] tests/test_graph_real_bge.py:85: Tester must supply a fresh authorized real-BGE index",
+      "746 passed, 5 skipped in 1066.71s (0:17:46)"
+    ]
+  },
+  {
+    "label": "t09-business-lock-check",
+    "head": "81b02f956298361cf9044ee289c0821a8275fab8",
+    "command": [
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "-c",
+      "from pathlib import Path; import importlib.metadata as m,hashlib,json; lock=Path(\"backend/requirements.lock\"); pins=[line.strip().split(\"==\",1) for line in lock.read_text().splitlines() if line.strip() and not line.startswith(\"#\")]; mismatches=[(name,version,m.version(name)) for name,version in pins if m.version(name)!=version]; assert not mismatches,mismatches; print(json.dumps({\"locked_packages_verified\":len(pins),\"lock_sha256\":hashlib.sha256(lock.read_bytes()).hexdigest()}))"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9",
+    "exit_code": 0,
+    "elapsed_seconds": 0.121,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "0966c755249987f3be046220eaee6f4e6bbf487fb2a37ac8677448f9d63c2e31",
+    "terminal_test_summaries": []
+  },
+  {
+    "label": "t09-business-pip-check",
+    "head": "81b02f956298361cf9044ee289c0821a8275fab8",
+    "command": [
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "-m",
+      "pip",
+      "check"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9",
+    "exit_code": 0,
+    "elapsed_seconds": 0.471,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "40f0e510127165f366352583858f86bdfe61065c02ca7ffa90b3ebe26d813230",
+    "terminal_test_summaries": []
+  },
+  {
+    "label": "t09-delta-runtime-build",
+    "head": "3a9fedeae8f01053dba2abc2d6bc36daef125133",
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-delta-3a9fede/runtime/pi",
+    "exit_code": 0,
+    "elapsed_seconds": 7.312,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "48380eee1e92f6e94c3ff4c8d11abd6efda1dd7676e65f24a042b7df10a0a0b5",
+    "terminal_test_summaries": []
+  },
+  {
+    "label": "t09-delta-runtime-install",
+    "head": "3a9fedeae8f01053dba2abc2d6bc36daef125133",
+    "command": [
+      "npm",
+      "ci",
+      "--offline",
+      "--ignore-scripts",
+      "--no-audit",
+      "--no-fund",
+      "--cache",
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/test-evidence/npm-cache"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-delta-3a9fede/runtime/pi",
+    "exit_code": 0,
+    "elapsed_seconds": 6.01,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "6c1fee73b5376bf97dbe6a392cedcb6738701de08fbdbb092deeaf7d94bccf3f",
+    "terminal_test_summaries": []
+  },
+  {
+    "label": "t09-demo-public-http",
+    "head": "81b02f956298361cf9044ee289c0821a8275fab8",
+    "command": [
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/test-support/browser/launch_browser_fixture.py",
+      "--source",
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9",
+      "--frontend-dist",
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9/frontend/dist",
+      "--lifetime",
+      "90",
+      "--artifacts",
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/test-evidence/t09-demo-http",
+      "--",
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9/work/local-cloud-integration/05/http_demo_contracts.py"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9",
+    "exit_code": 0,
+    "elapsed_seconds": 2.871,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "dfe54268d47e307f4bed64c2d266a355ab1ea322fb28108e2b44cd88561f005b",
+    "terminal_test_summaries": []
+  },
+  {
+    "label": "t09-dom-support-install",
+    "head": "81b02f956298361cf9044ee289c0821a8275fab8",
+    "command": [
+      "npm",
+      "ci",
+      "--offline",
+      "--ignore-scripts",
+      "--no-audit",
+      "--no-fund",
+      "--cache",
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/test-evidence/npm-cache"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9/work/clean-rebuild/02/test-support",
+    "exit_code": 0,
+    "elapsed_seconds": 1.686,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "e4c9717e23b89a458825f6d0bab95fbbf5d6fd382cbfbf7023e4de196fdc7847",
+    "terminal_test_summaries": []
+  },
+  {
+    "label": "t09-final-merge-minimum",
+    "head": "f963017587b3eab30965ffcd3aab90fcc3852f3e",
+    "command": [
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_final_runtime_tail_public.py",
+      "tests/test_integration_shopping_public.py::test_confirm_preserves_existing_nonbeverage_candidate_constraints",
+      "-q",
+      "-p",
+      "pytest_asyncio.plugin"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-merge-f963017/backend",
+    "exit_code": 0,
+    "elapsed_seconds": 8.096,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "85bf65da4f17d0c45d0e4f5f64f2efbc00b0fe06d23fd42cd4aaafd9f331eaf1",
+    "terminal_test_summaries": [
+      "4 passed in 7.11s"
+    ]
+  },
+  {
+    "label": "t09-final-merge-runtime-build",
+    "head": "f963017587b3eab30965ffcd3aab90fcc3852f3e",
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-merge-f963017/runtime/pi",
+    "exit_code": 0,
+    "elapsed_seconds": 6.585,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "ea3720728f5c2ee6bd84efc6916d49a79572a9833481989509baaaa50ae96e5e",
+    "terminal_test_summaries": []
+  },
+  {
+    "label": "t09-final-merge-runtime-install",
+    "head": "f963017587b3eab30965ffcd3aab90fcc3852f3e",
+    "command": [
+      "npm",
+      "ci",
+      "--offline",
+      "--ignore-scripts",
+      "--no-audit",
+      "--no-fund",
+      "--cache",
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/test-evidence/npm-cache"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-merge-f963017/runtime/pi",
+    "exit_code": 0,
+    "elapsed_seconds": 4.473,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "809eae7c645b4b71c7117ae7d56cd8b9a619eae9bb8869e23bf125c5d3e52cfe",
+    "terminal_test_summaries": []
+  },
+  {
+    "label": "t09-final-projection-tail-green",
+    "head": "3a9fedeae8f01053dba2abc2d6bc36daef125133",
+    "command": [
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_final_runtime_tail_public.py",
+      "-q",
+      "-p",
+      "pytest_asyncio.plugin"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-delta-3a9fede/backend",
+    "exit_code": 0,
+    "elapsed_seconds": 4.551,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "437aa8a1b2ff6005e991abbd92d7425810b2690fbde904eca99ac8bea97be1b6",
+    "terminal_test_summaries": [
+      "1 passed in 3.57s"
+    ]
+  },
+  {
+    "label": "t09-final-projection-tail-red",
+    "head": "9df0abbe6b7f5d684dfb506d8c60836149bde20c",
+    "command": [
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_final_runtime_tail_public.py",
+      "-q",
+      "-p",
+      "pytest_asyncio.plugin"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-tail-red-9df0abb/backend",
+    "exit_code": 1,
+    "elapsed_seconds": 4.105,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "fe4beda1d683d02d440912ba40dd07c8f145ad7eda6e296ef2e70bfb8910ca45",
+    "terminal_test_summaries": [
+      "1 failed in 3.23s"
+    ]
+  },
+  {
+    "label": "t09-frontend-build",
+    "head": "81b02f956298361cf9044ee289c0821a8275fab8",
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9/frontend",
+    "exit_code": 0,
+    "elapsed_seconds": 0.914,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "8ef1b3721b779093211765482dc1186ae8639729c6f6a677657d2427c960605f",
+    "terminal_test_summaries": []
+  },
+  {
+    "label": "t09-frontend-dom-all",
+    "head": "81b02f956298361cf9044ee289c0821a8275fab8",
+    "command": [
+      "bash",
+      "-c",
+      "set -e; node work/local-cloud-integration/05/compile_ui.cjs work/local-cloud-integration/05/compiled work/clean-rebuild/13/ui_contact.tsx; node work/local-cloud-integration/05/ui_stream_contract.mjs; node work/local-cloud-integration/05/ui_navigation.mjs; node work/local-cloud-integration/05/ui_order_navigation_race.mjs success; node work/local-cloud-integration/05/ui_order_navigation_race.mjs failure; for mode in product aftersales orders; do node work/local-cloud-integration/05/ui_demo_contracts.mjs \"$mode\"; done; export MERCURY_TEST_SUPPORT=\"$PWD/work/clean-rebuild/02/test-support\" MERCURY_COMPILED_DIR=\"$PWD/work/local-cloud-integration/05/compiled\"; node work/local-cloud-integration/05/compiled/test-entry.mjs; node work/clean-rebuild/13/identity_race.mjs; node work/local-cloud-integration/05/compile_ui.cjs work/next-experience/01/compiled; node work/next-experience/01/ui_snack_choices.mjs; node work/local-cloud-integration/05/compile_ui.cjs work/next-experience/04/compiled; node work/next-experience/04/ui_drink_filters.mjs; node work/local-cloud-integration/05/compile_ui.cjs work/clean-rebuild/03/compiled; node work/clean-rebuild/16/ui_snapshot_ordering.mjs; node work/local-cloud-integration/05/compile_ui.cjs work/clean-rebuild/12/compiled; node work/clean-rebuild/12/ui_orders.mjs; node work/local-cloud-integration/05/compile_ui.cjs work/clean-rebuild/14/compiled; node work/clean-rebuild/14/ui_aftersales.mjs"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9",
+    "exit_code": 0,
+    "elapsed_seconds": 19.955,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "685a26e7a4bd4de97cb5c378421ce2d2abe43991d2cbfc205a77bc7ef6a46b3c",
+    "terminal_test_summaries": []
+  },
+  {
+    "label": "t09-frontend-install",
+    "head": "81b02f956298361cf9044ee289c0821a8275fab8",
+    "command": [
+      "npm",
+      "ci",
+      "--offline",
+      "--ignore-scripts",
+      "--no-audit",
+      "--no-fund",
+      "--cache",
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/test-evidence/npm-cache"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9/frontend",
+    "exit_code": 0,
+    "elapsed_seconds": 1.972,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "2c5e055d5d88977d765eee658e101800a7199c03d695c9faffad0372d8c8fb9b",
+    "terminal_test_summaries": []
+  },
+  {
+    "label": "t09-frontend-strict-typecheck",
+    "head": "81b02f956298361cf9044ee289c0821a8275fab8",
+    "command": [
+      "node",
+      "node_modules/typescript/bin/tsc",
+      "--noEmit"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9/frontend",
+    "exit_code": 0,
+    "elapsed_seconds": 5.718,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "e8b0eea35ee5d6c8698bd63eac8463f4b59213602b19cd586727a3b1218694b1",
+    "terminal_test_summaries": []
+  },
+  {
+    "label": "t09-helper-regression",
+    "head": "81b02f956298361cf9044ee289c0821a8275fab8",
+    "command": [
+      "env",
+      "CERES_BROWSER_TEST_SOURCE=/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9",
+      "CERES_BROWSER_TEST_DIST=/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9/frontend/dist",
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "-m",
+      "pytest",
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/test-support/browser/test_launcher_contract.py",
+      "-q",
+      "-k",
+      "not reaps"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9",
+    "exit_code": 0,
+    "elapsed_seconds": 1.698,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "f25cfe240076f214d23535d8f059f901cb1369bfedc4f46a9490563b32f91f34",
+    "terminal_test_summaries": [
+      "3 passed, 1 deselected in 1.33s"
+    ]
+  },
+  {
+    "label": "t09-knowledge-production-lock-official",
+    "head": "81b02f956298361cf9044ee289c0821a8275fab8",
+    "command": [
+      "env",
+      "PYTHONPATH=/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9/work/judge-prefetch-rebuild/guards:/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9/backend:/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/test-evidence/pytest-only-support",
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/test-evidence/knowledge-production-venv/bin/python",
+      "-c",
+      "import importlib.util as u,importlib.metadata as m,sys,json; assert u.find_spec(\"sqlalchemy\") is None; production=list(m.distributions(path=[sys.prefix+\"/lib/python3.12/site-packages\"])); assert len(production)==144; print(json.dumps({\"SQLAlchemy\":\"absent\",\"production_distributions\":len(production),\"pytest_support\":\"external four-package directory only\"})); import pytest; result=pytest.main([\"tests/test_graph_official_library.py\",\"tests/test_graph_cli_public.py\",\"tests/test_knowledge_worker_deadline.py\",\"-q\",\"-ra\",\"-p\",\"pytest_asyncio.plugin\"]); assert u.find_spec(\"sqlalchemy\") is None; raise SystemExit(result)"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9/backend",
+    "exit_code": 0,
+    "elapsed_seconds": 36.695,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "24859670101772f8d862cd7c4d957745a381bff1e3ddf033db22c98d8a369998",
+    "terminal_test_summaries": [
+      "24 passed, 11 warnings in 32.47s"
+    ]
+  },
+  {
+    "label": "t09-packaged-helper-final-contracts",
+    "head": "4cb670b0eb7847b8337e3a86cae7a3398e3f1715",
+    "command": [
+      "env",
+      "CERES_BROWSER_TEST_SOURCE=/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9",
+      "CERES_BROWSER_TEST_DIST=/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9/frontend/dist",
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "-m",
+      "pytest",
+      "work/local-cloud-integration/browser-support/test_launcher_contract.py",
+      "-q"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-helper-4cb670b",
+    "exit_code": 0,
+    "elapsed_seconds": 9.314,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "5b6a1e46cc027f6bd060789a8a165ec72d995090b8e1c80172d9969c200072aa",
+    "terminal_test_summaries": [
+      "4 passed in 8.92s"
+    ]
+  },
+  {
+    "label": "t09-portable-node-isolation",
+    "head": "81b02f956298361cf9044ee289c0821a8275fab8",
+    "command": [
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "-m",
+      "pytest",
+      "../work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py",
+      "-q"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9/backend",
+    "exit_code": 0,
+    "elapsed_seconds": 5.072,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "8bf385c6ddc4e263ecae51dbdee2749c7754710668c1fb8c7bc60a63b29e1800",
+    "terminal_test_summaries": [
+      "2 passed in 4.15s"
+    ]
+  },
+  {
+    "label": "t09-product-delta-affected",
+    "head": "3a9fedeae8f01053dba2abc2d6bc36daef125133",
+    "command": [
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_final_runtime_tail_public.py",
+      "tests/test_integration_evaluation_runtime.py",
+      "tests/test_integration_evaluation_export.py",
+      "tests/test_integration_evaluation_annotations.py",
+      "tests/test_integration_native_finish_public.py",
+      "tests/test_integration_reviewed_interim_public.py",
+      "tests/test_integration_graph_runtime_public.py",
+      "tests/test_judge_policy_reuse_public.py",
+      "tests/test_judge_policy_reuse_safety_public.py",
+      "tests/test_integration_shopping_public.py",
+      "tests/test_integration_shopping_budget_public.py",
+      "tests/test_comparison_public.py",
+      "tests/test_comparison_safety.py",
+      "tests/test_purchase_confirmations.py",
+      "tests/test_purchase_public.py",
+      "tests/test_purchase_safety.py",
+      "tests/test_next_drinks_public.py",
+      "-q",
+      "-p",
+      "pytest_asyncio.plugin"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-delta-3a9fede/backend",
+    "exit_code": 0,
+    "elapsed_seconds": 293.033,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "aabc62bcf22324afd9f1741e9d527403105985d356b2cb01e682c919e2e6b50d",
+    "terminal_test_summaries": [
+      "183 passed in 283.29s (0:04:43)"
+    ]
+  },
+  {
+    "label": "t09-production-bge-build",
+    "head": "81b02f956298361cf9044ee289c0821a8275fab8",
+    "command": [
+      "timeout",
+      "180",
+      "env",
+      "HF_HUB_OFFLINE=1",
+      "TRANSFORMERS_OFFLINE=1",
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/test-evidence/knowledge-production-venv/bin/python",
+      "-c",
+      "import importlib.util,runpy; assert importlib.util.find_spec(\"sqlalchemy\") is None; runpy.run_module(\"app.knowledge.cli\",run_name=\"__main__\")",
+      "build-hybrid",
+      "--index",
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/test-evidence/t09-real-bge-hybrid.sqlite3"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9/backend",
+    "exit_code": 0,
+    "elapsed_seconds": 15.529,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "5a463d2ae71abfcb5fc0b501466181400749d214be6b5d887869177cff118fc3",
+    "terminal_test_summaries": []
+  },
+  {
+    "label": "t09-production-bge-dev-worker",
+    "head": "81b02f956298361cf9044ee289c0821a8275fab8",
+    "command": [
+      "timeout",
+      "180",
+      "env",
+      "HF_HUB_OFFLINE=1",
+      "TRANSFORMERS_OFFLINE=1",
+      "CERES_REAL_BGE_INDEX=/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/test-evidence/t09-real-bge-hybrid.sqlite3",
+      "PYTHONPATH=/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9/work/judge-prefetch-rebuild/guards:/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9/backend:/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/test-evidence/pytest-only-support",
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/test-evidence/knowledge-production-venv/bin/python",
+      "-c",
+      "import importlib.util,pytest; assert importlib.util.find_spec(\"sqlalchemy\") is None; result=pytest.main([\"tests/test_graph_real_bge.py\",\"-q\",\"-ra\",\"-p\",\"pytest_asyncio.plugin\"]); assert importlib.util.find_spec(\"sqlalchemy\") is None; raise SystemExit(result)"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9/backend",
+    "exit_code": 0,
+    "elapsed_seconds": 14.907,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "da37b101a0bb0c7c2419b6a35f825f73824c2e248e0075eb9ea7f5866be1e553",
+    "terminal_test_summaries": [
+      "4 passed in 13.05s"
+    ]
+  },
+  {
+    "label": "t09-real-runtime-http",
+    "head": "81b02f956298361cf9044ee289c0821a8275fab8",
+    "command": [
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/test-support/browser/launch_browser_fixture.py",
+      "--source",
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9",
+      "--frontend-dist",
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9/frontend/dist",
+      "--lifetime",
+      "90",
+      "--artifacts",
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/test-evidence/t09-runtime-http",
+      "--",
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/test-support/browser/api_smoke.py"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9",
+    "exit_code": 0,
+    "elapsed_seconds": 5.001,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "594156aa38c81572ef61a2e93819f3550be73448d4dabca6e0b17a4b5d950c6e",
+    "terminal_test_summaries": []
+  },
+  {
+    "label": "t09-runtime-build",
+    "head": "81b02f956298361cf9044ee289c0821a8275fab8",
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9/runtime/pi",
+    "exit_code": 0,
+    "elapsed_seconds": 5.688,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "aeefe855f709d569c24dd093683e52f1a76f9013fed98083b880ff2a5ae86d63",
+    "terminal_test_summaries": []
+  },
+  {
+    "label": "t09-runtime-install",
+    "head": "81b02f956298361cf9044ee289c0821a8275fab8",
+    "command": [
+      "npm",
+      "ci",
+      "--offline",
+      "--ignore-scripts",
+      "--no-audit",
+      "--no-fund",
+      "--cache",
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/test-evidence/npm-cache"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9/runtime/pi",
+    "exit_code": 0,
+    "elapsed_seconds": 5.839,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "64eb99c571de09410bcf18f0976a0bad720f2ab0411f67a142858133ccbdceaf",
+    "terminal_test_summaries": []
+  },
+  {
+    "label": "t09-runtime-typecheck",
+    "head": "81b02f956298361cf9044ee289c0821a8275fab8",
+    "command": [
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-81b02f9/runtime/pi",
+    "exit_code": 0,
+    "elapsed_seconds": 6.959,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "699e7ab42272d8b1e9ed330c7fbe4d45ea2e1a9277fc423489d4efb78d7b3f1e",
+    "terminal_test_summaries": []
+  },
+  {
+    "label": "t09-tail-red-runtime-build",
+    "head": "9df0abbe6b7f5d684dfb506d8c60836149bde20c",
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-tail-red-9df0abb/runtime/pi",
+    "exit_code": 0,
+    "elapsed_seconds": 6.017,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "47d88a1d07987094eb40856e05585b72cd22629fadfd25a5ed86f7fdc506c746",
+    "terminal_test_summaries": []
+  },
+  {
+    "label": "t09-tail-red-runtime-install",
+    "head": "9df0abbe6b7f5d684dfb506d8c60836149bde20c",
+    "command": [
+      "npm",
+      "ci",
+      "--offline",
+      "--ignore-scripts",
+      "--no-audit",
+      "--no-fund",
+      "--cache",
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/test-evidence/npm-cache"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-final-tail-red-9df0abb/runtime/pi",
+    "exit_code": 0,
+    "elapsed_seconds": 4.341,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "c1b2f4f3bc9b51b88aef4425955f87f698673914a6e0f4a6b955b9840eed1415",
+    "terminal_test_summaries": []
+  }
+]

@@ -82,9 +82,9 @@ class PurchaseService:
             from app.services.activity_service import activity_mismatch
             if item.get('selected', True) and activity_mismatch({'metadata':json.loads(product.metadata_json)}, conditions):
                 raise AppError(409, 'ACTIVITY_SCOPE_CONFLICT', '商品不属于当前活动成品范围，请先更新购买目标。')
-            from app.services.product_constraints import safety_mismatch, drink_filter_mismatch
+            from app.services.product_constraints import safety_mismatch, product_filter_mismatch
             from app.services.catalog_service import product_to_dict
-            if item.get('selected', True) and drink_filter_mismatch(product_to_dict(product, offer), conditions):
+            if item.get('selected', True) and product_filter_mismatch(product_to_dict(product, offer), conditions):
                 raise AppError(409, 'PRODUCT_FILTER_CONFLICT', '商品属性不符合当前筛选条件，未加购。')
             safety_reason = safety_mismatch({'metadata':json.loads(product.metadata_json)}, conditions)
             if item.get('selected', True) and safety_reason:

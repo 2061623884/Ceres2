@@ -1,10 +1,16 @@
 # T07：售后数量照片与工单证据范围
 
-- 状态：待验收（核心与 Mercury 技术门槛通过并合入；postmerge 通过，最终整合仍开放）
+- 状态：待验收（技术实现与受控门槛完成；实际浏览器/真实provider/用户本人验收未完成）
 - 负责人：implement_aftersales_evidence_slice（售后/DB/migration 唯一 owner）；主会话绑定实际 worker/worktree 后方可写入
 - 规格：[本轮规格](../docs/plans/ceres2-local-cloud-integration-spec.md)
 - 总任务：[集成 TASK](ceres2-local-cloud-integration.md)
 - Blocked by：无（可开始，与 T01 无共享文件）
+
+## 最终当前结论（2026-10-07）
+
+本票技术实现已进入最终产品 `f963017587b3eab30965ffcd3aab90fcc3852f3e`，受控验证/两轴修复闭环见[最终报告](../work/local-cloud-integration/t09/FINAL-VERIFICATION.md)。全量746通过/5跳过属于`81b02f9`；同版知识环境补齐跳过项，最终狭窄修复183例及合入4例另行绑定，不声称最终pin重新全量。实际浏览器BLOCKED、真实provider/用户本人验收NOT RUN，不能把技术完成等同于整体验收。
+
+以下阶段记录按各自固定pin保留，旧“待实现/待交接”等描述属于历史过程，不推翻本节当前结论。
 
 ## What to build / 合同
 
@@ -12,11 +18,11 @@
 
 ## 验收
 
-- [ ] 以上端到端业务合同完整实现，保留来源与安全边界。
-- [ ] 公开模拟订单/售后/人工 API：数量澄清、越量、照片 MIME/大小/个数、跨 owner/case/order/selection、旧工单与后续代次、无关同单照片、重放幂等和事务回滚。
-- [ ] 实现者准备 RED/GREEN 用例，专职 Tester 执行并绑定精确 source/build；未经执行不报通过。
-- [ ] 共享入口/schema/DB/Prompt 改动逐文件由唯一 owner 处理；交付前合入最新集成 tip，处理冲突后重新请求受影响验证。
-- [ ] 不改变模型配置/额度，不读 holdout/原工作树数据，不做收费请求或 shell push。
+- [x] 以上端到端业务合同完整实现，保留来源与安全边界。
+- [x] 公开模拟订单/售后/人工 API：数量澄清、越量、照片 MIME/大小/个数、跨 owner/case/order/selection、旧工单与后续代次、无关同单照片、重放幂等和事务回滚。
+- [x] 实现者准备 RED/GREEN 用例，专职 Tester 执行并绑定精确 source/build；未经执行不报通过。
+- [x] 共享入口/schema/DB/Prompt 改动逐文件由唯一 owner 处理；交付前合入最新集成 tip，处理冲突后重新请求受影响验证。
+- [x] 不改变模型配置/额度，不读 holdout/原工作树数据，不做收费请求或 shell push。
 
 ## 当前阻塞、下一步、证据
 
@@ -32,3 +38,5 @@
 Mercury 证据：[受控验证](../work/local-cloud-integration/t07/mercury-verification.json)、[源码等价](../work/local-cloud-integration/t07/mercury-source-equivalence.json)、[Standards](../work/local-cloud-integration/reviews/t07-standards-79a7eff.md)、[Spec](../work/local-cloud-integration/reviews/t07-spec-24ee4d0.md)。同版最终整合、真实验证与用户验收仍为独立门槛。
 
 固定 postmerge 证据：[11 例最小验证](../work/local-cloud-integration/t07/mercury-postmerge-minimum.json)。
+
+- [ ] 剩余实际浏览器、获准的真实provider与用户本人验收按最终报告独立完成；不由受控结果自动勾选。
