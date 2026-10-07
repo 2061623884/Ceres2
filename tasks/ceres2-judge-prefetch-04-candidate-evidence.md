@@ -1,6 +1,6 @@
 # 04：同版集成与调用对照
 
-- 状态：进行中（2026-10-07：03 云端专项／核心审查已释放，独立冻结核心进入唯一全量验证）
+- 状态：进行中（2026-10-07：核心同版 558 backend 全量已通过；核心交接文档两轴无阻塞；独立 comparison 支持及其文档审查、外部验收仍开放）
 - 拆分：已批准；功能依赖保持 01 → 02 → 03 → 04
 - 执行授权：2026-10-07 用户已授权从 GitHub 基线重新 implement-spec／TDD／Agent Team 实施、可追溯提交及分支推送；前置功能与专职 Tester 门槛保留。
 - 负责人：集成者维护最终候选与文档；专职 Tester 使用独立工作树 `../worktrees/04-core-verification`、分支 `ceres2/judge-prefetch-04-core-20261007`；专职 Tester 执行所有验证命令，Standards／Spec 独立只读审查。共享文件按 [执行决定](../docs/REBUILD-DECISIONS.md#4-写入所有权与可并行支持项) 交接。
@@ -49,13 +49,21 @@
 
 ## 2026-10-07 最终核心冻结与范围拆分
 
-核心冻结提交 `d6a40886926bf203b53c52db27d2177b1b3dcb80`，tree `2fad3a1c8e74593dc19ee929211be0d35a323938`。独立 04 worktree 的全部 248 个源码文件及已验证 guard/harness 与最终 03 scoped 候选完全一致；03 的 152 项专项不是最终全量成绩。本票在该冻结核心上只运行一次完整 backend，最终结果待 Tester 实际交付。
+核心冻结提交 `d6a40886926bf203b53c52db27d2177b1b3dcb80`，tree `2fad3a1c8e74593dc19ee929211be0d35a323938`。独立 04 worktree 的全部 248 个源码文件及已验证 guard/harness 与最终 03 scoped 候选完全一致；03 的 152 项专项不是最终全量成绩。本票在该冻结核心上只运行一次完整 backend，现已 **558 passed**，738.36 秒 pytest／756.438 秒 capture；没有选择／排除。另有依赖精确核对、Pi typecheck/build 及 3 项 guard／isolation 通过；该 3 项中 backend isolation 与全量重叠，不能把所有阶段数字相加。
+
+[最终核心报告](../work/judge-prefetch-rebuild/04-core-verification.md)、[source/harness/build 审计](../work/judge-prefetch-rebuild/04-core-final-source.json)与[五次 capture 摘要](../work/judge-prefetch-rebuild/04-core-verification-history.json)固定精确范围。248 个源码文件及受测 harness 前后一致；全套 617 个 Node PID（581 个 Pi worker）均加载 guard，没有意外 block。五个 dist artifact 的 hash 首次在全量运行中记录、终态相同，不冒称为运行前 artifact hash。
 
 尚未接受的比较 runner／其测试草稿不进入此 worktree，防止 harness fingerprint 漂移。其后若只加入独立支持脚本／文档且不改变 app 或 harness runtime，另留精确 per-artifact hash 与受影响测试；不得宣称后来改变的支持代码早已在本次核心全量中执行，也不盲目重复未变 backend。最终支持项／文档仍需单独审查，真实采样／浏览器／本人验收保持开放。
 
+## 核心文档／证据审查闭合
+
+[Standards](../work/judge-prefetch-rebuild/reviews/standards-core-documentation.md)与[Spec](../work/judge-prefetch-rebuild/reviews/spec-core-docs-final.md)独立核对文档提交 `a1ef364813c327585716ba2628914ee53b2f7895`，均无核心文档／证据阻塞。其 pins 保留全部 248 源码与四个受测 harness hash、五次原始 capture/output 哈希及子进程审计的交叉核对；未接受 comparison 草稿明确排除。后继仅登记本节审查结果和报告链接，不改变核心技术内容。
+
+核心可独立发布可追踪 checkpoint；comparison 继续按独立 artifact 测试和审查完成，不能阻止已核实核心备份，也不能随核心声明已验收。真实 provider／浏览器及本人验收继续开放，04 整体状态仍为进行中。
+
 ## 下一步与证据
 
-前三票已完成云端专项与核心审查，当前执行上述冻结核心全量及独立支持／文档验证；真实比较前仍须注明模型／数据版本及已授权界限。当前 04 全阶段功能集成及真实模型比较尚未执行；前述有界传输与 01 受控结果单独保留，不以局部通过标记 04 验收。
+前三票已完成云端专项与核心审查，冻结核心全量已完成，继续独立支持／文档验证；真实比较前仍须注明模型／数据版本及已授权界限。当前 01–03 同版受控核心全量已完成；独立支持／文档审查和真实模型比较尚未闭合，不以核心通过标记 04 整体验收。
 
 ## 有界传输支持项（可提前准备，非新增业务票）
 

@@ -1,0 +1,14 @@
+{
+  "remote_commit": "70a9f8c68ff99de7eb9b062dc1262d287e48b26e",
+  "local_commit": "1170a2eec96454edcf46b18c1fd735ac67ddb2ca",
+  "tree": "a022f3abe73b00943a420c3ad3e1da19c38546ca",
+  "branch": "ceres2/judge-prefetch-rebuild-20261007",
+  "verified": true,
+  "phase": "03 core release;04 final gates pending",
+  "repository": "https://github.com/2061623884/Ceres2",
+  "remote_commit_url": "https://github.com/2061623884/Ceres2/commit/70a9f8c68ff99de7eb9b062dc1262d287e48b26e",
+  "verification_date_utc": "2026-10-07",
+  "verification_owner": "Main integration coordinator",
+  "evidence": "Authorized GitHub connector verified integration branch HEAD and exact tree equality to the committed 03 core checkpoint. Its 248 source hashes and stable harness equal repaired scoped verification and the dedicated immutable 04 core.",
+  "scope": "03 reviewed cloud scoped checkpoint: 152 focused cases include 34 reuse/safety cases; dependencies, Pi build/typecheck and guard proof pass. Final 04 whole-phase core, support/documentation and external acceptance remain separate pending gates. Not final four-ticket acceptance."
+}

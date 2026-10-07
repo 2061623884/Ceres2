@@ -1,0 +1,193 @@
+{
+  "note": "These five controlled core captures use one committed source/harness. Earlier01-03 failures and superseded passes remain in their separate immutable histories. Optional comparison CLI captures are separate and excluded.",
+  "runs": [
+    {
+      "label": "04-independent-offline-install",
+      "head": "d6a40886926bf203b53c52db27d2177b1b3dcb80",
+      "command": [
+        [
+          "uv",
+          "venv",
+          "--python",
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "backend/.venv"
+        ],
+        [
+          "uv",
+          "pip",
+          "install",
+          "--offline",
+          "--link-mode",
+          "copy",
+          "--python",
+          "backend/.venv/bin/python",
+          "--index-url",
+          "https://pypi.org/simple",
+          "-r",
+          "backend/requirements.lock"
+        ],
+        [
+          "npm",
+          "ci",
+          "--offline",
+          "--registry=https://registry.npmjs.org",
+          "--no-audit",
+          "--no-fund"
+        ]
+      ],
+      "cwd": null,
+      "exit_code": 0,
+      "elapsed_seconds": 3.604,
+      "pytest_summary": null,
+      "source_manifest_sha256": "7c86cf268f5f4d7055626d6db1e3970d23735bd313ed148f638ede0a02c4368f",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "b1fdfb5bce29ce56ace36e10614bd07dc1f13f803cbd252217553e282e194a29",
+      "output_sha256": "1b7fc0ee5df359b0c7d1baedb289ce1d1dce530917c449aaec9d1833e33d183a",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": []
+    },
+    {
+      "label": "04-final-dependencies",
+      "head": "d6a40886926bf203b53c52db27d2177b1b3dcb80",
+      "command": [
+        "bash",
+        "-c",
+        "uv pip check --python backend/.venv/bin/python && backend/.venv/bin/python -c 'from importlib.metadata import version; from pathlib import Path; pairs=[line.split(\"==\") for line in Path(\"backend/requirements.lock\").read_text().splitlines() if line and not line.startswith(\"#\")]; assert all(version(name)==expected for name,expected in pairs); print(f\"All {len(pairs)} locked Python versions match\")' && cd runtime/pi && npm ls --depth=0"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/04-core-verification",
+      "exit_code": 0,
+      "elapsed_seconds": 0.471,
+      "pytest_summary": null,
+      "source_manifest_sha256": "7c86cf268f5f4d7055626d6db1e3970d23735bd313ed148f638ede0a02c4368f",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "52d599b691072b8e1814d2570b44de12aa25af9d43fdbe93330adf362e567cae",
+      "output_sha256": "993137f25984d2906fd6bf38bd86cb90b972c54ccd29472833a687936953aebd",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "node_guard_launcher_sha256": "9ea92e467bfc75d83184ff6871c38507ccbfb01d66b9ee0181e39bb59d332dcd",
+      "node_guard_launcher_after_sha256": "9ea92e467bfc75d83184ff6871c38507ccbfb01d66b9ee0181e39bb59d332dcd",
+      "node_launches": 1,
+      "pi_worker_launches": 0,
+      "all_launched_pids_guard_loaded": true,
+      "guard_event_counts": {
+        "loaded": 1
+      }
+    },
+    {
+      "label": "04-final-pi-build",
+      "head": "d6a40886926bf203b53c52db27d2177b1b3dcb80",
+      "command": [
+        "bash",
+        "-c",
+        "npm run typecheck && npm run build"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/04-core-verification/runtime/pi",
+      "exit_code": 0,
+      "elapsed_seconds": 7.137,
+      "pytest_summary": null,
+      "source_manifest_sha256": "7c86cf268f5f4d7055626d6db1e3970d23735bd313ed148f638ede0a02c4368f",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "17577a797088d4b05f9a987e3a3a47e09b3804a054b64da087d955615406e177",
+      "output_sha256": "e2df98651515bc2bdf7ded57bfdb21a18a37cf1c97b5b8b2ffc76b2efce266d0",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "node_guard_launcher_sha256": "8e712b33db3e21c0396fad0faaf1d169e4aa4a715b958105239ffebce1ec9117",
+      "node_guard_launcher_after_sha256": "8e712b33db3e21c0396fad0faaf1d169e4aa4a715b958105239ffebce1ec9117",
+      "node_launches": 4,
+      "pi_worker_launches": 0,
+      "all_launched_pids_guard_loaded": true,
+      "guard_event_counts": {
+        "loaded": 4
+      }
+    },
+    {
+      "label": "04-final-guard-proof",
+      "head": "d6a40886926bf203b53c52db27d2177b1b3dcb80",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "../work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py",
+        "tests/test_controlled_test_isolation.py"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/04-core-verification/backend",
+      "exit_code": 0,
+      "elapsed_seconds": 5.566,
+      "pytest_summary": "3 passed in 4.13s",
+      "source_manifest_sha256": "7c86cf268f5f4d7055626d6db1e3970d23735bd313ed148f638ede0a02c4368f",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "0c18b4733da97719a179b7d2bb94b602729b1d57142d400e7183aa76ea3d287e",
+      "output_sha256": "f08958dc1d19342bde7797036193914f0262b2887b69dfd8130c1d701ea1372a",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "node_guard_launcher_sha256": "52001938db0705d56cf8ad2ef81c955725ec8be0ca5109f1c8b720eb09306bcc",
+      "node_guard_launcher_after_sha256": "52001938db0705d56cf8ad2ef81c955725ec8be0ca5109f1c8b720eb09306bcc",
+      "node_launches": 2,
+      "pi_worker_launches": 1,
+      "all_launched_pids_guard_loaded": true,
+      "guard_event_counts": {
+        "loaded": 3,
+        "blocked_non_loopback_socket": 3,
+        "blocked_dotenv_read": 1
+      }
+    },
+    {
+      "label": "04-final-backend-full",
+      "head": "d6a40886926bf203b53c52db27d2177b1b3dcb80",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/04-core-verification/backend",
+      "exit_code": 0,
+      "elapsed_seconds": 756.438,
+      "pytest_summary": "558 passed in 738.36s (0:12:18)",
+      "source_manifest_sha256": "7c86cf268f5f4d7055626d6db1e3970d23735bd313ed148f638ede0a02c4368f",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "6dce09d4ace08819ebd53eb9756bf9b4bde6cdeccc1683d67436d30569c2fcaa",
+      "output_sha256": "f2accd08d37ecc322d15824619ddbda068c9723a3883c113a8dad65270fdb86b",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "node_guard_launcher_sha256": "08fa4638d5ec2444ad18b6eaf4db414bf7707b09ace5783c576120d88019fdf3",
+      "node_guard_launcher_after_sha256": "08fa4638d5ec2444ad18b6eaf4db414bf7707b09ace5783c576120d88019fdf3",
+      "node_launches": 617,
+      "pi_worker_launches": 581,
+      "all_launched_pids_guard_loaded": true,
+      "guard_event_counts": {
+        "loaded": 617
+      }
+    }
+  ]
+}

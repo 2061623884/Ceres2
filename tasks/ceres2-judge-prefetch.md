@@ -1,6 +1,6 @@
 # 可可角色判断与政策预检索：总 TASK
 
-- 状态：进行中（01–03 云端专项／核心审查已释放；04 冻结核心全量与支持／文档门槛进行中，外部验收开放）
+- 状态：进行中（01–03 核心与 04 同版 558 backend 已通过；核心文档两轴无阻塞，comparison 支持／独立文档和外部验收仍开放）
 - 拆分：已批准；功能依赖保持 01 → 02 → 03 → 04
 - 执行授权：2026-10-07 用户已批准从真实 GitHub 基线重新 implement-spec／TDD／Agent Team 实施、可追溯提交与分支推送。前端由用户本地处理；详见 [执行决定](../docs/REBUILD-DECISIONS.md)。
 - 负责人：主会话维护状态、权限与集成候选；各票唯一实现者按交接绑定，专职 Tester 独占验证，集成者独占提交／合并。
@@ -55,9 +55,11 @@
 
 ## 2026-10-07 03 云端专项与 04 核心冻结
 
+03 核心已核实发布为远端 `70a9f8c68ff99de7eb9b062dc1262d287e48b26e`，对应本地 `1170a2eec96454edcf46b18c1fd735ac67ddb2ca`，精确 tree 均为 `a022f3abe73b00943a420c3ad3e1da19c38546ca`；[映射](../work/judge-prefetch/publication-query-reuse-core.json)。这是后续集成发布基底，04 冻结运行不随文档提交移动。
+
 03 产品提交 `35a30fab775764cfcbc01ee84599fb450b6411bd` 已合并为 `d6a40886926bf203b53c52db27d2177b1b3dcb80`。248 个 source hash 与稳定 harness 通过修复后 **152 项专项**（含重叠的 34 复用／安全用例）、依赖、Pi build/typecheck 与 guard proof；[报告](../work/judge-prefetch-rebuild/03-query-reuse-verification.md)和[源码映射](../work/judge-prefetch-rebuild/03-query-reuse-final-source.json)。核心两轴复审闭合 bounded-event accounting P2，独立 runtime_summary 不把丢失字段或尾部事件当完整计数。
 
-04 使用独立 `../worktrees/04-core-verification`，固定上述 merge／tree `2fad3a1c8e74593dc19ee929211be0d35a323938` 进行一次最终全量；没有重复完整 03 backend。未接受比较 runner 草稿排除，后来支持-only 产物按独立精确 hash／测试范围记录。真实模型、前端／浏览器及本人验收不提前释放。
+04 使用独立 `../worktrees/04-core-verification`，固定上述 merge／tree `2fad3a1c8e74593dc19ee929211be0d35a323938` 已完成一次最终全量 **558 passed**；没有重复完整 03 backend。依赖、Pi build/typecheck 与 3 项 guard／isolation 通过，详见[最终核心报告](../work/judge-prefetch-rebuild/04-core-verification.md)及[source/harness/build 审计](../work/judge-prefetch-rebuild/04-core-final-source.json)。未接受比较 runner 草稿排除，后来支持-only 产物按独立精确 hash／测试范围记录。真实模型、前端／浏览器及本人验收不提前释放。
 
 ## 当前局部支持证据
 
@@ -69,10 +71,12 @@
 
 隔离修复／交接文档 checkpoint 已发布并核实：远端 `99bdcc03de6cd26a70f31d2a16cc77b94e12d0f9` 对应本地 `d9981f3ad0a46b684144e9f3769090a0c24e5994`，精确 tree 均为 `47af6713701ebf40f7d6a6e7be390db48f42e041`；[发布映射](../work/judge-prefetch/publication-node-guard-docs.json)。244 个已释放 01 产品／测试源码未变，02 最终发布使用此集成 checkpoint 为远端基底，随后已推进到上节 02 发布；不使用独立 WIP 分支代替集成或验收。
 
+[核心文档 Standards](../work/judge-prefetch-rebuild/reviews/standards-core-documentation.md)及[Spec](../work/judge-prefetch-rebuild/reviews/spec-core-docs-final.md)已对 `a1ef364813c327585716ba2628914ee53b2f7895` 独立审查，无核心文档／证据阻塞；后继只登记结果／链接。Comparison 草稿仍排除，保持独立支持审查和外部验收边界。
+
 ## 总体验收与证据
 
 各票全部验收项、同候选安全回归、独立 Standards／Spec 审查及真实调用对照分别记录。受控测试、真实模型、真实浏览器、本人验收分层；未满足者保留待验收或阻塞。性能无未经确认的阈值，未知用量不填零。旧阶段未闭合证据仍由[原总 TASK](ceres2-next-experience.md)维护，不借本任务宣称解决。
 
 ## 阻塞／下一步
 
-04 从已审查 01–03 的独立冻结核心完成唯一全量及支持／文档门槛。官方 DeepSeek thinking 是 04 记录的有界传输支持项，可提前准备但不释放 04 功能验收。真实 provider 采样须先核实配置及有限额度；前端由用户本地接手。各里程碑在本地 commit、授权分支发布、远端完整 SHA 读取与精确 tree 一致性核实后发布；GitHub connector 生成不同提交 SHA 时保留本地／远端 SHA 的持久映射回执，01–03 云端专项／核心结论如上；04 全量、支持／文档与外部门槛需各自同版证据。
+04 冻结核心唯一全量已完成，继续收敛独立 comparison 支持与最终文档审查；外部层仍由明确授权和用户本地验收闭合。官方 DeepSeek thinking 是 04 记录的有界传输支持项，可提前准备但不释放 04 功能验收。真实 provider 采样须先核实配置及有限额度；前端由用户本地接手。各里程碑在本地 commit、授权分支发布、远端完整 SHA 读取与精确 tree 一致性核实后发布；GitHub connector 生成不同提交 SHA 时保留本地／远端 SHA 的持久映射回执，01–03 云端专项／核心结论如上；04 全量、支持／文档与外部门槛需各自同版证据。

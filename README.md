@@ -18,8 +18,8 @@ Ceres2 是一个面向商超购物场景的 AI 应用原型：帮助用户把“
 - **角色入口**：只有可可新自由文本进行一次是否转墨墨的入口判断；yes 等用户确认切换，no／uncertain／timeout／error 保留原文继续可可。墨墨文字和结构化按钮不新增角色或政策 Kev；返回购物只靠明确按钮，不自动续接旧购物授权。
 - **同一 Pi 与政策证据**：留在可可的文字使用独立政策判断，yes 按完整原文预取现有静态规则并提供真实引用、来源、版本和状态。首次 Pi 理解保留相关任务、问题与引用，不再依赖四能力标签；后续由 guide_request 控制相关上下文。
 - **事实与完整请求**：政策不是具体订单资格或提交授权；购物、澄清、普通解释、历史／记忆结果与政策及职责边界可同时保留。未匹配、部分和错误分别投影；Python 保留当前请求、取消、deadline 与事务保护。
-- **请求内复用／多引用**：03 已完成精确 scope/query/category/版本复用、有效早期引用及多范围宿主输出，并通过 152 项专项（含重叠 34 复用／安全用例）和核心两轴复审；[03 TASK](tasks/ceres2-judge-prefetch-03-query-reuse.md)保留精确候选。固定 runtime_summary 独立于 256-event 诊断尾部；硬错误缺值仍为未知。04 的同版全量与支持／文档门槛进行中，不把 scoped 通过当成全阶段验收。
-- **验证层级**：01 的 480 backend、02 的 524 backend 分别对应各自冻结版本；02 内含 44 政策专项，不与全套相加。当前已核实 02 远端为 `e434e1b5419dfadec9db65dea13b63974a9d701e`，详见[发布映射](work/judge-prefetch/publication-policy-evidence-final.json)和[02 报告](work/judge-prefetch-rebuild/02-policy-evidence-verification.md)。真实 provider、前端／浏览器和用户本人验收仍开放。
+- **请求内复用／多引用**：03 已完成精确 scope/query/category/版本复用、有效早期引用及多范围宿主输出，并通过 152 项专项（含重叠 34 复用／安全用例）和核心两轴复审；[03 TASK](tasks/ceres2-judge-prefetch-03-query-reuse.md)保留精确候选。固定 runtime_summary 独立于 256-event 诊断尾部；硬错误缺值仍为未知。04 的同版核心全量现已通过；核心文档／证据两轴审查无阻塞；独立 comparison 支持及其文档审查和外部层仍未闭合，不能称四票整体已验收。
+- **当前受控核心**：冻结提交 `d6a40886926bf203b53c52db27d2177b1b3dcb80` 的 **558 backend** 全量通过，248 个源码 hash 与最终核心审查／专项一致；依赖、Pi typecheck/build 与 guard／isolation 同版通过，见[04 核心报告](work/judge-prefetch-rebuild/04-core-verification.md)。01 的 480、02 的 524、03 的 152 各保留适用版本，重叠数字不相加。最新已核实 03 核心远端为 `70a9f8c68ff99de7eb9b062dc1262d287e48b26e`，详见[03 发布映射](work/judge-prefetch/publication-query-reuse-core.json)及[03 scoped 报告](work/judge-prefetch-rebuild/03-query-reuse-verification.md)；后续 04 全量按源码等价映射到该核心；独立支持／文档不由该 checkpoint 自动完成。真实 provider、前端／浏览器和用户本人验收仍开放。
 
 ## 历史体验更新（2026-10-06）
 
@@ -36,9 +36,11 @@ Ceres2 是一个面向商超购物场景的 AI 应用原型：帮助用户把“
 ## 从哪里开始
 
 - **审查当前四票**：[总 TASK](tasks/ceres2-judge-prefetch.md) → [规格](docs/plans/ceres2-judge-prefetch-spec.md)／[执行决定](docs/REBUILD-DECISIONS.md) → 单票合同、冻结源码和独立审查。
-- **核对当前证据**：[01 报告](work/judge-prefetch-rebuild/01-role-entry-verification.md)、[02 报告](work/judge-prefetch-rebuild/02-policy-evidence-verification.md)及各自源码／发布映射；后续门槛以总 TASK 的实际候选为准。[Node 隔离更正](work/judge-prefetch-rebuild/node-guard-correction.md)保留早期限制与新证明。
+- **核对当前证据**：[01 报告](work/judge-prefetch-rebuild/01-role-entry-verification.md)、[02 报告](work/judge-prefetch-rebuild/02-policy-evidence-verification.md)、[03 报告](work/judge-prefetch-rebuild/03-query-reuse-verification.md)、[04 核心报告](work/judge-prefetch-rebuild/04-core-verification.md)及各自源码／发布映射；后续门槛以总 TASK 的实际候选为准。[Node 隔离更正](work/judge-prefetch-rebuild/node-guard-correction.md)保留早期限制与新证明。
 - **本地运行或接手**：以[当前接手指南](docs/JUDGE-PREFETCH-HANDOFF.md)为入口，先核对准确分支／SHA并保护本地未提交修改；旧十票／Ubuntu 指南仅作历史背景，不沿用旧模型、商品数、41 live 或 426／37 成绩。
 - **了解产品与来源**：[PROJECT](PROJECT.md)、[产品定义](prd.md)、[参考项目与采用边界](docs/REFERENCES.md)。[原 16 票索引](tasks/ceres2-upgrade.md)保留原阶段范围与历史证据。
+
+核心 README／TASK／交接与证据已通过[文档 Standards](work/judge-prefetch-rebuild/reviews/standards-core-documentation.md)和[文档 Spec](work/judge-prefetch-rebuild/reviews/spec-core-docs-final.md)独立审查；comparison 草稿不在该范围内。
 
 部分历史／中间证据仅保留在云端，未随公开仓库发布。当前公开依据是单票已提交的 curated 报告、source manifest、执行摘要、两轴审查与精确发布映射；原始日志／临时数据库不保证可从公开 checkout 取得，不能把失效的历史链接当作新版本证据。
 
@@ -66,7 +68,7 @@ Pi 和 LangGraph 是采用的外部运行框架。Ceres2 的工程重点在于�
 
 ## 项目规划
 
-### 第一阶段：建立完整、可验证的模拟购物生命周期
+### 既有基础阶段：完整模拟购物生命周期
 
 第一阶段按 16 个纵向任务组织，每项同时考虑必要的数据、业务服务、API、页面与验证，而不是先搭建一个通用 Agent 平台。
 
@@ -78,7 +80,7 @@ Pi 和 LangGraph 是采用的外部运行框架。Ceres2 的工程重点在于�
 | 订单与售后 | 12–15 | 持久模拟订单、同用户订单贯通、具体确认与售后回执、异步人工工单 |
 | 集成与验收 | 16 | 同版完整生命周期、恢复与异常验证、真实模型和页面体验、用户本人验收 |
 
-任务依赖、负责人、验收条件和证据统一放在 [tasks/](tasks/ceres2-upgrade.md)，本页只提供规划概览。
+原 16 票的依赖、负责人和证据保留在[基础阶段总 TASK](tasks/ceres2-upgrade.md)；当前四票实时状态以[角色／政策总 TASK](tasks/ceres2-judge-prefetch.md)为准，本页不另维护一套进度。
 
 ### 第二阶段与暂不纳入的范围
 
@@ -86,7 +88,7 @@ Pi 和 LangGraph 是采用的外部运行框架。Ceres2 的工程重点在于�
 
 回复后自动记忆提取和低频 Dream 已属于第一阶段，不能与未来的后台购物监测混为一谈。独立记忆管理页面、任意购物车的自动任务识别与补齐等仍属延期或待讨论范围，并未全部承诺在第二阶段实现。
 
-当前也不做真实支付／退款与履约、自动整餐或营养规划、实时人工接管、完整客服运营平台、分布式调度或全量 TypeScript 重写。完整范围以 [PROJECT](PROJECT.md) 和 [实施规格](docs/plans/ceres2-proactive-upgrade-spec.md) 为准。
+当前也不做真实支付／退款与履约、自动整餐或营养规划、实时人工接管、完整客服运营平台、分布式调度或全量 TypeScript 重写。长期产品范围以 [PROJECT](PROJECT.md) 和[基础阶段规格](docs/plans/ceres2-proactive-upgrade-spec.md)为准；当前四票实施边界另由[角色／政策规格](docs/plans/ceres2-judge-prefetch-spec.md)及[执行决定](docs/REBUILD-DECISIONS.md)固定。
 
 ## 历史进展与仍开放的体验限制（2026-10-06）
 
