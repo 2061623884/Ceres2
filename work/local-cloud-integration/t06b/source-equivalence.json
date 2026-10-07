@@ -1,0 +1,7 @@
+{
+  "delivery_pin": "0e74a8210371bc00960a2c06b5046ea94b18689f",
+  "merge_pin": "b9138afa4b96ebf5e1fcffdbab24913faffd5dc4",
+  "conflicts": false,
+  "product_directory_diff": [],
+  "meaning": "Git source equivalence; new fixed postmerge check requested separately"
+}

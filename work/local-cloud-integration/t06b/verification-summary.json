@@ -1,0 +1,62 @@
+[
+  {
+    "label": "t06b-graph-native-interim-green",
+    "head": "f53e7a849e17adf2d27d73bbf6f6f1c5ed433351",
+    "command": [
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_integration_graph_runtime_public.py",
+      "tests/test_integration_native_finish_public.py",
+      "tests/test_integration_reviewed_interim_public.py",
+      "-q",
+      "-p",
+      "pytest_asyncio.plugin"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-t06b-f53e7a8/backend",
+    "exit_code": 0,
+    "elapsed_seconds": 63.312,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "9093fbff0e08c170b4cd74cbb2a4fa1170b0a7c44efc900a282f2e6af47b086d",
+    "output_tail": "......................................                                   [100%]\n38 passed in 61.78s (0:01:01)\n"
+  },
+  {
+    "label": "t06b-current-offer-interim-deadline-green",
+    "head": "0e74a8210371bc00960a2c06b5046ea94b18689f",
+    "command": [
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_integration_graph_runtime_public.py::test_graph_facts_reread_current_offer_and_audited_interim",
+      "tests/test_integration_graph_runtime_public.py::test_graph_summary_survives_bounded_event_tail",
+      "tests/test_integration_graph_runtime_public.py::test_graph_lookup_uses_original_run_deadline_and_never_publishes_late_facts",
+      "-q",
+      "-p",
+      "pytest_asyncio.plugin"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T06-runtime/backend",
+    "exit_code": 0,
+    "elapsed_seconds": 22.995,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "9b0fce64fe7f132deabd807292ef04ec5d0868c616262923ddf93901705cd4ce",
+    "output_tail": "....                                                                     [100%]\n4 passed in 21.86s\n"
+  },
+  {
+    "label": "t06b-successor-build",
+    "head": "0e74a8210371bc00960a2c06b5046ea94b18689f",
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T06-runtime/runtime/pi",
+    "exit_code": 0,
+    "elapsed_seconds": 6.121,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "125d94d3fa8a89bf28fef39c308ca9998b1d1f7691f8ace19510897336cb2d17",
+    "output_tail": "\n> ceres2-pi-runtime@0.1.0 build\n> tsc\n\n"
+  }
+]

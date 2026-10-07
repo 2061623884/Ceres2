@@ -59,6 +59,8 @@ class PiProductRuntime:
         self.products: dict[str, dict[str, Any]] = {}
         self.proposals = {}
         self.dishes = {}
+        self.dish_graph_refs = {}
+        self.graph_results = {}
         self.dishes_searched = False
         self.events: list[dict[str, Any]] = []
         self.runtime_summary = {
@@ -66,6 +68,8 @@ class PiProductRuntime:
             'policy_lookup_outcomes': {'success': 0, 'empty': 0, 'error': 0},
             'policy_reuses': 0, 'tool_starts': 0, 'primary_pi_turns': 0,
             'policy_judgment': None, 'events_truncated': False,
+            'graph_tool_attempts': 0, 'graph_official_calls': 0, 'graph_provider_calls': 0,
+            'graph_embedding_calls': 0, 'graph_queries': [],
             'interim_audit_attempts': 0, 'interim_messages': 0, 'interim_audits': [],
         }
         self.tool_rounds = 0
@@ -75,7 +79,18 @@ class PiProductRuntime:
     def _record_event(self, event):
         # Fixed observed counts survive the bounded diagnostic tail. SDK turns
         # are primary Pi turns, not provider HTTP calls, tokens or cost.
-        if event['type'] == 'interim_audit_start':
+        if event['type'] == 'graph_query_start':
+            self.runtime_summary['graph_tool_attempts'] += 1
+            self.runtime_summary['graph_queries'].append({**event, 'outcome': None})
+        elif event['type'] == 'graph_query_end':
+            query = next(row for row in self.runtime_summary['graph_queries'] if row['attempt_id'] == event['attempt_id'])
+            query.update(event)
+            for total, field in (('graph_official_calls', 'official_graph_calls'),
+                                 ('graph_provider_calls', 'provider_calls'), ('graph_embedding_calls', 'embedding_calls')):
+                observed = event[field]
+                self.runtime_summary[total] = (self.runtime_summary[total] + observed
+                    if self.runtime_summary[total] is not None and observed is not None else None)
+        elif event['type'] == 'interim_audit_start':
             self.runtime_summary['interim_audit_attempts'] += 1
             self.runtime_summary['interim_audits'].append({**event, 'approved': None, 'outcome': None, 'diagnostic': None, 'duration_ms': None, 'usage': None, 'cost': None})
         elif event['type'] == 'interim_audit_end':
@@ -156,19 +171,35 @@ class PiProductRuntime:
                 self.products[ref] = {**product, 'ref':ref}
             self.comparison_refs = set(self.products)
             return {'products':list(self.products.values()), 'total':total, 'is_demo':True}
-        if name == 'search_dishes':
+        if name in ('search_dishes', 'search_recipe_relations'):
             if self.activity_active():
                 raise AppError(422, 'ACTIVITY_SCOPE_CONFLICT', '当前活动只选购成品；如需菜谱食材，请明确开始新的购买目标。')
-            self.dishes_searched = True
             from app.services.dish_service import DishService
             service = DishService(self.catalog)
+            graph = None
+            if name == 'search_recipe_relations':
+                matches, graph, error = self._graph_lookup(service, arguments)
+                if error is not None:
+                    self.dishes_searched = self.searched = True
+                    return {'outcome': 'error', 'error': error, 'dishes': [], 'is_demo': True,
+                            'message': '图查询未能完成，图关系状态未知；不能据此判断不存在相关菜谱或关系。'}
+            else:
+                matches = service.search(arguments['query'])
+            self.dishes_searched = True
             rows = []
-            for dish in service.search(arguments['query'])[:5]:
+            for dish in matches[:5]:
                 ref = f'dish-{uuid4().hex}'
                 self.dishes[ref] = dish
+                if graph is not None:
+                    self.dish_graph_refs[ref] = graph['graph_query_id']
                 rows.append({**dish, 'ref':ref, 'candidates':service.candidates(dish)})
             self.searched = True
-            return {'dishes':rows, 'is_demo':True}
+            if graph is None:
+                return {'dishes':rows, 'is_demo':True}
+            return {'dishes': rows, 'is_demo': True, 'outcome': 'success' if rows else 'empty',
+                    'graph_evidence': {key: graph[key] for key in ('graph_query_id', 'method', 'selection',
+                        'model_selected_entity_ids', 'canonical_scope', 'canonical_facts', 'ingredient_recipes',
+                        'graph_index_revision', 'query_revision')}}
         if name == 'propose_dish':
             if self.activity_active():
                 raise AppError(422, 'ACTIVITY_SCOPE_CONFLICT', '当前活动只选购成品；如需菜谱食材，请明确开始新的购买目标。')
@@ -208,6 +239,68 @@ class PiProductRuntime:
             self.products[ref] = {**product, 'ref': ref}
             return {'product': self.products[ref], 'is_demo': True}
         raise AppError(422, 'PI_TOOL_FORBIDDEN', '本次运行仅允许查询商品')
+
+    def _graph_lookup(self, service, arguments):
+        from app.services.knowledge_service import check_budget
+        from app.services.guide_run_service import safe_failure_diagnostic
+        query, method = arguments['query'], arguments.get('method', 'local')
+        attempt_id, started = f'graph-attempt-{uuid4().hex}', time.monotonic()
+        self._record_event({'type': 'graph_query_start', 'run_id': self.run_id,
+                            'attempt_id': attempt_id, 'query': query, 'method': method})
+        error, graph, matches = None, {}, []
+        try:
+            matches, graph = service.graph_search(query, method=method)
+            self.assert_current()
+            check_budget(self.catalog.deadline, self.catalog.should_stop)
+        except AppError as exc:
+            # Graph errors can coexist with other successful facts; expiry/stop is
+            # still checked by the owning Pi loop before sending a tool result.
+            if exc.detail['error']['code'] not in ('GRAPH_INDEX_MISSING', 'GRAPH_UNAVAILABLE',
+                    'KNOWLEDGE_UNAVAILABLE', 'KNOWLEDGE_STALE', 'KNOWLEDGE_TIMEOUT', 'KNOWLEDGE_CANCELLED'):
+                raise
+            LOGGER.warning('Graph lookup failed run_id=%s attempt_id=%s causes=%s',
+                           self.run_id, attempt_id, safe_failure_diagnostic(exc))
+            graph = exc.detail.get('graph_observation', {})
+            error = exc.detail['error']['code']
+        counts = graph.get('call_counts')
+        outcome = 'error' if error else 'success' if matches else 'empty'
+        self._record_event({'type': 'graph_query_end', 'run_id': self.run_id,
+            'attempt_id': attempt_id, 'query': query, 'method': method, 'outcome': outcome, 'error': error,
+            'graph_query_id': graph.get('graph_query_id'), 'graph_status': graph.get('graph_status', 'unobserved'),
+            'official_graph_calls': graph.get('official_graph_calls'),
+            'provider_calls': counts['completion'] if counts is not None else None,
+            'embedding_calls': counts['embedding'] if counts is not None else None,
+            'calls': graph.get('calls'), 'calls_truncated': graph.get('calls_truncated'),
+            'manifest': graph.get('manifest'), 'graph_index_revision': graph.get('graph_index_revision'),
+            'query_revision': graph.get('query_revision'), 'selection': graph.get('selection'),
+            'model_selected_entity_ids': graph.get('model_selected_entity_ids'),
+            'canonical_scope': graph.get('canonical_scope'),
+            'canonical_entity_ids': [row['id'] for row in graph['canonical_facts']] if not error else None,
+            'recipe_ids': [dish['dish_id'] for dish in matches] if not error else None,
+            'duration_ms': graph.get('duration_ms'), 'elapsed_ms': (time.monotonic()-started)*1000})
+        if not error:
+            self.graph_results[graph['graph_query_id']] = graph
+        return matches, graph, error
+
+    def _graph_message(self, answer):
+        latest = {}
+        for query in self.runtime_summary['graph_queries']:
+            latest[(query['query'], query['method'])] = query
+        lines = []
+        for query in latest.values():
+            if query['outcome'] == 'error':
+                lines.append('图查询未能完成，图关系状态未知；不能据此判断不存在相关菜谱或食材关系。')
+            elif query['outcome'] == 'empty':
+                lines.append('图查询未取得可核对的相关菜谱；不能据此判断不存在相关菜谱或食材关系。')
+        identities = dict.fromkeys(self.dish_graph_refs[ref] for ref in answer.get('dish_refs', []) if ref in self.dish_graph_refs)
+        for identity in identities:
+            graph = self.graph_results[identity]
+            scope = '检索社区规范事实视图' if graph['canonical_scope'] == 'retrieved_communities' else '模型选择对应的规范事实视图'
+            lines.append(f"图查询来源：{graph['method'].title()}；模型选中 {len(graph['selection']['entity_numbers'])} 个实体，"
+                         f"宿主提供{scope}（{len(graph['canonical_facts'])} 个实体），二者分别记录。"
+                         f"图版本 {graph['manifest']['graph_revision']}；展示用量来自当前规范菜谱，商品价格和库存另从当前 Offer 核对。"
+                         '图关系不证明过敏安全、营养或替代，也不授权采购。')
+        return '\n'.join(dict.fromkeys(lines))
 
     def _query_policy(self, query, category, *, origin):
         from app.mercury.policy import search_policies, source_snapshot
@@ -516,6 +609,9 @@ class PiProductRuntime:
         if (set(answer) & reference_fields) - applicable:
             raise AppError(422, 'PI_UNKNOWN_REFERENCE', '回复含有不适用于当前主结果的引用字段')
         outcome = self._answer_value(answer)
+        graph_message = self._graph_message(answer)
+        if graph_message:
+            outcome['graph_message'] = graph_message
         # Every successful primary result may carry independently acquired
         # policy facts, including a clarification or an explicit memory result.
         has_policy_refs = 'policy_ref' in answer or 'policy_refs' in answer
@@ -619,7 +715,7 @@ class PiProductRuntime:
                 raise AppError(422, 'PI_EVIDENCE_MISSING', '请先查询真实菜谱')
             dishes = [self.dishes[ref] for ref in dict.fromkeys(refs)][:5]
             candidates = [{'dish_id': dish['dish_id'], 'name': dish['name']} for dish in dishes]
-            lines = ['可以考虑以下菜品，请选一道后再准备采购清单：'] if dishes else ['已查询到菜谱，但本次没有选定展示结果。' if self.dishes else '本次没有查到匹配菜谱。']
+            lines = ['可以考虑以下菜品，请选一道后再准备采购清单：'] if dishes else ['已查询到菜谱，但本次没有选定展示结果。' if self.dishes else ('尚未取得可展示的规范菜谱引用。' if self.runtime_summary['graph_tool_attempts'] else '本次没有查到匹配菜谱。')]
             lines.extend(f"{index + 1}. {dish['name']}" for index, dish in enumerate(dishes))
             if dishes:
                 lines.append('尚未选定或加购；食材供给会在准备清单时核对，价格和库存为模拟数据。')

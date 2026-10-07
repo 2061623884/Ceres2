@@ -281,7 +281,7 @@ class PiProductTurnService:
             cards = ComparisonService(db, self.owner_id, deadline=deadline, should_stop=should_stop).publish(session_id, outcome['products'], assistant_id, body.get('view_context')) if status == 'completed' and outcome.get('comparison') else []
             ordinary_kind = 'general' if outcome.get('answer_kind') == 'general_explanation' else 'text'
             message_units = [(content, ordinary_kind) for content in outcome.get('messages', [outcome['message']])]
-            for field in ('policy_message', 'role_boundary_message'):
+            for field in ('graph_message', 'policy_message', 'role_boundary_message'):
                 if outcome.get(field):
                     message_units.append((outcome[field], 'text'))
             public_messages = [{'message_id': assistant_id if index == 0 else f'msg-{uuid4().hex}', 'content': content} for index, (content, _kind) in enumerate(message_units)]

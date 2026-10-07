@@ -1,6 +1,6 @@
 # T08：统一评测事件与运行版本
 
-- 状态：待开始
+- 状态：进行中（A已技术放行；B接管runtime实施中，整票仍等T05）
 - 负责人：evaluation/runtime owner (T06→T08 交接)；主会话绑定实际 worker/worktree 后方可写入
 - 规格：[本轮规格](../docs/plans/ceres2-local-cloud-integration-spec.md)
 - 总任务：[集成 TASK](ceres2-local-cloud-integration.md)
@@ -20,4 +20,26 @@ policy judgment/lookup/reuse/summary、model usage、retrieval、graph retrieval
 
 ## 当前阻塞、下一步、证据
 
-尚未实现；等待上列依赖交付。本票是可独立演示/验证的业务切片，不允许只搬文件并宣称完成。Tester 和两轴审查证据由主会话在收到后登记；历史来源报告不能代替本票结果。
+主会话批准按下述A/B阶段细化工程依赖，A阶段先实施；整票依赖未提前解除。本票是可独立演示/验证的业务切片，不允许只搬文件并宣称完成。Tester 和两轴审查证据由主会话在收到后登记；历史来源报告不能代替本票结果。
+
+
+## 同票工程依赖细化：A 导出/标注，B 运行时采集
+
+T08-A 可在当前既有 runtime_summary/receipt/event/message 合同上独立实施，由 prepare_evaluation_integration 唯一维护新增 backend/app/evaluation/__init__.py、export_runs.py、annotate_runs.py，以及独立新增 tests/test_integration_evaluation_export.py、tests/test_integration_evaluation_annotations.py。这是已有 incoming CLI入口的选择性移植和修复，不新增生产HTTP路由/权限，也不改变已有业务数据。
+
+A阶段覆盖显式owner过滤及精确run/request/session join、重复capture/annotation拒绝、人工标签null/显式赋值、读取持久化summary与独立详细tail、缺失时间/usage/runtime_version保持unknown、export_source_snapshot仅说明导出时源码。不得从tail补造完整计数，不从当前checkout倒填运行版本，不猜最近navigation关联；未具备运行采集证据的字段保持未知。只用合成测试库和固定JSONL验证；禁止读取真实运行库或导出用户原始数据。
+
+禁止并写：runtime/、pi_product_runtime.py、pi_product_turn_service.py、Guide入口/schema、graph/knowledge、conftest.py、DB/model/migration、frontend。若A阶段确需共享接口调整，先协调唯一owner，不提前接管。仅新evaluation模块和独立测试，不能修改别人的冻结source。
+
+T08-B仍严格等T06-B交回Pi/runtime，再补完整provider call identity/usage去重、完整summary与运行时版本采集，必要的Guide/DB变更需逐文件授权。T08整票仍依赖T05/T06/T07，A完成不解除T09、也不代替同版组合验证或两轴最终验收。
+
+T06在canonical `b9138af` 固定postmerge12例及runtime build稳定通过，T08-B正式取得Pi/runtime/Prompt所有权；T06 owner停止写入。Guide入口/schema、shared conftest、DB/model/migration若需修改仍先逐文件确认。A候选`cb412db`独立审核，B以当前canonical为基继承A后同版验证。
+
+
+## A 技术合入及 B 写入顺序
+
+`cb412db` 11例GREEN无漂移、两轴clear后无冲突合入 `a60b6b5`；evaluation三模块及两份测试与受测pin相同。固定postmerge已交Tester；B的写入必须等该检查完成与Merger最终base交接，不能只因T06已交回runtime而提前写入。
+
+A只接受当前policy/interim summary、owner过滤/精确join/显式人工标签/unknown及独立导出源码快照。B的新graph/provider summary schema投影和运行版本采集仍需独立实现/测试/复审。T05同版最终整合依赖保留。[验证](../work/local-cloud-integration/t08a/verification-summary.json)、[源码](../work/local-cloud-integration/t08a/source-equivalence.json)。
+
+固定detached `a60b6b5` 导出/标注postmerge11例/3.73s通过、源码/harness无漂移。A技术门槛关闭，B正式接管runtime/Prompt及evaluation投影；此CLI-only检查未重新执行runtime，不替代B整合验证。[postmerge](../work/local-cloud-integration/t08a/postmerge-minimum.json)。

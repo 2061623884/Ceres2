@@ -12,3 +12,5 @@ This is the independent cloud integration checkout, not the user's desktop or or
 - Source models and settings stay unchanged. All new official DeepSeek paths must preserve thinking disabled for exact official host only. Approved budget is 15 seconds total / 5 tool rounds; actual baseline Guide API was 30 seconds, so T01 must implement and verify 30→15 (Mercury already uses 15).
 - Product worker ownership is per file and worktree. Only the Merger writes the integration branch; review fixes return to one designated implementer. Read `git status --short` and exact HEAD before resuming, never assume a previous checkout is clean.
 - All tests/install/build belong to the independent Tester. Historical reports do not verify this integration. Final reviews compare `37c98400e7152b89e4a58f02fff3bceaa73b0eac...HEAD` and preserve missing evidence.
+
+Current coordination handles: `resume_integration_merger` is the sole canonical Merger; `resume_integration_tester` is the sole Tester. Deliver to these active handles and the root coordinator. Old bootstrap names are historical only; do not wake duplicate role owners.

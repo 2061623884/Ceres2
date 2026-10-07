@@ -1,6 +1,6 @@
 # T06：显式 GraphRAG 与规范菜谱事实
 
-- 状态：进行中（A已技术合入；T04已放行，B阶段接管Pi/runtime）
+- 状态：待验收（A/B技术门槛已合入且固定postmerge通过；真实图LLM/最终本人验收开放）
 - 负责人：knowledge/runtime owner (T04→T06 交接)；主会话绑定实际 worker/worktree 后方可写入
 - 规格：[本轮规格](../docs/plans/ceres2-local-cloud-integration-spec.md)
 - 总任务：[集成 TASK](ceres2-local-cloud-integration.md)
@@ -49,3 +49,14 @@ Tester 各固定 pin：`2ad494c` 官方库受控41例，`26028b3` CLI诊断增�
 最终测试-only审查与source binding已保存；fresh索引副本植入旧源码hash证明stale拒绝，不声称旧历史索引实际成功。[固定postmerge](../work/local-cloud-integration/t06a/postmerge-minimum.json)、[最终绑定](../work/local-cloud-integration/t06a/final-source-binding.json)。
 
 T04已在canonical `e0f57cd` 通过37例共存postmerge与runtime build；T06-B正式接管runtime/Prompt/Pi协议与独立tests。frontend归T05，不并写；shared conftest/DB/schema变更仍须逐文件协调。B候选完成后同版验证、两轴审查及整票验收仍必须独立完成。
+
+恢复检查：T06-B固定 `0e74a8210371bc00960a2c06b5046ea94b18689f` 工作树干净，Spec报告已恢复；同pin深测4例/21.86s及install/build终态GREEN，无源码/harness漂移。此前`f53e7a8`的38例成绩独立保留，不与4例相加冒充全量。Standards复核后无阻断，见下文技术合入；整票技术放行仍等待固定postmerge。
+
+
+## T06-B 技术合入
+
+`0e74a82` 两轴均clear，无冲突合入canonical `b9138af`，backend/runtime/frontend/data零差异。`f53e7a8`受控38例与`0e74a82`新增深测4例、后继runtime build均终态稳定；后继仅扩展测试，不把不同pin的数字相加。固定postmerge已交Tester，通过后转交T08-B runtime。真实graph LLM/最终质量及用户本人验收保持开放。
+
+[证据](../work/local-cloud-integration/t06b/verification-summary.json)、[等价](../work/local-cloud-integration/t06b/source-equivalence.json)、[Spec](../work/local-cloud-integration/reviews/t06b-spec-0e74a82.md)、[Standards](../work/local-cloud-integration/reviews/t06b-standards-0e74a82.md)。
+
+固定detached `b9138af` postmerge12例/30.38s及独立锁runtime安装/build通过，无源码/harness漂移。T06整票技术依赖已解除，Pi/runtime/Prompt转交T08-B；真实图LLM质量、最终同版全量、前端与本人验收不继承受控结果。[postmerge](../work/local-cloud-integration/t06b/postmerge-minimum.json)。

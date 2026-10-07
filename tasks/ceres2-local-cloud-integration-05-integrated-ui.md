@@ -21,3 +21,7 @@
 ## 当前阻塞、下一步、证据
 
 T02/T04/T07已技术放行，frontend owner从最新canonical接管全frontend目录；不得改runtime/共享backend文件。本票是可独立演示/验证的业务切片，不允许只搬文件并宣称完成。Tester 和两轴审查证据由主会话在收到后登记；历史来源报告不能代替本票结果。
+
+恢复检查：T05 WIP `a9c9c51151ffb67934c9d922c949a0bfa379c94e` 已将14份frontend源文件和3份独立UI harness提交，工作树干净；独立备份payload已准备，未合canonical，未验收。已恢复的5项受控检查不能替代完整DOM/实际Chromium/后端fixture旅程及两轴。远端备份是否成功以主会话回执为准。
+
+独立WIP备份已核实：remote `58db7fef475bab34e4c5b53bc3a1e4ba6408dfbb` ↔ local `a9c9c5` / tree `34da6207b0d26c566d99b9750cf13b71bde7a0bb`；回执已保存。此为独立备份分支，不是canonical合入或验收。

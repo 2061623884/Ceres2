@@ -48,10 +48,10 @@ T01 与 T07 核心已按下文固定 pin 受控验证并合入；T02/T03 分片�
 
 ## 已绑定工作者
 
-- Merger / 正式 TASK：prepare_merge_workspace_spec。
+- Merger / 正式 TASK：resume_integration_merger（当前唯一句柄；prepare_merge_workspace_spec仅历史，不再唤醒）。
 - T01：design_policy_retrieval_bridge，独占政策/知识和本票所需 Pi runtime、Prompt、source/reuse 接线，交付后转给 T03。
 - T07：implement_aftersales_evidence_slice，独占 mercury 售后/路由/tools/orders、human 服务/路由、orders API、checkout、售后模型及共享 model/migration registry；不写前端、政策、Pi runtime。
-- Tester：plan_merge_verification_gates，唯一验证执行者。
+- Tester：resume_integration_tester，当前唯一验证执行者（plan_merge_verification_gates仅历史，不再唤醒）。
 - T01 如需 Mercury 查询 deadline 接线，必须给 T07 owner 提交具体需求，由该 owner 写其文件；不得并发修改。
 
 ## Deadline 传递责任
@@ -107,3 +107,11 @@ T02/T03 已发布核实：local `d9cbb180380515d5d10d0b76fc1bbba299db7385` → r
 T06-A后端合入 `3069728`，固定postmerge47例/6.63s通过、源码/harness无漂移。A技术门槛关闭，T06-B仍等T04 runtime交接；真实BGE公开开发检索不替代真实图LLM与最终质量验收。
 
 T04合入 `e0f57cd` 与T06-A共存postmerge37例/46.30s及runtime安装/build稳定通过。正式并行释放T05 frontend和T06-B runtime；唯一文件所有权保持，二者不得并写。发布不阻塞下一票。
+
+T08依赖细化：新增evaluation CLI导出/标注与独立测试可先由A阶段owner实施；不写runtime/graph/conftest/DB。运行采集B阶段仍等T06-B交回runtime，整票仍等T05/T06/T07；详见T08 TASK。T04发布receipt已记录 remote `d1b4ff2fa53a51afcf000f3ca48fdf14c7bf613c` ↔ local `8186897`。
+
+当前协作句柄：唯一Merger为resume_integration_merger，唯一Tester为resume_integration_tester。实施者只向当前Merger及主协调交付；旧bootstrap句柄仅保留历史，禁止重新唤醒同角色写者。该修订不变更任务职责或源文件所有权。
+
+T06-B `b9138af` 固定postmerge12例/30.38s与runtime安装/build通过，整票技术依赖解除。runtime/Prompt正式转交T08-B；T05 frontend仍并行独占，最终集成/真实图LLM/本人验收开放。
+
+T06-B与T08-A技术合入完成：前者固定postmerge12+build，后者固定`a60b6b5` CLI-only postmerge11稳定通过。T08-B正式接管运行观测；T05前端继续并行独占。最终同版完整回归/两轴/用户验收未完成。
