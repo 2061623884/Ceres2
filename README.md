@@ -1,5 +1,7 @@
 # Ceres2 · 智能导购与受控售后
 
+> 2026-10-07 当前实施：从已发布基线重新执行[角色判断与政策预检索四票](tasks/ceres2-judge-prefetch.md)。先看[本轮决定与服务端契约](docs/REBUILD-DECISIONS.md)、[云端恢复入口副本](docs/recovery/CERES2-WORKSPACE.md)及[参考源码清单](docs/references/ceres2-rebuild-reference-sources.md)。前端由用户本地接手；下方 2026-10-06 验证结果仅适用于原历史候选，不是本次重建成绩。
+
 > 2026-10-06 本轮：下一阶段体验更新（10 票）。受控技术验证通过，真实模型、浏览器与用户验收仍开放。先看下方更新摘要，再读[接手与剩余验收](docs/NEXT-EXPERIENCE-HANDOFF.md)和[当前十票总 TASK](tasks/ceres2-next-experience.md)。
 
 Ceres2 是一个面向商超购物场景的 AI 应用原型：帮助用户把“想做什么、有什么要求”转化为可检查、可修改、可明确确认的购买清单，并将模拟订单衔接到独立的售后流程。

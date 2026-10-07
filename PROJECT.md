@@ -1,3 +1,15 @@
+# Ceres2：角色判断与政策预取云端重建
+
+更新：2026-10-07。当前执行入口为 [judge-prefetch 总 TASK](tasks/ceres2-judge-prefetch.md) 与 [规格](docs/plans/ceres2-judge-prefetch-spec.md)。用户已批准从真实 GitHub `4bed9c891261e382122d424825b649989ea92c92` 新实现四票，使用 implement-spec、TDD、Agent Team、可追溯提交及分支推送；功能依赖保持 01 → 02 → 03 → 04。当前仅规划／基线准备，尚无本轮实现或验证通过结论。
+
+[执行决定](docs/REBUILD-DECISIONS.md) 固定授权时序、服务端兼容契约、共享文件所有权、官方 DeepSeek thinking 有界支持项、Prompt 来源、TDD 与分层证据要求。云端负责后端/runtime 与交接；前端由用户本地实现，typed UI／真实浏览器和本人验收条目保留待验收。旧 `f45c4ff` 不可得源码／测试、`0c752a2` 成绩和本地补丁成绩均不继承。
+
+[真实基线与来源记录](work/judge-prefetch/rebuild-bootstrap.md) 保留已发布 commit/tree 与源码 manifest；[参考源码清单](docs/references/ceres2-rebuild-reference-sources.md) 单独记录只读外部来源，参考项目不是运行依赖或当前实现权威。规划／功能里程碑只有在提交、授权分支发布、远端完整 SHA 与精确 tree 一致性核实后才报告已发布；connector 发布若生成不同 SHA，保留本地／远端提交映射回执。
+
+以下为历史阶段原文，保留其业务来源和当时证据；其中“当前主线”“无 remote”“禁止推送”“仅某批票据”等时点描述不覆盖本段最新执行授权，也不构成本轮通过证明。
+
+---
+
 # Ceres2：下一阶段完整购物体验
 
 更新：2026-10-06。当前工程主线为[下一阶段体验总 TASK](tasks/ceres2-next-experience.md)：已批准 10 个纵向切片，按依赖并行 TDD 连续实施，最终做 Standards／Spec 两轴审查。01–09已有受控技术交付；最终双轴审查问题已修复并通过独立复审；同一冻结0c752a2完整426backend、37受控DOM、build/strict检查与OS restart1/1通过，01–09受控门槛恢复。10仍待验收，外部真实模型／浏览器／语言／holdout／V3比较／本人验收未闭合。历史失败及旧成绩保留，不称整体已验收。07真实语言效果及成本改善未验证，Prompt长度增加如实保留。精确候选、历史失败与分层证据见总TASK；未宣称真实provider／真实浏览器／本人验收通过。
