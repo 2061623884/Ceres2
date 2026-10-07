@@ -1,0 +1,14 @@
+{
+  "remote_commit": "19822b146637fbf9cbba75dcf499984d393a4605",
+  "local_commit": "4b576321317d6755cb2ef5845ceca6f89ba3e2b5",
+  "tree": "cfb1028c1330537bc703bfff27591e109e61ea13",
+  "branch": "ceres2/judge-prefetch-rebuild-20261007",
+  "verified": true,
+  "phase": "01 controlled released; external acceptance open",
+  "repository": "https://github.com/2061623884/Ceres2",
+  "remote_commit_url": "https://github.com/2061623884/Ceres2/commit/19822b146637fbf9cbba75dcf499984d393a4605",
+  "verification_date_utc": "2026-10-07",
+  "verification_owner": "Main integration coordinator",
+  "evidence": "Authorized GitHub connector read remote integration branch HEAD and exact commit tree; matches local published checkpoint. All 244 product/test source hashes equal final controlled gate manifests.",
+  "scope": "Ticket 01 cloud technical gate released with both independent reviews closed. Frontend, real-provider, browser and user acceptance stay open. Known baseline policy-composition completeness gap passes to ticket 02. Separate WIP branch is only a backup."
+}

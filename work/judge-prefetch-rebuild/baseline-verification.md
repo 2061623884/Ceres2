@@ -34,3 +34,7 @@ The runner uses a sanitized child environment, synthetic fixture keys, memory/te
 The frontend build emits the existing Vite future-native-config warning about `__dirname` and JSON import attributes; it still builds and passes strict TypeScript. No lint script is configured, so lint is not claimed as passed.
 
 This is limited baseline readiness, not full regression, browser DOM, real browser, live-provider, independent holdout or user acceptance. No product or frontend source was modified by the Tester. Full candidate checks will follow the approved vertical slices.
+
+## Later Node-enforcement correction (2026-10-07)
+
+The earlier blanket Python/Node guard statement is qualified by the [Node guard correction](node-guard-correction.md): production Pi workers omit NODE_OPTIONS from their explicit child environment, so the original runner did not enforce that Node preload in those workers. Synthetic credentials, loopback fixtures, temporary state, Python protection and the recorded test results remain distinct facts; historical captures are not relabeled as using the repaired launcher. Fresh real-worker guard proof and subsequent runs are recorded separately.

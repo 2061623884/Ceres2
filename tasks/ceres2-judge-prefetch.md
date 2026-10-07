@@ -1,6 +1,6 @@
 # 可可角色判断与政策预检索：总 TASK
 
-- 状态：进行中（01 云端技术门槛已释放且整体待验收；02 工作树就绪，03–04 等待依赖）
+- 状态：进行中（01 云端技术门槛已释放且整体待验收；02 已启动逐行为 TDD，03–04 等待依赖）
 - 拆分：已批准；功能依赖保持 01 → 02 → 03 → 04
 - 执行授权：2026-10-07 用户已批准从真实 GitHub 基线重新 implement-spec／TDD／Agent Team 实施、可追溯提交与分支推送。前端由用户本地处理；详见 [执行决定](../docs/REBUILD-DECISIONS.md)。
 - 负责人：主会话维护状态、权限与集成候选；各票唯一实现者按交接绑定，专职 Tester 独占验证，集成者独占提交／合并。
@@ -39,13 +39,19 @@
 
 ## 2026-10-07 01 云端技术交付
 
+01 云端里程碑已发布为远端 `19822b146637fbf9cbba75dcf499984d393a4605`，对应本地 `4b576321317d6755cb2ef5845ceca6f89ba3e2b5`，精确 tree 均为 `cfb1028c1330537bc703bfff27591e109e61ea13`；[发布映射](../work/judge-prefetch/publication-role-entry-final.json)。
+
 01 修复提交 `9f2eff1265c373736cc5f8683c8ccaa680959c30` 已合并为 `46f3fcf47d544e0c0ecead0abc13cb23d63a38b8`。244 个产品／测试源码文件与最终完整 backend **480 passed**、重叠专项 **149 passed**、Pi typecheck/build 和依赖检查的所有前后 manifest 完全一致；[Tester 报告](../work/judge-prefetch-rebuild/01-role-entry-verification.md)及[源码映射](../work/judge-prefetch-rebuild/01-role-entry-final-source.json)。独立 [Standards](../work/judge-prefetch-rebuild/reviews/standards-01-rereview.md)／[Spec](../work/judge-prefetch-rebuild/reviews/spec-01-rereview.md)原发现已闭合。
 
-01 保持“待验收”，云端技术依赖已释放给 02；前端、真实 provider／浏览器及本人验收仍开放。02 工作树为 `../worktrees/02-policy-evidence`，共享产品文件在显式交接后只由 02 维护；集成者继续独占 TASK／PROJECT 和合并／提交，Tester 继续独占所有安装／验证。03–04 仍等待各自功能前置，不以局部通过提前验收。
+01 保持“待验收”，云端技术依赖已释放给 02；前端、真实 provider／浏览器及本人验收仍开放。02 已获准逐行为 TDD，工作树为 `../worktrees/02-policy-evidence`，共享产品文件在显式交接后只由 02 维护；集成者继续独占 TASK／PROJECT 和合并／提交，Tester 继续独占所有安装／验证。03–04 仍等待各自功能前置，不以局部通过提前验收。
 
 ## 当前局部支持证据
 
 官方 DeepSeek 五条辅助请求路径的有界支持已集成，详见 [04 支持项记录](ceres2-judge-prefetch-04-candidate-evidence.md#2026-10-07-有界传输支持项)及[Tester 报告](../work/judge-prefetch-rebuild/thinking-transport-verification.md)。主 Pi／validator 两条路径随后已由 01 串行接入，并在最终同版专项／完整套件重新验证全部七路径；04 的业务依赖没有释放。当前只报告有边界的受控结果，不宣称完整功能、独立审查或真实 provider 通过。
+
+## 验证隔离更正（2026-10-07）
+
+[Tester 更正说明](../work/judge-prefetch-rebuild/node-guard-correction.md)记录：旧 runner 仅设置 NODE_OPTIONS，但生产 Pi 子进程的明确环境白名单会移除它，因此旧“全部 Node 子进程均受强制 loopback／dotenv 守卫”的表述过强。旧测试数量、源码 hash、合成凭据与 loopback fixture 事实保留，不追溯改称旧守卫已生效。现已只在测试 harness 的 PATH 放置强制加载 guard 的 Node launcher，生产权限未扩大；[新鲜四项证明与失败探针](../work/judge-prefetch-rebuild/node-guard-verification.json)包含实际 worker PID 关联。02 当前及以后工作树的受控验证必须使用该修复，最终全阶段门槛重新冻结后运行。
 
 ## 总体验收与证据
 

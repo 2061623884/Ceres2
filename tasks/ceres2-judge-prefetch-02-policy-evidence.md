@@ -1,6 +1,6 @@
 # 02：政策预检索与同 Pi 回答
 
-- 状态：待开始（01 云端技术依赖已释放，独立工作树已准备）
+- 状态：进行中（2026-10-07：01 云端技术依赖已发布核实，02 独立工作树已获准逐行为 TDD）
 - 拆分：已批准；功能依赖保持 01 → 02 → 03 → 04
 - 执行授权：2026-10-07 用户已授权从 GitHub 基线重新 implement-spec／TDD／Agent Team 实施、可追溯提交及分支推送；前置功能与专职 Tester 门槛保留。
 - 负责人：02 唯一实现者接手工作树 `../worktrees/02-policy-evidence`、分支 `ceres2/judge-prefetch-02-policy-evidence-20261007`；专职 Tester 执行所有验证命令，Standards／Spec 独立只读审查。共享文件按 [执行决定](../docs/REBUILD-DECISIONS.md#4-写入所有权与可并行支持项) 交接。
@@ -40,6 +40,10 @@
 ## Ownership／交接
 
 接收 01 的初始上下文契约后，本票独占可可政策判断、预取、上下文注入、证据注册、Prompt 及配套 fixture 的最小共享改动。检索仍复用现有来源，不重写库存筛选。向 03 交付真实证据与引用生命周期、失败分类及可用调用计数；如导航回归需修复，由主会话协调 01 负责人而非并行改同一入口。
+
+## 2026-10-07 中间源码保全
+
+政策 yes 预取与 no／uncertain／timeout／error 回退的中间版本已独立保存：本地 `4b3533cc7abdf4f4d3d776dfbce923fa2e3faf7b` 对应远端 `b8922a8eaf08fadc973ff75adc3abc5ede346f0d`，精确 tree 均为 `ad0a82d362c2f74fff87b4f87a24988bbc732d18`，分支 `ceres2/judge-prefetch-policy-wip-20261007`；[核实映射](../work/judge-prefetch/publication-policy-wip.json)。快照时 34 项相关受控测试通过且 245 个 source hash 无漂移，但检索错误／空／部分结果、完整混合呈现、晚到取消／deadline 守卫和最终审查仍未完成。该 WIP 不合入已释放集成，不表示 02 验收或 03 依赖释放；实现已继续。
 
 ## 下一步与证据
 

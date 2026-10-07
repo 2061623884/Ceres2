@@ -1,0 +1,14 @@
+{
+  "remote_commit": "b8922a8eaf08fadc973ff75adc3abc5ede346f0d",
+  "local_commit": "4b3533cc7abdf4f4d3d776dfbce923fa2e3faf7b",
+  "tree": "ad0a82d362c2f74fff87b4f87a24988bbc732d18",
+  "branch": "ceres2/judge-prefetch-policy-wip-20261007",
+  "verified": true,
+  "phase": "02 WIP only; no acceptance",
+  "repository": "https://github.com/2061623884/Ceres2",
+  "remote_commit_url": "https://github.com/2061623884/Ceres2/commit/b8922a8eaf08fadc973ff75adc3abc5ede346f0d",
+  "verification_date_utc": "2026-10-07",
+  "verification_owner": "Main integration coordinator",
+  "evidence": "Authorized GitHub connector read the separate WIP branch HEAD and exact commit tree; equals the frozen local WIP tree. The snapshot preserved all 245 source hashes from the 34-test controlled GREEN capture.",
+  "scope": "Incomplete ticket 02 policy prefetch and judgment fallback backup. Lookup errors/empty/partial projection, complete mixed outcomes, late deadline/cancel guards and final review were pending at snapshot. No accepted integration merge or ticket 03 dependency release."
+}

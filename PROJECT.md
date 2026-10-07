@@ -1,6 +1,6 @@
 # Ceres2：角色判断与政策预取云端重建
 
-更新：2026-10-07。当前执行入口为 [judge-prefetch 总 TASK](tasks/ceres2-judge-prefetch.md) 与 [规格](docs/plans/ceres2-judge-prefetch-spec.md)。用户已批准从真实 GitHub `4bed9c891261e382122d424825b649989ea92c92` 新实现四票，使用 implement-spec、TDD、Agent Team、可追溯提交及分支推送；功能依赖保持 01 → 02 → 03 → 04。规划／基线及源码 WIP 已发布并核实。01 已完成同版云端实现、480 backend（专项 149 为其重叠子集）、Pi typecheck/build、依赖检查及独立两轴复审，云端技术门槛释放给 02；01 整体保持待验收，真实 provider、用户本地前端／浏览器与本人验收仍开放。02 独立工作树已准备，03–04 等待各自依赖。
+更新：2026-10-07。当前执行入口为 [judge-prefetch 总 TASK](tasks/ceres2-judge-prefetch.md) 与 [规格](docs/plans/ceres2-judge-prefetch-spec.md)。用户已批准从真实 GitHub `4bed9c891261e382122d424825b649989ea92c92` 新实现四票，使用 implement-spec、TDD、Agent Team、可追溯提交及分支推送；功能依赖保持 01 → 02 → 03 → 04。规划／基线及源码 WIP 已发布并核实。01 已完成同版云端实现、480 backend（专项 149 为其重叠子集）、Pi typecheck/build、依赖检查及独立两轴复审，云端技术门槛释放给 02；01 整体保持待验收，真实 provider、用户本地前端／浏览器与本人验收仍开放。01 里程碑已核实发布为远端 `19822b146637fbf9cbba75dcf499984d393a4605`；[发布映射](work/judge-prefetch/publication-role-entry-final.json)。02 独立工作树已启动逐行为 TDD，03–04 等待各自依赖。
 
 [执行决定](docs/REBUILD-DECISIONS.md) 固定授权时序、服务端兼容契约、共享文件所有权、官方 DeepSeek thinking 有界支持项、Prompt 来源、TDD 与分层证据要求。云端负责后端/runtime 与交接；前端由用户本地实现，typed UI／真实浏览器和本人验收条目保留待验收。旧 `f45c4ff` 不可得源码／测试、`0c752a2` 成绩和本地补丁成绩均不继承。
 

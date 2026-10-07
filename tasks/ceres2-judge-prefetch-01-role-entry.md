@@ -49,6 +49,7 @@
 
 ## 2026-10-07 云端交付与依赖释放
 
+- 已核实发布：远端 `19822b146637fbf9cbba75dcf499984d393a4605` 对应本地交付 `4b576321317d6755cb2ef5845ceca6f89ba3e2b5`，精确 tree 均为 `cfb1028c1330537bc703bfff27591e109e61ea13`，分支 `ceres2/judge-prefetch-rebuild-20261007`；[发布映射](../work/judge-prefetch/publication-role-entry-final.json)。
 - 修复提交：`9f2eff1265c373736cc5f8683c8ccaa680959c30`；集成提交：`46f3fcf47d544e0c0ecead0abc13cb23d63a38b8`。244 个产品／测试文件与最终四项门槛的运行前后 source map 完全一致，提交和合并未改变它们；[冻结清单与提交映射](../work/judge-prefetch-rebuild/01-role-entry-final-source.json)。
 - [Tester 报告](../work/judge-prefetch-rebuild/01-role-entry-verification.md)：同版完整 backend **480 passed**，其重叠专项子集 **149 passed**，Pi typecheck/build、62 个 Python 锁定包及 Pi 依赖检查通过。不能把 149 与 480 相加。红测、失败 GREEN 与修复历史保留在[执行摘要](../work/judge-prefetch-rebuild/01-role-entry-verification-history.json)。
 - [Standards 复审](../work/judge-prefetch-rebuild/reviews/standards-01-rereview.md)与[Spec 复审](../work/judge-prefetch-rebuild/reviews/spec-01-rereview.md)均闭合原 P2，无新增 01 阻塞发现。
