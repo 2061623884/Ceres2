@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from uuid import uuid4
 from sqlalchemy import func, select, update
+from sqlalchemy.orm import Session
 from app.core.errors import AppError
 from app.models.guide import GuideSession, GuideTask, GuideMessage, GuideTurnReceipt
 from app.services.catalog_service import CatalogService
@@ -132,7 +133,43 @@ class PiProductTurnService:
             task = db.get(GuideTask, current.current_task_id) if current.current_task_id else None
             return bool(task and json.loads(task.conditions_json).get('activity_id'))
 
-        runtime = PiProductRuntime(CatalogService(db, store_id), assert_current, run_id=run_id, route_request=route_request, context=context, memory_command=memory_turn.prepare, product_search=lambda arguments: ComparisonService(db, self.owner_id).search(session_id, arguments, scope_to_page=False), comparison_search=lambda arguments: ComparisonService(db, self.owner_id).search(session_id, arguments, body.get('view_context')), candidate_resolve=lambda ref: ComparisonService(db, self.owner_id).resolve(session_id, ref, body.get('displayed_candidate_refs', []), body.get('view_context')), history_command=history_turn.prepare, explore_products=lambda arguments: questions.explore(session_id, arguments), select_question_products=lambda arguments: questions.select_products(session_id, arguments), activity_active=activity_active)
+        def publish_interim(identity, text):
+            assert_current(final=True)
+            # A separate short transaction publishes history only. It cannot
+            # commit pending shopping or memory changes in the runtime Session.
+            with Session(db.get_bind()) as publication:
+                fenced = publication.execute(update(GuideSession).where(
+                    GuideSession.session_id == session_id, GuideSession.owner_id == self.owner_id,
+                    GuideSession.session_version == anchor[0], GuideSession.current_task_id == anchor[1],
+                ).values(session_version=GuideSession.session_version))
+                if fenced.rowcount != 1:
+                    raise AppError(409, 'STALE_STATE', '发布中途回复时会话已变化')
+                if anchor[1] is not None:
+                    task_fence = publication.execute(update(GuideTask).where(
+                        GuideTask.task_id == anchor[1], GuideTask.owner_id == self.owner_id,
+                        GuideTask.state_version == anchor[2],
+                    ).values(state_version=GuideTask.state_version))
+                    if task_fence.rowcount != 1:
+                        raise AppError(409, 'STALE_STATE', '发布中途回复时购买条件已变化')
+                receipt = publication.get(GuideTurnReceipt, run_id)
+                if receipt.status != 'running' or run_cancelled(run_id):
+                    return
+                sequence = publication.scalar(select(func.max(GuideMessage.sequence)).where(GuideMessage.session_id == session_id)) or 0
+                user = publication.scalar(select(GuideMessage).where(GuideMessage.session_id == session_id,
+                    GuideMessage.owner_id == self.owner_id, GuideMessage.request_id == body['request_id'], GuideMessage.role == 'user'))
+                if user is None:
+                    sequence += 1
+                    publication.add(GuideMessage(message_id=f'msg-{uuid4().hex}', session_id=session_id,
+                        owner_id=self.owner_id, task_id=anchor[1], sequence=sequence, role='user',
+                        kind='text', content=body['message'], request_id=body['request_id']))
+                publication.add(GuideMessage(message_id=identity, session_id=session_id, owner_id=self.owner_id,
+                    task_id=anchor[1], sequence=sequence+1, role='assistant', kind='interim', content=text, request_id=body['request_id']))
+                append_event(publication, receipt, 'message.interim', {'message_id':identity, 'content':text})
+                if run_cancelled(run_id):
+                    return
+                publication.commit()
+
+        runtime = PiProductRuntime(CatalogService(db, store_id), assert_current, run_id=run_id, route_request=route_request, context=context, memory_command=memory_turn.prepare, product_search=lambda arguments: ComparisonService(db, self.owner_id).search(session_id, arguments, scope_to_page=False), comparison_search=lambda arguments: ComparisonService(db, self.owner_id).search(session_id, arguments, body.get('view_context')), candidate_resolve=lambda ref: ComparisonService(db, self.owner_id).resolve(session_id, ref, body.get('displayed_candidate_refs', []), body.get('view_context')), history_command=history_turn.prepare, explore_products=lambda arguments: questions.explore(session_id, arguments), select_question_products=lambda arguments: questions.select_products(session_id, arguments), activity_active=activity_active, publish_interim=publish_interim)
         try:
             progress('understanding')
             explicit_confirm = body['message'].strip().rstrip('。！!') in ('就按这个加购', '确认加购', '确认把当前清单加入购物车')
@@ -223,9 +260,13 @@ class PiProductTurnService:
             if outcome.get('policy_message'):
                 outcome['messages'] = [outcome['message'], outcome['policy_message']]
             public_messages = [{'message_id': assistant_id if index == 0 else f'msg-{uuid4().hex}', 'content': content} for index, content in enumerate(outcome.get('messages', [outcome['message']]))]
-            db.add(GuideMessage(message_id=f'msg-{uuid4().hex}', session_id=session_id, owner_id=self.owner_id, task_id=anchor[1], sequence=sequence + 1, role='user', kind='text', content=body['message'], request_id=body['request_id']))
+            user = db.scalar(select(GuideMessage).where(GuideMessage.session_id == session_id,
+                GuideMessage.owner_id == self.owner_id, GuideMessage.request_id == body['request_id'], GuideMessage.role == 'user'))
+            assistant_offset = 1 if user is not None else 2
+            if user is None:
+                db.add(GuideMessage(message_id=f'msg-{uuid4().hex}', session_id=session_id, owner_id=self.owner_id, task_id=anchor[1], sequence=sequence + 1, role='user', kind='text', content=body['message'], request_id=body['request_id']))
             for index, message in enumerate(public_messages):
-                db.add(GuideMessage(message_id=message['message_id'], session_id=session_id, owner_id=self.owner_id, task_id=anchor[1], sequence=sequence + index + 2, role='assistant', kind='general' if outcome.get('answer_kind') == 'general_explanation' else 'text', content=message['content'], request_id=body['request_id']))
+                db.add(GuideMessage(message_id=message['message_id'], session_id=session_id, owner_id=self.owner_id, task_id=anchor[1], sequence=sequence + index + assistant_offset, role='assistant', kind='general' if outcome.get('answer_kind') == 'general_explanation' else 'text', content=message['content'], request_id=body['request_id']))
             if outcome.get('exploration'):
                 question = questions.publish(session_id, outcome['exploration'], assistant_id)
                 db.flush()

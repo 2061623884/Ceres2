@@ -1,0 +1,242 @@
+{
+  "browser": "Firefox 136.0 headless through Mozilla geckodriver 0.37.1",
+  "frontend_origin": "http://127.0.0.1:18444",
+  "isolated_backend_origin": "http://127.0.0.1:18013",
+  "isolated_database": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/work/ceres2-optimization/testing/tmp/browser-demo/business.sqlite3",
+  "journey_steps": [
+    "opened Ceres landing page in isolated native Firefox",
+    "searched the 71-SKU demo catalog for shrimp and opened a rendered result",
+    "opened product detail and added one item to cart",
+    "completed demo checkout and opened its immutable order snapshot",
+    "advanced order through submitted → shipped → delivered in the UI",
+    "entered Momo with the selected delivered order",
+    "uploaded a PNG, reviewed a photo-bound quality proposal, and confirmed the application",
+    "operator UI authenticated with the isolated test token and viewed the matching ticket photo"
+  ],
+  "checks": {
+    "retrieval_rendered_shrimp_product": true,
+    "simulated_order_created": true,
+    "order_state_submitted_to_shipped_to_delivered": true,
+    "quality_proposal_has_one_package_and_photo": true,
+    "quality_application_confirmed_with_photo": true,
+    "receipt": "模拟申请已提交 · sim-d6897a03b2d342f6ace0619e521ba7c5 · ¥15.90\n\n模拟售后申请已提交，尚未审批或退款到账；没有真实资金或履约操作。\n\n回执：asr-3ad9a0b3dabb4eefbbfdc0a20c1adf55",
+    "operator_can_read_quality_ticket_and_photo": true,
+    "operator_ticket_summary": "质量问题申请 asa-e855e5ec135c485ab89297a7a60146fd：签收时发现销售包装破损（Firefox浏览器演示），问题包装数 1；需要核对照片、问题与处理方式，不代表退款获批。\n\n等待人工处理",
+    "operator_view_contains_photo": true,
+    "all_boolean_checks_passed": true
+  },
+  "screenshot": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/work/ceres2-optimization/testing/tmp/browser-demo/browser-demo-journey.png",
+  "proxy_api_calls": [
+    {
+      "method": "GET",
+      "path": "/api/v1/bootstrap",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/cart",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/categories",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/products",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/products",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/media/images/demo-baking-powder-100g.jpg",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/media/images/demo-butter-200g.jpg",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/products",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/products",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/media/images/demo-cake-flour-250g.jpg",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/media/images/demo-cream-cheese-200g.jpg",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/products/demo%3Ashrimp-200g",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/cart/items",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/cart",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/checkout/preview",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/checkout/confirm",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/cart",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/orders",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/orders/sim-d6897a03b2d342f6ace0619e521ba7c5",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/orders/sim-d6897a03b2d342f6ace0619e521ba7c5/demo-state",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/orders/sim-d6897a03b2d342f6ace0619e521ba7c5/demo-state",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/guide/sessions",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/navigation/sessions/session-177da3cb27e849a595c0ffbe251e7af1/opening",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/guide/sessions",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/guide/sessions/session-177da3cb27e849a595c0ffbe251e7af1/status",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/mercury/sessions",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/mercury/sessions/ms_fe33dc8c4ff940a4aabbbdcefd3a61dd",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/mercury/sessions/ms_fe33dc8c4ff940a4aabbbdcefd3a61dd/order",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/mercury/orders",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/mercury/sessions/ms_fe33dc8c4ff940a4aabbbdcefd3a61dd/human-ticket",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/orders/sim-d6897a03b2d342f6ace0619e521ba7c5",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/mercury/sessions/ms_fe33dc8c4ff940a4aabbbdcefd3a61dd/aftersales",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/mercury/sessions/ms_fe33dc8c4ff940a4aabbbdcefd3a61dd/photos",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/mercury/sessions/ms_fe33dc8c4ff940a4aabbbdcefd3a61dd/photos/photo-abbca3d303134cdd801f34496acbc5ab",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/mercury/sessions/ms_fe33dc8c4ff940a4aabbbdcefd3a61dd/proposals",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/mercury/sessions/ms_fe33dc8c4ff940a4aabbbdcefd3a61dd/confirm",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/orders/sim-d6897a03b2d342f6ace0619e521ba7c5",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/mercury/sessions/ms_fe33dc8c4ff940a4aabbbdcefd3a61dd/aftersales",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/mercury/sessions/ms_fe33dc8c4ff940a4aabbbdcefd3a61dd/human-ticket",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/mercury/sessions/ms_fe33dc8c4ff940a4aabbbdcefd3a61dd/photos/photo-abbca3d303134cdd801f34496acbc5ab",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/mercury/operator/tickets",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/mercury/operator/tickets/ht_2d7a54d665c54d1a9e2716ec96ae1a48/photos/photo-abbca3d303134cdd801f34496acbc5ab",
+      "status": 200
+    }
+  ],
+  "result": "passed"
+}

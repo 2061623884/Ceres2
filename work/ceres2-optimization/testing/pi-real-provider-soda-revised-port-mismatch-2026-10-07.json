@@ -1,0 +1,35 @@
+{
+  "sample_id": "soda-revised",
+  "sample_revision": "experience-interim-direction-explicit-v2",
+  "provider": {
+    "configured": true,
+    "model_id": "deepseek-flash",
+    "base_hostname": "api.deepseek.com",
+    "api_key_value_recorded": false
+  },
+  "route": {},
+  "request": {
+    "sha256": "d7cd5a7f0211b4d832cc1631a9656165c04745c2563ad37b5ff3b245f0ba220d",
+    "length": 45
+  },
+  "source_sha256": {
+    "backend/app/prompts/experience.json": "d47a13608bfe3be88276c09722df03a0d70271fa8cc49a33f27267726ce9b760",
+    "backend/app/prompts/experience.py": "d66693ea9c11b7d5ff50df83c133389f0d7104d013f10f6194dc7666a26502a3",
+    "backend/app/services/pi_product_runtime.py": "5fd3f21378f230673331f7de9296f2c1ac6966fa92c24f832854750d338a9ab7",
+    "backend/app/services/pi_product_turn_service.py": "d04bd133427377e37d36d46bd5debdb131046f9083460de010fed7450e9062a9",
+    "backend/app/services/guide_run_service.py": "2bbb7494279eb79ce7ba18f07eacedf08e5321bde6c167065bdd54c98a7a1451",
+    "backend/app/models/guide.py": "40e273a2918cee5dfa00f299d1757ecf4982cad3f9290604d30eb38bb0218c52",
+    "backend/app/evaluation/export_runs.py": "9974050b2aa9c8b2c472532622e1f71d45eb25db3cccf23d5672c09f9ca504a5",
+    "runtime/pi/src/worker.ts": "a38007f6859174b59c5338b16db16de008336f8950cba72c2df42b68c89b6a7e",
+    "runtime/pi/src/prompt-modules.ts": "fbcf407ac3be56b9df06e0e177f9e84a1413a03b1060c8d16e8aa379fcc27625",
+    "data/fixtures/products.json": "8857a75c26387acb98023dd3b743e369a6d1f01fb1b64c24993fe3b87690f3e1",
+    "data/fixtures/recipes.json": "1fd396fe8255961fd8c423817efe0d80a1a0ad8377b26e42104a76886c3ed45c",
+    "data/fixtures/policies.json": "7a370431a1a9c2df2b818218f3c54cb01946f93fa027aad44021dd1637f10502",
+    "evals/ceres2-optimization-retrieval-dev.json": "eb47a57f89fc65d56d3e74a9b68947d096ba485d5c08051f29dc9a97aa12652e"
+  },
+  "observed": {},
+  "raw_sse_ignored_path": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/work/ceres2-optimization/testing/tmp/pi-real-smoke/soda-revised/guide-sse.jsonl",
+  "owner_id_or_provider_key_recorded": false,
+  "result": "failed",
+  "failure_class": "RuntimeError"
+}

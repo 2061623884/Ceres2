@@ -1,0 +1,452 @@
+{
+  "sample_id": "recipe-facts-rejected-audit-capture-v1",
+  "sample_revision": "native-tools-finish-response-interim-audit-v1",
+  "instrumentation": {
+    "runtime_events_safe_projection": true,
+    "test_sitecustomize_enabled": true,
+    "node_message_shape": true,
+    "wire_fetch_mode": "disabled",
+    "wire_override_scope": null,
+    "production_worker_modified": false
+  },
+  "provider": {
+    "configured": true,
+    "model_id": "deepseek-flash",
+    "base_hostname": "api.deepseek.com",
+    "api_key_value_recorded": false
+  },
+  "route": {
+    "status": "unavailable",
+    "manual_role_choice_used": true
+  },
+  "request": {
+    "sha256": "27c0252c3901c8663b0d94947d50b94ae69bb2a4fa45d81eb6d9cee1b2cdcc95",
+    "length": 58
+  },
+  "source_sha256": {
+    "backend/app/prompts/experience.json": "8687311543e73c9ae6131740e3af6aee6e751fe090b8548d46b6080cedc290da",
+    "backend/app/prompts/experience.py": "d66693ea9c11b7d5ff50df83c133389f0d7104d013f10f6194dc7666a26502a3",
+    "backend/app/services/pi_product_runtime.py": "d1285f785ce2e71c4de63eb6ef7a31af153d0d17071de2c2f73702e05ddb82f3",
+    "backend/app/services/pi_product_turn_service.py": "d04bd133427377e37d36d46bd5debdb131046f9083460de010fed7450e9062a9",
+    "backend/app/services/guide_run_service.py": "2bbb7494279eb79ce7ba18f07eacedf08e5321bde6c167065bdd54c98a7a1451",
+    "backend/app/models/guide.py": "40e273a2918cee5dfa00f299d1757ecf4982cad3f9290604d30eb38bb0218c52",
+    "backend/app/evaluation/export_runs.py": "9974050b2aa9c8b2c472532622e1f71d45eb25db3cccf23d5672c09f9ca504a5",
+    "runtime/pi/src/worker.ts": "3f516802adffeb8c78efd69ea8d0d76faa961f2627bdbdc4940950f73a845ab1",
+    "runtime/pi/dist/worker.js": "50d72fd973a725ceba0f051f427422e89facaeffd494e2b4f7e24d4d091089aa",
+    "runtime/pi/src/prompt-modules.ts": "fbcf407ac3be56b9df06e0e177f9e84a1413a03b1060c8d16e8aa379fcc27625",
+    "work/ceres2-optimization/testing/sitecustomize.py": "81842b2454afbf3dfb11db9d0d5613018360dee780b10be89151ce9aaa6d72fd",
+    "work/ceres2-optimization/testing/strip_response_format_preload.mjs": "10332d19363f31b3054188810fea8b243db70bd26b8b82d6d3e5f9e96e0c7015",
+    "data/fixtures/products.json": "8857a75c26387acb98023dd3b743e369a6d1f01fb1b64c24993fe3b87690f3e1",
+    "data/fixtures/recipes.json": "1fd396fe8255961fd8c423817efe0d80a1a0ad8377b26e42104a76886c3ed45c",
+    "data/fixtures/policies.json": "7a370431a1a9c2df2b818218f3c54cb01946f93fa027aad44021dd1637f10502",
+    "evals/ceres2-optimization-retrieval-dev.json": "eb47a57f89fc65d56d3e74a9b68947d096ba485d5c08051f29dc9a97aa12652e"
+  },
+  "observed": {
+    "sse_frame_count": 22,
+    "event_type_counts": {
+      "accepted": 1,
+      "progress": 5,
+      "message.interim": 1,
+      "answer.delta": 14,
+      "turn.completed": 1
+    },
+    "terminal_event": "turn.completed",
+    "runtime_status": "completed",
+    "answer_kind": "business_facts",
+    "answer_status": "accepted",
+    "finish_response_tool_calls": 1,
+    "product_card_count": 0,
+    "dish_candidate_count": 0,
+    "final_message_count": 1,
+    "interims_precede_terminal": true,
+    "interim_opportunities": 2,
+    "interim_candidate_status_counts": {
+      "ready": 2
+    },
+    "interim_candidates": [
+      {
+        "status": "ready",
+        "text_characters": 95,
+        "tool_call_count": 1
+      },
+      {
+        "status": "ready",
+        "text_characters": 75,
+        "tool_call_count": 1
+      }
+    ],
+    "interim_published_count": 1,
+    "answer_delta_characters": 315,
+    "interim_records": [
+      {
+        "message_id": "run-0d5e686c444b4b20a8263aae11ed1d52:interim:2",
+        "content_length": 75,
+        "content_sha256": "752be3c5109fcbdce5ef0f2a48ec045ca723a885242d5409f411c05b5f610d4a",
+        "host_recorded_at_ms": 1791372383587.0112,
+        "host_elapsed_ms": 4834.451904296875,
+        "browser_display_time_ms": null
+      }
+    ],
+    "model_usage": [
+      {
+        "kind": "main",
+        "model": "deepseek-flash",
+        "provider_host": "api.deepseek.com",
+        "duration_ms": 1243.82011,
+        "usage": {
+          "input": 242,
+          "output": 91,
+          "cacheRead": 4096,
+          "cacheWrite": 0,
+          "totalTokens": 4429
+        },
+        "cost": null
+      },
+      {
+        "kind": "interim_audit",
+        "model": "deepseek-flash",
+        "provider_host": "api.deepseek.com",
+        "duration_ms": 999.1359399999999,
+        "usage": {
+          "input": 162,
+          "output": 16,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 178
+        },
+        "cost": null
+      },
+      {
+        "kind": "main",
+        "model": "deepseek-flash",
+        "provider_host": "api.deepseek.com",
+        "duration_ms": 1456.92411,
+        "usage": {
+          "input": 673,
+          "output": 101,
+          "cacheRead": 5376,
+          "cacheWrite": 0,
+          "totalTokens": 6150
+        },
+        "cost": null
+      },
+      {
+        "kind": "interim_audit",
+        "model": "deepseek-flash",
+        "provider_host": "api.deepseek.com",
+        "duration_ms": 598.3350479999999,
+        "usage": {
+          "input": 189,
+          "output": 16,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 205
+        },
+        "cost": null
+      },
+      {
+        "kind": "main",
+        "model": "deepseek-flash",
+        "provider_host": "api.deepseek.com",
+        "duration_ms": 2598.126003999998,
+        "usage": {
+          "input": 2752,
+          "output": 527,
+          "cacheRead": 6144,
+          "cacheWrite": 0,
+          "totalTokens": 9423
+        },
+        "cost": null
+      }
+    ],
+    "usage_fields_valid": true,
+    "append_event_host_times_valid": true,
+    "interim_display_clock_claimed": false,
+    "error_code": null
+  },
+  "export": {
+    "schema_version": "ceres-eval-capture-v1",
+    "record_count": 1,
+    "has_observed_usage_field": true,
+    "has_retrieval_field": true,
+    "labels_still_null_before_annotation": true,
+    "has_source_snapshot": true,
+    "run_started_at_ms_present": true,
+    "event_timestamps_are_separate_fields": true,
+    "raw_capture_path": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/data/generated/evals/pi-real-provider-recipe-facts-rejected-audit-capture-v1-capture-2026-10-07.jsonl"
+  },
+  "raw_sse_ignored_path": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/work/ceres2-optimization/testing/tmp/pi-real-smoke/recipe-facts-rejected-audit-capture-v1/guide-sse.jsonl",
+  "safe_runtime_diagnostics_path": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/work/ceres2-optimization/testing/tmp/pi-real-smoke/recipe-facts-rejected-audit-capture-v1/runtime-event-diagnostics.json",
+  "safe_fetch_diagnostics_path": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/work/ceres2-optimization/testing/tmp/pi-real-smoke/recipe-facts-rejected-audit-capture-v1/fetch-instrumentation.json",
+  "owner_id_or_provider_key_recorded": false,
+  "result": "completed",
+  "isolated_service": {
+    "health": "ok",
+    "business_data_mode": "demo",
+    "configured_for_live_provider": true
+  },
+  "sse_has_terminal_completion": true,
+  "runtime_events_diagnostic": {
+    "event_type_counts": {
+      "agent_start": 1,
+      "turn_start": 3,
+      "message_start": 7,
+      "message_end": 7,
+      "main_message_shape": 3,
+      "model_usage": 5,
+      "interim_candidate": 2,
+      "tool_execution_start": 3,
+      "interim_audit": 2,
+      "tool_execution_end": 3,
+      "turn_end": 3,
+      "graph_retrieval": 1,
+      "agent_end": 1
+    },
+    "safe_events": [
+      {
+        "type": "agent_start"
+      },
+      {
+        "type": "turn_start"
+      },
+      {
+        "type": "message_start"
+      },
+      {
+        "type": "message_end"
+      },
+      {
+        "type": "message_start"
+      },
+      {
+        "type": "message_end"
+      },
+      {
+        "type": "main_message_shape",
+        "stop_reason": "toolUse",
+        "text_characters": 95,
+        "text_block_count": 1,
+        "tool_call_count": 1,
+        "text_shape": "plain_text",
+        "observed_json_keys": []
+      },
+      {
+        "type": "model_usage",
+        "kind": "main",
+        "model": "deepseek-flash",
+        "provider_host": "api.deepseek.com",
+        "duration_ms": 1243.82011,
+        "usage": {
+          "input": 242,
+          "output": 91,
+          "cacheRead": 4096,
+          "cacheWrite": 0,
+          "totalTokens": 4429
+        },
+        "cost": null
+      },
+      {
+        "type": "interim_candidate",
+        "status": "ready",
+        "text_characters": 95,
+        "tool_call_count": 1
+      },
+      {
+        "type": "tool_execution_start",
+        "tool_name": "guide_request"
+      },
+      {
+        "type": "model_usage",
+        "kind": "interim_audit",
+        "model": "deepseek-flash",
+        "provider_host": "api.deepseek.com",
+        "duration_ms": 999.1359399999999,
+        "usage": {
+          "input": 162,
+          "output": 16,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 178
+        },
+        "cost": null
+      },
+      {
+        "type": "interim_audit",
+        "approved": false
+      },
+      {
+        "type": "tool_execution_end"
+      },
+      {
+        "type": "message_start"
+      },
+      {
+        "type": "message_end"
+      },
+      {
+        "type": "turn_end"
+      },
+      {
+        "type": "turn_start"
+      },
+      {
+        "type": "message_start"
+      },
+      {
+        "type": "message_end"
+      },
+      {
+        "type": "main_message_shape",
+        "stop_reason": "toolUse",
+        "text_characters": 75,
+        "text_block_count": 1,
+        "tool_call_count": 1,
+        "text_shape": "plain_text",
+        "observed_json_keys": []
+      },
+      {
+        "type": "model_usage",
+        "kind": "main",
+        "model": "deepseek-flash",
+        "provider_host": "api.deepseek.com",
+        "duration_ms": 1456.92411,
+        "usage": {
+          "input": 673,
+          "output": 101,
+          "cacheRead": 5376,
+          "cacheWrite": 0,
+          "totalTokens": 6150
+        },
+        "cost": null
+      },
+      {
+        "type": "interim_candidate",
+        "status": "ready",
+        "text_characters": 75,
+        "tool_call_count": 1
+      },
+      {
+        "type": "tool_execution_start",
+        "tool_name": "search_recipe_relations"
+      },
+      {
+        "type": "model_usage",
+        "kind": "interim_audit",
+        "model": "deepseek-flash",
+        "provider_host": "api.deepseek.com",
+        "duration_ms": 598.3350479999999,
+        "usage": {
+          "input": 189,
+          "output": 16,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 205
+        },
+        "cost": null
+      },
+      {
+        "type": "interim_audit",
+        "approved": true
+      },
+      {
+        "type": "graph_retrieval"
+      },
+      {
+        "type": "tool_execution_end"
+      },
+      {
+        "type": "message_start"
+      },
+      {
+        "type": "message_end"
+      },
+      {
+        "type": "turn_end"
+      },
+      {
+        "type": "turn_start"
+      },
+      {
+        "type": "message_start"
+      },
+      {
+        "type": "message_end"
+      },
+      {
+        "type": "main_message_shape",
+        "stop_reason": "toolUse",
+        "text_characters": 622,
+        "text_block_count": 1,
+        "tool_call_count": 1,
+        "text_shape": "plain_text",
+        "observed_json_keys": []
+      },
+      {
+        "type": "model_usage",
+        "kind": "main",
+        "model": "deepseek-flash",
+        "provider_host": "api.deepseek.com",
+        "duration_ms": 2598.126003999998,
+        "usage": {
+          "input": 2752,
+          "output": 527,
+          "cacheRead": 6144,
+          "cacheWrite": 0,
+          "totalTokens": 9423
+        },
+        "cost": null
+      },
+      {
+        "type": "tool_execution_start",
+        "tool_name": "finish_response"
+      },
+      {
+        "type": "tool_execution_end"
+      },
+      {
+        "type": "message_start"
+      },
+      {
+        "type": "message_end"
+      },
+      {
+        "type": "turn_end"
+      },
+      {
+        "type": "agent_end"
+      }
+    ],
+    "runtime_status": "completed",
+    "exception": null,
+    "test_child_launch_instrumentation": {
+      "worker_launches_matched": 1,
+      "node_options_injected": true,
+      "fetch_mode_injected": true,
+      "fetch_report_path_configured": true,
+      "rejected_text_capture_path_injected": true
+    },
+    "raw_text_or_request_body_recorded": false,
+    "provider_secret_recorded": false
+  },
+  "rejected_interim_capture": {
+    "candidate_count": 1,
+    "candidate_text_only": true,
+    "sha256": "afc5b953a148aa610e59d25bc9e3fa63acbc2de36457d8648b1e7461033d1b26",
+    "path": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/work/ceres2-optimization/testing/tmp/pi-real-smoke/recipe-facts-rejected-audit-capture-v1/rejected-audit-candidates.jsonl"
+  },
+  "fetch_wire_instrumentation": {
+    "mode": "observe",
+    "fetch_calls": 5,
+    "json_string_bodies": 5,
+    "tool_requests": 3,
+    "tool_requests_with_response_format": 0,
+    "response_format_removed": 0,
+    "tool_choice_required_requests": 0,
+    "tool_choice_auto_set": 0,
+    "tool_choice_auto_requests": 3,
+    "only_top_level_tool_choice_changed": true,
+    "only_top_level_response_format_removed": true,
+    "request_body_or_headers_recorded": false,
+    "credentials_recorded": false
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "browser": "Firefox 136.0 headless through Mozilla geckodriver 0.37.1",
+  "provider": {
+    "model_id": "deepseek-flash",
+    "base_hostname": "api.deepseek.com",
+    "api_key_recorded": false
+  },
+  "production_worker_modified": false,
+  "test_preload_or_sitecustomize": false,
+  "steps": [
+    "opened the built Grok-style Ceres UI in native Firefox",
+    "opened Keke and waited for its public message input",
+    "routed once, used the visible manual-role fallback, and resumed the same request",
+    "observed the browser DOM and public SSE event ordering"
+  ],
+  "outcome": {
+    "terminal_type": "turn.completed",
+    "terminal_sequence": 18,
+    "interim_sequence": 3,
+    "interim_preceded_terminal": true,
+    "interim_recorded_at_ms": 1791371943275.2224,
+    "interim_elapsed_ms": 2693.17919921875,
+    "interim_content_characters": 76,
+    "interim_content_sha256": "7fecb79ecc291ccab1952e4021cab1e4f64a8661a022c2d3e2dc8bddb0f18c89",
+    "ui_bubbles_before_terminal": null,
+    "ui_bubbles_after_terminal": {
+      "assistant_bubble_character_counts": [
+        37,
+        194,
+        76,
+        38
+      ],
+      "assistant_text_bubble_count": 4,
+      "input_count": 1,
+      "loading_bubble_count": 0
+    },
+    "dom_observed_ms_after_send": null,
+    "sse_sequence_types": [
+      {
+        "type": "accepted",
+        "sequence": 1
+      },
+      {
+        "type": "progress",
+        "sequence": 2
+      },
+      {
+        "type": "message.interim",
+        "sequence": 3,
+        "content_characters": 76,
+        "content_sha256": "7fecb79ecc291ccab1952e4021cab1e4f64a8661a022c2d3e2dc8bddb0f18c89",
+        "recorded_at_ms": 1791371943275.2224,
+        "elapsed_ms": 2693.17919921875
+      },
+      {
+        "type": "progress",
+        "sequence": 4
+      },
+      {
+        "type": "progress",
+        "sequence": 5
+      },
+      {
+        "type": "message.interim",
+        "sequence": 6,
+        "content_characters": 38,
+        "content_sha256": "ce93a332d53f2eef0f9dc3b197ecddf16ec868d75b7dc38f78e8b0c7cef25d72",
+        "recorded_at_ms": 1791371945075.7166,
+        "elapsed_ms": 4493.67333984375
+      },
+      {
+        "type": "progress",
+        "sequence": 7
+      },
+      {
+        "type": "progress",
+        "sequence": 8
+      },
+      {
+        "type": "answer.delta",
+        "sequence": 9
+      },
+      {
+        "type": "answer.delta",
+        "sequence": 10
+      },
+      {
+        "type": "answer.delta",
+        "sequence": 11
+      },
+      {
+        "type": "answer.delta",
+        "sequence": 12
+      },
+      {
+        "type": "answer.delta",
+        "sequence": 13
+      },
+      {
+        "type": "answer.delta",
+        "sequence": 14
+      },
+      {
+        "type": "answer.delta",
+        "sequence": 15
+      },
+      {
+        "type": "answer.delta",
+        "sequence": 16
+      },
+      {
+        "type": "answer.delta",
+        "sequence": 17
+      },
+      {
+        "type": "turn.completed",
+        "sequence": 18,
+        "runtime_status": "completed",
+        "answer_status": "accepted",
+        "finish_response_calls": 1,
+        "candidate_statuses": [
+          "ready",
+          "ready"
+        ]
+      }
+    ],
+    "backend_thread_dump_captured": false
+  },
+  "result": "failed",
+  "service": {
+    "health": "ok",
+    "business_data_mode": "demo",
+    "configured_for_live_provider": true,
+    "database": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/work/ceres2-optimization/testing/tmp/browser-interim/streaming-v9-stack/business.sqlite3"
+  },
+  "api_call_summary": {
+    "GET /api/v1/bootstrap 200": 1,
+    "GET /api/v1/categories 200": 1,
+    "GET /api/v1/products 200": 2,
+    "GET /api/v1/cart 200": 1,
+    "GET /media/images/demo-butter-200g.jpg 200": 1,
+    "GET /media/images/demo-baking-powder-100g.jpg 200": 1,
+    "POST /api/v1/guide/sessions 200": 2,
+    "POST /api/v1/navigation/sessions/{session_id}/opening 200": 1,
+    "GET /api/v1/guide/sessions/{session_id}/status 200": 1,
+    "POST /api/v1/navigation/sessions/{session_id}/routes 200": 1,
+    "POST /api/v1/navigation/sessions/{session_id}/switches 200": 1,
+    "GET /api/v1/guide/sessions/{session_id} 200": 2,
+    "POST /api/v1/guide/sessions/{session_id}/turns/stream 200": 1,
+    "POST /api/v1/guide/sessions/{session_id}/result-introductions 202": 1
+  }
+}

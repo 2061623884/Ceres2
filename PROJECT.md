@@ -211,3 +211,7 @@ Ceres 帮助用户把购物需求变成满足明确条件、符合模拟门店�
 ### 当前受控集成证据版本
 
 TASK16 同版验证范围为 320 个源码文件，集合 SHA-256：`b711e091dd35bd646062946a76c1f57b4e514f6a243eb1a9efe917874b63b6ba`。294 项两次验证与 45 项补充检查及关闭的最终两轴审查只适用于该冻结版本；详细证据及外部门槛见 [TASK16](tasks/ceres2-runtime-upgrade-16-integrated-verification.md) 和 [交付说明](work/clean-rebuild/16/DELIVERY.md)。本地交付版本以本分支 Git 提交为准；本地提交不等于整体用户验收，禁止推送。
+
+## 独立优化线路（2026-10-07）
+
+已授权在 `codex/ceres2-optimization-20261007` worktree 实现 demo 量级完整 RAG/GraphRAG、同一次 Pi 运行的可选中途消息与必要业务闭环，暂不合并。状态、验收与证据只在 [优化 TASK](tasks/ceres2-optimization.md) 维护；架构和范围见 [优化规格](docs/plans/ceres2-optimization-spec.md)。Dots 云端评测方法/数据集线路独立对齐，不继承旧采样结论。

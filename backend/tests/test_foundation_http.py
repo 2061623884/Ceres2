@@ -47,10 +47,10 @@ def test_bootstrap_uses_persistent_server_identity(web):
 def test_catalog_returns_real_seeded_products_and_current_offer(web):
     client, sessions = web
     categories = client.get('/api/v1/categories').json()
-    assert sum(c['product_count'] for c in categories) == 70
+    assert sum(c['product_count'] for c in categories) == 71
     listing = client.get('/api/v1/products', params={'page_size': 500}).json()
-    assert listing['total'] == 70
-    assert len(listing['items']) == 70  # baseline65 + approved35g snack + DR lemon-cola + three AC finished-product fixtures
+    assert listing['total'] == 71
+    assert len(listing['items']) == 71  # existing70 + demo shrimp for the selected recipe fixture
     assert 'demo:snack-original-potato-chips-35g-bag' in {p['sku_id'] for p in listing['items']}
     assert all(p['price_fen'] > 0 for p in listing['items'])
     sku = 'demo:flour-all-purpose-500g'
@@ -82,6 +82,25 @@ def test_schema_initialization_is_repeatable(tmp_path):
     init_db(engine)
     assert 'owners' in Base.metadata.tables
     engine.dispose()
+
+
+def test_repeat_seed_corrects_chips_procurement_without_resetting_offer(web):
+    import json
+    from app.models.catalog import CatalogProduct
+    client, sessions = web
+    sku = 'demo:snack-original-potato-chips-70g-bag'
+    with sessions.begin() as db:
+        product = db.get(CatalogProduct, sku)
+        product.ingredient_ids = json.dumps(['potato'])
+        offer = db.scalar(select(Offer).where(Offer.sku_id == sku))
+        offer.price_fen, offer.available_qty, offer.offer_version = 777, 2, 3
+    with sessions.begin() as db:
+        seed_catalog(db)
+    with sessions() as db:
+        assert 'potato' not in json.loads(db.get(CatalogProduct, sku).ingredient_ids)
+        offer = db.scalar(select(Offer).where(Offer.sku_id == sku))
+        assert (offer.price_fen, offer.available_qty, offer.offer_version) == (777, 2, 3)
+    assert client.get('/api/v1/products/'+sku).json()['price_fen'] == 777
 
 
 def test_schema_initialization_preserves_unrelated_existing_facts(tmp_path):

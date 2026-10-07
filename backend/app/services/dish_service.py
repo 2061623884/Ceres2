@@ -17,7 +17,21 @@ class DishService:
         self.catalog = catalog
 
     def search(self, query):
-        return [dish for dish in recipes() if any(query in name for name in [dish['name'], *dish['aliases']])]
+        from app.services.knowledge_service import knowledge
+        current = {dish['dish_id']: dish for dish in recipes()}
+        # A full canonical name/alias identifies a selected recipe. Similar
+        # recipes must not expand that named fact query or selection.
+        named = [identity for identity, dish in current.items() if query in (dish['name'], *dish['aliases'])]
+        retrieval = knowledge.search(query, 'recipe', limit=5, allowed_ids=named if named else list(current))
+        return [current[hit['id']] for hit in retrieval['hits']]
+
+    def graph_search(self, query):
+        from app.services.knowledge_service import knowledge
+        graph = knowledge.graph(query)
+        recipe_ids = [row['id'].removeprefix('recipe:') for row in graph['canonical_facts'] if row['type'] == 'RECIPE']
+        current = {dish['dish_id']: dish for dish in recipes()}
+        retrieval = knowledge.search(query, 'recipe', limit=5, allowed_ids=recipe_ids)
+        return [current[hit['id']] for hit in retrieval['hits'] if hit['id'] in current], graph
 
     def candidates(self, dish):
         ingredients = [row['ingredient_id'] for row in dish['required_items']] + dish['pantry_items']

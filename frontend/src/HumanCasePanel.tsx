@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { readHumanTicket, requestHumanTicket, replyHumanTicket, type HumanTicket } from './lib/humanCases'
+import HumanPhotos from './HumanPhotos'
 
 export const humanStatus = { open: '等待人工处理', waiting_user: '等待您补充信息', resolved: '已解决', closed: '已关闭' }
 const button = 'rounded-xl border border-black/15 px-3 py-2 text-xs disabled:opacity-40'
@@ -49,6 +50,7 @@ export function HumanCasePanel({ caseId, refreshKey = 0 }: { caseId: string; ref
     {ticket && <div className="space-y-2">
       <p>{ticket.summary}</p>
       <p className="break-all text-xs text-black/50">工单 {ticket.ticket_id}</p>
+      <HumanPhotos ticket={ticket} />
       {ticket.messages.map(message => <p key={message.message_id} className="rounded-lg bg-black/5 p-2"><span className="text-xs text-black/50">{message.author === 'operator' ? '人工处理者' : '您'}：</span>{message.content}</p>)}
     </div>}
     <label className="mt-3 block text-xs">{ticket && ['open', 'waiting_user'].includes(ticket.status) ? '补充信息' : '描述需要人工帮助的问题'}

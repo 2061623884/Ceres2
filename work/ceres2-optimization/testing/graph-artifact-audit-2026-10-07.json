@@ -1,0 +1,65 @@
+{
+  "graph_revision": "ceres-recipe-byog-v1",
+  "graphrag_version": "3.2.0",
+  "provider_model": "deepseek-flash",
+  "provider_host": "api.deepseek.com",
+  "source_counts": {
+    "product": 71,
+    "recipe": 8,
+    "policy": 11
+  },
+  "output_table_rows": {
+    "entities": 44,
+    "relationships": 61,
+    "text_units": 26,
+    "documents": 26,
+    "communities": 11,
+    "community_reports": 11
+  },
+  "entity_community_coverage": {
+    "entity_count": 44,
+    "covered_count": 44,
+    "missing_ids": []
+  },
+  "relationship_community_coverage": {
+    "relationship_count": 61,
+    "covered_count": 39,
+    "missing_count": 22
+  },
+  "community_report_ids_match": true,
+  "lance_tables": {
+    "community_full_content": {
+      "rows": 11,
+      "dimensions": 512
+    },
+    "entity_description": {
+      "rows": 44,
+      "dimensions": 512
+    },
+    "text_unit_text": {
+      "rows": 26,
+      "dimensions": 512
+    }
+  },
+  "completion_call_count": 11,
+  "completion_usage_totals": {
+    "prompt_tokens": 31817,
+    "completion_tokens": 12111,
+    "total_tokens": 43928
+  },
+  "implementation_hashes": {
+    "corpus.py": "8d8f1066d2935cc2e18bca77ef3a9af3a8c6aaee1ed6d49180d5edf4c2394e77",
+    "bge.py": "f9b22bee892e61f9954365e3bdca6ebe376edff5eed9995f121797659d9e5654",
+    "hybrid.py": "28cf7acca335d862106984bbec18b41980e2e2e63397f9c32ad8362d0422d9d2",
+    "graph.py": "75cc20f7f2efbb6e92f84a11d4184c6594c78231aac30ede5547715ebff64dec",
+    "providers.py": "0ff1259835fd51d384f3ee61e59253a1b2ed0a3c9dd5e23afa5e9ba2fcd19786"
+  },
+  "fixture_hashes": {
+    "products.json": "224f5486346850016e30f8a4b4cbb10af9c8f14d5337826d4e0269594e0b7db0",
+    "recipes.json": "bf841bb27fdbd833d3fdb93d356c156237fad93246e57f4f861b0c0a58ee985c",
+    "ingredients.json": "228bbb817f9f8e6e1932b56477b81cced9e3adbf5867cf8674c40690e5c8b287",
+    "policies.json": "7a370431a1a9c2df2b818218f3c54cb01946f93fa027aad44021dd1637f10502",
+    "knowledge-provenance.json": "2ec04bf44e16088c3e696617fd7486c471749f6b4b442ec6914f05360351ee15"
+  },
+  "manifest_path": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/data/indexes/graphrag/manifest.json"
+}

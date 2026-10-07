@@ -1,0 +1,139 @@
+{
+  "graph_revision": "ceres-recipe-byog-v3",
+  "graphrag_version": "3.2.0",
+  "provider_model": "deepseek-flash",
+  "provider_host": "api.deepseek.com",
+  "source_counts": {
+    "product": 71,
+    "recipe": 8,
+    "policy": 11
+  },
+  "output_table_rows": {
+    "entities": 44,
+    "relationships": 61,
+    "text_units": 26,
+    "documents": 26,
+    "communities": 11,
+    "community_reports": 11
+  },
+  "entity_community_coverage": {
+    "entity_count": 44,
+    "covered_count": 44,
+    "missing_ids": []
+  },
+  "relationship_community_coverage": {
+    "relationship_count": 61,
+    "covered_count": 39,
+    "missing_count": 22
+  },
+  "community_report_ids_match": true,
+  "community_witness_coverage": {
+    "community_count": 11,
+    "member_count": 54,
+    "witness_count": 54,
+    "all_members_have_witness": true,
+    "communities": [
+      {
+        "community": 0,
+        "member_count": 10,
+        "witness_count": 10,
+        "missing_entity_ids": []
+      },
+      {
+        "community": 1,
+        "member_count": 6,
+        "witness_count": 6,
+        "missing_entity_ids": []
+      },
+      {
+        "community": 2,
+        "member_count": 5,
+        "witness_count": 5,
+        "missing_entity_ids": []
+      },
+      {
+        "community": 3,
+        "member_count": 7,
+        "witness_count": 7,
+        "missing_entity_ids": []
+      },
+      {
+        "community": 4,
+        "member_count": 6,
+        "witness_count": 6,
+        "missing_entity_ids": []
+      },
+      {
+        "community": 5,
+        "member_count": 5,
+        "witness_count": 5,
+        "missing_entity_ids": []
+      },
+      {
+        "community": 6,
+        "member_count": 5,
+        "witness_count": 5,
+        "missing_entity_ids": []
+      },
+      {
+        "community": 7,
+        "member_count": 3,
+        "witness_count": 3,
+        "missing_entity_ids": []
+      },
+      {
+        "community": 8,
+        "member_count": 3,
+        "witness_count": 3,
+        "missing_entity_ids": []
+      },
+      {
+        "community": 9,
+        "member_count": 2,
+        "witness_count": 2,
+        "missing_entity_ids": []
+      },
+      {
+        "community": 10,
+        "member_count": 2,
+        "witness_count": 2,
+        "missing_entity_ids": []
+      }
+    ]
+  },
+  "lance_tables": {
+    "community_full_content": {
+      "rows": 11,
+      "dimensions": 512
+    },
+    "entity_description": {
+      "rows": 44,
+      "dimensions": 512
+    },
+    "text_unit_text": {
+      "rows": 26,
+      "dimensions": 512
+    }
+  },
+  "completion_call_count": 11,
+  "completion_usage_totals": {
+    "prompt_tokens": 33478,
+    "completion_tokens": 14067,
+    "total_tokens": 47545
+  },
+  "implementation_hashes": {
+    "corpus.py": "8d8f1066d2935cc2e18bca77ef3a9af3a8c6aaee1ed6d49180d5edf4c2394e77",
+    "bge.py": "f9b22bee892e61f9954365e3bdca6ebe376edff5eed9995f121797659d9e5654",
+    "hybrid.py": "28cf7acca335d862106984bbec18b41980e2e2e63397f9c32ad8362d0422d9d2",
+    "graph.py": "095f84d5adfa906242ed504b1832d19178d8adcb41bc82e5d0e2213d2f93d8ce",
+    "providers.py": "1d55074c04c1bf40af31361a53de511410ad856ff1e21c902f3a35221a29bd0a"
+  },
+  "fixture_hashes": {
+    "products.json": "8857a75c26387acb98023dd3b743e369a6d1f01fb1b64c24993fe3b87690f3e1",
+    "recipes.json": "1fd396fe8255961fd8c423817efe0d80a1a0ad8377b26e42104a76886c3ed45c",
+    "ingredients.json": "a9079a1c7ca8d3f94c4efdfa004ede7e48b5ea568f7cb8025804124ad82ca19d",
+    "policies.json": "7a370431a1a9c2df2b818218f3c54cb01946f93fa027aad44021dd1637f10502",
+    "knowledge-provenance.json": "bd0dbb60462ea1db3fdb0d36bb0cd12f8c86aa87e7b9ac1619fa9159bbef0fd9"
+  },
+  "manifest_path": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/data/indexes/graphrag/manifest.json"
+}

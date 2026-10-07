@@ -279,7 +279,7 @@ export function MercuryChat({ initialOrderId, entrySequence = 0, onOrderEntryCon
         {restoring && <p className="text-center text-sm text-black/40">正在连接墨墨…</p>}
         {error && <p className="text-center text-xs text-red-600">{error}</p>}
 
-        {sessionId && !restoring && <AfterSalesPanel caseId={sessionId} orderId={selectedOrder} selectionVersion={selectionVersion} refreshKey={caseRefresh} disabled={typing || selecting} interactionVersion={interactionVersion} />}
+        {sessionId && !restoring && <AfterSalesPanel caseId={sessionId} orderId={selectedOrder} selectionVersion={selectionVersion} refreshKey={caseRefresh} disabled={typing || selecting} interactionVersion={interactionVersion} onCaseChange={()=>setCaseRefresh(value=>value+1)} />}
 
         {sessionId && !restoring && <HumanCasePanel key={sessionId} caseId={sessionId} refreshKey={caseRefresh} />}
 

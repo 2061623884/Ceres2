@@ -1,0 +1,24 @@
+{
+  "version":"optimization-retrieval-dev-v1",
+  "purpose":"Development relevance calibration and lane comparison, not an independent acceptance set.",
+  "cases":[
+    {"id":"recipe-alias","namespace":"recipe","query":"什锦炒饭","target_ids":["dish-yangzhou-chao-fan"]},
+    {"id":"recipe-name","namespace":"recipe","query":"番茄炒蛋","target_ids":["dish-fanqie-chao-dan"]},
+    {"id":"recipe-egg","namespace":"recipe","query":"家里有鸡蛋和青椒，可以做哪道菜","target_ids":["dish-jiajiao-chaodan"]},
+    {"id":"recipe-unknown","namespace":"recipe","query":"佛跳墙的做法","target_ids":[]},
+    {"id":"product-shrimp","namespace":"product","query":"炒饭用的虾仁","target_ids":["demo:shrimp-200g"]},
+    {"id":"product-tomato","namespace":"product","query":"西红柿","target_ids":["demo:tomato-fresh-500g"]},
+    {"id":"product-water","namespace":"product","query":"瓶装饮用水","target_ids":["demo:water-550ml","demo:cn-nongfu-water-550ml-bottle","demo:cn-cestbon-water-555ml-bottle"]},
+    {"id":"product-potato","namespace":"product","query":"做酸辣土豆丝用的土豆","target_ids":["demo:potato-500g"],"excluded_ids":["demo:snack-original-potato-chips-70g-bag","demo:snack-original-potato-chips-35g-bag"]},
+    {"id":"product-apple-absent","namespace":"product","query":"苹果","target_ids":[]},
+    {"id":"product-bike-absent","namespace":"product","query":"自行车","target_ids":[]},
+    {"id":"policy-cancel","namespace":"policy","query":"未发货取消订单","target_ids":["P-REF-01","P-ORD-01"]},
+    {"id":"policy-return","namespace":"policy","query":"退货政策","target_ids":["P-RET-01","P-RET-02"]},
+    {"id":"policy-bad-fresh","namespace":"policy","query":"生鲜坏了能退吗","target_ids":["P-QUA-01","P-RET-02"]},
+    {"id":"policy-delivery","namespace":"policy","query":"还没送来怎么办","target_ids":["P-DEL-01","P-FUL-01"]},
+    {"id":"policy-safety","namespace":"policy","query":"食品疑似变质，担心吃了有危险","target_ids":["P-SAF-01","P-QUA-01"]},
+    {"id":"policy-discount","namespace":"policy","query":"优惠能一起用吗","target_ids":["P-PRI-01"]},
+    {"id":"policy-unknown","namespace":"policy","query":"火星定制商品特殊条款","target_ids":[]},
+    {"id":"policy-bike","namespace":"policy","query":"怎么修自行车","target_ids":[]}
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "browser": "Firefox 136.0 headless through Mozilla geckodriver 0.37.1",
+  "frontend_origin": "http://127.0.0.1:18444",
+  "isolated_backend_origin": "http://127.0.0.1:18013",
+  "isolated_database": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/work/ceres2-optimization/testing/tmp/browser-demo/business.sqlite3",
+  "journey_steps": [
+    "opened Ceres landing page in isolated native Firefox"
+  ],
+  "checks": {},
+  "result": "failed",
+  "error": "WebDriver POST /session/b8fe9496-4601-4d07-b9a6-ab52aa71836e/execute/sync returned 500: {'value': {'error': 'javascript error', 'message': 'TypeError: arguments[0].scrollIntoView is not a function', 'stacktrace': '@http://127.0.0.1:18444/:2:20\\n@http://127.0.0.1:18444/:3:8\\n'}}",
+  "traceback": "Traceback (most recent call last):\n  File \"/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/backend/../work/ceres2-optimization/testing/browser_demo_journey.py\", line 257, in main\n    click_button(driver, \"商品\")\n  File \"/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/backend/../work/ceres2-optimization/testing/browser_demo_journey.py\", line 184, in click_button\n    driver.script(\"arguments[0].scrollIntoView({block:'center'});\", [element_id])\n  File \"/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/backend/../work/ceres2-optimization/testing/browser_demo_journey.py\", line 136, in script\n    return self.command(\"POST\", \"/execute/sync\", {\"script\": source, \"args\": args or []}, timeout=45)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/backend/../work/ceres2-optimization/testing/browser_demo_journey.py\", line 133, in command\n    return self.request(method, self.root + path, payload, timeout).get(\"value\")\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/backend/../work/ceres2-optimization/testing/browser_demo_journey.py\", line 129, in request\n    raise BrowserFailure(f\"WebDriver {method} {path} returned {status}: {value}\")\nBrowserFailure: WebDriver POST /session/b8fe9496-4601-4d07-b9a6-ab52aa71836e/execute/sync returned 500: {'value': {'error': 'javascript error', 'message': 'TypeError: arguments[0].scrollIntoView is not a function', 'stacktrace': '@http://127.0.0.1:18444/:2:20\\n@http://127.0.0.1:18444/:3:8\\n'}}\n",
+  "proxy_api_calls": [
+    {
+      "method": "GET",
+      "path": "/api/v1/bootstrap",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/cart",
+      "status": 200
+    }
+  ],
+  "failure_page_text": "哈喽，\nCeres的朋友!\n今日心情\n演示\n😡\n😕\n😐\n🙂\n😍\n为你准备\n查看全部 ↗\n轻盈计划\n\n减脂餐\n\n成品轻食选购（演示）\n\n当季鲜选\n\n生鲜采买\n\n当季食材一键备货\n\n主页\n商品\n订单\n个人中心",
+  "failure_screenshot": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/work/ceres2-optimization/testing/tmp/browser-demo/browser-demo-failure.png"
+}

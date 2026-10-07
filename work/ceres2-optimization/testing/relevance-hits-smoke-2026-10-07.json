@@ -1,0 +1,507 @@
+{
+  "eval_version": "optimization-retrieval-dev-v1",
+  "purpose": "Development relevance calibration and lane comparison, not an independent acceptance set.",
+  "index_manifest": {
+    "relevance_revision": "retrieval-dev-v1-floors",
+    "relevance_floors": {
+      "recipe": 0.54,
+      "product": 0.56,
+      "policy": 0.5
+    },
+    "calibration_sha256": "eb47a57f89fc65d56d3e74a9b68947d096ba485d5c08051f29dc9a97aa12652e",
+    "expected_calibration_sha256": "eb47a57f89fc65d56d3e74a9b68947d096ba485d5c08051f29dc9a97aa12652e"
+  },
+  "case_count": 18,
+  "positive_case_count": 13,
+  "negative_case_count": 5,
+  "positive_targets_top3_count": 13,
+  "negative_empty_count": 5,
+  "potato_chips_excluded_from_hits": true,
+  "failures": [],
+  "cases": [
+    {
+      "case_id": "recipe-alias",
+      "namespace": "recipe",
+      "query": "什锦炒饭",
+      "target_ids": [
+        "dish-yangzhou-chao-fan"
+      ],
+      "target_hit_ranks": {
+        "dish-yangzhou-chao-fan": 1
+      },
+      "hits_top3": [
+        {
+          "id": "dish-yangzhou-chao-fan",
+          "rrf_score": 0.03278688524590164,
+          "cosine": 0.7509927749633789
+        },
+        {
+          "id": "dish-dan-chao-fan",
+          "rrf_score": 0.03225806451612903,
+          "cosine": 0.6375530958175659
+        }
+      ],
+      "hit_count": 2,
+      "negative_empty": true,
+      "excluded_ids": [],
+      "excluded_hit_ids": [],
+      "relevance_floor": 0.54,
+      "positive_targets_top3": true
+    },
+    {
+      "case_id": "recipe-name",
+      "namespace": "recipe",
+      "query": "番茄炒蛋",
+      "target_ids": [
+        "dish-fanqie-chao-dan"
+      ],
+      "target_hit_ranks": {
+        "dish-fanqie-chao-dan": 1
+      },
+      "hits_top3": [
+        {
+          "id": "dish-fanqie-chao-dan",
+          "rrf_score": 0.03278688524590164,
+          "cosine": 0.8098695278167725
+        },
+        {
+          "id": "dish-jiajiao-chaodan",
+          "rrf_score": 0.03225806451612903,
+          "cosine": 0.6397520899772644
+        },
+        {
+          "id": "dish-dan-chao-fan",
+          "rrf_score": 0.015873015873015872,
+          "cosine": 0.5936989784240723
+        }
+      ],
+      "hit_count": 3,
+      "negative_empty": true,
+      "excluded_ids": [],
+      "excluded_hit_ids": [],
+      "relevance_floor": 0.54,
+      "positive_targets_top3": true
+    },
+    {
+      "case_id": "recipe-egg",
+      "namespace": "recipe",
+      "query": "家里有鸡蛋和青椒，可以做哪道菜",
+      "target_ids": [
+        "dish-jiajiao-chaodan"
+      ],
+      "target_hit_ranks": {
+        "dish-jiajiao-chaodan": 1
+      },
+      "hits_top3": [
+        {
+          "id": "dish-jiajiao-chaodan",
+          "rrf_score": 0.03278688524590164,
+          "cosine": 0.7164088487625122
+        },
+        {
+          "id": "dish-fanqie-chao-dan",
+          "rrf_score": 0.03200204813108039,
+          "cosine": 0.5934027433395386
+        },
+        {
+          "id": "dish-qingjiao-rousi",
+          "rrf_score": 0.03200204813108039,
+          "cosine": 0.5907136797904968
+        }
+      ],
+      "hit_count": 5,
+      "negative_empty": true,
+      "excluded_ids": [],
+      "excluded_hit_ids": [],
+      "relevance_floor": 0.54,
+      "positive_targets_top3": true
+    },
+    {
+      "case_id": "recipe-unknown",
+      "namespace": "recipe",
+      "query": "佛跳墙的做法",
+      "target_ids": [],
+      "target_hit_ranks": {},
+      "hits_top3": [],
+      "hit_count": 0,
+      "negative_empty": true,
+      "excluded_ids": [],
+      "excluded_hit_ids": [],
+      "relevance_floor": 0.54,
+      "positive_targets_top3": true
+    },
+    {
+      "case_id": "product-shrimp",
+      "namespace": "product",
+      "query": "炒饭用的虾仁",
+      "target_ids": [
+        "demo:shrimp-200g"
+      ],
+      "target_hit_ranks": {
+        "demo:shrimp-200g": 1
+      },
+      "hits_top3": [
+        {
+          "id": "demo:shrimp-200g",
+          "rrf_score": 0.03278688524590164,
+          "cosine": 0.7040766477584839
+        }
+      ],
+      "hit_count": 1,
+      "negative_empty": true,
+      "excluded_ids": [],
+      "excluded_hit_ids": [],
+      "relevance_floor": 0.56,
+      "positive_targets_top3": true
+    },
+    {
+      "case_id": "product-tomato",
+      "namespace": "product",
+      "query": "西红柿",
+      "target_ids": [
+        "demo:tomato-fresh-500g"
+      ],
+      "target_hit_ranks": {
+        "demo:tomato-fresh-500g": 1
+      },
+      "hits_top3": [
+        {
+          "id": "demo:tomato-fresh-500g",
+          "rrf_score": 0.01639344262295082,
+          "cosine": 0.6102555394172668
+        }
+      ],
+      "hit_count": 1,
+      "negative_empty": true,
+      "excluded_ids": [],
+      "excluded_hit_ids": [],
+      "relevance_floor": 0.56,
+      "positive_targets_top3": true
+    },
+    {
+      "case_id": "product-water",
+      "namespace": "product",
+      "query": "瓶装饮用水",
+      "target_ids": [
+        "demo:water-550ml",
+        "demo:cn-nongfu-water-550ml-bottle",
+        "demo:cn-cestbon-water-555ml-bottle"
+      ],
+      "target_hit_ranks": {
+        "demo:water-550ml": 2,
+        "demo:cn-nongfu-water-550ml-bottle": 3,
+        "demo:cn-cestbon-water-555ml-bottle": 1
+      },
+      "hits_top3": [
+        {
+          "id": "demo:cn-cestbon-water-555ml-bottle",
+          "rrf_score": 0.03252247488101534,
+          "cosine": 0.7465536594390869
+        },
+        {
+          "id": "demo:water-550ml",
+          "rrf_score": 0.032266458495966696,
+          "cosine": 0.7714277505874634
+        },
+        {
+          "id": "demo:cn-nongfu-water-550ml-bottle",
+          "rrf_score": 0.03200204813108039,
+          "cosine": 0.7256149053573608
+        }
+      ],
+      "hit_count": 10,
+      "negative_empty": true,
+      "excluded_ids": [],
+      "excluded_hit_ids": [],
+      "relevance_floor": 0.56,
+      "positive_targets_top3": true
+    },
+    {
+      "case_id": "product-potato",
+      "namespace": "product",
+      "query": "做酸辣土豆丝用的土豆",
+      "target_ids": [
+        "demo:potato-500g"
+      ],
+      "target_hit_ranks": {
+        "demo:potato-500g": 1
+      },
+      "hits_top3": [
+        {
+          "id": "demo:potato-500g",
+          "rrf_score": 0.03278688524590164,
+          "cosine": 0.6592614650726318
+        }
+      ],
+      "hit_count": 1,
+      "negative_empty": true,
+      "excluded_ids": [
+        "demo:snack-original-potato-chips-70g-bag",
+        "demo:snack-original-potato-chips-35g-bag"
+      ],
+      "excluded_hit_ids": [],
+      "relevance_floor": 0.56,
+      "positive_targets_top3": true
+    },
+    {
+      "case_id": "product-apple-absent",
+      "namespace": "product",
+      "query": "苹果",
+      "target_ids": [],
+      "target_hit_ranks": {},
+      "hits_top3": [],
+      "hit_count": 0,
+      "negative_empty": true,
+      "excluded_ids": [],
+      "excluded_hit_ids": [],
+      "relevance_floor": 0.56,
+      "positive_targets_top3": true
+    },
+    {
+      "case_id": "product-bike-absent",
+      "namespace": "product",
+      "query": "自行车",
+      "target_ids": [],
+      "target_hit_ranks": {},
+      "hits_top3": [],
+      "hit_count": 0,
+      "negative_empty": true,
+      "excluded_ids": [],
+      "excluded_hit_ids": [],
+      "relevance_floor": 0.56,
+      "positive_targets_top3": true
+    },
+    {
+      "case_id": "policy-cancel",
+      "namespace": "policy",
+      "query": "未发货取消订单",
+      "target_ids": [
+        "P-REF-01",
+        "P-ORD-01"
+      ],
+      "target_hit_ranks": {
+        "P-REF-01": 1,
+        "P-ORD-01": 2
+      },
+      "hits_top3": [
+        {
+          "id": "P-REF-01",
+          "rrf_score": 0.03278688524590164,
+          "cosine": 0.7524361610412598
+        },
+        {
+          "id": "P-ORD-01",
+          "rrf_score": 0.03225806451612903,
+          "cosine": 0.6430987119674683
+        },
+        {
+          "id": "P-DEL-01",
+          "rrf_score": 0.031024531024531024,
+          "cosine": 0.5314828753471375
+        }
+      ],
+      "hit_count": 9,
+      "negative_empty": true,
+      "excluded_ids": [],
+      "excluded_hit_ids": [],
+      "relevance_floor": 0.5,
+      "positive_targets_top3": true
+    },
+    {
+      "case_id": "policy-return",
+      "namespace": "policy",
+      "query": "退货政策",
+      "target_ids": [
+        "P-RET-01",
+        "P-RET-02"
+      ],
+      "target_hit_ranks": {
+        "P-RET-01": 1,
+        "P-RET-02": 2
+      },
+      "hits_top3": [
+        {
+          "id": "P-RET-01",
+          "rrf_score": 0.032266458495966696,
+          "cosine": 0.5827369093894958
+        },
+        {
+          "id": "P-RET-02",
+          "rrf_score": 0.03225806451612903,
+          "cosine": 0.5892359018325806
+        },
+        {
+          "id": "P-REF-01",
+          "rrf_score": 0.032018442622950824,
+          "cosine": 0.6241207122802734
+        }
+      ],
+      "hit_count": 7,
+      "negative_empty": true,
+      "excluded_ids": [],
+      "excluded_hit_ids": [],
+      "relevance_floor": 0.5,
+      "positive_targets_top3": true
+    },
+    {
+      "case_id": "policy-bad-fresh",
+      "namespace": "policy",
+      "query": "生鲜坏了能退吗",
+      "target_ids": [
+        "P-QUA-01",
+        "P-RET-02"
+      ],
+      "target_hit_ranks": {
+        "P-QUA-01": 2,
+        "P-RET-02": 1
+      },
+      "hits_top3": [
+        {
+          "id": "P-RET-02",
+          "rrf_score": 0.03278688524590164,
+          "cosine": 0.6446715593338013
+        },
+        {
+          "id": "P-QUA-01",
+          "rrf_score": 0.016129032258064516,
+          "cosine": 0.565921425819397
+        },
+        {
+          "id": "P-RET-01",
+          "rrf_score": 0.015873015873015872,
+          "cosine": 0.536763072013855
+        }
+      ],
+      "hit_count": 6,
+      "negative_empty": true,
+      "excluded_ids": [],
+      "excluded_hit_ids": [],
+      "relevance_floor": 0.5,
+      "positive_targets_top3": true
+    },
+    {
+      "case_id": "policy-delivery",
+      "namespace": "policy",
+      "query": "还没送来怎么办",
+      "target_ids": [
+        "P-DEL-01",
+        "P-FUL-01"
+      ],
+      "target_hit_ranks": {
+        "P-DEL-01": 2,
+        "P-FUL-01": 1
+      },
+      "hits_top3": [
+        {
+          "id": "P-FUL-01",
+          "rrf_score": 0.01639344262295082,
+          "cosine": 0.5963628888130188
+        },
+        {
+          "id": "P-DEL-01",
+          "rrf_score": 0.016129032258064516,
+          "cosine": 0.5256590247154236
+        },
+        {
+          "id": "P-RET-01",
+          "rrf_score": 0.015873015873015872,
+          "cosine": 0.5085647106170654
+        }
+      ],
+      "hit_count": 3,
+      "negative_empty": true,
+      "excluded_ids": [],
+      "excluded_hit_ids": [],
+      "relevance_floor": 0.5,
+      "positive_targets_top3": true
+    },
+    {
+      "case_id": "policy-safety",
+      "namespace": "policy",
+      "query": "食品疑似变质，担心吃了有危险",
+      "target_ids": [
+        "P-SAF-01",
+        "P-QUA-01"
+      ],
+      "target_hit_ranks": {
+        "P-SAF-01": 2,
+        "P-QUA-01": 1
+      },
+      "hits_top3": [
+        {
+          "id": "P-QUA-01",
+          "rrf_score": 0.03252247488101534,
+          "cosine": 0.6559972167015076
+        },
+        {
+          "id": "P-SAF-01",
+          "rrf_score": 0.03252247488101534,
+          "cosine": 0.6754224300384521
+        },
+        {
+          "id": "P-RET-02",
+          "rrf_score": 0.03149801587301587,
+          "cosine": 0.5503270626068115
+        }
+      ],
+      "hit_count": 4,
+      "negative_empty": true,
+      "excluded_ids": [],
+      "excluded_hit_ids": [],
+      "relevance_floor": 0.5,
+      "positive_targets_top3": true
+    },
+    {
+      "case_id": "policy-discount",
+      "namespace": "policy",
+      "query": "优惠能一起用吗",
+      "target_ids": [
+        "P-PRI-01"
+      ],
+      "target_hit_ranks": {
+        "P-PRI-01": 1
+      },
+      "hits_top3": [
+        {
+          "id": "P-PRI-01",
+          "rrf_score": 0.03278688524590164,
+          "cosine": 0.514642059803009
+        }
+      ],
+      "hit_count": 1,
+      "negative_empty": true,
+      "excluded_ids": [],
+      "excluded_hit_ids": [],
+      "relevance_floor": 0.5,
+      "positive_targets_top3": true
+    },
+    {
+      "case_id": "policy-unknown",
+      "namespace": "policy",
+      "query": "火星定制商品特殊条款",
+      "target_ids": [],
+      "target_hit_ranks": {},
+      "hits_top3": [],
+      "hit_count": 0,
+      "negative_empty": true,
+      "excluded_ids": [],
+      "excluded_hit_ids": [],
+      "relevance_floor": 0.5,
+      "positive_targets_top3": true
+    },
+    {
+      "case_id": "policy-bike",
+      "namespace": "policy",
+      "query": "怎么修自行车",
+      "target_ids": [],
+      "target_hit_ranks": {},
+      "hits_top3": [],
+      "hit_count": 0,
+      "negative_empty": true,
+      "excluded_ids": [],
+      "excluded_hit_ids": [],
+      "relevance_floor": 0.5,
+      "positive_targets_top3": true
+    }
+  ]
+}

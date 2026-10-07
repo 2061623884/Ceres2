@@ -1,0 +1,313 @@
+{
+  "provider_model": "deepseek-flash",
+  "provider_host": "api.deepseek.com",
+  "query": "这批家常菜共有哪几类食材，哪些菜用鸡蛋",
+  "failure": {
+    "type": "ValueError",
+    "message": "GraphRAG selected a reference outside the retrieved context"
+  },
+  "search_returned": false,
+  "answer_is_no_data": false,
+  "selection_shape_valid": true,
+  "selected_entity_ids": [
+    "ingredient:猪肉",
+    "ingredient:青椒",
+    "ingredient:卷心菜",
+    "ingredient:食用油",
+    "ingredient:酱油",
+    "ingredient:鸡胸肉",
+    "ingredient:花生",
+    "ingredient:醋",
+    "ingredient:大米",
+    "ingredient:葱",
+    "ingredient:糖",
+    "ingredient:番茄",
+    "ingredient:鸡蛋",
+    "ingredient:盐",
+    "ingredient:土豆",
+    "ingredient:辣椒酱",
+    "ingredient:虾",
+    "ingredient:豌豆",
+    "recipe:扬州炒饭",
+    "recipe:蛋炒饭",
+    "recipe:番茄炒蛋",
+    "recipe:尖椒炒蛋"
+  ],
+  "selected_entity_details": [
+    {
+      "id": "ingredient:猪肉",
+      "in_exact_scope_set": false
+    },
+    {
+      "id": "ingredient:青椒",
+      "in_exact_scope_set": false
+    },
+    {
+      "id": "ingredient:卷心菜",
+      "in_exact_scope_set": false
+    },
+    {
+      "id": "ingredient:食用油",
+      "in_exact_scope_set": false
+    },
+    {
+      "id": "ingredient:酱油",
+      "in_exact_scope_set": false
+    },
+    {
+      "id": "ingredient:鸡胸肉",
+      "in_exact_scope_set": false
+    },
+    {
+      "id": "ingredient:花生",
+      "in_exact_scope_set": false
+    },
+    {
+      "id": "ingredient:醋",
+      "in_exact_scope_set": false
+    },
+    {
+      "id": "ingredient:大米",
+      "in_exact_scope_set": false
+    },
+    {
+      "id": "ingredient:葱",
+      "in_exact_scope_set": false
+    },
+    {
+      "id": "ingredient:糖",
+      "in_exact_scope_set": false
+    },
+    {
+      "id": "ingredient:番茄",
+      "in_exact_scope_set": false
+    },
+    {
+      "id": "ingredient:鸡蛋",
+      "in_exact_scope_set": false
+    },
+    {
+      "id": "ingredient:盐",
+      "in_exact_scope_set": false
+    },
+    {
+      "id": "ingredient:土豆",
+      "in_exact_scope_set": false
+    },
+    {
+      "id": "ingredient:辣椒酱",
+      "in_exact_scope_set": false
+    },
+    {
+      "id": "ingredient:虾",
+      "in_exact_scope_set": false
+    },
+    {
+      "id": "ingredient:豌豆",
+      "in_exact_scope_set": false
+    },
+    {
+      "id": "recipe:扬州炒饭",
+      "in_exact_scope_set": false
+    },
+    {
+      "id": "recipe:蛋炒饭",
+      "in_exact_scope_set": false
+    },
+    {
+      "id": "recipe:番茄炒蛋",
+      "in_exact_scope_set": false
+    },
+    {
+      "id": "recipe:尖椒炒蛋",
+      "in_exact_scope_set": false
+    }
+  ],
+  "context_keys": {
+    "reports": 11
+  },
+  "entity_context_ids": [],
+  "context_report_ids": [
+    "0",
+    "1",
+    "10",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9"
+  ],
+  "report_id_mappings": [
+    {
+      "context_report_id": "7",
+      "report_human_readable_id": 7,
+      "community_id": 7,
+      "member_count": 3,
+      "member_ids": [
+        "sku:demo:cabbage-500g",
+        "ingredient:cabbage",
+        "recipe:dish-huiguo-rou"
+      ]
+    },
+    {
+      "context_report_id": "8",
+      "report_human_readable_id": 8,
+      "community_id": 8,
+      "member_count": 3,
+      "member_ids": [
+        "ingredient:pork",
+        "sku:demo:pork-500g",
+        "recipe:dish-qingjiao-rousi"
+      ]
+    },
+    {
+      "context_report_id": "9",
+      "report_human_readable_id": 9,
+      "community_id": 9,
+      "member_count": 2,
+      "member_ids": [
+        "ingredient:soy_sauce",
+        "sku:demo:soy-sauce-500ml"
+      ]
+    },
+    {
+      "context_report_id": "10",
+      "report_human_readable_id": 10,
+      "community_id": 10,
+      "member_count": 2,
+      "member_ids": [
+        "ingredient:oil",
+        "sku:demo:cooking-oil-500ml"
+      ]
+    },
+    {
+      "context_report_id": "0",
+      "report_human_readable_id": 0,
+      "community_id": 0,
+      "member_count": 10,
+      "member_ids": [
+        "sku:demo:cabbage-500g",
+        "ingredient:cabbage",
+        "recipe:dish-huiguo-rou",
+        "ingredient:pork",
+        "ingredient:soy_sauce",
+        "ingredient:oil",
+        "sku:demo:pork-500g",
+        "recipe:dish-qingjiao-rousi",
+        "sku:demo:soy-sauce-500ml",
+        "sku:demo:cooking-oil-500ml"
+      ]
+    },
+    {
+      "context_report_id": "1",
+      "report_human_readable_id": 1,
+      "community_id": 1,
+      "member_count": 6,
+      "member_ids": [
+        "ingredient:salt",
+        "sku:demo:potato-500g",
+        "ingredient:potato",
+        "recipe:dish-suanla-tudousi",
+        "sku:demo:salt-500g",
+        "ingredient:chili_sauce"
+      ]
+    },
+    {
+      "context_report_id": "2",
+      "report_human_readable_id": 2,
+      "community_id": 2,
+      "member_count": 5,
+      "member_ids": [
+        "sku:demo:rice-2kg",
+        "ingredient:rice",
+        "recipe:dish-dan-chao-fan",
+        "sku:demo:scallion-200g",
+        "ingredient:scallion"
+      ]
+    },
+    {
+      "context_report_id": "3",
+      "report_human_readable_id": 3,
+      "community_id": 3,
+      "member_count": 7,
+      "member_ids": [
+        "recipe:dish-gongbao-jiding",
+        "ingredient:peanut",
+        "ingredient:vinegar",
+        "ingredient:chicken_breast",
+        "sku:demo:vinegar-500ml",
+        "sku:demo:peanut-200g",
+        "sku:demo:chicken-breast-500g"
+      ]
+    },
+    {
+      "context_report_id": "4",
+      "report_human_readable_id": 4,
+      "community_id": 4,
+      "member_count": 6,
+      "member_ids": [
+        "ingredient:bell_pepper",
+        "recipe:dish-jiajiao-chaodan",
+        "ingredient:egg",
+        "sku:demo:bell-pepper-300g",
+        "sku:demo:eggs-10pack",
+        "sku:demo:eggs-fresh-6pack"
+      ]
+    },
+    {
+      "context_report_id": "5",
+      "report_human_readable_id": 5,
+      "community_id": 5,
+      "member_count": 5,
+      "member_ids": [
+        "recipe:dish-yangzhou-chao-fan",
+        "ingredient:shrimp",
+        "ingredient:green_pea",
+        "sku:demo:shrimp-200g",
+        "sku:demo:green-pea-300g"
+      ]
+    },
+    {
+      "context_report_id": "6",
+      "report_human_readable_id": 6,
+      "community_id": 6,
+      "member_count": 5,
+      "member_ids": [
+        "sku:demo:tomato-fresh-500g",
+        "ingredient:tomato",
+        "recipe:dish-fanqie-chao-dan",
+        "ingredient:sugar",
+        "sku:demo:sugar-white-500g"
+      ]
+    }
+  ],
+  "scope_entity_count": 44,
+  "out_of_scope_entity_ids": [
+    "ingredient:卷心菜",
+    "ingredient:土豆",
+    "ingredient:大米",
+    "ingredient:猪肉",
+    "ingredient:番茄",
+    "ingredient:盐",
+    "ingredient:糖",
+    "ingredient:花生",
+    "ingredient:葱",
+    "ingredient:虾",
+    "ingredient:豌豆",
+    "ingredient:辣椒酱",
+    "ingredient:酱油",
+    "ingredient:醋",
+    "ingredient:青椒",
+    "ingredient:食用油",
+    "ingredient:鸡胸肉",
+    "ingredient:鸡蛋",
+    "recipe:尖椒炒蛋",
+    "recipe:扬州炒饭",
+    "recipe:番茄炒蛋",
+    "recipe:蛋炒饭"
+  ],
+  "call_count": 4
+}

@@ -20,6 +20,11 @@ class ConfirmRequest(BaseModel):
     idempotency_key: str = Field(min_length=1, max_length=128)
     confirmed: Literal[True]
 
+class DemoAdvance(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    expected_version: int = Field(ge=1)
+    status: Literal['shipped', 'delivered']
+
 
 def service(request: Request, response: Response, db: Session = Depends(get_db)):
     return CheckoutService(db, get_or_create_owner(request, response, db))
@@ -39,3 +44,7 @@ def list_orders(checkout: CheckoutService = Depends(service)):
 @router.get('/orders/{order_id}')
 def get_order(order_id: str, checkout: CheckoutService = Depends(service)):
     return checkout.get_order(order_id)
+
+@router.post('/orders/{order_id}/demo-state', dependencies=[Depends(require_shopping_writes)])
+def advance_demo(order_id: str, body: DemoAdvance, checkout: CheckoutService = Depends(service)):
+    return checkout.advance_demo(order_id, body.expected_version, body.status)

@@ -1,0 +1,56 @@
+{
+  "sample_id": "product-policy-native-tools-production-v3-current-interim-claim",
+  "sample_revision": "native-tools-finish-response-interim-audit-v1",
+  "instrumentation": {
+    "runtime_events_safe_projection": false,
+    "test_sitecustomize_enabled": false,
+    "node_message_shape": false,
+    "wire_fetch_mode": "disabled",
+    "wire_override_scope": null,
+    "production_worker_modified": false
+  },
+  "provider": {
+    "configured": true,
+    "model_id": "deepseek-flash",
+    "base_hostname": "api.deepseek.com",
+    "api_key_value_recorded": false
+  },
+  "route": {},
+  "request": {
+    "sha256": "773e84a1e4e77b9f02466f2740bd0f6ece6af45682dc15fcd73689b88955718d",
+    "length": 57
+  },
+  "source_sha256": {
+    "backend/app/prompts/experience.json": "793ed7aef9636f69d0082e991a80d7c38d0f753613dd0827bf20490d87231afe",
+    "backend/app/prompts/experience.py": "d66693ea9c11b7d5ff50df83c133389f0d7104d013f10f6194dc7666a26502a3",
+    "backend/app/services/pi_product_runtime.py": "d1285f785ce2e71c4de63eb6ef7a31af153d0d17071de2c2f73702e05ddb82f3",
+    "backend/app/services/pi_product_turn_service.py": "d04bd133427377e37d36d46bd5debdb131046f9083460de010fed7450e9062a9",
+    "backend/app/services/guide_run_service.py": "2bbb7494279eb79ce7ba18f07eacedf08e5321bde6c167065bdd54c98a7a1451",
+    "backend/app/models/guide.py": "40e273a2918cee5dfa00f299d1757ecf4982cad3f9290604d30eb38bb0218c52",
+    "backend/app/evaluation/export_runs.py": "9974050b2aa9c8b2c472532622e1f71d45eb25db3cccf23d5672c09f9ca504a5",
+    "runtime/pi/src/worker.ts": "886e77de443fc10e0c495860365740b3c6da492a4bc4ae7742ba12ddb4796a51",
+    "runtime/pi/dist/worker.js": "431849c84a73017b70361f555c74e6f6a4397a4a00d517833183bfc751035aa1",
+    "runtime/pi/src/prompt-modules.ts": "fbcf407ac3be56b9df06e0e177f9e84a1413a03b1060c8d16e8aa379fcc27625",
+    "work/ceres2-optimization/testing/sitecustomize.py": "81842b2454afbf3dfb11db9d0d5613018360dee780b10be89151ce9aaa6d72fd",
+    "work/ceres2-optimization/testing/strip_response_format_preload.mjs": "10332d19363f31b3054188810fea8b243db70bd26b8b82d6d3e5f9e96e0c7015",
+    "data/fixtures/products.json": "8857a75c26387acb98023dd3b743e369a6d1f01fb1b64c24993fe3b87690f3e1",
+    "data/fixtures/recipes.json": "1fd396fe8255961fd8c423817efe0d80a1a0ad8377b26e42104a76886c3ed45c",
+    "data/fixtures/policies.json": "7a370431a1a9c2df2b818218f3c54cb01946f93fa027aad44021dd1637f10502",
+    "evals/ceres2-optimization-retrieval-dev.json": "eb47a57f89fc65d56d3e74a9b68947d096ba485d5c08051f29dc9a97aa12652e"
+  },
+  "observed": {},
+  "export": null,
+  "raw_sse_ignored_path": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/work/ceres2-optimization/testing/tmp/pi-real-smoke/product-policy-native-tools-production-v3-current-interim-claim/guide-sse.jsonl",
+  "safe_runtime_diagnostics_path": null,
+  "safe_fetch_diagnostics_path": null,
+  "owner_id_or_provider_key_recorded": false,
+  "result": "failed",
+  "isolated_service": {
+    "health": "ok",
+    "business_data_mode": "demo",
+    "configured_for_live_provider": true
+  },
+  "failure_class": "HTTPError",
+  "failure_stage": "guide_session_setup",
+  "failure_fingerprint": "19131a1b317655f3cb0d4b97b4de0d56df0c6910128e96067d27e3b59ae38b4f"
+}

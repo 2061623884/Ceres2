@@ -1,0 +1,208 @@
+{
+  "exit_result": "success",
+  "provider_model": "deepseek-flash",
+  "provider_host": "api.deepseek.com",
+  "graph_root": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/data/indexes/graphrag",
+  "source_counts": {
+    "product": 71,
+    "recipe": 8,
+    "policy": 11
+  },
+  "graph_counts": {
+    "entities": 44,
+    "relationships": 61,
+    "text_units": 26
+  },
+  "output_counts": {
+    "entities": 44,
+    "relationships": 61,
+    "text_units": 26,
+    "communities": 11,
+    "community_reports": 11
+  },
+  "provider_revision": "ceres-graphrag-provider-v1",
+  "call_count": 19,
+  "completion_call_count": 11,
+  "embedding_call_count": 8,
+  "completion_usage": [
+    {
+      "completion_tokens": 834,
+      "prompt_tokens": 2709,
+      "total_tokens": 3543,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cache_write_tokens": null,
+        "cached_tokens": 2560
+      },
+      "prompt_cache_hit_tokens": 2560,
+      "prompt_cache_miss_tokens": 149
+    },
+    {
+      "completion_tokens": 1066,
+      "prompt_tokens": 2709,
+      "total_tokens": 3775,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cache_write_tokens": null,
+        "cached_tokens": 2560
+      },
+      "prompt_cache_hit_tokens": 2560,
+      "prompt_cache_miss_tokens": 149
+    },
+    {
+      "completion_tokens": 692,
+      "prompt_tokens": 2578,
+      "total_tokens": 3270,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cache_write_tokens": null,
+        "cached_tokens": 2432
+      },
+      "prompt_cache_hit_tokens": 2432,
+      "prompt_cache_miss_tokens": 146
+    },
+    {
+      "completion_tokens": 1152,
+      "prompt_tokens": 2562,
+      "total_tokens": 3714,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cache_write_tokens": null,
+        "cached_tokens": 2428
+      },
+      "prompt_cache_hit_tokens": 2428,
+      "prompt_cache_miss_tokens": 134
+    },
+    {
+      "completion_tokens": 909,
+      "prompt_tokens": 2983,
+      "total_tokens": 3892,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cache_write_tokens": null,
+        "cached_tokens": 2816
+      },
+      "prompt_cache_hit_tokens": 2816,
+      "prompt_cache_miss_tokens": 167
+    },
+    {
+      "completion_tokens": 1785,
+      "prompt_tokens": 3412,
+      "total_tokens": 5197,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cache_write_tokens": null,
+        "cached_tokens": 3200
+      },
+      "prompt_cache_hit_tokens": 3200,
+      "prompt_cache_miss_tokens": 212
+    },
+    {
+      "completion_tokens": 958,
+      "prompt_tokens": 2891,
+      "total_tokens": 3849,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cache_write_tokens": null,
+        "cached_tokens": 2688
+      },
+      "prompt_cache_hit_tokens": 2688,
+      "prompt_cache_miss_tokens": 203
+    },
+    {
+      "completion_tokens": 1477,
+      "prompt_tokens": 3111,
+      "total_tokens": 4588,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cache_write_tokens": null,
+        "cached_tokens": 2944
+      },
+      "prompt_cache_hit_tokens": 2944,
+      "prompt_cache_miss_tokens": 167
+    },
+    {
+      "completion_tokens": 1260,
+      "prompt_tokens": 3060,
+      "total_tokens": 4320,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cache_write_tokens": null,
+        "cached_tokens": 2816
+      },
+      "prompt_cache_hit_tokens": 2816,
+      "prompt_cache_miss_tokens": 244
+    },
+    {
+      "completion_tokens": 851,
+      "prompt_tokens": 2897,
+      "total_tokens": 3748,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cache_write_tokens": null,
+        "cached_tokens": 2688
+      },
+      "prompt_cache_hit_tokens": 2688,
+      "prompt_cache_miss_tokens": 209
+    },
+    {
+      "completion_tokens": 1127,
+      "prompt_tokens": 2905,
+      "total_tokens": 4032,
+      "completion_tokens_details": null,
+      "prompt_tokens_details": {
+        "audio_tokens": null,
+        "cache_write_tokens": null,
+        "cached_tokens": 2688
+      },
+      "prompt_cache_hit_tokens": 2688,
+      "prompt_cache_miss_tokens": 217
+    }
+  ],
+  "embedding_usage": [
+    {
+      "prompt_tokens": 599,
+      "texts": 10
+    },
+    {
+      "prompt_tokens": 691,
+      "texts": 16
+    },
+    {
+      "prompt_tokens": 1178,
+      "texts": 16
+    },
+    {
+      "prompt_tokens": 1087,
+      "texts": 16
+    },
+    {
+      "prompt_tokens": 941,
+      "texts": 12
+    },
+    {
+      "prompt_tokens": 2048,
+      "texts": 4
+    },
+    {
+      "prompt_tokens": 2560,
+      "texts": 5
+    },
+    {
+      "prompt_tokens": 1024,
+      "texts": 2
+    }
+  ],
+  "api_key_written": false,
+  "manifest_path": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/data/indexes/graphrag/manifest.json"
+}

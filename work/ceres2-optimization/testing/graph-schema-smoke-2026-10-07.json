@@ -1,0 +1,81 @@
+{
+  "offline_only": true,
+  "synthetic_provider_values": true,
+  "provider_called": false,
+  "source_counts": {
+    "product": 71,
+    "recipe": 8,
+    "policy": 11
+  },
+  "graph_counts": {
+    "entities": 44,
+    "relationships": 61,
+    "text_units": 26
+  },
+  "tables": {
+    "entities": {
+      "rows": 44,
+      "columns": [
+        "id",
+        "title",
+        "type",
+        "description",
+        "text_unit_ids",
+        "human_readable_id",
+        "frequency",
+        "degree"
+      ]
+    },
+    "relationships": {
+      "rows": 61,
+      "columns": [
+        "id",
+        "source",
+        "target",
+        "description",
+        "weight",
+        "text_unit_ids",
+        "human_readable_id",
+        "combined_degree"
+      ]
+    },
+    "text_units": {
+      "rows": 26,
+      "columns": [
+        "id",
+        "human_readable_id",
+        "text",
+        "n_tokens",
+        "document_id",
+        "entity_ids",
+        "relationship_ids",
+        "covariate_ids"
+      ]
+    },
+    "documents": {
+      "rows": 26,
+      "columns": [
+        "id",
+        "namespace",
+        "title",
+        "text",
+        "source"
+      ]
+    }
+  },
+  "config": {
+    "workflows": [
+      "create_communities",
+      "create_community_reports",
+      "generate_text_embeddings"
+    ],
+    "cache_type": "memory",
+    "vector_store_type": "lancedb",
+    "vector_size": 512,
+    "completion_type": "ceres_json_mode",
+    "embedding_type": "ceres_bge",
+    "model_id": "schema-smoke-model"
+  },
+  "source_map_ids_unique": true,
+  "output_root": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/work/ceres2-optimization/testing/tmp/graph-schema-smoke-2026-10-07"
+}

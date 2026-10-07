@@ -1,0 +1,63 @@
+{
+  "version": "optimization-failure-regressions-v2",
+  "purpose": "Development failure intake and regression routing, not independent acceptance scores",
+  "human_review_status": "pending",
+  "cases": [
+    {
+      "case_id": "concurrent-bge-first-use",
+      "error_type": "runtime",
+      "expected_behavior": "Two concurrent first requests initialize one real 512-dimensional encoder successfully",
+      "observed_failure": "One of two first-use threads failed importing AutoModel",
+      "attribution": "Concurrent lazy model initialization",
+      "change": "Single-flight encoder initialization",
+      "regression_entry": "work/ceres2-optimization/testing/bge_concurrent_init_smoke.py",
+      "before_evidence": "work/ceres2-optimization/testing/bge-concurrent-init-smoke-2026-10-07.json",
+      "after_evidence": "work/ceres2-optimization/testing/bge-concurrent-init-retest-2026-10-07.json"
+    },
+    {
+      "case_id": "single-character-egg-recipes",
+      "error_type": "retrieval",
+      "input": "蛋",
+      "expected_recipe_ids": ["dish-fanqie-chao-dan", "dish-dan-chao-fan", "dish-yangzhou-chao-fan", "dish-jiajiao-chaodan"],
+      "attribution": "Bigram tokenizer and dense-only floor erased explicit recipe ingredient evidence",
+      "change": "Chinese unigrams plus literal title/text relevance, retaining dense gates for other queries",
+      "regression_entry": "work/ceres2-optimization/testing/hybrid_query_smoke.py",
+      "before_evidence": "work/ceres2-optimization/testing/hybrid-query-smoke-tokenizer-v2-2026-10-07.json",
+      "after_evidence": "work/ceres2-optimization/testing/hybrid-query-smoke-v4-literal-or-dense-2026-10-07.json"
+    },
+    {
+      "case_id": "global-egg-source-projection",
+      "error_type": "factuality",
+      "input": "这批家常菜共有哪几类食材，哪些菜用鸡蛋",
+      "expected_behavior": "Source descriptions and four egg REQUIRES relationships retain known categories and quantities; unknown questions remain empty",
+      "attribution": "Generated community/reduce prose omitted or contradicted source facts; model entity selection also omitted two egg recipes",
+      "change": "Preserve retrieved community source witnesses and render canonical scope overview",
+      "remaining_limitation": "Model selector recall is still 2/4, separate from canonical overview 4/4",
+      "regression_entry": "work/ceres2-optimization/testing/graph_global_overview_smoke.py",
+      "before_evidence": "work/ceres2-optimization/testing/graph-query-v3-content-audit-2026-10-07.json",
+      "after_evidence": "work/ceres2-optimization/testing/graph-global-overview-v3-smoke-2026-10-07.json"
+    },
+    {
+      "case_id": "problem-package-quantity-clarification",
+      "error_type": "dialogue",
+      "expected_behavior": "Missing quality/fulfillment problem quantity pauses, explicit quantity resumes to an immutable proposal, confirmation alone creates one application and human ticket",
+      "attribution": "Tool contract requested a quantity clarification but its slot was absent",
+      "change": "Quantity clarification slot and aligned tool/prompt/UI; quantity-scoped fulfillment intake",
+      "regression_entry": "backend/tests/test_aftersales_public.py::test_problem_quantity_clarification_resumes_without_submission",
+      "evidence_note": "Current regression result must be read from the final Tester report; source addition alone is not a pass"
+    },
+    {
+      "case_id": "interim-recipe-fact-audit",
+      "error_type": "factuality",
+      "input": "番茄炒蛋需要鸡蛋3枚，蛋炒饭需要鸡蛋2枚。",
+      "expected_behavior": "An affirmative recipe ingredient or quantity result is withheld from the interim channel; a plan to verify those same targets remains allowable",
+      "observed_failure": "The real same-model semantic smoke allowed this authored factual assertion and matched 8 of 9 expected verdicts",
+      "attribution": "Interim audit treated a recipe amount assertion without a store name as ordinary cooking knowledge",
+      "change": "Scope all affirmative recipe ingredient, amount, serving and shared-ingredient assertions to task facts in interim auditing; general-chat auditing is unchanged",
+      "regression_entry": "work/ceres2-optimization/testing/interim_claim_semantic_audit.py",
+      "before_evidence": "work/ceres2-optimization/testing/interim-claim-semantic-audit-2026-10-07.json",
+      "after_evidence": "work/ceres2-optimization/testing/interim-claim-semantic-audit-v2-2026-10-07.json",
+      "remaining_limitation": "13 of 13 current development verdicts match, including four additional variants; this is neither a blind score nor evidence of a factual claim reaching an actual shopper"
+    }
+  ]
+}

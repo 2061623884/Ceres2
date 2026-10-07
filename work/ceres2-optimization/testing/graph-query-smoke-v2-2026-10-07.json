@@ -1,0 +1,1770 @@
+{
+  "provider_model": "deepseek-flash",
+  "provider_host": "api.deepseek.com",
+  "queries": [
+    {
+      "method": "local",
+      "query": "番茄炒蛋需要哪些食材与商品",
+      "answer": "## 番茄炒蛋的食材与商品\n\n**必需食材（基准2人份）**\n- 番茄 300g\n- 鸡蛋 3pc\n\n以上用量来源为食谱记录 [Data: Entities (0); Relationships (0, 1); Sources (18)]。\n\n**调料（数量未记录）**\n- 食用油、盐、糖；均为调料记录，数量未记录，不能推定家庭已有或足够 [Data: Relationships (2, 3, 4); Entities (0); Sources (18)]。\n\n**可对应的采购商品（仅模拟采购候选）**\n- 番茄：新鲜番茄 500克（规格 500g）[Data: Relationships (50); Entities (33); Sources (7)]\n- 鸡蛋：鲜鸡蛋 6枚装（规格 6pc）[Data: Relationships (51); Entities (34); Sources (8)]；另有鲜鸡蛋 10枚装（规格 10pc）作为鸡蛋的采购候选 [Data: Relationships (44); Entities (27); Sources (1)]\n\n**说明与未知事项**\n- 上述商品仅为采购候选，仍须核对单位、门店库存及用户约束；采购关系不证明食品成分、营养、过敏安全或跨食材替代 [Data: Relationships (50, 51); Entities (24, 12)]。\n- 各商品价格、库存未知，需另查当前业务 Offer [Data: Entities (33, 34, 27)]。\n- 调料对应商品仅有“食用盐 500克”一条记录 [Data: Entities (30); Sources (4)]，食用油、糖的对应商品在提供数据中未记录，属未知。",
+      "context": {
+        "relationships": [
+          {
+            "id": "1",
+            "source": "番茄炒蛋 [recipe:dish-fanqie-chao-dan]",
+            "target": "鸡蛋 [ingredient:egg]",
+            "description": "REQUIRES: 番茄炒蛋 基准 2 人需 3pc，原始用量来源 recipes.json/dish-fanqie-chao-dan；其他人数和包装由业务服务计算。",
+            "weight": "1.0",
+            "links": "4",
+            "in_context": true
+          },
+          {
+            "id": "6",
+            "source": "蛋炒饭 [recipe:dish-dan-chao-fan]",
+            "target": "鸡蛋 [ingredient:egg]",
+            "description": "REQUIRES: 蛋炒饭 基准 2 人需 2pc，原始用量来源 recipes.json/dish-dan-chao-fan；其他人数和包装由业务服务计算。",
+            "weight": "1.0",
+            "links": "4",
+            "in_context": true
+          },
+          {
+            "id": "40",
+            "source": "尖椒炒蛋 [recipe:dish-jiajiao-chaodan]",
+            "target": "鸡蛋 [ingredient:egg]",
+            "description": "REQUIRES: 尖椒炒蛋 基准 2 人需 3pc，原始用量来源 recipes.json/dish-jiajiao-chaodan；其他人数和包装由业务服务计算。",
+            "weight": "1.0",
+            "links": "4",
+            "in_context": true
+          },
+          {
+            "id": "0",
+            "source": "番茄炒蛋 [recipe:dish-fanqie-chao-dan]",
+            "target": "番茄 [ingredient:tomato]",
+            "description": "REQUIRES: 番茄炒蛋 基准 2 人需 300g，原始用量来源 recipes.json/dish-fanqie-chao-dan；其他人数和包装由业务服务计算。",
+            "weight": "1.0",
+            "links": "2",
+            "in_context": true
+          },
+          {
+            "id": "51",
+            "source": "鸡蛋 [ingredient:egg]",
+            "target": "鲜鸡蛋 6枚装 [sku:demo:eggs-fresh-6pack]",
+            "description": "PROCUREMENT_CANDIDATE: 鲜鸡蛋 6枚装 可作为该食材采购候选，销售规格 6pc；仍须核对单位、门店库存及用户约束，不证明食品成分或替代。",
+            "weight": "1.0",
+            "links": "4",
+            "in_context": true
+          },
+          {
+            "id": "50",
+            "source": "番茄 [ingredient:tomato]",
+            "target": "新鲜番茄 500克 [sku:demo:tomato-fresh-500g]",
+            "description": "PROCUREMENT_CANDIDATE: 新鲜番茄 500克 可作为该食材采购候选，销售规格 500g；仍须核对单位、门店库存及用户约束，不证明食品成分或替代。",
+            "weight": "1.0",
+            "links": "2",
+            "in_context": true
+          },
+          {
+            "id": "2",
+            "source": "番茄炒蛋 [recipe:dish-fanqie-chao-dan]",
+            "target": "食用油 [ingredient:oil]",
+            "description": "PANTRY: 番茄炒蛋 调料，数量未记录，不能推定家庭已有或足够。",
+            "weight": "1.0",
+            "links": "3",
+            "in_context": true
+          },
+          {
+            "id": "3",
+            "source": "番茄炒蛋 [recipe:dish-fanqie-chao-dan]",
+            "target": "盐 [ingredient:salt]",
+            "description": "PANTRY: 番茄炒蛋 调料，数量未记录，不能推定家庭已有或足够。",
+            "weight": "1.0",
+            "links": "3",
+            "in_context": true
+          },
+          {
+            "id": "7",
+            "source": "蛋炒饭 [recipe:dish-dan-chao-fan]",
+            "target": "食用油 [ingredient:oil]",
+            "description": "PANTRY: 蛋炒饭 调料，数量未记录，不能推定家庭已有或足够。",
+            "weight": "1.0",
+            "links": "3",
+            "in_context": true
+          },
+          {
+            "id": "8",
+            "source": "蛋炒饭 [recipe:dish-dan-chao-fan]",
+            "target": "盐 [ingredient:salt]",
+            "description": "PANTRY: 蛋炒饭 调料，数量未记录，不能推定家庭已有或足够。",
+            "weight": "1.0",
+            "links": "3",
+            "in_context": true
+          },
+          {
+            "id": "41",
+            "source": "尖椒炒蛋 [recipe:dish-jiajiao-chaodan]",
+            "target": "食用油 [ingredient:oil]",
+            "description": "PANTRY: 尖椒炒蛋 调料，数量未记录，不能推定家庭已有或足够。",
+            "weight": "1.0",
+            "links": "3",
+            "in_context": true
+          },
+          {
+            "id": "42",
+            "source": "尖椒炒蛋 [recipe:dish-jiajiao-chaodan]",
+            "target": "盐 [ingredient:salt]",
+            "description": "PANTRY: 尖椒炒蛋 调料，数量未记录，不能推定家庭已有或足够。",
+            "weight": "1.0",
+            "links": "3",
+            "in_context": true
+          },
+          {
+            "id": "11",
+            "source": "扬州炒饭 [recipe:dish-yangzhou-chao-fan]",
+            "target": "鸡蛋 [ingredient:egg]",
+            "description": "REQUIRES: 扬州炒饭 基准 2 人需 2pc，原始用量来源 recipes.json/dish-yangzhou-chao-fan；其他人数和包装由业务服务计算。",
+            "weight": "1.0",
+            "links": "1",
+            "in_context": true
+          },
+          {
+            "id": "39",
+            "source": "尖椒炒蛋 [recipe:dish-jiajiao-chaodan]",
+            "target": "青椒 [ingredient:bell_pepper]",
+            "description": "REQUIRES: 尖椒炒蛋 基准 2 人需 200g，原始用量来源 recipes.json/dish-jiajiao-chaodan；其他人数和包装由业务服务计算。",
+            "weight": "1.0",
+            "links": "1",
+            "in_context": true
+          },
+          {
+            "id": "5",
+            "source": "蛋炒饭 [recipe:dish-dan-chao-fan]",
+            "target": "大米 [ingredient:rice]",
+            "description": "REQUIRES: 蛋炒饭 基准 2 人需 300g，原始用量来源 recipes.json/dish-dan-chao-fan；其他人数和包装由业务服务计算。",
+            "weight": "1.0",
+            "links": "1",
+            "in_context": true
+          },
+          {
+            "id": "4",
+            "source": "番茄炒蛋 [recipe:dish-fanqie-chao-dan]",
+            "target": "糖 [ingredient:sugar]",
+            "description": "PANTRY: 番茄炒蛋 调料，数量未记录，不能推定家庭已有或足够。",
+            "weight": "1.0",
+            "links": "1",
+            "in_context": true
+          },
+          {
+            "id": "9",
+            "source": "蛋炒饭 [recipe:dish-dan-chao-fan]",
+            "target": "葱 [ingredient:scallion]",
+            "description": "PANTRY: 蛋炒饭 调料，数量未记录，不能推定家庭已有或足够。",
+            "weight": "1.0",
+            "links": "1",
+            "in_context": true
+          },
+          {
+            "id": "44",
+            "source": "鸡蛋 [ingredient:egg]",
+            "target": "鲜鸡蛋 10枚装 [sku:demo:eggs-10pack]",
+            "description": "PROCUREMENT_CANDIDATE: 鲜鸡蛋 10枚装 可作为该食材采购候选，销售规格 10pc；仍须核对单位、门店库存及用户约束，不证明食品成分或替代。",
+            "weight": "1.0",
+            "links": "1",
+            "in_context": true
+          }
+        ],
+        "claims": [],
+        "entities": [
+          {
+            "id": "0",
+            "entity": "番茄炒蛋 [recipe:dish-fanqie-chao-dan]",
+            "description": "番茄炒蛋 别名 西红柿炒鸡蛋 番茄鸡蛋 基准 2人 必需食材 番茄 300g、鸡蛋 3pc 调料 食用油、盐、糖。调料数量未记录，家庭已有食材数量未知。",
+            "number of relationships": "5",
+            "in_context": true
+          },
+          {
+            "id": "33",
+            "entity": "新鲜番茄 500克 [sku:demo:tomato-fresh-500g]",
+            "description": "新鲜番茄 500克 Fresh Tomato 500g 品牌 演示品牌 品类 vegetable 规格 500g 采购食材 番茄 用途 家常菜 番茄炒蛋。仅供模拟采购，价格库存另查当前业务 Offer。",
+            "number of relationships": "1",
+            "in_context": true
+          },
+          {
+            "id": "34",
+            "entity": "鲜鸡蛋 6枚装 [sku:demo:eggs-fresh-6pack]",
+            "description": "鲜鸡蛋 6枚装 Fresh Eggs 6 pack 品牌 演示品牌 品类 vegetable 规格 6pc 采购食材 鸡蛋 用途 家常菜 炒蛋 番茄炒蛋。仅供模拟采购，价格库存另查当前业务 Offer。",
+            "number of relationships": "1",
+            "in_context": true
+          },
+          {
+            "id": "7",
+            "entity": "尖椒炒蛋 [recipe:dish-jiajiao-chaodan]",
+            "description": "尖椒炒蛋 别名  基准 2人 必需食材 青椒 200g、鸡蛋 3pc 调料 食用油、盐。调料数量未记录，家庭已有食材数量未知。",
+            "number of relationships": "4",
+            "in_context": true
+          },
+          {
+            "id": "1",
+            "entity": "蛋炒饭 [recipe:dish-dan-chao-fan]",
+            "description": "蛋炒饭 别名 鸡蛋炒饭 炒饭 基准 2人 必需食材 大米 300g、鸡蛋 2pc 调料 食用油、盐、葱。调料数量未记录，家庭已有食材数量未知。",
+            "number of relationships": "5",
+            "in_context": true
+          },
+          {
+            "id": "24",
+            "entity": "番茄 [ingredient:tomato]",
+            "description": "采购食材 番茄，类别 vegetable；来源 ingredients.json/tomato。采购关系不证明配料、营养、过敏安全或跨食材替代。",
+            "number of relationships": "2",
+            "in_context": true
+          },
+          {
+            "id": "12",
+            "entity": "鸡蛋 [ingredient:egg]",
+            "description": "采购食材 鸡蛋，类别 egg；来源 ingredients.json/egg。采购关系不证明配料、营养、过敏安全或跨食材替代。",
+            "number of relationships": "6",
+            "in_context": true
+          },
+          {
+            "id": "2",
+            "entity": "扬州炒饭 [recipe:dish-yangzhou-chao-fan]",
+            "description": "扬州炒饭 别名 什锦炒饭 基准 2人 必需食材 大米 350g、鸡蛋 2pc、虾 80g、豌豆 50g 调料 食用油、盐。调料数量未记录，家庭已有食材数量未知。",
+            "number of relationships": "6",
+            "in_context": true
+          },
+          {
+            "id": "27",
+            "entity": "鲜鸡蛋 10枚装 [sku:demo:eggs-10pack]",
+            "description": "鲜鸡蛋 10枚装 Fresh Eggs 10 pack 品牌 演示品牌 品类 baking 规格 10pc 采购食材 鸡蛋 用途 烘焙 蛋糕。仅供模拟采购，价格库存另查当前业务 Offer。",
+            "number of relationships": "1",
+            "in_context": true
+          },
+          {
+            "id": "29",
+            "entity": "青椒 300克 [sku:demo:bell-pepper-300g]",
+            "description": "青椒 300克 Bell Pepper 300g 品牌 演示品牌 品类 vegetable 规格 300g 采购食材 青椒 用途 炒菜 小炒肉。仅供模拟采购，价格库存另查当前业务 Offer。",
+            "number of relationships": "1",
+            "in_context": true
+          },
+          {
+            "id": "42",
+            "entity": "青豌豆 300克 [sku:demo:green-pea-300g]",
+            "description": "青豌豆 300克 Frozen Green Peas 300g 品牌 演示品牌 品类 vegetable 规格 300g 采购食材 豌豆 用途 炒饭 家常。仅供模拟采购，价格库存另查当前业务 Offer。",
+            "number of relationships": "1",
+            "in_context": true
+          },
+          {
+            "id": "17",
+            "entity": "土豆 [ingredient:potato]",
+            "description": "采购食材 土豆，类别 vegetable；来源 ingredients.json/potato。采购关系不证明配料、营养、过敏安全或跨食材替代。",
+            "number of relationships": "2",
+            "in_context": true
+          },
+          {
+            "id": "43",
+            "entity": "演示虾仁200克 [sku:demo:shrimp-200g]",
+            "description": "演示虾仁200克 Demo Shrimp 200g 品牌 演示品牌 品类 seafood 类型 shrimp 规格 200g 采购食材 虾 用途 炒饭 家常。仅供模拟采购，价格库存另查当前业务 Offer。",
+            "number of relationships": "1",
+            "in_context": true
+          },
+          {
+            "id": "40",
+            "entity": "土豆 500克 [sku:demo:potato-500g]",
+            "description": "土豆 500克 Potato 500g 品牌 演示品牌 品类 vegetable 规格 500g 采购食材 土豆 用途 火锅 火锅素菜。仅供模拟采购，价格库存另查当前业务 Offer。",
+            "number of relationships": "1",
+            "in_context": true
+          },
+          {
+            "id": "9",
+            "entity": "卷心菜 [ingredient:cabbage]",
+            "description": "采购食材 卷心菜，类别 vegetable；来源 ingredients.json/cabbage。采购关系不证明配料、营养、过敏安全或跨食材替代。",
+            "number of relationships": "2",
+            "in_context": true
+          },
+          {
+            "id": "20",
+            "entity": "葱 [ingredient:scallion]",
+            "description": "采购食材 葱，类别 vegetable；来源 ingredients.json/scallion。采购关系不证明配料、营养、过敏安全或跨食材替代。",
+            "number of relationships": "2",
+            "in_context": true
+          },
+          {
+            "id": "36",
+            "entity": "小葱 200克 [sku:demo:scallion-200g]",
+            "description": "小葱 200克 Green Onion 200g 品牌 演示品牌 品类 vegetable 规格 200g 采购食材 葱 用途 调味 家常菜 葱香。仅供模拟采购，价格库存另查当前业务 Offer。",
+            "number of relationships": "1",
+            "in_context": true
+          },
+          {
+            "id": "38",
+            "entity": "花生米 200克 [sku:demo:peanut-200g]",
+            "description": "花生米 200克 Roasted Peanuts 200g 品牌 演示品牌 品类 staple 规格 200g 采购食材 花生 用途 家常菜 宫保鸡丁。仅供模拟采购，价格库存另查当前业务 Offer。",
+            "number of relationships": "1",
+            "in_context": true
+          },
+          {
+            "id": "39",
+            "entity": "卷心菜 500克 [sku:demo:cabbage-500g]",
+            "description": "卷心菜 500克 Green Cabbage 500g 品牌 演示品牌 品类 vegetable 规格 500g 采购食材 卷心菜 用途 火锅 火锅素菜。仅供模拟采购，价格库存另查当前业务 Offer。",
+            "number of relationships": "1",
+            "in_context": true
+          },
+          {
+            "id": "30",
+            "entity": "食用盐 500克 [sku:demo:salt-500g]",
+            "description": "食用盐 500克 Table Salt 500g 品牌 演示品牌 品类 condiment 规格 500g 采购食材 盐 用途 调味 家常。仅供模拟采购，价格库存另查当前业务 Offer。",
+            "number of relationships": "1",
+            "in_context": true
+          }
+        ],
+        "sources": [
+          {
+            "id": "18",
+            "text": "番茄炒蛋 番茄炒蛋 别名 西红柿炒鸡蛋 番茄鸡蛋 基准 2人 必需食材 番茄 300g、鸡蛋 3pc 调料 食用油、盐、糖。调料数量未记录，家庭已有食材数量未知。"
+          },
+          {
+            "id": "7",
+            "text": "新鲜番茄 500克 新鲜番茄 500克 Fresh Tomato 500g 品牌 演示品牌 品类 vegetable 规格 500g 采购食材 番茄 用途 家常菜 番茄炒蛋"
+          },
+          {
+            "id": "8",
+            "text": "鲜鸡蛋 6枚装 鲜鸡蛋 6枚装 Fresh Eggs 6 pack 品牌 演示品牌 品类 vegetable 规格 6pc 采购食材 鸡蛋 用途 家常菜 炒蛋 番茄炒蛋"
+          },
+          {
+            "id": "25",
+            "text": "尖椒炒蛋 尖椒炒蛋 别名  基准 2人 必需食材 青椒 200g、鸡蛋 3pc 调料 食用油、盐。调料数量未记录，家庭已有食材数量未知。"
+          },
+          {
+            "id": "19",
+            "text": "蛋炒饭 蛋炒饭 别名 鸡蛋炒饭 炒饭 基准 2人 必需食材 大米 300g、鸡蛋 2pc 调料 食用油、盐、葱。调料数量未记录，家庭已有食材数量未知。"
+          },
+          {
+            "id": "1",
+            "text": "鲜鸡蛋 10枚装 鲜鸡蛋 10枚装 Fresh Eggs 10 pack 品牌 演示品牌 品类 baking 规格 10pc 采购食材 鸡蛋 用途 烘焙 蛋糕"
+          },
+          {
+            "id": "20",
+            "text": "扬州炒饭 扬州炒饭 别名 什锦炒饭 基准 2人 必需食材 大米 350g、鸡蛋 2pc、虾 80g、豌豆 50g 调料 食用油、盐。调料数量未记录，家庭已有食材数量未知。"
+          },
+          {
+            "id": "3",
+            "text": "青椒 300克 青椒 300克 Bell Pepper 300g 品牌 演示品牌 品类 vegetable 规格 300g 采购食材 青椒 用途 炒菜 小炒肉"
+          },
+          {
+            "id": "16",
+            "text": "青豌豆 300克 青豌豆 300克 Frozen Green Peas 300g 品牌 演示品牌 品类 vegetable 规格 300g 采购食材 豌豆 用途 炒饭 家常"
+          },
+          {
+            "id": "14",
+            "text": "土豆 500克 土豆 500克 Potato 500g 品牌 演示品牌 品类 vegetable 规格 500g 采购食材 土豆 用途 火锅 火锅素菜"
+          },
+          {
+            "id": "23",
+            "text": "酸辣土豆丝 酸辣土豆丝 别名 醋溜土豆丝 基准 2人 必需食材 土豆 350g 调料 食用油、盐、醋、辣椒酱。调料数量未记录，家庭已有食材数量未知。"
+          },
+          {
+            "id": "17",
+            "text": "演示虾仁200克 演示虾仁200克 Demo Shrimp 200g 品牌 演示品牌 品类 seafood 类型 shrimp 规格 200g 采购食材 虾 用途 炒饭 家常"
+          },
+          {
+            "id": "13",
+            "text": "卷心菜 500克 卷心菜 500克 Green Cabbage 500g 品牌 演示品牌 品类 vegetable 规格 500g 采购食材 卷心菜 用途 火锅 火锅素菜"
+          },
+          {
+            "id": "24",
+            "text": "回锅肉 回锅肉 别名  基准 2人 必需食材 猪肉 300g、青椒 100g、卷心菜 100g 调料 食用油、盐、酱油。调料数量未记录，家庭已有食材数量未知。"
+          },
+          {
+            "id": "10",
+            "text": "小葱 200克 小葱 200克 Green Onion 200g 品牌 演示品牌 品类 vegetable 规格 200g 采购食材 葱 用途 调味 家常菜 葱香"
+          },
+          {
+            "id": "12",
+            "text": "花生米 200克 花生米 200克 Roasted Peanuts 200g 品牌 演示品牌 品类 staple 规格 200g 采购食材 花生 用途 家常菜 宫保鸡丁"
+          },
+          {
+            "id": "4",
+            "text": "食用盐 500克 食用盐 500克 Table Salt 500g 品牌 演示品牌 品类 condiment 规格 500g 采购食材 盐 用途 调味 家常"
+          }
+        ]
+      },
+      "context_keys": {
+        "relationships": 18,
+        "claims": 0,
+        "entities": 20,
+        "sources": 17
+      },
+      "source_map_audit": {
+        "entities": {
+          "expected_ids": 44,
+          "mapped_ids": 44,
+          "ids_match": true,
+          "human_readable_ids_unique": true
+        },
+        "relationships": {
+          "expected_ids": 61,
+          "mapped_ids": 61,
+          "ids_match": true,
+          "human_readable_ids_unique": true
+        }
+      },
+      "call_usage": {
+        "call_count": 2,
+        "completion_count": 1,
+        "embedding_count": 1,
+        "completion_usage": [
+          {
+            "completion_tokens": 348,
+            "prompt_tokens": 4111,
+            "total_tokens": 4459,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cache_write_tokens": null,
+              "cached_tokens": 640
+            },
+            "prompt_cache_hit_tokens": 640,
+            "prompt_cache_miss_tokens": 3471
+          }
+        ],
+        "embedding_usage": [
+          {
+            "prompt_tokens": 15,
+            "texts": 1
+          }
+        ]
+      },
+      "source_map": {
+        "entities": [
+          {
+            "id": "recipe:dish-fanqie-chao-dan",
+            "human_readable_id": 0,
+            "title": "番茄炒蛋 [recipe:dish-fanqie-chao-dan]"
+          },
+          {
+            "id": "recipe:dish-dan-chao-fan",
+            "human_readable_id": 1,
+            "title": "蛋炒饭 [recipe:dish-dan-chao-fan]"
+          },
+          {
+            "id": "recipe:dish-yangzhou-chao-fan",
+            "human_readable_id": 2,
+            "title": "扬州炒饭 [recipe:dish-yangzhou-chao-fan]"
+          },
+          {
+            "id": "recipe:dish-qingjiao-rousi",
+            "human_readable_id": 3,
+            "title": "青椒肉丝 [recipe:dish-qingjiao-rousi]"
+          },
+          {
+            "id": "recipe:dish-gongbao-jiding",
+            "human_readable_id": 4,
+            "title": "宫保鸡丁 [recipe:dish-gongbao-jiding]"
+          },
+          {
+            "id": "recipe:dish-suanla-tudousi",
+            "human_readable_id": 5,
+            "title": "酸辣土豆丝 [recipe:dish-suanla-tudousi]"
+          },
+          {
+            "id": "recipe:dish-huiguo-rou",
+            "human_readable_id": 6,
+            "title": "回锅肉 [recipe:dish-huiguo-rou]"
+          },
+          {
+            "id": "recipe:dish-jiajiao-chaodan",
+            "human_readable_id": 7,
+            "title": "尖椒炒蛋 [recipe:dish-jiajiao-chaodan]"
+          },
+          {
+            "id": "ingredient:bell_pepper",
+            "human_readable_id": 8,
+            "title": "青椒 [ingredient:bell_pepper]"
+          },
+          {
+            "id": "ingredient:cabbage",
+            "human_readable_id": 9,
+            "title": "卷心菜 [ingredient:cabbage]"
+          },
+          {
+            "id": "ingredient:chicken_breast",
+            "human_readable_id": 10,
+            "title": "鸡胸肉 [ingredient:chicken_breast]"
+          },
+          {
+            "id": "ingredient:chili_sauce",
+            "human_readable_id": 11,
+            "title": "辣椒酱 [ingredient:chili_sauce]"
+          },
+          {
+            "id": "ingredient:egg",
+            "human_readable_id": 12,
+            "title": "鸡蛋 [ingredient:egg]"
+          },
+          {
+            "id": "ingredient:green_pea",
+            "human_readable_id": 13,
+            "title": "豌豆 [ingredient:green_pea]"
+          },
+          {
+            "id": "ingredient:oil",
+            "human_readable_id": 14,
+            "title": "食用油 [ingredient:oil]"
+          },
+          {
+            "id": "ingredient:peanut",
+            "human_readable_id": 15,
+            "title": "花生 [ingredient:peanut]"
+          },
+          {
+            "id": "ingredient:pork",
+            "human_readable_id": 16,
+            "title": "猪肉 [ingredient:pork]"
+          },
+          {
+            "id": "ingredient:potato",
+            "human_readable_id": 17,
+            "title": "土豆 [ingredient:potato]"
+          },
+          {
+            "id": "ingredient:rice",
+            "human_readable_id": 18,
+            "title": "大米 [ingredient:rice]"
+          },
+          {
+            "id": "ingredient:salt",
+            "human_readable_id": 19,
+            "title": "盐 [ingredient:salt]"
+          },
+          {
+            "id": "ingredient:scallion",
+            "human_readable_id": 20,
+            "title": "葱 [ingredient:scallion]"
+          },
+          {
+            "id": "ingredient:shrimp",
+            "human_readable_id": 21,
+            "title": "虾 [ingredient:shrimp]"
+          },
+          {
+            "id": "ingredient:soy_sauce",
+            "human_readable_id": 22,
+            "title": "酱油 [ingredient:soy_sauce]"
+          },
+          {
+            "id": "ingredient:sugar",
+            "human_readable_id": 23,
+            "title": "糖 [ingredient:sugar]"
+          },
+          {
+            "id": "ingredient:tomato",
+            "human_readable_id": 24,
+            "title": "番茄 [ingredient:tomato]"
+          },
+          {
+            "id": "ingredient:vinegar",
+            "human_readable_id": 25,
+            "title": "醋 [ingredient:vinegar]"
+          },
+          {
+            "id": "sku:demo:sugar-white-500g",
+            "human_readable_id": 26,
+            "title": "白砂糖 500克 [sku:demo:sugar-white-500g]"
+          },
+          {
+            "id": "sku:demo:eggs-10pack",
+            "human_readable_id": 27,
+            "title": "鲜鸡蛋 10枚装 [sku:demo:eggs-10pack]"
+          },
+          {
+            "id": "sku:demo:pork-500g",
+            "human_readable_id": 28,
+            "title": "猪肩肉 500克 [sku:demo:pork-500g]"
+          },
+          {
+            "id": "sku:demo:bell-pepper-300g",
+            "human_readable_id": 29,
+            "title": "青椒 300克 [sku:demo:bell-pepper-300g]"
+          },
+          {
+            "id": "sku:demo:salt-500g",
+            "human_readable_id": 30,
+            "title": "食用盐 500克 [sku:demo:salt-500g]"
+          },
+          {
+            "id": "sku:demo:soy-sauce-500ml",
+            "human_readable_id": 31,
+            "title": "生抽酱油 500毫升 [sku:demo:soy-sauce-500ml]"
+          },
+          {
+            "id": "sku:demo:chicken-breast-500g",
+            "human_readable_id": 32,
+            "title": "鸡胸肉 500克 [sku:demo:chicken-breast-500g]"
+          },
+          {
+            "id": "sku:demo:tomato-fresh-500g",
+            "human_readable_id": 33,
+            "title": "新鲜番茄 500克 [sku:demo:tomato-fresh-500g]"
+          },
+          {
+            "id": "sku:demo:eggs-fresh-6pack",
+            "human_readable_id": 34,
+            "title": "鲜鸡蛋 6枚装 [sku:demo:eggs-fresh-6pack]"
+          },
+          {
+            "id": "sku:demo:rice-2kg",
+            "human_readable_id": 35,
+            "title": "大米 2公斤 [sku:demo:rice-2kg]"
+          },
+          {
+            "id": "sku:demo:scallion-200g",
+            "human_readable_id": 36,
+            "title": "小葱 200克 [sku:demo:scallion-200g]"
+          },
+          {
+            "id": "sku:demo:cooking-oil-500ml",
+            "human_readable_id": 37,
+            "title": "食用油 500毫升 [sku:demo:cooking-oil-500ml]"
+          },
+          {
+            "id": "sku:demo:peanut-200g",
+            "human_readable_id": 38,
+            "title": "花生米 200克 [sku:demo:peanut-200g]"
+          },
+          {
+            "id": "sku:demo:cabbage-500g",
+            "human_readable_id": 39,
+            "title": "卷心菜 500克 [sku:demo:cabbage-500g]"
+          },
+          {
+            "id": "sku:demo:potato-500g",
+            "human_readable_id": 40,
+            "title": "土豆 500克 [sku:demo:potato-500g]"
+          },
+          {
+            "id": "sku:demo:vinegar-500ml",
+            "human_readable_id": 41,
+            "title": "米醋 500毫升 [sku:demo:vinegar-500ml]"
+          },
+          {
+            "id": "sku:demo:green-pea-300g",
+            "human_readable_id": 42,
+            "title": "青豌豆 300克 [sku:demo:green-pea-300g]"
+          },
+          {
+            "id": "sku:demo:shrimp-200g",
+            "human_readable_id": 43,
+            "title": "演示虾仁200克 [sku:demo:shrimp-200g]"
+          }
+        ],
+        "relationships": [
+          {
+            "id": "recipe:dish-fanqie-chao-dan->ingredient:tomato",
+            "human_readable_id": 0,
+            "source": "番茄炒蛋 [recipe:dish-fanqie-chao-dan]",
+            "target": "番茄 [ingredient:tomato]"
+          },
+          {
+            "id": "recipe:dish-fanqie-chao-dan->ingredient:egg",
+            "human_readable_id": 1,
+            "source": "番茄炒蛋 [recipe:dish-fanqie-chao-dan]",
+            "target": "鸡蛋 [ingredient:egg]"
+          },
+          {
+            "id": "recipe:dish-fanqie-chao-dan->ingredient:oil",
+            "human_readable_id": 2,
+            "source": "番茄炒蛋 [recipe:dish-fanqie-chao-dan]",
+            "target": "食用油 [ingredient:oil]"
+          },
+          {
+            "id": "recipe:dish-fanqie-chao-dan->ingredient:salt",
+            "human_readable_id": 3,
+            "source": "番茄炒蛋 [recipe:dish-fanqie-chao-dan]",
+            "target": "盐 [ingredient:salt]"
+          },
+          {
+            "id": "recipe:dish-fanqie-chao-dan->ingredient:sugar",
+            "human_readable_id": 4,
+            "source": "番茄炒蛋 [recipe:dish-fanqie-chao-dan]",
+            "target": "糖 [ingredient:sugar]"
+          },
+          {
+            "id": "recipe:dish-dan-chao-fan->ingredient:rice",
+            "human_readable_id": 5,
+            "source": "蛋炒饭 [recipe:dish-dan-chao-fan]",
+            "target": "大米 [ingredient:rice]"
+          },
+          {
+            "id": "recipe:dish-dan-chao-fan->ingredient:egg",
+            "human_readable_id": 6,
+            "source": "蛋炒饭 [recipe:dish-dan-chao-fan]",
+            "target": "鸡蛋 [ingredient:egg]"
+          },
+          {
+            "id": "recipe:dish-dan-chao-fan->ingredient:oil",
+            "human_readable_id": 7,
+            "source": "蛋炒饭 [recipe:dish-dan-chao-fan]",
+            "target": "食用油 [ingredient:oil]"
+          },
+          {
+            "id": "recipe:dish-dan-chao-fan->ingredient:salt",
+            "human_readable_id": 8,
+            "source": "蛋炒饭 [recipe:dish-dan-chao-fan]",
+            "target": "盐 [ingredient:salt]"
+          },
+          {
+            "id": "recipe:dish-dan-chao-fan->ingredient:scallion",
+            "human_readable_id": 9,
+            "source": "蛋炒饭 [recipe:dish-dan-chao-fan]",
+            "target": "葱 [ingredient:scallion]"
+          },
+          {
+            "id": "recipe:dish-yangzhou-chao-fan->ingredient:rice",
+            "human_readable_id": 10,
+            "source": "扬州炒饭 [recipe:dish-yangzhou-chao-fan]",
+            "target": "大米 [ingredient:rice]"
+          },
+          {
+            "id": "recipe:dish-yangzhou-chao-fan->ingredient:egg",
+            "human_readable_id": 11,
+            "source": "扬州炒饭 [recipe:dish-yangzhou-chao-fan]",
+            "target": "鸡蛋 [ingredient:egg]"
+          },
+          {
+            "id": "recipe:dish-yangzhou-chao-fan->ingredient:shrimp",
+            "human_readable_id": 12,
+            "source": "扬州炒饭 [recipe:dish-yangzhou-chao-fan]",
+            "target": "虾 [ingredient:shrimp]"
+          },
+          {
+            "id": "recipe:dish-yangzhou-chao-fan->ingredient:green_pea",
+            "human_readable_id": 13,
+            "source": "扬州炒饭 [recipe:dish-yangzhou-chao-fan]",
+            "target": "豌豆 [ingredient:green_pea]"
+          },
+          {
+            "id": "recipe:dish-yangzhou-chao-fan->ingredient:oil",
+            "human_readable_id": 14,
+            "source": "扬州炒饭 [recipe:dish-yangzhou-chao-fan]",
+            "target": "食用油 [ingredient:oil]"
+          },
+          {
+            "id": "recipe:dish-yangzhou-chao-fan->ingredient:salt",
+            "human_readable_id": 15,
+            "source": "扬州炒饭 [recipe:dish-yangzhou-chao-fan]",
+            "target": "盐 [ingredient:salt]"
+          },
+          {
+            "id": "recipe:dish-qingjiao-rousi->ingredient:pork",
+            "human_readable_id": 16,
+            "source": "青椒肉丝 [recipe:dish-qingjiao-rousi]",
+            "target": "猪肉 [ingredient:pork]"
+          },
+          {
+            "id": "recipe:dish-qingjiao-rousi->ingredient:bell_pepper",
+            "human_readable_id": 17,
+            "source": "青椒肉丝 [recipe:dish-qingjiao-rousi]",
+            "target": "青椒 [ingredient:bell_pepper]"
+          },
+          {
+            "id": "recipe:dish-qingjiao-rousi->ingredient:oil",
+            "human_readable_id": 18,
+            "source": "青椒肉丝 [recipe:dish-qingjiao-rousi]",
+            "target": "食用油 [ingredient:oil]"
+          },
+          {
+            "id": "recipe:dish-qingjiao-rousi->ingredient:salt",
+            "human_readable_id": 19,
+            "source": "青椒肉丝 [recipe:dish-qingjiao-rousi]",
+            "target": "盐 [ingredient:salt]"
+          },
+          {
+            "id": "recipe:dish-qingjiao-rousi->ingredient:soy_sauce",
+            "human_readable_id": 20,
+            "source": "青椒肉丝 [recipe:dish-qingjiao-rousi]",
+            "target": "酱油 [ingredient:soy_sauce]"
+          },
+          {
+            "id": "recipe:dish-gongbao-jiding->ingredient:chicken_breast",
+            "human_readable_id": 21,
+            "source": "宫保鸡丁 [recipe:dish-gongbao-jiding]",
+            "target": "鸡胸肉 [ingredient:chicken_breast]"
+          },
+          {
+            "id": "recipe:dish-gongbao-jiding->ingredient:peanut",
+            "human_readable_id": 22,
+            "source": "宫保鸡丁 [recipe:dish-gongbao-jiding]",
+            "target": "花生 [ingredient:peanut]"
+          },
+          {
+            "id": "recipe:dish-gongbao-jiding->ingredient:bell_pepper",
+            "human_readable_id": 23,
+            "source": "宫保鸡丁 [recipe:dish-gongbao-jiding]",
+            "target": "青椒 [ingredient:bell_pepper]"
+          },
+          {
+            "id": "recipe:dish-gongbao-jiding->ingredient:oil",
+            "human_readable_id": 24,
+            "source": "宫保鸡丁 [recipe:dish-gongbao-jiding]",
+            "target": "食用油 [ingredient:oil]"
+          },
+          {
+            "id": "recipe:dish-gongbao-jiding->ingredient:salt",
+            "human_readable_id": 25,
+            "source": "宫保鸡丁 [recipe:dish-gongbao-jiding]",
+            "target": "盐 [ingredient:salt]"
+          },
+          {
+            "id": "recipe:dish-gongbao-jiding->ingredient:soy_sauce",
+            "human_readable_id": 26,
+            "source": "宫保鸡丁 [recipe:dish-gongbao-jiding]",
+            "target": "酱油 [ingredient:soy_sauce]"
+          },
+          {
+            "id": "recipe:dish-gongbao-jiding->ingredient:vinegar",
+            "human_readable_id": 27,
+            "source": "宫保鸡丁 [recipe:dish-gongbao-jiding]",
+            "target": "醋 [ingredient:vinegar]"
+          },
+          {
+            "id": "recipe:dish-suanla-tudousi->ingredient:potato",
+            "human_readable_id": 28,
+            "source": "酸辣土豆丝 [recipe:dish-suanla-tudousi]",
+            "target": "土豆 [ingredient:potato]"
+          },
+          {
+            "id": "recipe:dish-suanla-tudousi->ingredient:oil",
+            "human_readable_id": 29,
+            "source": "酸辣土豆丝 [recipe:dish-suanla-tudousi]",
+            "target": "食用油 [ingredient:oil]"
+          },
+          {
+            "id": "recipe:dish-suanla-tudousi->ingredient:salt",
+            "human_readable_id": 30,
+            "source": "酸辣土豆丝 [recipe:dish-suanla-tudousi]",
+            "target": "盐 [ingredient:salt]"
+          },
+          {
+            "id": "recipe:dish-suanla-tudousi->ingredient:vinegar",
+            "human_readable_id": 31,
+            "source": "酸辣土豆丝 [recipe:dish-suanla-tudousi]",
+            "target": "醋 [ingredient:vinegar]"
+          },
+          {
+            "id": "recipe:dish-suanla-tudousi->ingredient:chili_sauce",
+            "human_readable_id": 32,
+            "source": "酸辣土豆丝 [recipe:dish-suanla-tudousi]",
+            "target": "辣椒酱 [ingredient:chili_sauce]"
+          },
+          {
+            "id": "recipe:dish-huiguo-rou->ingredient:pork",
+            "human_readable_id": 33,
+            "source": "回锅肉 [recipe:dish-huiguo-rou]",
+            "target": "猪肉 [ingredient:pork]"
+          },
+          {
+            "id": "recipe:dish-huiguo-rou->ingredient:bell_pepper",
+            "human_readable_id": 34,
+            "source": "回锅肉 [recipe:dish-huiguo-rou]",
+            "target": "青椒 [ingredient:bell_pepper]"
+          },
+          {
+            "id": "recipe:dish-huiguo-rou->ingredient:cabbage",
+            "human_readable_id": 35,
+            "source": "回锅肉 [recipe:dish-huiguo-rou]",
+            "target": "卷心菜 [ingredient:cabbage]"
+          },
+          {
+            "id": "recipe:dish-huiguo-rou->ingredient:oil",
+            "human_readable_id": 36,
+            "source": "回锅肉 [recipe:dish-huiguo-rou]",
+            "target": "食用油 [ingredient:oil]"
+          },
+          {
+            "id": "recipe:dish-huiguo-rou->ingredient:salt",
+            "human_readable_id": 37,
+            "source": "回锅肉 [recipe:dish-huiguo-rou]",
+            "target": "盐 [ingredient:salt]"
+          },
+          {
+            "id": "recipe:dish-huiguo-rou->ingredient:soy_sauce",
+            "human_readable_id": 38,
+            "source": "回锅肉 [recipe:dish-huiguo-rou]",
+            "target": "酱油 [ingredient:soy_sauce]"
+          },
+          {
+            "id": "recipe:dish-jiajiao-chaodan->ingredient:bell_pepper",
+            "human_readable_id": 39,
+            "source": "尖椒炒蛋 [recipe:dish-jiajiao-chaodan]",
+            "target": "青椒 [ingredient:bell_pepper]"
+          },
+          {
+            "id": "recipe:dish-jiajiao-chaodan->ingredient:egg",
+            "human_readable_id": 40,
+            "source": "尖椒炒蛋 [recipe:dish-jiajiao-chaodan]",
+            "target": "鸡蛋 [ingredient:egg]"
+          },
+          {
+            "id": "recipe:dish-jiajiao-chaodan->ingredient:oil",
+            "human_readable_id": 41,
+            "source": "尖椒炒蛋 [recipe:dish-jiajiao-chaodan]",
+            "target": "食用油 [ingredient:oil]"
+          },
+          {
+            "id": "recipe:dish-jiajiao-chaodan->ingredient:salt",
+            "human_readable_id": 42,
+            "source": "尖椒炒蛋 [recipe:dish-jiajiao-chaodan]",
+            "target": "盐 [ingredient:salt]"
+          },
+          {
+            "id": "ingredient:sugar->sku:demo:sugar-white-500g",
+            "human_readable_id": 43,
+            "source": "糖 [ingredient:sugar]",
+            "target": "白砂糖 500克 [sku:demo:sugar-white-500g]"
+          },
+          {
+            "id": "ingredient:egg->sku:demo:eggs-10pack",
+            "human_readable_id": 44,
+            "source": "鸡蛋 [ingredient:egg]",
+            "target": "鲜鸡蛋 10枚装 [sku:demo:eggs-10pack]"
+          },
+          {
+            "id": "ingredient:pork->sku:demo:pork-500g",
+            "human_readable_id": 45,
+            "source": "猪肉 [ingredient:pork]",
+            "target": "猪肩肉 500克 [sku:demo:pork-500g]"
+          },
+          {
+            "id": "ingredient:bell_pepper->sku:demo:bell-pepper-300g",
+            "human_readable_id": 46,
+            "source": "青椒 [ingredient:bell_pepper]",
+            "target": "青椒 300克 [sku:demo:bell-pepper-300g]"
+          },
+          {
+            "id": "ingredient:salt->sku:demo:salt-500g",
+            "human_readable_id": 47,
+            "source": "盐 [ingredient:salt]",
+            "target": "食用盐 500克 [sku:demo:salt-500g]"
+          },
+          {
+            "id": "ingredient:soy_sauce->sku:demo:soy-sauce-500ml",
+            "human_readable_id": 48,
+            "source": "酱油 [ingredient:soy_sauce]",
+            "target": "生抽酱油 500毫升 [sku:demo:soy-sauce-500ml]"
+          },
+          {
+            "id": "ingredient:chicken_breast->sku:demo:chicken-breast-500g",
+            "human_readable_id": 49,
+            "source": "鸡胸肉 [ingredient:chicken_breast]",
+            "target": "鸡胸肉 500克 [sku:demo:chicken-breast-500g]"
+          },
+          {
+            "id": "ingredient:tomato->sku:demo:tomato-fresh-500g",
+            "human_readable_id": 50,
+            "source": "番茄 [ingredient:tomato]",
+            "target": "新鲜番茄 500克 [sku:demo:tomato-fresh-500g]"
+          },
+          {
+            "id": "ingredient:egg->sku:demo:eggs-fresh-6pack",
+            "human_readable_id": 51,
+            "source": "鸡蛋 [ingredient:egg]",
+            "target": "鲜鸡蛋 6枚装 [sku:demo:eggs-fresh-6pack]"
+          },
+          {
+            "id": "ingredient:rice->sku:demo:rice-2kg",
+            "human_readable_id": 52,
+            "source": "大米 [ingredient:rice]",
+            "target": "大米 2公斤 [sku:demo:rice-2kg]"
+          },
+          {
+            "id": "ingredient:scallion->sku:demo:scallion-200g",
+            "human_readable_id": 53,
+            "source": "葱 [ingredient:scallion]",
+            "target": "小葱 200克 [sku:demo:scallion-200g]"
+          },
+          {
+            "id": "ingredient:oil->sku:demo:cooking-oil-500ml",
+            "human_readable_id": 54,
+            "source": "食用油 [ingredient:oil]",
+            "target": "食用油 500毫升 [sku:demo:cooking-oil-500ml]"
+          },
+          {
+            "id": "ingredient:peanut->sku:demo:peanut-200g",
+            "human_readable_id": 55,
+            "source": "花生 [ingredient:peanut]",
+            "target": "花生米 200克 [sku:demo:peanut-200g]"
+          },
+          {
+            "id": "ingredient:cabbage->sku:demo:cabbage-500g",
+            "human_readable_id": 56,
+            "source": "卷心菜 [ingredient:cabbage]",
+            "target": "卷心菜 500克 [sku:demo:cabbage-500g]"
+          },
+          {
+            "id": "ingredient:potato->sku:demo:potato-500g",
+            "human_readable_id": 57,
+            "source": "土豆 [ingredient:potato]",
+            "target": "土豆 500克 [sku:demo:potato-500g]"
+          },
+          {
+            "id": "ingredient:vinegar->sku:demo:vinegar-500ml",
+            "human_readable_id": 58,
+            "source": "醋 [ingredient:vinegar]",
+            "target": "米醋 500毫升 [sku:demo:vinegar-500ml]"
+          },
+          {
+            "id": "ingredient:green_pea->sku:demo:green-pea-300g",
+            "human_readable_id": 59,
+            "source": "豌豆 [ingredient:green_pea]",
+            "target": "青豌豆 300克 [sku:demo:green-pea-300g]"
+          },
+          {
+            "id": "ingredient:shrimp->sku:demo:shrimp-200g",
+            "human_readable_id": 60,
+            "source": "虾 [ingredient:shrimp]",
+            "target": "演示虾仁200克 [sku:demo:shrimp-200g]"
+          }
+        ]
+      }
+    },
+    {
+      "method": "global",
+      "query": "这批家常菜共有哪几类食材，哪些菜用鸡蛋",
+      "answer": "## 结论速览\n\n- **这批菜谱的食材类别只能按 INGREDIENT 节点的 `kind` 来判定**；SKU 的 `category_id` 只是货架位置，不作食材或营养分类 [Data: Reports (0, 3, 2, 5, 1)]。\n- **明确的食材 `kind` 类别**包括：`meat`、`condiment`、`vegetable`、`staple`、`seafood`、`egg` [Data: Reports (0, 3, 2, 5, 1)]。\n- **明确使用鸡蛋的菜谱共有 4 个**：蛋炒饭、扬州炒饭、尖椒炒蛋、番茄炒蛋 [Data: Reports (2, 4, 5, 6)]。\n\n## 一、食材类别（kind）\n\n输入资料没有给出“食材类别清单”的汇总字段，因此只能依据各记录中 INGREDIENT 的 `kind` 逐一引用。可确认的类别及对应食材如下：\n\n| kind | 已确认的食材 | 证据 |\n|---|---|---|\n| `meat` | 猪肉、鸡胸肉 | [Data: Reports (0, 3)] |\n| `condiment` | 食用油、酱油、醋、辣椒酱、盐、糖 | [Data: Reports (1, 3, 4, 6, 7)] |\n| `vegetable` | 卷心菜、葱、豌豆、土豆、青椒、番茄 | [Data: Reports (1, 2, 4, 5, 6, 7)] |\n| `staple` | 花生、大米 | [Data: Reports (2, 5, 3)] |\n| `seafood` | 虾 | [Data: Reports (5)] |\n| `egg` | 鸡蛋 | [Data: Reports (4)] |\n\n需要保留的不确定性：\n\n- 猪肉在 REQUIRES 关系中被记录为回锅肉所需食材 300g，但其 INGREDIENT 节点及 `kind` 未在提供资料中出现；上述 `meat` 归类来自其他记录，猪肉自身的 kind 仍属未知 [Data: Reports (1, 4, 6, 7)]。\n- 各菜谱的调料数量多未记录；家庭已有食材数量均未知 [Data: Reports (1, 4, 6, 7)]。\n\n## 二、哪些菜用鸡蛋\n\n明确列出鸡蛋为必需食材的菜谱共 4 个，基准均为 2 人：\n\n1. **蛋炒饭**：必需食材含鸡蛋 2pc，另有大米 300g；调料为食用油、盐、葱（调料数量未记录）[Data: Reports (2)]。\n2. **扬州炒饭**：必需食材含鸡蛋 2pc，另有大米 350g、虾 80g、豌豆 50g；调料为食用油、盐（数量未记录）[Data: Reports (5)]。\n3. **尖椒炒蛋**：必需食材为青椒 200g、鸡蛋 3pc；调料为食用油、盐（数量未记录）[Data: Reports (4, 6)]。\n4. **番茄炒蛋**：主料为番茄 300g、鸡蛋 3pc；调料为食用油、盐、糖（数量未记录）[Data: Reports (4, 6)]。\n\n**未列出鸡蛋的菜谱**：酸辣土豆丝与回锅肉的完整食材清单中未列出鸡蛋 [Data: Reports (4, 6)]。此陈述仅针对这两个菜谱的记录，不能据此推断全图任何其他菜谱均无鸡蛋。\n\n## 三、其他菜谱食材（便于对照）\n\n- **酸辣土豆丝**（基准 2 人）：主料土豆 350g；调料食用油、盐、醋、辣椒酱（数量未记录）[Data: Reports (1)]。\n- **回锅肉**（基准 2 人）：必需食材猪肉 300g、青椒 100g、卷心菜 100g；调料食用油、盐、酱油（数量未记录）[Data: Reports (0, 8)]。\n- **青椒肉丝**（基准 2 人）：必需食材猪肉 200g、青椒 200g；调料食用油、盐、酱油（数量未记录）[Data: Reports (8)]。\n- **宫保鸡丁**（基准 2 人）：必需食材鸡胸肉 250g、花生 50g、青椒 100g；调料食用油、盐、酱油、醋（数量未记录）[Data: Reports (3)]。\n\n## 四、采购 SKU 的定位说明\n\n模拟采购 SKU 及其 `category_id` 仅为货架位置，不代表食材类别或营养分类：鲜鸡蛋 10 枚装（baking，10pc）、鲜鸡蛋 6 枚装（vegetable，6pc）、青椒 300g（vegetable）、新鲜番茄 500g（vegetable）、白砂糖 500g（baking）、卷心菜 500g（vegetable）、食用盐 500g（condiment）、土豆 500g（规格 500g）[Data: Reports (1, 4, 6, 7)]。\n\n另需注意：\n\n- PROCUREMENT_CANDIDATE 仅表示该 SKU 可作为该食材的采购候选，仍须核对单位、门店库存及用户约束，不证明食品成分、营养、过敏安全或跨食材替代；价格与库存需另查当前业务 Offer [Data: Reports (1, 4, 6, 7)]。\n- 社区只是全图局部子图，不能从社区内缺少某食材或关系推断全图未记录；例如蛋炒饭子图只出现大米、葱，扬州炒饭子图只出现豌豆、虾，但鸡蛋仍是其完整清单中的必需食材 [Data: Reports (2, 5, 0, 3)]。\n- 各菜谱的完整必需食材清单须以其 RECIPE 的 description 为准 [Data: Reports (0, 3, 2, 5, 1)]。",
+      "context": {
+        "reports": [
+          {
+            "id": "0",
+            "title": "回锅肉与青椒肉丝采购社区：食用油、猪肉、青椒、卷心菜与酱油",
+            "occurrence weight": 1.0,
+            "content": "# 回锅肉与青椒肉丝采购社区：食用油、猪肉、青椒、卷心菜与酱油\n\n该社区以菜谱“回锅肉”和“青椒肉丝”为中心，通过 REQUIRES 关系连接到猪肉、青椒、卷心菜、食用油和酱油等 INGREDIENT 节点；其中猪肉、食用油、酱油、卷心菜等食材各自通过 PROCUREMENT_CANDIDATE 关系连接到一个模拟 SKU。社区内能确认的完整采购事实仅为这些记录所载内容；图路径不证明替代、过敏安全、营养或家庭已有数量，SKU 的 category_id 仅为货架位置而非食材类别。\n\n## 菜谱回锅肉的完整必需食材清单\n\n回锅肉 [recipe:dish-huiguo-rou] 的基准为 2 人，完整必需食材清单为：猪肉 300g、青椒 100g、卷心菜 100g；调料为食用油、盐、酱油，但调料数量未记录，家庭已有食材数量未知。报告逐项保留这些名称、基准人数和已有用量，不因社区内缺少某食材节点或关系而推断全图没有记录它。[Data: Entities (6); Relationships (33)]\n\n## 菜谱青椒肉丝的完整必需食材清单\n\n青椒肉丝 [recipe:dish-qingjiao-rousi] 别名尖椒肉丝，基准为 2 人，完整必需食材清单为：猪肉 200g、青椒 200g；调料为食用油、盐、酱油，但调料数量未记录，家庭已有食材数量未知。该菜谱的猪肉 REQUIRES 关系原始用量来源为 recipes.json/dish-qingjiao-rousi。[Data: Entities (3); Relationships (16)]\n\n## 猪肉食材及其采购候选\n\n猪肉 [ingredient:pork] 的 kind 类别为 meat，来源为 ingredients.json/pork。社区内记录到猪肩肉 500克 [sku:demo:pork-500g] 作为猪肉的 PROCUREMENT_CANDIDATE，销售规格 500g，品牌为演示品牌，SKU 品类为 meat，用途为家常、小炒肉。该关系仍须核对单位、门店库存及用户约束，不证明食品成分或替代，也不证明过敏安全、营养或家庭已有数量。[Data: Entities (16, 28); Relationships (45, 33, 16)]\n\n## 食用油食材及其采购候选\n\n食用油 [ingredient:oil] 的 kind 类别为 condiment，来源为 ingredients.json/oil。食用油 500毫升 [sku:demo:cooking-oil-500ml] 被记录为其 PROCUREMENT_CANDIDATE，销售规格 500ml，品牌为演示品牌，SKU 品类为 staple，用途为炒菜、家常。该 SKU 的 category_id 是货架位置，不能当作食材类别、成分或营养类别；采购关系不证明配料、营养、过敏安全或跨食材替代。[Data: Entities (14, 37); Relationships (54)]\n\n## 酱油食材及其采购候选\n\n酱油 [ingredient:soy_sauce] 的 kind 类别为 condiment，来源为 ingredients.json/soy_sauce。生抽酱油 500毫升 [sku:demo:soy-sauce-500ml] 被记录为其 PROCUREMENT_CANDIDATE，销售规格 500ml，品牌为演示品牌，SKU 品类为 condiment，用途为调味、炒菜。采购关系不证明食品成分或替代，也不证明过敏安全、营养或家庭已有数量。[Data: Entities (22, 31); Relationships (48)]\n\n## 卷心菜食材及其采购候选\n\n卷心菜 [ingredient:cabbage] 的 kind 类别为 vegetable，来源为 ingredients.json/cabbage。卷心菜 500克 [sku:demo:cabbage-500g] 被记录为其 PROCUREMENT_CANDIDATE，销售规格 500g，品牌为演示品牌，SKU 品类为 vegetable，用途为火锅、火锅素菜。该关系仍须核对单位、门店库存及用户约束，不证明食品成分或替代。[Data: Entities (9, 39); Relationships (56)]\n\n## 社区中已有的调料数量与家庭已有数量均未知\n\n在社区内可确认的菜谱记录中，回锅肉和青椒肉丝均列出调料食用油、盐、酱油，但记录明确调料数量未记录；同时记录明确家庭已有食材数量未知。因此不能从社区内缺少某个关系推断全图没有记录它，也不能从图路径推断家庭已有数量。[Data: Entities (6, 3, 14, 22)]\n\n## SKU 的 category_id 仅代表货架位置\n\n社区内 SKU 的 category_id 是货架位置，不能当作食材类别、成分或营养类别；食材种类只能引用 INGREDIENT 的 kind。例如食用油 500毫升的 SKU 品类为 staple，而其对应的 INGREDIENT 食用油 kind 为 condiment；生抽酱油的 SKU 品类为 condiment，对应 INGREDIENT 酱油 kind 也是 condiment。两者含义不同，不可混淆。[Data: Entities (37, 14, 31, 22)]\n\n## 仅模拟采购，不证明履约\n\n记录明确标注仅为模拟采购，价格库存另查当前业务 Offer。PROCUREMENT_CANDIDATE 关系仅表示可作为采购候选，仍须核对单位、门店库存及用户约束，不证明食品成分或替代，也不证明真实履约。[Data: Entities (37, 31, 28, 39); Relationships (54, 48, 45, 56)]",
+            "rank": 3.0
+          },
+          {
+            "id": "10",
+            "title": "食用油采购候选社区：食用油与食用油 500毫升",
+            "occurrence weight": 0.75,
+            "content": "# 食用油采购候选社区：食用油与食用油 500毫升\n\n该社区由两个节点组成：食材节点“食用油”（entity id 14）与 SKU 节点“食用油 500毫升”（entity id 37）。两者之间由一条 PROCUREMENT_CANDIDATE 关系（关系 id 54）连接，说明该 SKU 可作为该食材的采购候选，销售规格为 500ml，但仍须核对单位、门店库存及用户约束，且不证明食品成分或替代。食材节点记录其类别为 condiment、来源为 ingredients.json/oil，并明确采购关系不证明配料、营养、过敏安全或跨食材替代。SKU 节点记录品牌为演示品牌、品类为 staple、规格 500ml、用途为炒菜与家常，并注明仅供模拟采购，价格库存另查当前业务 Offer。社区为全图局部子图，本报告只保留上述已有采购事实，不推断全图是否记录其他关系。\n\n## 确认的采购候选关系\n\n该社区的核心事实是一条采购候选关系：SKU“食用油 500毫升”（entity id 37）被记录为食材“食用油”（entity id 14）的采购候选，销售规格为 500ml。该关系同时明确仍须核对单位、门店库存及用户约束，并且不证明食品成分或替代。因此，此关系只能支持“存在采购候选记录”这一结论，不能扩展为配料、营养、过敏安全或跨食材替代方面的结论。 [Data: Entities (14, 37); Relationships (54)]\n\n## 食用油节点的采购资料\n\n食材节点“食用油”（entity id 14）的描述记录其类别为 condiment，来源为 ingredients.json/oil。描述同时声明采购关系不证明配料、营养、过敏安全或跨食材替代。本报告不推断这些未记录的事实，只保留该节点已有的采购来源与类别信息。 [Data: Entities (14)]\n\n## 食用油 500毫升 SKU 的采购资料\n\nSKU 节点“食用油 500毫升”（entity id 37）记录标题为“食用油 500毫升 Cooking Oil 500ml”，品牌为演示品牌，品类为 staple，规格为 500ml，采购食材为食用油，用途为炒菜、家常。描述还注明仅供模拟采购，价格库存另查当前业务 Offer。因此，该节点提供的是模拟商品资料层面的信息，并未提供真实价格、库存或履约信息。 [Data: Entities (37)]\n\n## 局部子图的边界与证据限制\n\n本社区只是全图的局部子图。社区内仅出现一个食材节点和一个 SKU 节点，以及它们之间的一条关系。不能从社区内缺少某个关系推断全图没有记录它。因此，本报告不主张该食材只存在这一个采购候选，也不主张该 SKU 与其他食材之间存在或不存在任何关系。 [Data: Entities (14, 37); Relationships (54)]\n\n## 菜谱描述需逐项保留的说明\n\n本社区输入资料中未提供任何 RECIPE 类型的实体，因此没有可引用的菜谱 entity id，也没有菜谱 description 中的完整必需食材清单、基准人数或已有用量可供逐项保留。该完整清单应来自 RECIPE 的 description，但本次提供的社区数据不包含该记录，故无法在本报告中写入完整食材清单；此缺失保持为未知，不以社区内缺少关系来推断全图不存在。 [Data: Entities (14, 37); Relationships (54)]\n\n## category_id 与食材类别的区分\n\n输入资料中 SKU 的品类字段记录为 staple，这是模拟商品资料中的品类描述。根据约束，SKU 的 category_id 是货架位置，不能当作食材类别、成分或营养类别；食材种类只能引用 INGREDIENT 的 kind。本报告因此不将 staple 解释为食材类别或营养类别，只在 SKU 描述层面保留该记录。 [Data: Entities (14, 37)]\n\n## 未证明的结论保持未知\n\n图路径不能证明替代、过敏安全、营养或家庭已有数量。采购候选关系只说明该 SKU 可作为该食材的采购候选，不证明食品成分或替代；食材节点描述也明确采购关系不证明配料、营养、过敏安全或跨食材替代。因此，本报告不写入替代、过敏安全、营养或家庭已有数量方面的结论，这些事实在本次输入中均保持未知。 [Data: Entities (14, 37); Relationships (54)]",
+            "rank": 3.0
+          },
+          {
+            "id": "3",
+            "title": "宫保鸡丁菜谱采购社区：鸡胸肉、花生、醋及模拟 SKU",
+            "occurrence weight": 0.4166666667,
+            "content": "# 宫保鸡丁菜谱采购社区：鸡胸肉、花生、醋及模拟 SKU\n\n该社区以宫保鸡丁（entity id 4）为核心，其必需食材包括鸡胸肉、花生、青椒及调料（食用油、盐、酱油、醋），基准人数2人，并记录了鸡胸肉250g、花生50g、青椒100g的具体用量；调料数量未记录，家庭已有食材数量未知。社区内可见鸡胸肉（entity 10）、花生（entity 15）、醋（entity 25）三种食材节点，并分别关联模拟采购候选SKU：鸡胸肉500克（entity 32）、花生米200克（entity 38）、米醋500毫升（entity 41）。所有关系均为REQUIRES或PROCUREMENT_CANDIDATE，仅表明菜谱需求与采购候选，不证明替代、过敏安全、营养或真实履约。\n\n## 完整食材清单与基准用量（以RECIPE entity id 4引用）\n\n宫保鸡丁（RECIPE entity id 4）的description中记录完整必需食材清单：基准2人，必需食材包括鸡胸肉250g、花生50g、青椒100g，调料包括食用油、盐、酱油、醋。必须逐项保留名称、基准人数和已有用量。调料数量未记录，家庭已有食材数量未知。即使某些食材节点或关系位于社区外，也不能从社区内缺少某个关系推断全图没有记录它。本清单仅作为菜谱定义存在，不证明任何食材的替代、过敏安全、营养或真实采购履约。[Data: Entities (4)]\n\n## 鸡胸肉食材与模拟采购候选\n\n鸡胸肉（INGREDIENT entity 10）类别为meat，来源ingredients.json/chicken_breast，采购关系不证明配料、营养、过敏安全或跨食材替代。宫保鸡丁（entity 4）通过REQUIRES关系（关系21）要求鸡胸肉，基准2人需250g，原始用量来源recipes.json/dish-gongbao-jiding；其他人数和包装由业务服务计算。鸡胸肉与模拟SKU“鸡胸肉500克”（entity 32）存在PROCUREMENT_CANDIDATE关系（关系49），销售规格500g；仍须核对单位、门店库存及用户约束，不证明食品成分或替代。[Data: Entities (4, 10, 32); Relationships (21, 49)]\n\n## 花生食材与模拟采购候选\n\n花生（INGREDIENT entity 15）类别为staple，来源ingredients.json/peanut，采购关系不证明配料、营养、过敏安全或跨食材替代。宫保鸡丁（entity 4）的必需食材中包含花生50g，但当前社区内没有显示花生与菜谱之间的REQUIRES关系；不能从社区内缺少该关系推断全图没有记录它。花生与模拟SKU“花生米200克”（entity 38）存在PROCUREMENT_CANDIDATE关系（关系55），销售规格200g；仍须核对单位、门店库存及用户约束，不证明食品成分或替代。[Data: Entities (4, 15, 38); Relationships (55)]\n\n## 醋食材与模拟采购候选\n\n醋（INGREDIENT entity 25）类别为condiment，来源ingredients.json/vinegar，采购关系不证明配料、营养、过敏安全或跨食材替代。宫保鸡丁（entity 4）的调料清单中包含醋，但数量未记录，家庭已有数量未知。当前社区内没有显示醋与菜谱之间的REQUIRES关系；不能从社区内缺少该关系推断全图没有记录它。醋与模拟SKU“米醋500毫升”（entity 41）存在PROCUREMENT_CANDIDATE关系（关系58），销售规格500ml；仍须核对单位、门店库存及用户约束，不证明食品成分或替代。[Data: Entities (4, 25, 41); Relationships (58)]\n\n## SKU品类仅为货架位置，非食材类别\n\n模拟SKU的category_id代表货架位置，不能当作食材类别、成分或营养类别。食材种类只能引用INGREDIENT的kind。例如，鸡胸肉SKU（entity 32）品类为meat，花生米SKU（entity 38）品类为staple，米醋SKU（entity 41）品类为condiment；这些品类仅用于货架分类，与食材本身的营养或成分属性无关。[Data: Entities (32, 38, 41)]\n\n## 采购候选关系仅表明模拟采购可能性\n\n所有PROCUREMENT_CANDIDATE关系（关系49、55、58）仅表示SKU可作为对应食材的模拟采购候选，并给出销售规格，但明确不证明食品成分、替代、过敏安全、营养或真实履约。价格库存需另查当前业务Offer。采购关系不证明配料、营养、过敏安全或跨食材替代。[Data: Relationships (49, 55, 58)]\n\n## 社区内缺失关系不能推断全图缺失\n\n社区只是全图的局部子图。即使社区内没有显示宫保鸡丁与花生、醋、青椒、食用油、盐、酱油之间的REQUIRES关系，或没有显示某些食材与SKU之间的采购候选关系，也不能据此推断全图没有记录这些关系。完整必需食材清单必须从RECIPE entity id 4的description中逐项保留。缺失事实保持未知。[Data: Entities (4); Relationships (21)]\n\n## 不证明过敏安全、营养或替代关系\n\n图路径（包括REQUIRES和PROCUREMENT_CANDIDATE）不能证明替代、过敏安全、营养或家庭已有数量。例如，花生与花生米SKU之间的采购候选关系不证明花生米可替代花生用于过敏安全目的，也不证明其营养成分。所有相关描述均明确声明采购关系不证明配料、营养、过敏安全或跨食材替代。[Data: Relationships (21, 49, 55, 58)]",
+            "rank": 3.5
+          },
+          {
+            "id": "2",
+            "title": "蛋炒饭食谱社区：米饭、葱及其采购候选",
+            "occurrence weight": 0.3333333333,
+            "content": "# 蛋炒饭食谱社区：米饭、葱及其采购候选\n\n该社区围绕蛋炒饭（recipe:dish-dan-chao-fan）构建，包含完整必需食材清单：大米300g、鸡蛋2pc，调料食用油、盐、葱；基准人数为2人。当前社区子图仅包含大米和葱两个食材节点，以及它们各自的采购候选SKU：大米2公斤和小葱200克。蛋炒饭通过REQUIRES关系与大米关联，大米和葱分别通过PROCUREMENT_CANDIDATE与对应SKU关联。所有采购关系仅表示候选，不证明成分、营养、过敏安全或替代关系。\n\n## 蛋炒饭完整必需食材清单\n\n菜谱“蛋炒饭”的description中记录了完整的必需食材清单，报告中必须逐项保留名称、基准人数和已有用量，即使某些食材节点或关系位于社区外。该菜谱基准为2人，必需食材包括：大米300g、鸡蛋2pc；调料包括：食用油、盐、葱。调料数量未记录，家庭已有食材数量未知。当前社区子图仅包含大米和葱两个食材节点，鸡蛋、食用油、盐位于社区外，但不影响它们作为必需食材的事实。不能从社区内缺少某个关系推断全图没有记录它。 [Data: Entities (1); Relationships (5)]\n\n## 大米作为采购食材及其SKU候选\n\n大米（ingredient:rice）是蛋炒饭的必需食材之一，菜谱要求2人份使用300g大米。大米节点类别为staple，来源ingredients.json/rice。大米与SKU“大米2公斤”（sku:demo:rice-2kg）之间存在采购候选关系（PROCUREMENT_CANDIDATE），该SKU销售规格2000g，品牌为演示品牌，品类staple，用途包括主食、炒饭、蛋炒饭。采购关系仅表示该SKU可作为采购候选，不证明食品成分或替代，仍需核对单位、门店库存及用户约束。价格库存需另查当前业务Offer。 [Data: Entities (18, 35); Relationships (5, 52)]\n\n## 葱作为采购食材及其SKU候选\n\n葱（ingredient:scallion）是蛋炒饭的调料之一，菜谱中未记录用量。葱节点类别为vegetable，来源ingredients.json/scallion。葱与SKU“小葱200克”（sku:demo:scallion-200g）之间存在采购候选关系（PROCUREMENT_CANDIDATE），该SKU销售规格200g，品牌为演示品牌，品类vegetable，用途包括调味、家常菜、葱香。采购关系仅表示该SKU可作为采购候选，不证明食品成分或替代，仍需核对单位、门店库存及用户约束。价格库存需另查当前业务Offer。 [Data: Entities (20, 36); Relationships (53)]\n\n## SKU类别仅为货架位置\n\nSKU“大米2公斤”的category_id标注为staple，“小葱200克”的category_id标注为vegetable。根据约束，SKU的category_id是货架位置，不能当作食材类别、成分或营养类别。食材种类只能引用INGREDIENT的kind。例如，大米节点的kind为staple，葱节点的kind为vegetable。因此，SKU的品类标签不应被解释为食材类别或营养信息。 [Data: Entities (18, 20, 35, 36)]\n\n## 采购关系不证明替代、过敏安全或营养\n\n图中路径不能证明替代、过敏安全、营养或家庭已有数量。关系（52）和（53）明确描述为PROCUREMENT_CANDIDATE，仅表示该SKU可作为该食材的采购候选，不证明食品成分或替代。关系（5）记录蛋炒饭需大米300g，原始用量来源recipes.json/dish-dan-chao-fan，其他人数和包装由业务服务计算。所有采购关系与模拟商品资料仅供模拟采购，价格库存另查当前业务Offer。不能从这些关系推断食材之间的替代性、过敏安全性或营养信息。 [Data: Relationships (5, 52, 53)]\n\n## 社区子图范围限制\n\n社区只是全图的局部子图。当前社区包含蛋炒饭、大米、葱以及对应的两个SKU。但菜谱的完整必需食材清单还包括鸡蛋、食用油、盐，这些节点或关系可能位于社区外。不能从社区内缺少某个关系推断全图没有记录它。报告必须基于提供的记录，缺失事实保持未知。例如，调料的用量未记录，家庭已有食材数量未知。 [Data: Entities (1, 18, 20, 35, 36); Relationships (5, 52, 53)]",
+            "rank": 2.0
+          },
+          {
+            "id": "9",
+            "title": "酱油食材与生抽酱油 500毫升 SKU 采购社区",
+            "occurrence weight": 0.3333333333,
+            "content": "# 酱油食材与生抽酱油 500毫升 SKU 采购社区\n\n该社区仅包含两个实体：食材「酱油」（ingredient:soy_sauce，类别 condiment）与模拟商品「生抽酱油 500毫升」（sku:demo:soy-sauce-500ml，品牌 演示品牌，品类 condiment，规格 500ml）。二者通过唯一的关系相连：生抽酱油 500毫升 可作为酱油的采购候选，销售规格 500ml，仍须核对单位、门店库存及用户约束。该关系不证明食品成分、过敏安全、营养、替代关系或真实履约。社区中不包含任何 RECIPE 节点、菜谱 description、基准人数或已有用量记录，因此无法在本社区范围内提供完整必需食材清单。\n\n## 社区仅含酱油食材与一个 SKU，且无 RECIPE 记录\n\n本社区的全部实体为食材「酱油 [ingredient:soy_sauce]」（类别 condiment，来源 ingredients.json/soy_sauce）与 SKU「生抽酱油 500毫升 [sku:demo:soy-sauce-500ml]」（品牌 演示品牌，品类 condiment，规格 500ml，采购食材 酱油，用途 调味 炒菜）。社区中不存在任何 RECIPE 节点及其 description，因此无法在本社区内获得完整必需食材清单、基准人数或已有用量；不能因社区内缺少某个关系而推断全图没有记录它。[Data: Entities (22, 31)]\n\n## 唯一关系为采购候选，附带单位与库存核对要求\n\n食材酱油与 SKU 生抽酱油 500毫升 之间的唯一关系是 PROCUREMENT_CANDIDATE：生抽酱油 500毫升 可作为该食材采购候选，销售规格 500ml；仍须核对单位、门店库存及用户约束。该关系明确不证明食品成分或替代。整条关系未提供价格、库存数量或履约信息，采购前仍需另行核对当前业务 Offer。[Data: Entities (22, 31); Relationships (48)]\n\n## condiment 类别只表示采购分类，不能当作食材或营养类别\n\n食材酱油的记录将类别记为 condiment；SKU 生抽酱油 500毫升 的品类亦记为 condiment。按约束，SKU 的 category_id 是货架位置，不能当作食材类别、成分或营养类别；食材种类只能引用 INGREDIENT 的 kind。本社区未提供任何 kind 字段值，也未提供配料表、营养成分或过敏原信息，因此不能从 condiment 推断成分、营养或过敏安全。[Data: Entities (22, 31)]\n\n## 缺少菜谱清单导致无法逐项保留食材名称、人数与用量\n\n约束要求：若存在 RECIPE，其 description 为完整必需食材清单，报告必须逐项保留名称、基准人数和已有用量，即使某食材节点或关系位于社区外。本社区未提供任何 RECIPE 实体、description、基准人数或已有用量记录，因此本报告无法生成并保留该完整清单，只能如实说明缺失。[Data: Entities (22, 31); Relationships (48)]\n\n## 图路径不构成替代、过敏安全、营养或家庭库存证据\n\n本社区只有一条 PROCUREMENT_CANDIDATE 关系，其描述本身即声明不证明食品成分或替代。此外，关系描述要求核对单位、门店库存及用户约束，说明门店库存与家庭已有数量均未被记录。因此，任何关于生抽酱油 500毫升 可替代酱油、对某过敏人群安全、具备特定营养属性或家庭已有存量的结论都缺乏本社区数据支持，应保持未知。[Data: Relationships (48)]",
+            "rank": 1.0
+          },
+          {
+            "id": "5",
+            "title": "扬州炒饭菜谱社区：采购记录局部视图",
+            "occurrence weight": 0.25,
+            "content": "# 扬州炒饭菜谱社区：采购记录局部视图\n\n本社区以扬州炒饭（recipe:dish-yangzhou-chao-fan）为核心，包含其食材豌豆、虾，以及对应的模拟 SKU 青豌豆 300克与演示虾仁200克。社区内仅记录部分菜谱必需食材与采购候选关系，完整性须以该菜谱 description 的完整清单为准。\n\n## 扬州炒饭完整必需食材清单（按基准 2 人）\n\n扬州炒饭（entity id: 2）的 description 给出完整必需食材清单与基准人数：基准 2 人；必需食材包括大米 350g、鸡蛋 2pc、虾 80g、豌豆 50g；调料为食用油、盐，调料数量未记录，家庭已有食材数量未知。报告逐项保留名称、基准人数和已有用量，即使某食材节点或关系位于社区外，仍按完整清单记录；不能因社区内缺少某关系而推断全图没有记录。 [Data: Entities (2)]\n\n## 社区内已出现的食材与采购候选：豌豆\n\n社区内记录豌豆为采购食材，类别 vegetable，来源 ingredients.json/green_pea（entity id: 13）。与 SKU 青豌豆 300克（entity id: 42）存在 PROCUREMENT_CANDIDATE 关系，该 SKU 规格 300g、品类 vegetable，用途炒饭、家常；关系说明仍须核对单位、门店库存及用户约束，不证明食品成分或替代，也不证明真实履约。 [Data: Entities (13, 42); Relationships (59)]\n\n## 社区内已出现的食材与采购候选：虾\n\n社区内记录虾为采购食材，类别 seafood，来源 ingredients.json/shrimp（entity id: 21）。与 SKU 演示虾仁200克（entity id: 43）存在 PROCUREMENT_CANDIDATE 关系，该 SKU 规格 200g、品类 seafood、类型 shrimp，用途炒饭、家常；关系说明仍须核对单位、门店库存及用户约束，不证明食品成分或替代，也不证明真实履约。 [Data: Entities (21, 43); Relationships (60)]\n\n## 菜谱到食材的 REQUIRES 记录\n\n图中记录扬州炒饭到大米存在 REQUIRES 关系，基准 2 人需 350g，原始用量来源 recipes.json/dish-yangzhou-chao-fan，其他人数和包装由业务服务计算（relationship id: 10）。该关系仅覆盖大米这一项；大米节点不在本社区实体列表中，不能据此推断全图没有记录大米或菜谱的其他食材。 [Data: Relationships (10)]\n\n## SKU 的 category_id/品类字段仅表示货架位置\n\n青豌豆 300克（entity id: 42）与演示虾仁200克（entity id: 43）的品类字段分别为 vegetable 与 seafood，但该字段是 SKU 的 category_id 货架位置，不能当作食材类别、成分或营养类别；食材种类只能引用 INGREDIENT 的 kind，即豌豆（entity id: 13）的 kind=vegetable、虾（entity id: 21）的 kind=seafood。 [Data: Entities (13, 21, 42, 43)]\n\n## 采购关系与模拟 SKU 的限制\n\n输入资料仅为采购关系与模拟商品资料，SKU 标注“仅供模拟采购，价格库存另查当前业务 Offer”；PROCUREMENT_CANDIDATE 仅表示可作为采购候选，仍须核对单位、门店库存及用户约束，不证明食品成分、营养、过敏安全、跨食材替代或真实履约。 [Data: Entities (42, 43); Relationships (59, 60)]",
+            "rank": 3.0
+          },
+          {
+            "id": "8",
+            "title": "青椒肉丝菜谱与采购子图：猪肉及模拟SKU",
+            "occurrence weight": 0.25,
+            "content": "# 青椒肉丝菜谱与采购子图：猪肉及模拟SKU\n\n本社区以青椒肉丝（dish-qingjiao-rousi）菜谱为核心，关联必需食材猪肉（ingredient:pork），并链接至模拟采购SKU猪肩肉500克（sku:demo:pork-500g）。菜谱为2人份，必需食材含猪肉200g、青椒200g，调料为食用油、盐、酱油但数量未记录，家庭已有食材数量未知。猪肉被标记为肉类采购食材，猪肩肉500克为猪肉的采购候选，销售规格500g，但采购关系不证明食品成分或替代关系。\n\n## 青椒肉丝完整必需食材清单必须逐项保留\n\n根据菜谱RECIPE的description，青椒肉丝（recipe:dish-qingjiao-rousi）基准2人，完整必需食材清单为：猪肉200g、青椒200g；调料为食用油、盐、酱油。调料数量未记录。该清单必须写入明确finding并以该RECIPE的entity id引用，不得因社区内缺少某些关系而推断全图没有记录。社区仅显示猪肉为已关联食材，青椒和调料未在此子图中出现，但不能据此认为全图不存在相关记录。家庭已有食材数量未知。[Data: Entities (3)]\n\n## 猪肉作为采购食材及其类别\n\n猪肉（ingredient:pork）是采购食材，类别meat，来源ingredients.json/pork。采购关系不证明配料、营养、过敏安全或跨食材替代。猪肉与青椒肉丝之间存在REQUIRES关系：青椒肉丝基准2人需200g，原始用量来源recipes.json/dish-qingjiao-rousi；其他人数和包装由业务服务计算。[Data: Entities (16); Relationships (16)]\n\n## SKU猪肩肉500克为猪肉的采购候选\n\n猪肩肉500克（sku:demo:pork-500g）为演示品牌Pork Shoulder 500g，品类meat，规格500g，采购食材猪肉，用途家常小炒肉。该SKU仅是模拟采购，价格库存另查当前业务Offer。猪肉与猪肩肉500克之间存在PROCUREMENT_CANDIDATE关系：猪肩肉500克可作为该食材采购候选，销售规格500g；仍须核对单位、门店库存及用户约束，不证明食品成分或替代。[Data: Entities (28); Relationships (45)]\n\n## 关系局限与不可推断事项\n\n图路径仅表示采购候选与需求关系，不能证明替代、过敏安全、营养或家庭已有数量。SKU的category_id是货架位置，不能当作食材类别、成分或营养类别；食材种类只能引用INGREDIENT的kind。本社区中猪肉的kind（类别meat）来自ingredients.json/pork，猪肩肉500克的品类meat为SKU分类，不可与食材类别混淆。不得从社区内缺少某个关系推断全图没有记录它。[Data: Entities (3, 16, 28); Relationships (16, 45)]\n\n## 青椒与调料在社区外，需保持未知\n\n青椒肉丝的完整食材清单包含青椒200g以及调料食用油、盐、酱油，但本社区子图未包含青椒和调料实体或关系。不能从社区内缺少关系推断全图没有记录它们。调料数量未记录，家庭已有食材数量未知。报告仅引用提供的记录，缺失事实保持未知。[Data: Entities (3)]\n\n## 采购模拟资料不证明真实履约\n\n猪肩肉500克仅为模拟采购SKU，价格库存需另查当前业务Offer。采购关系不证明食品成分、过敏安全、营养或跨食材替代，也不能作为真实履约依据。所有采购事实应准确保留原始记录，不添加泛化风险套话。[Data: Entities (28); Relationships (45)]",
+            "rank": 2.0
+          },
+          {
+            "id": "1",
+            "title": "酸辣土豆丝菜谱及采购候选社区",
+            "occurrence weight": 0.8333333333,
+            "content": "# 酸辣土豆丝菜谱及采购候选社区\n\n该社区以酸辣土豆丝菜谱为核心，关联食材土豆（REQUIRES，基准2人需350g）、调料辣椒酱（PANTRY，数量未记录），以及盐、食用盐500g、土豆500g等采购候选节点。盐与食用盐500g之间存在采购候选关系，土豆与土豆500g之间也存在采购候选关系。菜谱的完整必需食材清单包括土豆350g以及食用油、盐、醋、辣椒酱等调料，但调料数量未记录，家庭已有食材数量未知。社区内关系仅表示采购候选，不证明食品成分、营养、过敏安全或跨食材替代。\n\n## 酸辣土豆丝完整必需食材清单\n\n酸辣土豆丝（entity id: 5）的 description 中记录了完整的必需食材清单：主料土豆350g，调料食用油、盐、醋、辣椒酱。基准人数为2人。其中辣椒酱的数量未记录。该清单必须逐项保留名称、基准人数和已有用量，即使某些食材节点或关系位于社区外，也不能从社区内缺少某个关系推断全图没有记录它。其他人数和包装由业务服务计算。 [Data: Entities (5); Relationships (28, 32)]\n\n## 土豆的必需用量与采购候选\n\n酸辣土豆丝与土豆（entity id: 17）之间存在 REQUIRES 关系，明确基准2人需350g，原始用量来源为 recipes.json/dish-suanla-tudousi。土豆与土豆500g（entity id: 40）之间存在 PROCUREMENT_CANDIDATE 关系：土豆500g可作为该食材采购候选，销售规格500g；仍须核对单位、门店库存及用户约束。该采购关系不证明食品成分、营养、过敏安全或跨食材替代。 [Data: Entities (5, 17, 40); Relationships (28, 57)]\n\n## 辣椒酱的潘泰关系与数量未知\n\n酸辣土豆丝与辣椒酱（entity id: 11）之间存在 PANTRY 关系，表明辣椒酱是酸辣土豆丝的调料，但数量未记录。不能据此推定家庭已有或足够。辣椒酱的 kind 为 condiment，来源 ingredients.json/chili_sauce。采购关系不证明配料、营养、过敏安全或跨食材替代。 [Data: Entities (5, 11); Relationships (32)]\n\n## 盐的采购候选关系\n\n盐（entity id: 19）与食用盐500g（entity id: 30）之间存在 PROCUREMENT_CANDIDATE 关系：食用盐500g可作为该食材采购候选，销售规格500g；仍须核对单位、门店库存及用户约束。该关系不证明食品成分或替代。盐的 kind 为 condiment，来源 ingredients.json/salt。食用盐500g 的品牌为演示品牌，品类为 condiment，规格500g，仅供模拟采购，价格库存另查当前业务 Offer。 [Data: Entities (19, 30); Relationships (47)]\n\n## 菜谱中其他调料的记录情况\n\n酸辣土豆丝 description 中列出调料食用油、盐、醋、辣椒酱。当前社区内仅记录了盐和辣椒酱的食材节点及部分关系。食用油和醋未在社区实体或关系中出现，但这并不表示全图没有记录它们；根据约束，不能从社区内缺少某个关系推断全图没有记录它。完整食材清单应在以 RECIPE entity id 引用的 finding 中保留。 [Data: Entities (5)]\n\n## SKU 品类与食材类别的区分\n\n食用盐500g 和土豆500g 的 category_id 或品类（condiment、vegetable）是货架位置，不能当作食材类别、成分或营养类别。食材种类只能引用 INGREDIENT 的 kind：盐的 kind 为 condiment，土豆的 kind 为 vegetable，辣椒酱的 kind 为 condiment。采购关系不证明配料、营养、过敏安全或跨食材替代。 [Data: Entities (19, 30, 17, 40, 11)]\n\n## 家庭已有食材数量未知\n\n酸辣土豆丝 description 中明确家庭已有食材数量未知。PANTRY 关系也注明数量未记录，不能推定家庭已有或足够。因此，在采购决策中不能依据现有信息判断家庭是否已有食用油、盐、醋、辣椒酱等调料。图路径不能证明替代、过敏安全、营养或家庭已有数量。 [Data: Entities (5); Relationships (32)]\n\n## 社区范围与全图关系的保守推断\n\n社区只是全图的局部子图。当前社区包含酸辣土豆丝、土豆、盐、辣椒酱、食用盐500g、土豆500g等实体，以及 REQUIRES、PANTRY、PROCUREMENT_CANDIDATE 等关系。不能从社区内缺少某个关系推断全图没有记录它。例如，食用油和醋未出现在社区中，但可能在全图其他位置有记录。报告应仅基于提供的记录，缺失事实保持未知。 [Data: Entities (5, 17, 19, 30, 40, 11, +more); Relationships (28, 32, 47, 57)]",
+            "rank": 3.0
+          },
+          {
+            "id": "4",
+            "title": "尖椒炒蛋菜谱采购社区：青椒、鸡蛋与模拟 SKU",
+            "occurrence weight": 0.8333333333,
+            "content": "# 尖椒炒蛋菜谱采购社区：青椒、鸡蛋与模拟 SKU\n\n该社区以菜谱「尖椒炒蛋 [recipe:dish-jiajiao-chaodan]」为中心，基准 2 人，必需食材为青椒 200g 与鸡蛋 3pc；调料食用油、盐数量未记录，家庭已有食材数量未知。社区包含两个 INGREDIENT 节点——青椒 [ingredient:bell_pepper]（类别 vegetable）和鸡蛋 [ingredient:egg]（类别 egg），以及三个模拟采购 SKU：鲜鸡蛋 10 枚装（品类 baking）、鲜鸡蛋 6 枚装（品类 vegetable）、青椒 300 克（品类 vegetable）。菜谱通过 REQUIRES 关系指向青椒，两个 INGREDIENT 通过 PROCUREMENT_CANDIDATE 关系分别指向对应 SKU。这些采购关系只表明 SKU 可作为采购候选，不证明食品成分、营养、过敏安全或跨食材替代；SKU 的 category_id 仅是货架位置，不是食材类别。社区只是全图局部子图，缺少某个关系不代表全图没有记录。\n\n## 完整必需食材清单（逐项保留名称、基准人数与已有用量）\n\n菜谱「尖椒炒蛋 [recipe:dish-jiajiao-chaodan]」（entity id 7）的 description 中给出完整必需食材清单，报告按原样逐项保留：基准 2 人；必需食材 青椒 200g、鸡蛋 3pc；调料 食用油、盐。其中调料数量未记录，家庭已有食材数量未知。该清单必须完整保留，即使某食材节点或关系位于本社区之外，也不能因其在当前子图中缺少关系而推断全图没有记录。 [Data: Entities (7); Relationships (39)]\n\n## 青椒食材节点与菜谱的 REQUIRES 关系\n\n青椒以 INGREDIENT 节点「青椒 [ingredient:bell_pepper]」（entity id 8）出现，其 kind/类别为 vegetable，来源 ingredients.json/bell_pepper。菜谱通过 REQUIRES 关系指向青椒，描述为「尖椒炒蛋 基准 2 人需 200g，原始用量来源 recipes.json/dish-jiajiao-chaodan；其他人数和包装由业务服务计算」。该关系仅记录原始用量来源，不证明营养、过敏安全或跨食材替代。 [Data: Entities (7, 8); Relationships (39)]\n\n## 鸡蛋食材节点及其采购候选 SKU\n\n鸡蛋以 INGREDIENT 节点「鸡蛋 [ingredient:egg]」（entity id 12）出现，其 kind/类别为 egg，来源 ingredients.json/egg。该 INGREDIENT 通过 PROCUREMENT_CANDIDATE 关系指向两个模拟 SKU：鲜鸡蛋 10 枚装 [sku:demo:eggs-10pack]（规格 10pc）与鲜鸡蛋 6 枚装 [sku:demo:eggs-fresh-6pack]（规格 6pc）。两条关系的描述均强调：可作为该食材采购候选，但仍须核对单位、门店库存及用户约束，不证明食品成分或替代。 [Data: Entities (12, 27, 34); Relationships (44, 51)]\n\n## 青椒 300 克 SKU 作为青椒的采购候选\n\n青椒 INGREDIENT 通过 PROCUREMENT_CANDIDATE 关系指向模拟 SKU「青椒 300克 [sku:demo:bell-pepper-300g]」（entity id 29），销售规格 300g，用途标注为炒菜、小炒肉。关系描述明确：可作为该食材采购候选，销售规格 300g，但仍须核对单位、门店库存及用户约束，不证明食品成分或替代。该 SKU 与菜谱所需 200g 的换算及可行性属于业务服务范围，本资料未记录。 [Data: Entities (8, 29); Relationships (46)]\n\n## SKU 的 category_id 仅为货架位置，不是食材类别\n\n三个模拟 SKU 的品类字段分别为：鲜鸡蛋 10 枚装 品类 baking；鲜鸡蛋 6 枚装 品类 vegetable；青椒 300克 品类 vegetable。该 category_id 是货架位置，不能当作食材类别、成分或营养类别。食材种类只能引用 INGREDIENT 的 kind：青椒为 vegetable，鸡蛋为 egg。因此不能因鲜鸡蛋 6 枚装品类为 vegetable 而将其归为蔬菜类食材，也不能因鲜鸡蛋 10 枚装品类为 baking 而推断其成分或营养属性。 [Data: Entities (8, 12, 27, 29, 34)]\n\n## 图路径不能证明替代、过敏安全、营养或家庭已有数量\n\n现有资料中，采购候选关系与菜谱-食材关系均为采购或需求记录。图路径不能证明替代关系（例如不能因两个鸡蛋 SKU 都是候选而认为二者可互相替代）、不能证明过敏安全、不能证明营养属性，也不能证明家庭已有数量。菜谱 description 明确调料数量未记录、家庭已有食材数量未知。任何从社区内缺少某个关系推断全图没有记录的做法都不成立。 [Data: Entities (7, 8, 12, 27, 29, 34); Relationships (39, 44, 46, 51)]\n\n## 社区结构：菜谱—食材—模拟 SKU 的两层关系\n\n该社区呈两层结构：第一层为菜谱通过 REQUIRES 关系指向青椒 INGREDIENT；第二层为 INGREDIENT 通过 PROCUREMENT_CANDIDATE 关系指向模拟 SKU。鸡蛋既有 INGREDIENT 节点也有两个 SKU 候选，青椒同样有 INGREDIENT 节点与一个 SKU 候选。SKU 均标注「仅供模拟采购，价格库存另查当前业务 Offer」，说明真实履约、价格与库存不在本资料范围内。 [Data: Entities (7, 8, 12, 27, 29, 34); Relationships (39, 44, 46, 51)]\n\n## 社区为局部子图，缺失关系不等于全图缺失\n\n本社区只是全图的局部子图。虽然当前子图内未出现调味品（食用油、盐）的 INGREDIENT 节点或其采购候选关系，但菜谱 description 已将食用油、盐列为调料；不能因为社区内缺少这些关系就推断全图没有记录它们。同样，菜谱所需鸡蛋 3pc、青椒 200g 的包装换算、单位核对、门店库存与用户约束均须由业务服务另行处理。 [Data: Entities (7); Relationships (39)]",
+            "rank": 3.0
+          },
+          {
+            "id": "6",
+            "title": "番茄炒蛋菜谱采购社区",
+            "occurrence weight": 0.25,
+            "content": "# 番茄炒蛋菜谱采购社区\n\n该社区以菜谱“番茄炒蛋”为中心，关联食材“番茄”和“糖”，以及模拟采购商品“新鲜番茄 500克”和“白砂糖 500克”。菜谱要求基准 2 人份所需食材，其中番茄 300g、鸡蛋 3pc 为必需，调料食用油、盐、糖数量未记录。番茄和糖分别与对应的 SKU 建立采购候选关系，但该关系仅用于采购参考，不证明成分、营养、过敏安全或替代关系。\n\n## 菜谱完整食材清单及基准用量\n\n菜谱“番茄炒蛋”（ID: 0）的 description 中列出了完整必需食材清单：主料为番茄 300g、鸡蛋 3pc；调料为食用油、盐、糖，但调料数量未记录，家庭已有食材数量未知。基准人数为 2 人。此清单来自 RECIPE 的完整描述，必须逐项保留，不因社区子图内缺少某些食材节点或关系而推断全图无记录。 [Data: Entities (0)]\n\n## 食材“番茄”的采购事实\n\n食材“番茄”（ID: 24）的类别为 vegetable，来源为 ingredients.json/tomato。它与菜谱“番茄炒蛋”存在 REQUIRES 关系，基准 2 人需 300g，原始用量来源为 recipes.json/dish-fanqie-chao-dan，其他人数和包装由业务服务计算。该采购关系不证明配料、营养、过敏安全或跨食材替代。 [Data: Entities (24); Relationships (0)]\n\n## 食材“糖”的采购事实\n\n食材“糖”（ID: 23）的类别为 condiment，来源为 ingredients.json/sugar。在菜谱“番茄炒蛋”的调料清单中提及糖，但具体用量未记录。该实体与 SKU“白砂糖 500克”存在采购候选关系，但该关系不证明食品成分或替代。 [Data: Entities (23); Relationships (43)]\n\n## 模拟商品“新鲜番茄 500克”的采购候选关系\n\nSKU“新鲜番茄 500克”（ID: 33）品牌为演示品牌，品类为 vegetable，规格 500g，用途为家常菜/番茄炒蛋，仅供模拟采购，价格库存需另查当前业务 Offer。它与食材“番茄”存在 PROCUREMENT_CANDIDATE 关系，可作为该食材采购候选，销售规格 500g；仍须核对单位、门店库存及用户约束，不证明食品成分或替代。 [Data: Entities (33); Relationships (50)]\n\n## 模拟商品“白砂糖 500克”的采购候选关系\n\nSKU“白砂糖 500克”（ID: 26）品牌为演示品牌，品类为 baking，规格 500g，用途为烘焙/甜味，仅供模拟采购，价格库存需另查当前业务 Offer。它与食材“糖”存在 PROCUREMENT_CANDIDATE 关系，可作为该食材采购候选，销售规格 500g；仍须核对单位、门店库存及用户约束，不证明食品成分或替代。 [Data: Entities (26); Relationships (43)]\n\n## SKU 品类字段仅为货架位置\n\nSKU 的 category_id（如“新鲜番茄 500克”的品类 vegetable 和“白砂糖 500克”的品类 baking）是货架位置，不能当作食材类别、成分或营养类别。食材种类只能引用 INGREDIENT 的 kind，如“番茄”的类别为 vegetable，“糖”的类别为 condiment。 [Data: Entities (33, 26, 24, 23)]\n\n## 社区子图范围限定\n\n本报告仅基于提供的社区子图，包含 5 个实体和 3 条关系。社区只是全图的局部子图，不能从社区内缺少某个关系推断全图没有记录它。例如，菜谱的完整食材清单（如鸡蛋、食用油、盐）虽未出现在关系或实体列表中，但已保留在菜谱 description 中。 [Data: Entities (0); Relationships (0, 43, 50)]",
+            "rank": 3.0
+          },
+          {
+            "id": "7",
+            "title": "回锅肉菜谱与卷心菜采购社区报告",
+            "occurrence weight": 0.1666666667,
+            "content": "# 回锅肉菜谱与卷心菜采购社区报告\n\n本社区以实体“回锅肉”为核心，连接两个关键实体：“卷心菜”和模拟商品“卷心菜 500克”。回锅肉是一个菜谱，记录了基准人数和部分必需食材及调料。卷心菜作为食材，通过一条采购候选关系指向一个模拟商品SKU，该SKU提供具体销售规格和用途标签。社区结构简单，但报告需注意：菜谱的完整必需食材清单必须逐项保留，即使部分食材节点或关系未出现在社区内；采购资料不证明过敏安全、营养或替代关系。\n\n## 回锅肉菜谱的完整必需食材清单\n\n实体“回锅肉”的描述中给出了完整的必需食材清单，必须逐项保留名称、基准人数和已有用量。基准为2人，必需食材包括：猪肉 300g、青椒 100g、卷心菜 100g；调料包括：食用油、盐、酱油，调料数量未记录，家庭已有食材数量未知。该完整清单应以该 RECIPE 的 entity id 引用，即使某些食材节点或关系位于社区外，也不能从社区内缺少某个关系推断全图没有记录它。 [Data: Entities (6)]\n\n## 卷心菜作为食材实体\n\n实体“卷心菜”被标识为采购食材，类别为vegetable，来源为ingredients.json/cabbage。描述明确指出采购关系不证明配料、营养、过敏安全或跨食材替代。该实体与一个模拟商品SKU通过采购候选关系相连，该关系不证明食品成分或替代。 [Data: Entities (9); Relationships (56)]\n\n## 卷心菜500克模拟商品\n\n实体“卷心菜 500克”是一个模拟商品SKU，品牌为演示品牌，品类为vegetable，规格500g，用途为火锅素菜。描述说明仅供模拟采购，价格库存需另查当前业务Offer。该SKU与食材“卷心菜”之间的关系为采购候选，但销售规格500g，仍须核对单位、门店库存及用户约束，不证明食品成分或替代。 [Data: Entities (39); Relationships (56)]\n\n## 回锅肉与猪肉的REQUIRES关系\n\n回锅肉与猪肉之间存在REQUIRES关系，描述指出：回锅肉基准2人需300g，原始用量来源recipes.json/dish-huiguo-rou；其他人数和包装由业务服务计算。该关系提供了菜谱对猪肉的用量要求，是菜谱采购资料的一部分。 [Data: Relationships (33)]\n\n## 社区结构的局部性与完整性注意\n\n本社区仅包含回锅肉、卷心菜和卷心菜500克三个实体，以及它们之间的关系。但菜谱描述中提到的青椒、猪肉等食材节点可能位于社区外，报告不能因社区内缺少这些关系而推断全图没有记录。必须依据菜谱描述中的完整清单，逐项保留所有必需食材和调料信息，即使对应节点或关系不在当前社区内。 [Data: Entities (6); Relationships (33, 56)]",
+            "rank": 2.0
+          }
+        ]
+      },
+      "context_keys": {
+        "reports": 11
+      },
+      "source_map_audit": {
+        "entities": {
+          "expected_ids": 44,
+          "mapped_ids": 44,
+          "ids_match": true,
+          "human_readable_ids_unique": true
+        },
+        "relationships": {
+          "expected_ids": 61,
+          "mapped_ids": 61,
+          "ids_match": true,
+          "human_readable_ids_unique": true
+        }
+      },
+      "call_usage": {
+        "call_count": 3,
+        "completion_count": 3,
+        "embedding_count": 0,
+        "completion_usage": [
+          {
+            "completion_tokens": 680,
+            "prompt_tokens": 5201,
+            "total_tokens": 5881,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cache_write_tokens": null,
+              "cached_tokens": 384
+            },
+            "prompt_cache_hit_tokens": 384,
+            "prompt_cache_miss_tokens": 4817
+          },
+          {
+            "completion_tokens": 746,
+            "prompt_tokens": 8050,
+            "total_tokens": 8796,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cache_write_tokens": null,
+              "cached_tokens": 384
+            },
+            "prompt_cache_hit_tokens": 384,
+            "prompt_cache_miss_tokens": 7666
+          },
+          {
+            "completion_tokens": 1333,
+            "prompt_tokens": 2296,
+            "total_tokens": 3629,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cache_write_tokens": null,
+              "cached_tokens": 0
+            },
+            "prompt_cache_hit_tokens": 0,
+            "prompt_cache_miss_tokens": 2296
+          }
+        ],
+        "embedding_usage": []
+      },
+      "source_map": {
+        "entities": [
+          {
+            "id": "recipe:dish-fanqie-chao-dan",
+            "human_readable_id": 0,
+            "title": "番茄炒蛋 [recipe:dish-fanqie-chao-dan]"
+          },
+          {
+            "id": "recipe:dish-dan-chao-fan",
+            "human_readable_id": 1,
+            "title": "蛋炒饭 [recipe:dish-dan-chao-fan]"
+          },
+          {
+            "id": "recipe:dish-yangzhou-chao-fan",
+            "human_readable_id": 2,
+            "title": "扬州炒饭 [recipe:dish-yangzhou-chao-fan]"
+          },
+          {
+            "id": "recipe:dish-qingjiao-rousi",
+            "human_readable_id": 3,
+            "title": "青椒肉丝 [recipe:dish-qingjiao-rousi]"
+          },
+          {
+            "id": "recipe:dish-gongbao-jiding",
+            "human_readable_id": 4,
+            "title": "宫保鸡丁 [recipe:dish-gongbao-jiding]"
+          },
+          {
+            "id": "recipe:dish-suanla-tudousi",
+            "human_readable_id": 5,
+            "title": "酸辣土豆丝 [recipe:dish-suanla-tudousi]"
+          },
+          {
+            "id": "recipe:dish-huiguo-rou",
+            "human_readable_id": 6,
+            "title": "回锅肉 [recipe:dish-huiguo-rou]"
+          },
+          {
+            "id": "recipe:dish-jiajiao-chaodan",
+            "human_readable_id": 7,
+            "title": "尖椒炒蛋 [recipe:dish-jiajiao-chaodan]"
+          },
+          {
+            "id": "ingredient:bell_pepper",
+            "human_readable_id": 8,
+            "title": "青椒 [ingredient:bell_pepper]"
+          },
+          {
+            "id": "ingredient:cabbage",
+            "human_readable_id": 9,
+            "title": "卷心菜 [ingredient:cabbage]"
+          },
+          {
+            "id": "ingredient:chicken_breast",
+            "human_readable_id": 10,
+            "title": "鸡胸肉 [ingredient:chicken_breast]"
+          },
+          {
+            "id": "ingredient:chili_sauce",
+            "human_readable_id": 11,
+            "title": "辣椒酱 [ingredient:chili_sauce]"
+          },
+          {
+            "id": "ingredient:egg",
+            "human_readable_id": 12,
+            "title": "鸡蛋 [ingredient:egg]"
+          },
+          {
+            "id": "ingredient:green_pea",
+            "human_readable_id": 13,
+            "title": "豌豆 [ingredient:green_pea]"
+          },
+          {
+            "id": "ingredient:oil",
+            "human_readable_id": 14,
+            "title": "食用油 [ingredient:oil]"
+          },
+          {
+            "id": "ingredient:peanut",
+            "human_readable_id": 15,
+            "title": "花生 [ingredient:peanut]"
+          },
+          {
+            "id": "ingredient:pork",
+            "human_readable_id": 16,
+            "title": "猪肉 [ingredient:pork]"
+          },
+          {
+            "id": "ingredient:potato",
+            "human_readable_id": 17,
+            "title": "土豆 [ingredient:potato]"
+          },
+          {
+            "id": "ingredient:rice",
+            "human_readable_id": 18,
+            "title": "大米 [ingredient:rice]"
+          },
+          {
+            "id": "ingredient:salt",
+            "human_readable_id": 19,
+            "title": "盐 [ingredient:salt]"
+          },
+          {
+            "id": "ingredient:scallion",
+            "human_readable_id": 20,
+            "title": "葱 [ingredient:scallion]"
+          },
+          {
+            "id": "ingredient:shrimp",
+            "human_readable_id": 21,
+            "title": "虾 [ingredient:shrimp]"
+          },
+          {
+            "id": "ingredient:soy_sauce",
+            "human_readable_id": 22,
+            "title": "酱油 [ingredient:soy_sauce]"
+          },
+          {
+            "id": "ingredient:sugar",
+            "human_readable_id": 23,
+            "title": "糖 [ingredient:sugar]"
+          },
+          {
+            "id": "ingredient:tomato",
+            "human_readable_id": 24,
+            "title": "番茄 [ingredient:tomato]"
+          },
+          {
+            "id": "ingredient:vinegar",
+            "human_readable_id": 25,
+            "title": "醋 [ingredient:vinegar]"
+          },
+          {
+            "id": "sku:demo:sugar-white-500g",
+            "human_readable_id": 26,
+            "title": "白砂糖 500克 [sku:demo:sugar-white-500g]"
+          },
+          {
+            "id": "sku:demo:eggs-10pack",
+            "human_readable_id": 27,
+            "title": "鲜鸡蛋 10枚装 [sku:demo:eggs-10pack]"
+          },
+          {
+            "id": "sku:demo:pork-500g",
+            "human_readable_id": 28,
+            "title": "猪肩肉 500克 [sku:demo:pork-500g]"
+          },
+          {
+            "id": "sku:demo:bell-pepper-300g",
+            "human_readable_id": 29,
+            "title": "青椒 300克 [sku:demo:bell-pepper-300g]"
+          },
+          {
+            "id": "sku:demo:salt-500g",
+            "human_readable_id": 30,
+            "title": "食用盐 500克 [sku:demo:salt-500g]"
+          },
+          {
+            "id": "sku:demo:soy-sauce-500ml",
+            "human_readable_id": 31,
+            "title": "生抽酱油 500毫升 [sku:demo:soy-sauce-500ml]"
+          },
+          {
+            "id": "sku:demo:chicken-breast-500g",
+            "human_readable_id": 32,
+            "title": "鸡胸肉 500克 [sku:demo:chicken-breast-500g]"
+          },
+          {
+            "id": "sku:demo:tomato-fresh-500g",
+            "human_readable_id": 33,
+            "title": "新鲜番茄 500克 [sku:demo:tomato-fresh-500g]"
+          },
+          {
+            "id": "sku:demo:eggs-fresh-6pack",
+            "human_readable_id": 34,
+            "title": "鲜鸡蛋 6枚装 [sku:demo:eggs-fresh-6pack]"
+          },
+          {
+            "id": "sku:demo:rice-2kg",
+            "human_readable_id": 35,
+            "title": "大米 2公斤 [sku:demo:rice-2kg]"
+          },
+          {
+            "id": "sku:demo:scallion-200g",
+            "human_readable_id": 36,
+            "title": "小葱 200克 [sku:demo:scallion-200g]"
+          },
+          {
+            "id": "sku:demo:cooking-oil-500ml",
+            "human_readable_id": 37,
+            "title": "食用油 500毫升 [sku:demo:cooking-oil-500ml]"
+          },
+          {
+            "id": "sku:demo:peanut-200g",
+            "human_readable_id": 38,
+            "title": "花生米 200克 [sku:demo:peanut-200g]"
+          },
+          {
+            "id": "sku:demo:cabbage-500g",
+            "human_readable_id": 39,
+            "title": "卷心菜 500克 [sku:demo:cabbage-500g]"
+          },
+          {
+            "id": "sku:demo:potato-500g",
+            "human_readable_id": 40,
+            "title": "土豆 500克 [sku:demo:potato-500g]"
+          },
+          {
+            "id": "sku:demo:vinegar-500ml",
+            "human_readable_id": 41,
+            "title": "米醋 500毫升 [sku:demo:vinegar-500ml]"
+          },
+          {
+            "id": "sku:demo:green-pea-300g",
+            "human_readable_id": 42,
+            "title": "青豌豆 300克 [sku:demo:green-pea-300g]"
+          },
+          {
+            "id": "sku:demo:shrimp-200g",
+            "human_readable_id": 43,
+            "title": "演示虾仁200克 [sku:demo:shrimp-200g]"
+          }
+        ],
+        "relationships": [
+          {
+            "id": "recipe:dish-fanqie-chao-dan->ingredient:tomato",
+            "human_readable_id": 0,
+            "source": "番茄炒蛋 [recipe:dish-fanqie-chao-dan]",
+            "target": "番茄 [ingredient:tomato]"
+          },
+          {
+            "id": "recipe:dish-fanqie-chao-dan->ingredient:egg",
+            "human_readable_id": 1,
+            "source": "番茄炒蛋 [recipe:dish-fanqie-chao-dan]",
+            "target": "鸡蛋 [ingredient:egg]"
+          },
+          {
+            "id": "recipe:dish-fanqie-chao-dan->ingredient:oil",
+            "human_readable_id": 2,
+            "source": "番茄炒蛋 [recipe:dish-fanqie-chao-dan]",
+            "target": "食用油 [ingredient:oil]"
+          },
+          {
+            "id": "recipe:dish-fanqie-chao-dan->ingredient:salt",
+            "human_readable_id": 3,
+            "source": "番茄炒蛋 [recipe:dish-fanqie-chao-dan]",
+            "target": "盐 [ingredient:salt]"
+          },
+          {
+            "id": "recipe:dish-fanqie-chao-dan->ingredient:sugar",
+            "human_readable_id": 4,
+            "source": "番茄炒蛋 [recipe:dish-fanqie-chao-dan]",
+            "target": "糖 [ingredient:sugar]"
+          },
+          {
+            "id": "recipe:dish-dan-chao-fan->ingredient:rice",
+            "human_readable_id": 5,
+            "source": "蛋炒饭 [recipe:dish-dan-chao-fan]",
+            "target": "大米 [ingredient:rice]"
+          },
+          {
+            "id": "recipe:dish-dan-chao-fan->ingredient:egg",
+            "human_readable_id": 6,
+            "source": "蛋炒饭 [recipe:dish-dan-chao-fan]",
+            "target": "鸡蛋 [ingredient:egg]"
+          },
+          {
+            "id": "recipe:dish-dan-chao-fan->ingredient:oil",
+            "human_readable_id": 7,
+            "source": "蛋炒饭 [recipe:dish-dan-chao-fan]",
+            "target": "食用油 [ingredient:oil]"
+          },
+          {
+            "id": "recipe:dish-dan-chao-fan->ingredient:salt",
+            "human_readable_id": 8,
+            "source": "蛋炒饭 [recipe:dish-dan-chao-fan]",
+            "target": "盐 [ingredient:salt]"
+          },
+          {
+            "id": "recipe:dish-dan-chao-fan->ingredient:scallion",
+            "human_readable_id": 9,
+            "source": "蛋炒饭 [recipe:dish-dan-chao-fan]",
+            "target": "葱 [ingredient:scallion]"
+          },
+          {
+            "id": "recipe:dish-yangzhou-chao-fan->ingredient:rice",
+            "human_readable_id": 10,
+            "source": "扬州炒饭 [recipe:dish-yangzhou-chao-fan]",
+            "target": "大米 [ingredient:rice]"
+          },
+          {
+            "id": "recipe:dish-yangzhou-chao-fan->ingredient:egg",
+            "human_readable_id": 11,
+            "source": "扬州炒饭 [recipe:dish-yangzhou-chao-fan]",
+            "target": "鸡蛋 [ingredient:egg]"
+          },
+          {
+            "id": "recipe:dish-yangzhou-chao-fan->ingredient:shrimp",
+            "human_readable_id": 12,
+            "source": "扬州炒饭 [recipe:dish-yangzhou-chao-fan]",
+            "target": "虾 [ingredient:shrimp]"
+          },
+          {
+            "id": "recipe:dish-yangzhou-chao-fan->ingredient:green_pea",
+            "human_readable_id": 13,
+            "source": "扬州炒饭 [recipe:dish-yangzhou-chao-fan]",
+            "target": "豌豆 [ingredient:green_pea]"
+          },
+          {
+            "id": "recipe:dish-yangzhou-chao-fan->ingredient:oil",
+            "human_readable_id": 14,
+            "source": "扬州炒饭 [recipe:dish-yangzhou-chao-fan]",
+            "target": "食用油 [ingredient:oil]"
+          },
+          {
+            "id": "recipe:dish-yangzhou-chao-fan->ingredient:salt",
+            "human_readable_id": 15,
+            "source": "扬州炒饭 [recipe:dish-yangzhou-chao-fan]",
+            "target": "盐 [ingredient:salt]"
+          },
+          {
+            "id": "recipe:dish-qingjiao-rousi->ingredient:pork",
+            "human_readable_id": 16,
+            "source": "青椒肉丝 [recipe:dish-qingjiao-rousi]",
+            "target": "猪肉 [ingredient:pork]"
+          },
+          {
+            "id": "recipe:dish-qingjiao-rousi->ingredient:bell_pepper",
+            "human_readable_id": 17,
+            "source": "青椒肉丝 [recipe:dish-qingjiao-rousi]",
+            "target": "青椒 [ingredient:bell_pepper]"
+          },
+          {
+            "id": "recipe:dish-qingjiao-rousi->ingredient:oil",
+            "human_readable_id": 18,
+            "source": "青椒肉丝 [recipe:dish-qingjiao-rousi]",
+            "target": "食用油 [ingredient:oil]"
+          },
+          {
+            "id": "recipe:dish-qingjiao-rousi->ingredient:salt",
+            "human_readable_id": 19,
+            "source": "青椒肉丝 [recipe:dish-qingjiao-rousi]",
+            "target": "盐 [ingredient:salt]"
+          },
+          {
+            "id": "recipe:dish-qingjiao-rousi->ingredient:soy_sauce",
+            "human_readable_id": 20,
+            "source": "青椒肉丝 [recipe:dish-qingjiao-rousi]",
+            "target": "酱油 [ingredient:soy_sauce]"
+          },
+          {
+            "id": "recipe:dish-gongbao-jiding->ingredient:chicken_breast",
+            "human_readable_id": 21,
+            "source": "宫保鸡丁 [recipe:dish-gongbao-jiding]",
+            "target": "鸡胸肉 [ingredient:chicken_breast]"
+          },
+          {
+            "id": "recipe:dish-gongbao-jiding->ingredient:peanut",
+            "human_readable_id": 22,
+            "source": "宫保鸡丁 [recipe:dish-gongbao-jiding]",
+            "target": "花生 [ingredient:peanut]"
+          },
+          {
+            "id": "recipe:dish-gongbao-jiding->ingredient:bell_pepper",
+            "human_readable_id": 23,
+            "source": "宫保鸡丁 [recipe:dish-gongbao-jiding]",
+            "target": "青椒 [ingredient:bell_pepper]"
+          },
+          {
+            "id": "recipe:dish-gongbao-jiding->ingredient:oil",
+            "human_readable_id": 24,
+            "source": "宫保鸡丁 [recipe:dish-gongbao-jiding]",
+            "target": "食用油 [ingredient:oil]"
+          },
+          {
+            "id": "recipe:dish-gongbao-jiding->ingredient:salt",
+            "human_readable_id": 25,
+            "source": "宫保鸡丁 [recipe:dish-gongbao-jiding]",
+            "target": "盐 [ingredient:salt]"
+          },
+          {
+            "id": "recipe:dish-gongbao-jiding->ingredient:soy_sauce",
+            "human_readable_id": 26,
+            "source": "宫保鸡丁 [recipe:dish-gongbao-jiding]",
+            "target": "酱油 [ingredient:soy_sauce]"
+          },
+          {
+            "id": "recipe:dish-gongbao-jiding->ingredient:vinegar",
+            "human_readable_id": 27,
+            "source": "宫保鸡丁 [recipe:dish-gongbao-jiding]",
+            "target": "醋 [ingredient:vinegar]"
+          },
+          {
+            "id": "recipe:dish-suanla-tudousi->ingredient:potato",
+            "human_readable_id": 28,
+            "source": "酸辣土豆丝 [recipe:dish-suanla-tudousi]",
+            "target": "土豆 [ingredient:potato]"
+          },
+          {
+            "id": "recipe:dish-suanla-tudousi->ingredient:oil",
+            "human_readable_id": 29,
+            "source": "酸辣土豆丝 [recipe:dish-suanla-tudousi]",
+            "target": "食用油 [ingredient:oil]"
+          },
+          {
+            "id": "recipe:dish-suanla-tudousi->ingredient:salt",
+            "human_readable_id": 30,
+            "source": "酸辣土豆丝 [recipe:dish-suanla-tudousi]",
+            "target": "盐 [ingredient:salt]"
+          },
+          {
+            "id": "recipe:dish-suanla-tudousi->ingredient:vinegar",
+            "human_readable_id": 31,
+            "source": "酸辣土豆丝 [recipe:dish-suanla-tudousi]",
+            "target": "醋 [ingredient:vinegar]"
+          },
+          {
+            "id": "recipe:dish-suanla-tudousi->ingredient:chili_sauce",
+            "human_readable_id": 32,
+            "source": "酸辣土豆丝 [recipe:dish-suanla-tudousi]",
+            "target": "辣椒酱 [ingredient:chili_sauce]"
+          },
+          {
+            "id": "recipe:dish-huiguo-rou->ingredient:pork",
+            "human_readable_id": 33,
+            "source": "回锅肉 [recipe:dish-huiguo-rou]",
+            "target": "猪肉 [ingredient:pork]"
+          },
+          {
+            "id": "recipe:dish-huiguo-rou->ingredient:bell_pepper",
+            "human_readable_id": 34,
+            "source": "回锅肉 [recipe:dish-huiguo-rou]",
+            "target": "青椒 [ingredient:bell_pepper]"
+          },
+          {
+            "id": "recipe:dish-huiguo-rou->ingredient:cabbage",
+            "human_readable_id": 35,
+            "source": "回锅肉 [recipe:dish-huiguo-rou]",
+            "target": "卷心菜 [ingredient:cabbage]"
+          },
+          {
+            "id": "recipe:dish-huiguo-rou->ingredient:oil",
+            "human_readable_id": 36,
+            "source": "回锅肉 [recipe:dish-huiguo-rou]",
+            "target": "食用油 [ingredient:oil]"
+          },
+          {
+            "id": "recipe:dish-huiguo-rou->ingredient:salt",
+            "human_readable_id": 37,
+            "source": "回锅肉 [recipe:dish-huiguo-rou]",
+            "target": "盐 [ingredient:salt]"
+          },
+          {
+            "id": "recipe:dish-huiguo-rou->ingredient:soy_sauce",
+            "human_readable_id": 38,
+            "source": "回锅肉 [recipe:dish-huiguo-rou]",
+            "target": "酱油 [ingredient:soy_sauce]"
+          },
+          {
+            "id": "recipe:dish-jiajiao-chaodan->ingredient:bell_pepper",
+            "human_readable_id": 39,
+            "source": "尖椒炒蛋 [recipe:dish-jiajiao-chaodan]",
+            "target": "青椒 [ingredient:bell_pepper]"
+          },
+          {
+            "id": "recipe:dish-jiajiao-chaodan->ingredient:egg",
+            "human_readable_id": 40,
+            "source": "尖椒炒蛋 [recipe:dish-jiajiao-chaodan]",
+            "target": "鸡蛋 [ingredient:egg]"
+          },
+          {
+            "id": "recipe:dish-jiajiao-chaodan->ingredient:oil",
+            "human_readable_id": 41,
+            "source": "尖椒炒蛋 [recipe:dish-jiajiao-chaodan]",
+            "target": "食用油 [ingredient:oil]"
+          },
+          {
+            "id": "recipe:dish-jiajiao-chaodan->ingredient:salt",
+            "human_readable_id": 42,
+            "source": "尖椒炒蛋 [recipe:dish-jiajiao-chaodan]",
+            "target": "盐 [ingredient:salt]"
+          },
+          {
+            "id": "ingredient:sugar->sku:demo:sugar-white-500g",
+            "human_readable_id": 43,
+            "source": "糖 [ingredient:sugar]",
+            "target": "白砂糖 500克 [sku:demo:sugar-white-500g]"
+          },
+          {
+            "id": "ingredient:egg->sku:demo:eggs-10pack",
+            "human_readable_id": 44,
+            "source": "鸡蛋 [ingredient:egg]",
+            "target": "鲜鸡蛋 10枚装 [sku:demo:eggs-10pack]"
+          },
+          {
+            "id": "ingredient:pork->sku:demo:pork-500g",
+            "human_readable_id": 45,
+            "source": "猪肉 [ingredient:pork]",
+            "target": "猪肩肉 500克 [sku:demo:pork-500g]"
+          },
+          {
+            "id": "ingredient:bell_pepper->sku:demo:bell-pepper-300g",
+            "human_readable_id": 46,
+            "source": "青椒 [ingredient:bell_pepper]",
+            "target": "青椒 300克 [sku:demo:bell-pepper-300g]"
+          },
+          {
+            "id": "ingredient:salt->sku:demo:salt-500g",
+            "human_readable_id": 47,
+            "source": "盐 [ingredient:salt]",
+            "target": "食用盐 500克 [sku:demo:salt-500g]"
+          },
+          {
+            "id": "ingredient:soy_sauce->sku:demo:soy-sauce-500ml",
+            "human_readable_id": 48,
+            "source": "酱油 [ingredient:soy_sauce]",
+            "target": "生抽酱油 500毫升 [sku:demo:soy-sauce-500ml]"
+          },
+          {
+            "id": "ingredient:chicken_breast->sku:demo:chicken-breast-500g",
+            "human_readable_id": 49,
+            "source": "鸡胸肉 [ingredient:chicken_breast]",
+            "target": "鸡胸肉 500克 [sku:demo:chicken-breast-500g]"
+          },
+          {
+            "id": "ingredient:tomato->sku:demo:tomato-fresh-500g",
+            "human_readable_id": 50,
+            "source": "番茄 [ingredient:tomato]",
+            "target": "新鲜番茄 500克 [sku:demo:tomato-fresh-500g]"
+          },
+          {
+            "id": "ingredient:egg->sku:demo:eggs-fresh-6pack",
+            "human_readable_id": 51,
+            "source": "鸡蛋 [ingredient:egg]",
+            "target": "鲜鸡蛋 6枚装 [sku:demo:eggs-fresh-6pack]"
+          },
+          {
+            "id": "ingredient:rice->sku:demo:rice-2kg",
+            "human_readable_id": 52,
+            "source": "大米 [ingredient:rice]",
+            "target": "大米 2公斤 [sku:demo:rice-2kg]"
+          },
+          {
+            "id": "ingredient:scallion->sku:demo:scallion-200g",
+            "human_readable_id": 53,
+            "source": "葱 [ingredient:scallion]",
+            "target": "小葱 200克 [sku:demo:scallion-200g]"
+          },
+          {
+            "id": "ingredient:oil->sku:demo:cooking-oil-500ml",
+            "human_readable_id": 54,
+            "source": "食用油 [ingredient:oil]",
+            "target": "食用油 500毫升 [sku:demo:cooking-oil-500ml]"
+          },
+          {
+            "id": "ingredient:peanut->sku:demo:peanut-200g",
+            "human_readable_id": 55,
+            "source": "花生 [ingredient:peanut]",
+            "target": "花生米 200克 [sku:demo:peanut-200g]"
+          },
+          {
+            "id": "ingredient:cabbage->sku:demo:cabbage-500g",
+            "human_readable_id": 56,
+            "source": "卷心菜 [ingredient:cabbage]",
+            "target": "卷心菜 500克 [sku:demo:cabbage-500g]"
+          },
+          {
+            "id": "ingredient:potato->sku:demo:potato-500g",
+            "human_readable_id": 57,
+            "source": "土豆 [ingredient:potato]",
+            "target": "土豆 500克 [sku:demo:potato-500g]"
+          },
+          {
+            "id": "ingredient:vinegar->sku:demo:vinegar-500ml",
+            "human_readable_id": 58,
+            "source": "醋 [ingredient:vinegar]",
+            "target": "米醋 500毫升 [sku:demo:vinegar-500ml]"
+          },
+          {
+            "id": "ingredient:green_pea->sku:demo:green-pea-300g",
+            "human_readable_id": 59,
+            "source": "豌豆 [ingredient:green_pea]",
+            "target": "青豌豆 300克 [sku:demo:green-pea-300g]"
+          },
+          {
+            "id": "ingredient:shrimp->sku:demo:shrimp-200g",
+            "human_readable_id": 60,
+            "source": "虾 [ingredient:shrimp]",
+            "target": "演示虾仁200克 [sku:demo:shrimp-200g]"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "model_id": "deepseek-flash",
+  "base_hostname": "api.deepseek.com",
+  "structured": {
+    "attempted": true,
+    "passed": true,
+    "usage": {
+      "prompt_tokens": 166,
+      "completion_tokens": 11,
+      "total_tokens": 177
+    },
+    "validated_fields": [
+      "label",
+      "status"
+    ]
+  },
+  "streaming": {
+    "attempted": true,
+    "passed": true,
+    "usage": {
+      "prompt_tokens": 49,
+      "completion_tokens": 4,
+      "total_tokens": 53
+    },
+    "chunk_count": 6,
+    "content_characters": 8
+  },
+  "calls": [
+    {
+      "kind": "completion",
+      "model": "deepseek-flash",
+      "duration_ms": 561.2862249836326,
+      "usage": {
+        "prompt_tokens": 49,
+        "completion_tokens": 4,
+        "total_tokens": 53
+      },
+      "streaming": true,
+      "structured": false
+    }
+  ],
+  "failure": null,
+  "config_complete": true,
+  "api_key_written": false,
+  "provider_called": true
+}

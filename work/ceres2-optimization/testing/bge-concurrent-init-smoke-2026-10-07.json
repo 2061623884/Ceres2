@@ -1,0 +1,16 @@
+{
+  "worker_count": 2,
+  "success_count": 1,
+  "results": [
+    {
+      "success": false,
+      "error_type": "ImportError",
+      "error_message": "cannot import name 'AutoModel' from 'transformers' (/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/.venv-graphrag/lib/python3.11/site-packages/transformers/__init__.py)"
+    },
+    {
+      "success": true,
+      "dimensions": 512,
+      "identity": 139761898528208
+    }
+  ]
+}

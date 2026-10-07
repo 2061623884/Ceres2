@@ -1,20 +1,14 @@
 {
-  "version": "v1",
+  "version": "optimization-demo-v2",
   "dishes": [
     {
+      "dish_id": "dish-fanqie-chao-dan",
+      "name": "番茄炒蛋",
       "aliases": [
         "西红柿炒鸡蛋",
         "番茄鸡蛋"
       ],
       "base_people": 2,
-      "dish_id": "dish-fanqie-chao-dan",
-      "name": "番茄炒蛋",
-      "optional_items": [],
-      "pantry_items": [
-        "oil",
-        "salt",
-        "sugar"
-      ],
       "required_items": [
         {
           "ingredient_id": "tomato",
@@ -24,22 +18,22 @@
           "ingredient_id": "egg",
           "quantity_pc": 3
         }
+      ],
+      "optional_items": [],
+      "pantry_items": [
+        "oil",
+        "salt",
+        "sugar"
       ]
     },
     {
+      "dish_id": "dish-dan-chao-fan",
+      "name": "蛋炒饭",
       "aliases": [
         "鸡蛋炒饭",
         "炒饭"
       ],
       "base_people": 2,
-      "dish_id": "dish-dan-chao-fan",
-      "name": "蛋炒饭",
-      "optional_items": [],
-      "pantry_items": [
-        "oil",
-        "salt",
-        "scallion"
-      ],
       "required_items": [
         {
           "ingredient_id": "rice",
@@ -49,6 +43,162 @@
           "ingredient_id": "egg",
           "quantity_pc": 2
         }
+      ],
+      "optional_items": [],
+      "pantry_items": [
+        "oil",
+        "salt",
+        "scallion"
+      ]
+    },
+    {
+      "dish_id": "dish-yangzhou-chao-fan",
+      "name": "扬州炒饭",
+      "aliases": [
+        "什锦炒饭"
+      ],
+      "base_people": 2,
+      "required_items": [
+        {
+          "ingredient_id": "rice",
+          "quantity_g": 350
+        },
+        {
+          "ingredient_id": "egg",
+          "quantity_pc": 2
+        },
+        {
+          "ingredient_id": "shrimp",
+          "quantity_g": 80
+        },
+        {
+          "ingredient_id": "green_pea",
+          "quantity_g": 50
+        }
+      ],
+      "optional_items": [],
+      "pantry_items": [
+        "oil",
+        "salt"
+      ]
+    },
+    {
+      "dish_id": "dish-qingjiao-rousi",
+      "name": "青椒肉丝",
+      "aliases": [
+        "尖椒肉丝"
+      ],
+      "base_people": 2,
+      "required_items": [
+        {
+          "ingredient_id": "pork",
+          "quantity_g": 200
+        },
+        {
+          "ingredient_id": "bell_pepper",
+          "quantity_g": 200
+        }
+      ],
+      "optional_items": [],
+      "pantry_items": [
+        "oil",
+        "salt",
+        "soy_sauce"
+      ]
+    },
+    {
+      "dish_id": "dish-gongbao-jiding",
+      "name": "宫保鸡丁",
+      "aliases": [],
+      "base_people": 2,
+      "required_items": [
+        {
+          "ingredient_id": "chicken_breast",
+          "quantity_g": 250
+        },
+        {
+          "ingredient_id": "peanut",
+          "quantity_g": 50
+        },
+        {
+          "ingredient_id": "bell_pepper",
+          "quantity_g": 100
+        }
+      ],
+      "optional_items": [],
+      "pantry_items": [
+        "oil",
+        "salt",
+        "soy_sauce",
+        "vinegar"
+      ]
+    },
+    {
+      "dish_id": "dish-suanla-tudousi",
+      "name": "酸辣土豆丝",
+      "aliases": [
+        "醋溜土豆丝"
+      ],
+      "base_people": 2,
+      "required_items": [
+        {
+          "ingredient_id": "potato",
+          "quantity_g": 350
+        }
+      ],
+      "optional_items": [],
+      "pantry_items": [
+        "oil",
+        "salt",
+        "vinegar",
+        "chili_sauce"
+      ]
+    },
+    {
+      "dish_id": "dish-huiguo-rou",
+      "name": "回锅肉",
+      "aliases": [],
+      "base_people": 2,
+      "required_items": [
+        {
+          "ingredient_id": "pork",
+          "quantity_g": 300
+        },
+        {
+          "ingredient_id": "bell_pepper",
+          "quantity_g": 100
+        },
+        {
+          "ingredient_id": "cabbage",
+          "quantity_g": 100
+        }
+      ],
+      "optional_items": [],
+      "pantry_items": [
+        "oil",
+        "salt",
+        "soy_sauce"
+      ]
+    },
+    {
+      "dish_id": "dish-jiajiao-chaodan",
+      "name": "尖椒炒蛋",
+      "aliases": [],
+      "base_people": 2,
+      "required_items": [
+        {
+          "ingredient_id": "bell_pepper",
+          "quantity_g": 200
+        },
+        {
+          "ingredient_id": "egg",
+          "quantity_pc": 3
+        }
+      ],
+      "optional_items": [],
+      "pantry_items": [
+        "oil",
+        "salt"
       ]
     }
   ]

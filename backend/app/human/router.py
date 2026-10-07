@@ -87,6 +87,23 @@ def operator_tickets(db: Session = Depends(get_db)):
     return [ticket_view(db, ticket) for ticket in db.scalars(select(HumanTicket).order_by(HumanTicket.created_at.desc()))]
 
 
+@router.get('/operator/tickets/{ticket_id}/photos/{photo_id}', dependencies=[Depends(operator_only)])
+def operator_photo(ticket_id: str, photo_id: str, db: Session = Depends(get_db)):
+    from fastapi.responses import Response
+    from app.mercury.models import MercuryCase
+    from app.mercury.aftersales_models import AfterSalesPhoto
+    ticket = db.get(HumanTicket, ticket_id)
+    if ticket is None:
+        raise HTTPException(404, '未找到工单')
+    case = db.get(MercuryCase, ticket.case_id)
+    photo = db.scalar(select(AfterSalesPhoto).where(AfterSalesPhoto.photo_id == photo_id,
+        AfterSalesPhoto.case_id == case.case_id, AfterSalesPhoto.order_id == ticket.order_id,
+        AfterSalesPhoto.owner_id == case.owner_id))
+    if photo is None:
+        raise HTTPException(404, '照片不属于该工单订单')
+    return Response(photo.content, media_type=photo.content_type, headers={'X-Content-Type-Options':'nosniff'})
+
+
 @router.post('/operator/tickets/{ticket_id}/messages', dependencies=[Depends(operator_only)])
 def operator_message(ticket_id: str, body: OperatorMessage, db: Session = Depends(get_db)):
     ticket = db.get(HumanTicket, ticket_id)

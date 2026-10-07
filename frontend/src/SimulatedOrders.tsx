@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { ApiError, getCart, yuan, type Cart } from './lib/saleGuide'
-import { confirmCheckout, getOrder, listOrders, previewCheckout, type CheckoutPreview, type SimulatedOrder } from './lib/orders'
+import { advanceDemoOrder, confirmCheckout, getOrder, listOrders, previewCheckout, type CheckoutPreview, type SimulatedOrder } from './lib/orders'
 
 const button = 'rounded-full bg-[#171716] px-5 py-3 text-sm font-semibold text-white disabled:opacity-40'
 
@@ -82,6 +82,7 @@ export function SimulatedOrdersScreen({ onContactOrder }: { onContactOrder: (ord
   const [orders, setOrders] = useState<SimulatedOrder[]>([])
   const [selected, setSelected] = useState<SimulatedOrder | null>(null)
   const [loading, setLoading] = useState(true)
+  const [advancing, setAdvancing] = useState(false)
   const [error, setError] = useState<string | null>(null)
   async function load() {
     setLoading(true)
@@ -96,6 +97,17 @@ export function SimulatedOrdersScreen({ onContactOrder }: { onContactOrder: (ord
     try { setSelected(await getOrder(orderId)) }
     catch (err) { setError(err instanceof Error ? err.message : '订单加载失败') }
   }
+  async function advance(status: 'shipped' | 'delivered') {
+    if (!selected || advancing) return
+    setAdvancing(true); setError(null)
+    try {
+      const current = await advanceDemoOrder(selected, status)
+      setSelected(current); setOrders(rows => rows.map(row => row.order_id === current.order_id ? current : row))
+    } catch (error) {
+      setError(error instanceof Error ? error.message : '模拟状态更新失败')
+      setSelected(null)
+    } finally { setAdvancing(false) }
+  }
   return <section className="flex h-full flex-col bg-[#fcfbf8] p-5">
     <h2 className="mb-3 text-2xl font-semibold">我的模拟订单</h2>
     <p className="mb-4 text-xs text-black/45">模拟数据，不代表真实支付或配送</p>
@@ -106,6 +118,7 @@ export function SimulatedOrdersScreen({ onContactOrder }: { onContactOrder: (ord
       <p className="text-xs">{new Date(selected.created_at).toLocaleString()} · 模拟状态：{selected.status === 'submitted' ? '已提交' : selected.status}</p>
       {selected.items.map(item => <div key={item.sku_id} className="text-sm"><p>{item.name} × {item.quantity}</p><p>{yuan(item.unit_price_fen)} / 件 · {yuan(item.line_total_fen)}</p></div>)}
       <p className="text-lg font-semibold">合计 {yuan(selected.total_fen)}</p>
+      {['submitted','shipped'].includes(selected.status) && <button className={button} disabled={advancing} onClick={()=>void advance(selected.status === 'submitted' ? 'shipped' : 'delivered')}>{selected.status === 'submitted' ? '模拟推进至配送中' : '模拟签收'}</button>}
       <button className={button} data-contact-order-id={selected.order_id} onClick={() => onContactOrder(selected.order_id)}>联系墨墨</button>
     </article> : <div className="space-y-3 overflow-y-auto">
       {loading && <p role="status">正在读取订单…</p>}

@@ -1,0 +1,312 @@
+{
+  "sample_id": "soda-native-tools-v1",
+  "sample_revision": "native-tools-finish-response-interim-audit-v1",
+  "instrumentation": {
+    "runtime_events_safe_projection": true,
+    "node_message_shape": false,
+    "wire_fetch_mode": "disabled",
+    "production_worker_modified": false
+  },
+  "provider": {
+    "configured": true,
+    "model_id": "deepseek-flash",
+    "base_hostname": "api.deepseek.com",
+    "api_key_value_recorded": false
+  },
+  "route": {
+    "status": "unavailable",
+    "manual_role_choice_used": true
+  },
+  "request": {
+    "sha256": "d7cd5a7f0211b4d832cc1631a9656165c04745c2563ad37b5ff3b245f0ba220d",
+    "length": 45
+  },
+  "source_sha256": {
+    "backend/app/prompts/experience.json": "c82d3c67c4d3d310bbcc2e7fc864649144504aa2b48f52cd4aa4240138cdde80",
+    "backend/app/prompts/experience.py": "d66693ea9c11b7d5ff50df83c133389f0d7104d013f10f6194dc7666a26502a3",
+    "backend/app/services/pi_product_runtime.py": "5fd3f21378f230673331f7de9296f2c1ac6966fa92c24f832854750d338a9ab7",
+    "backend/app/services/pi_product_turn_service.py": "d04bd133427377e37d36d46bd5debdb131046f9083460de010fed7450e9062a9",
+    "backend/app/services/guide_run_service.py": "2bbb7494279eb79ce7ba18f07eacedf08e5321bde6c167065bdd54c98a7a1451",
+    "backend/app/models/guide.py": "40e273a2918cee5dfa00f299d1757ecf4982cad3f9290604d30eb38bb0218c52",
+    "backend/app/evaluation/export_runs.py": "9974050b2aa9c8b2c472532622e1f71d45eb25db3cccf23d5672c09f9ca504a5",
+    "runtime/pi/src/worker.ts": "397cca13064d7f9f8f7d1344c7316496bdc27fb11bbb3e437ed5786de5d06906",
+    "runtime/pi/dist/worker.js": "2db081c6c93863c102767ed8866cec2ae83e09828679f4436d2113a7f2f7e713",
+    "runtime/pi/src/prompt-modules.ts": "fbcf407ac3be56b9df06e0e177f9e84a1413a03b1060c8d16e8aa379fcc27625",
+    "work/ceres2-optimization/testing/sitecustomize.py": "2fa0b9a8451fe36b586d2e22fb2439741b7cccc1144a9dd57e1b287ad056db93",
+    "work/ceres2-optimization/testing/strip_response_format_preload.mjs": "dfde4c04611448529b1369383df3dd7c6e541f2d788b495d47a33fbe1eea3b21",
+    "data/fixtures/products.json": "8857a75c26387acb98023dd3b743e369a6d1f01fb1b64c24993fe3b87690f3e1",
+    "data/fixtures/recipes.json": "1fd396fe8255961fd8c423817efe0d80a1a0ad8377b26e42104a76886c3ed45c",
+    "data/fixtures/policies.json": "7a370431a1a9c2df2b818218f3c54cb01946f93fa027aad44021dd1637f10502",
+    "evals/ceres2-optimization-retrieval-dev.json": "eb47a57f89fc65d56d3e74a9b68947d096ba485d5c08051f29dc9a97aa12652e"
+  },
+  "observed": {
+    "sse_frame_count": 8,
+    "event_type_counts": {
+      "accepted": 1,
+      "progress": 5,
+      "answer.delta": 1,
+      "turn.completed": 1
+    },
+    "terminal_event": "turn.completed",
+    "runtime_status": "completed",
+    "interim_opportunities": 2,
+    "interim_candidate_status_counts": {
+      "absent": 2
+    },
+    "interim_candidates": [
+      {
+        "status": "absent",
+        "text_characters": 0,
+        "tool_call_count": 1
+      },
+      {
+        "status": "absent",
+        "text_characters": 0,
+        "tool_call_count": 1
+      }
+    ],
+    "interim_published_count": 0,
+    "answer_delta_characters": 22,
+    "interim_records": [],
+    "model_usage": [
+      {
+        "kind": "main",
+        "model": "deepseek-flash",
+        "provider_host": "api.deepseek.com",
+        "duration_ms": 555.5600770000001,
+        "usage": {
+          "input": 4225,
+          "output": 57,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 4282
+        },
+        "cost": null
+      },
+      {
+        "kind": "main",
+        "model": "deepseek-flash",
+        "provider_host": "api.deepseek.com",
+        "duration_ms": 855.644242,
+        "usage": {
+          "input": 4616,
+          "output": 53,
+          "cacheRead": 1280,
+          "cacheWrite": 0,
+          "totalTokens": 5949
+        },
+        "cost": null
+      },
+      {
+        "kind": "main",
+        "model": "deepseek-flash",
+        "provider_host": "api.deepseek.com",
+        "duration_ms": 824.653112,
+        "usage": {
+          "input": 5334,
+          "output": 92,
+          "cacheRead": 5888,
+          "cacheWrite": 0,
+          "totalTokens": 11314
+        },
+        "cost": null
+      }
+    ],
+    "usage_fields_valid": true,
+    "append_event_host_times_valid": true,
+    "interim_display_clock_claimed": false,
+    "error_code": null
+  },
+  "export": {
+    "schema_version": "ceres-eval-capture-v1",
+    "record_count": 1,
+    "has_observed_usage_field": true,
+    "has_retrieval_field": true,
+    "labels_still_null_before_annotation": true,
+    "has_source_snapshot": true,
+    "run_started_at_ms_present": true,
+    "event_timestamps_are_separate_fields": true,
+    "raw_capture_path": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/data/generated/evals/pi-real-provider-soda-native-tools-v1-capture-2026-10-07.jsonl"
+  },
+  "raw_sse_ignored_path": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/work/ceres2-optimization/testing/tmp/pi-real-smoke/soda-native-tools-v1/guide-sse.jsonl",
+  "safe_runtime_diagnostics_path": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/work/ceres2-optimization/testing/tmp/pi-real-smoke/soda-native-tools-v1/runtime-event-diagnostics.json",
+  "safe_fetch_diagnostics_path": null,
+  "owner_id_or_provider_key_recorded": false,
+  "result": "completed",
+  "isolated_service": {
+    "health": "ok",
+    "business_data_mode": "demo",
+    "configured_for_live_provider": true
+  },
+  "sse_has_terminal_completion": true,
+  "runtime_events_diagnostic": {
+    "event_type_counts": {
+      "agent_start": 1,
+      "turn_start": 3,
+      "message_start": 7,
+      "message_end": 7,
+      "model_usage": 3,
+      "interim_candidate": 2,
+      "tool_execution_start": 3,
+      "tool_execution_end": 3,
+      "turn_end": 3,
+      "agent_end": 1
+    },
+    "safe_events": [
+      {
+        "type": "agent_start"
+      },
+      {
+        "type": "turn_start"
+      },
+      {
+        "type": "message_start"
+      },
+      {
+        "type": "message_end"
+      },
+      {
+        "type": "message_start"
+      },
+      {
+        "type": "message_end"
+      },
+      {
+        "type": "model_usage",
+        "kind": "main",
+        "model": "deepseek-flash",
+        "provider_host": "api.deepseek.com",
+        "duration_ms": 555.5600770000001,
+        "usage": {
+          "input": 4225,
+          "output": 57,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 4282
+        },
+        "cost": null
+      },
+      {
+        "type": "interim_candidate",
+        "status": "absent",
+        "text_characters": 0,
+        "tool_call_count": 1
+      },
+      {
+        "type": "tool_execution_start",
+        "tool_name": "guide_request"
+      },
+      {
+        "type": "tool_execution_end"
+      },
+      {
+        "type": "message_start"
+      },
+      {
+        "type": "message_end"
+      },
+      {
+        "type": "turn_end"
+      },
+      {
+        "type": "turn_start"
+      },
+      {
+        "type": "message_start"
+      },
+      {
+        "type": "message_end"
+      },
+      {
+        "type": "model_usage",
+        "kind": "main",
+        "model": "deepseek-flash",
+        "provider_host": "api.deepseek.com",
+        "duration_ms": 855.644242,
+        "usage": {
+          "input": 4616,
+          "output": 53,
+          "cacheRead": 1280,
+          "cacheWrite": 0,
+          "totalTokens": 5949
+        },
+        "cost": null
+      },
+      {
+        "type": "interim_candidate",
+        "status": "absent",
+        "text_characters": 0,
+        "tool_call_count": 1
+      },
+      {
+        "type": "tool_execution_start",
+        "tool_name": "explore_products"
+      },
+      {
+        "type": "tool_execution_end"
+      },
+      {
+        "type": "message_start"
+      },
+      {
+        "type": "message_end"
+      },
+      {
+        "type": "turn_end"
+      },
+      {
+        "type": "turn_start"
+      },
+      {
+        "type": "message_start"
+      },
+      {
+        "type": "message_end"
+      },
+      {
+        "type": "model_usage",
+        "kind": "main",
+        "model": "deepseek-flash",
+        "provider_host": "api.deepseek.com",
+        "duration_ms": 824.653112,
+        "usage": {
+          "input": 5334,
+          "output": 92,
+          "cacheRead": 5888,
+          "cacheWrite": 0,
+          "totalTokens": 11314
+        },
+        "cost": null
+      },
+      {
+        "type": "tool_execution_start",
+        "tool_name": "finish_response"
+      },
+      {
+        "type": "tool_execution_end"
+      },
+      {
+        "type": "message_start"
+      },
+      {
+        "type": "message_end"
+      },
+      {
+        "type": "turn_end"
+      },
+      {
+        "type": "agent_end"
+      }
+    ],
+    "runtime_status": "completed",
+    "exception": null,
+    "test_child_launch_instrumentation": {
+      "worker_launches_matched": 0,
+      "node_options_injected": false,
+      "fetch_mode_injected": false,
+      "fetch_report_path_configured": false
+    },
+    "raw_text_or_request_body_recorded": false,
+    "provider_secret_recorded": false
+  }
+}

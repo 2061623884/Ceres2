@@ -28,6 +28,8 @@ def test_restart_marks_dead_process_only_and_preserves_committed_result(pi_clien
         assert restarted.get(BASE + '/turns/saved-run').json()['result'] == {'message': '保留结果'}
         events = restarted.get(BASE + '/runs/dead-run/events').json()['events']
         assert events[-1]['payload']['code'] == 'RUN_INTERRUPTED'
+        assert isinstance(events[-1]['recorded_at_ms'], (int, float))
+        assert events[-1]['elapsed_ms'] is None  # historical start time is unknown
     assert len(requests) == 0
 
 

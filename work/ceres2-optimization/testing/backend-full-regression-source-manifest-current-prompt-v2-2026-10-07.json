@@ -1,0 +1,274 @@
+{
+  "run_report": "work/ceres2-optimization/testing/backend-full-regression-current-prompt-v2-2026-10-07.json",
+  "head_commit": "b118dbea3852026c6a04c790b1e27df67c3c9c18",
+  "source_snapshot_sha256": "4e87c6b746f70f3dd4ce3fa6066e143775e2df9274b5e584cd317b7193195525",
+  "source_snapshot_file_count": 66,
+  "reconstruction": "Reconstructed after the run from the current changed-file set. In a temporary copy only, reverted the failure-intake version string from v2 to v1 and removed the appended fifth interim-recipe-fact-audit case. The aggregate matched the run report exactly; current source was untouched.",
+  "frozen_source_copy": "work/ceres2-optimization/testing/tmp/backend-full-regression-source-freeze-current-prompt-v2-2026-10-07/",
+  "files": [
+    {
+      "path": "backend/app/api/orders.py",
+      "sha256": "8fafb96e2996941e83fd44a97dcefb3fa5ac1e99d9a6072420fbaa919518cb5e"
+    },
+    {
+      "path": "backend/app/human/router.py",
+      "sha256": "9a80ee8fd15517e60445de5a160f15777827ffd1f9ab7333be9e5103ea68a653"
+    },
+    {
+      "path": "backend/app/human/service.py",
+      "sha256": "ff486a16adf52aab8ee5fbad05e23e376f8c78faa1af9785b7dc796e0bc30409"
+    },
+    {
+      "path": "backend/app/mercury/aftersales.py",
+      "sha256": "1e53017ec84833ed99fdf6ceeb43910c9c1076d74746b49ffd9553c29d467457"
+    },
+    {
+      "path": "backend/app/mercury/aftersales_models.py",
+      "sha256": "c1e2eea33165c672ae7c0c17043450dde405e0acc9f2ebec1348529b93f58d2e"
+    },
+    {
+      "path": "backend/app/mercury/orders.py",
+      "sha256": "1f481f0a8a423b6b551ede1a42224c16d66edca8f316e602e5bb752b893372a5"
+    },
+    {
+      "path": "backend/app/mercury/policy.py",
+      "sha256": "1ab8dd24b324e33516659c885248c0d509833d32a2ddb15c99f1ffa2415aff05"
+    },
+    {
+      "path": "backend/app/mercury/router.py",
+      "sha256": "8f7f52dcf16be76371f2508fbdba4078e8c39ab5f9a8a64bc953cffaafdab3c3"
+    },
+    {
+      "path": "backend/app/mercury/tools.py",
+      "sha256": "dbc6f3f63313c62465c025449685e4f09965741b0f90bf9fef3ca8827da511df"
+    },
+    {
+      "path": "backend/app/migrations/__init__.py",
+      "sha256": "0004338acd91e9d943ad15aaf879743a446827616b0b11c6780f9fb3c029acbc"
+    },
+    {
+      "path": "backend/app/models/__init__.py",
+      "sha256": "74fb7e94c28b271b81271def398decca3746d92e5e35d1c0d3c85f22a4e96fb9"
+    },
+    {
+      "path": "backend/app/models/guide.py",
+      "sha256": "40e273a2918cee5dfa00f299d1757ecf4982cad3f9290604d30eb38bb0218c52"
+    },
+    {
+      "path": "backend/app/prompts/experience.json",
+      "sha256": "793ed7aef9636f69d0082e991a80d7c38d0f753613dd0827bf20490d87231afe"
+    },
+    {
+      "path": "backend/app/services/catalog_service.py",
+      "sha256": "f98e8570a08b3ac3d918708e874f84d6588feef2b15e83060cf131e46071eb5e"
+    },
+    {
+      "path": "backend/app/services/checkout_service.py",
+      "sha256": "1794a62bd0abbd1024388640d3cc96d39fda7ebbab007c47f0f94d82655a67fc"
+    },
+    {
+      "path": "backend/app/services/dish_service.py",
+      "sha256": "8874930b5a27f5b84904f47752a957f3dec601fed92a6392da22dfc298b4ebea"
+    },
+    {
+      "path": "backend/app/services/guide_run_service.py",
+      "sha256": "2bbb7494279eb79ce7ba18f07eacedf08e5321bde6c167065bdd54c98a7a1451"
+    },
+    {
+      "path": "backend/app/services/pi_product_runtime.py",
+      "sha256": "d1285f785ce2e71c4de63eb6ef7a31af153d0d17071de2c2f73702e05ddb82f3"
+    },
+    {
+      "path": "backend/app/services/pi_product_turn_service.py",
+      "sha256": "d04bd133427377e37d36d46bd5debdb131046f9083460de010fed7450e9062a9"
+    },
+    {
+      "path": "backend/app/services/seed_service.py",
+      "sha256": "1bea8c6c3fa76bf0f5dbba7e4c7023d65a638c2e82a5fe5cdae742688e047eca"
+    },
+    {
+      "path": "backend/tests/test_aftersales_public.py",
+      "sha256": "d30df9628e7e79730815993d936a495a40bfedf6d4f546c61449553d9c8e90bf"
+    },
+    {
+      "path": "backend/tests/test_foundation_http.py",
+      "sha256": "079f6eaefaa2c6988ea43a6c27ae78138d614711948e26d6e93970903cb1960c"
+    },
+    {
+      "path": "backend/tests/test_guide_dish_suggestions.py",
+      "sha256": "f9a9f5c67c9d21dec2ec89a0316a5c4ab922a006dc840a6c852c178e3bfd0a00"
+    },
+    {
+      "path": "backend/tests/test_guide_migration.py",
+      "sha256": "88eea0640e7c21fcd7aaa66c6bdad00464905c2926a8debe2ff81ecec18b3fcc"
+    },
+    {
+      "path": "backend/tests/test_guide_recovery.py",
+      "sha256": "ecbb1d5a6c6b73e1c01fd620e6d90a6c67b62723ab9bf9117d9b557ea7347aaa"
+    },
+    {
+      "path": "backend/tests/test_next_shared_policy_public.py",
+      "sha256": "dc550a75ce30c29f7836dc7d9df8d62ec06cfc59fe7aa24e5176776d6a842999"
+    },
+    {
+      "path": "backend/tests/test_official_deepseek_thinking.py",
+      "sha256": "58f2b1a0357fdcd3f7641d70101c824a6c2e214dde3e0c4c6eab5549a81274bc"
+    },
+    {
+      "path": "backend/tests/test_runtime_pi_product_query.py",
+      "sha256": "0454d60255a2b8cad4cc71c2afd19cfeb152d7d285e971b9c5813cfde53e9dc0"
+    },
+    {
+      "path": "data/fixtures/offers.json",
+      "sha256": "ed6ab610d2ed43c73cd8855197d9492e66b94817c5ae3bdbd5a6b95cfc4fc16d"
+    },
+    {
+      "path": "data/fixtures/products.json",
+      "sha256": "8857a75c26387acb98023dd3b743e369a6d1f01fb1b64c24993fe3b87690f3e1"
+    },
+    {
+      "path": "data/fixtures/recipes.json",
+      "sha256": "1fd396fe8255961fd8c423817efe0d80a1a0ad8377b26e42104a76886c3ed45c"
+    },
+    {
+      "path": "frontend/src/AfterSalesPanel.tsx",
+      "sha256": "90af5ef6e56ab287e516b9299417bbc2c0fb8b25d1cb3f54f732d89267969f15"
+    },
+    {
+      "path": "frontend/src/App.tsx",
+      "sha256": "3413ab5bb8bda86b5e45e2687ad68a044fdbe3b67b91279508d45dad1b652508"
+    },
+    {
+      "path": "frontend/src/HumanCasePanel.tsx",
+      "sha256": "a407aa7cae30ea2401a9a38e135245ca2c5c673c57a3164c8612e92c15b99bdf"
+    },
+    {
+      "path": "frontend/src/HumanOperatorPage.tsx",
+      "sha256": "5b638b6fa4befbffdf9a012a69afecb538ac482cae0c55d0be044c8975667c8b"
+    },
+    {
+      "path": "frontend/src/MercuryChat.tsx",
+      "sha256": "7e682f8f67a072ffdd384362f4778dbc88c82659ad9d7c1d3e64bef697d98291"
+    },
+    {
+      "path": "frontend/src/SimulatedOrders.tsx",
+      "sha256": "ecdd3eca6c89838935b2fa441232530b71d61797d206eee456b4442ef8048616"
+    },
+    {
+      "path": "frontend/src/lib/aftersales.ts",
+      "sha256": "d7fb3fa51dc6b8ff8542b14a3b13a79e566c2b21cfe4c76526db139fc85436b2"
+    },
+    {
+      "path": "frontend/src/lib/humanCases.ts",
+      "sha256": "e7afb3ea939057d9b46f8c3e4b6074944d758c275ebf73fb926ea9644047ea8b"
+    },
+    {
+      "path": "frontend/src/lib/orders.ts",
+      "sha256": "efdf804503b62c14795cc4a59b7c22f565e3e066b0d5bf2875bce2835802c502"
+    },
+    {
+      "path": "frontend/src/lib/saleGuide.ts",
+      "sha256": "5065b636392c57d8b2cba51a17d39ef3dc227123ef63fe195e84dea30d1058d0"
+    },
+    {
+      "path": "runtime/pi/src/general-claim.ts",
+      "sha256": "ca88e6a1c6fb6416cd7fd1ea3c9026b3e6dd6f8011a7609ee720ac134ef8b4c6"
+    },
+    {
+      "path": "runtime/pi/src/prompt-modules.ts",
+      "sha256": "fbcf407ac3be56b9df06e0e177f9e84a1413a03b1060c8d16e8aa379fcc27625"
+    },
+    {
+      "path": "runtime/pi/src/worker.ts",
+      "sha256": "886e77de443fc10e0c495860365740b3c6da492a4bc4ae7742ba12ddb4796a51"
+    },
+    {
+      "path": "backend/app/evaluation/__init__.py",
+      "sha256": "e9559b36e87641eb400f7327c70b8c67a644d0f870325ff19daacf0c87303e3e"
+    },
+    {
+      "path": "backend/app/evaluation/annotate_runs.py",
+      "sha256": "c63abbdc667357e9e024bdb47718ce399f9d907a11e6326131fd0662638ccce1"
+    },
+    {
+      "path": "backend/app/evaluation/export_runs.py",
+      "sha256": "9974050b2aa9c8b2c472532622e1f71d45eb25db3cccf23d5672c09f9ca504a5"
+    },
+    {
+      "path": "backend/app/knowledge/__init__.py",
+      "sha256": "1dcae4f718a1691de388635188e3b3b0e6a97ff642e64fda468afb215fc9450b"
+    },
+    {
+      "path": "backend/app/knowledge/bge.py",
+      "sha256": "f9b22bee892e61f9954365e3bdca6ebe376edff5eed9995f121797659d9e5654"
+    },
+    {
+      "path": "backend/app/knowledge/cli.py",
+      "sha256": "60dc8494886e8f1f1bb94a84b9e4ad98d9d3b17dbc68fef008e786668ba93543"
+    },
+    {
+      "path": "backend/app/knowledge/corpus.py",
+      "sha256": "8d8f1066d2935cc2e18bca77ef3a9af3a8c6aaee1ed6d49180d5edf4c2394e77"
+    },
+    {
+      "path": "backend/app/knowledge/graph.py",
+      "sha256": "c1a70eddf0c768f4c33c0f46851ff70445b4c495a8b986b86551b3a0b9802cab"
+    },
+    {
+      "path": "backend/app/knowledge/hybrid.py",
+      "sha256": "f930a76aa085536ec543ec02830e96174cc81d6ee05427cd740880371cb5f382"
+    },
+    {
+      "path": "backend/app/knowledge/providers.py",
+      "sha256": "1d55074c04c1bf40af31361a53de511410ad856ff1e21c902f3a35221a29bd0a"
+    },
+    {
+      "path": "backend/app/knowledge/worker.py",
+      "sha256": "793299ed547d58acc15bdead83cc1d61a64418abffa2fd6a07d68dcc18fa61fd"
+    },
+    {
+      "path": "backend/app/services/knowledge_service.py",
+      "sha256": "d6af53786c795e6b480f6a0eeb6541f02485e172aa9ca0fdc7a811d5b481042f"
+    },
+    {
+      "path": "backend/knowledge-requirements.lock",
+      "sha256": "3a82d620102bec1f9495be30ecc6705ba1109b4a20e9a48154e66de2a71df72e"
+    },
+    {
+      "path": "backend/tests/test_pi_interim_native.py",
+      "sha256": "e3a5f3af34405020bdf561c84595eea38ad6142883f7d2ff4b3d99dc97a75b10"
+    },
+    {
+      "path": "data/fixtures/ingredients.json",
+      "sha256": "a9079a1c7ca8d3f94c4efdfa004ede7e48b5ea568f7cb8025804124ad82ca19d"
+    },
+    {
+      "path": "data/fixtures/knowledge-provenance.json",
+      "sha256": "bd0dbb60462ea1db3fdb0d36bb0cd12f8c86aa87e7b9ac1619fa9159bbef0fd9"
+    },
+    {
+      "path": "data/fixtures/policies.json",
+      "sha256": "7a370431a1a9c2df2b818218f3c54cb01946f93fa027aad44021dd1637f10502"
+    },
+    {
+      "path": "evals/README.md",
+      "sha256": "9b700fb25a7b754f66f63aa9db06f1372c565cd56141acea1909687ce067ea07"
+    },
+    {
+      "path": "evals/ceres2-optimization-failure-regressions.json",
+      "sha256": "a35110686bc0634dffbb645b8ebd4570bba5a7e989c11c28af7c5779440585d7"
+    },
+    {
+      "path": "evals/ceres2-optimization-retrieval-dev.json",
+      "sha256": "eb47a57f89fc65d56d3e74a9b68947d096ba485d5c08051f29dc9a97aa12652e"
+    },
+    {
+      "path": "frontend/src/HumanPhotos.tsx",
+      "sha256": "55daf50334362d72ce87ca7b4ecf5a5f58eafbfca012c1bfdc31078e5793526f"
+    },
+    {
+      "path": "frontend/src/ProductDetail.tsx",
+      "sha256": "f5ee270ff5ec381629c4fe3fcd72733553804d4e6bc73a868ccb13f897f2fc7b"
+    }
+  ]
+}

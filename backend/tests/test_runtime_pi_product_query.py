@@ -138,6 +138,22 @@ def pi_client(tmp_path, monkeypatch):
     def database():
         with sessions() as db:
             yield db
+    # These runtime/authority tests use synthetic SQL SKUs, absent from the
+    # versioned demo corpus. Control only the retrieval seam; real BGE/BM25/RRF
+    # and demo HTTP retrieval are validated separately by optimization smoke.
+    from app.services.knowledge_service import knowledge
+    actual_search = knowledge.search
+    def controlled_retrieval(query, namespace, *, limit=10, allowed_ids=None, category=None):
+        if namespace != 'product':
+            return actual_search(query, namespace, limit=limit, allowed_ids=allowed_ids, category=category)
+        with sessions() as db:
+            candidates = db.query(CatalogProduct).filter(CatalogProduct.sku_id.in_(allowed_ids)).all()
+            matches = [row for row in candidates if any(query.lower() in (value or '').lower()
+                for value in (row.name, row.name_zh, row.brand))][:limit]
+            hits = [{'id':row.sku_id, 'ranks':{}, 'scores':{}, 'rrf_score':0,
+                'document':{'source':{'file':'controlled-catalog-fixture', 'record_id':row.sku_id}}} for row in matches]
+        return {'hits':hits, 'manifest':{'corpus_revision':'controlled-retrieval-fixture'}}
+    monkeypatch.setattr(knowledge, 'search', controlled_retrieval)
     from app.main import app
     app.dependency_overrides[get_db] = database
     # No lifespan: the production startup must never touch an active data path.

@@ -1,0 +1,262 @@
+{
+  "browser": "Firefox 136.0 headless through Mozilla geckodriver 0.37.1",
+  "provider": {
+    "model_id": "deepseek-flash",
+    "base_hostname": "api.deepseek.com",
+    "api_key_recorded": false
+  },
+  "production_worker_modified": false,
+  "test_preload_or_sitecustomize": false,
+  "steps": [
+    "opened the built Grok-style Ceres UI in native Firefox"
+  ],
+  "outcome": {},
+  "result": "failed",
+  "service": {
+    "health": "ok",
+    "business_data_mode": "demo",
+    "configured_for_live_provider": true,
+    "database": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/work/ceres2-optimization/testing/tmp/browser-interim/streaming-v5/business.sqlite3"
+  },
+  "failure_stage": "open_keke",
+  "failure_class": "BrowserFailure",
+  "failure_fingerprint": "873012a8fac83d592bc52055094a605465a062599c047256b40ee7132595e26d",
+  "browser_ui_diagnostics": {
+    "alerts": [],
+    "assistant_bubble_state": {
+      "row_count": 2
+    },
+    "body_visible": true,
+    "buttons": [
+      {
+        "disabled": false,
+        "label": "静安区\n⌄",
+        "pressed": null
+      },
+      {
+        "disabled": false,
+        "label": "",
+        "pressed": null
+      },
+      {
+        "disabled": false,
+        "label": "",
+        "pressed": null
+      },
+      {
+        "disabled": false,
+        "label": "🧁\n烘焙原料",
+        "pressed": "true"
+      },
+      {
+        "disabled": false,
+        "label": "📦\n饮料",
+        "pressed": "false"
+      },
+      {
+        "disabled": false,
+        "label": "🧂\n调味品",
+        "pressed": "false"
+      },
+      {
+        "disabled": false,
+        "label": "🥛\n乳品",
+        "pressed": "false"
+      },
+      {
+        "disabled": false,
+        "label": "📦\n水果",
+        "pressed": "false"
+      },
+      {
+        "disabled": false,
+        "label": "🥩\n肉类",
+        "pressed": "false"
+      },
+      {
+        "disabled": false,
+        "label": "📦\nprepared_food",
+        "pressed": "false"
+      },
+      {
+        "disabled": false,
+        "label": "📦\n水产",
+        "pressed": "false"
+      },
+      {
+        "disabled": false,
+        "label": "📦\n零食",
+        "pressed": "false"
+      },
+      {
+        "disabled": false,
+        "label": "📦\n粮油米面",
+        "pressed": "false"
+      },
+      {
+        "disabled": false,
+        "label": "🥬\n蔬菜",
+        "pressed": "false"
+      },
+      {
+        "disabled": false,
+        "label": "绿色餐桌计划\n\n有机蔬菜\n全场 88 折",
+        "pressed": null
+      },
+      {
+        "disabled": false,
+        "label": "限时会员价\n\n牧场鲜肉\n买二减一",
+        "pressed": null
+      },
+      {
+        "disabled": false,
+        "label": "综合排序⌄\n演示",
+        "pressed": null
+      },
+      {
+        "disabled": false,
+        "label": "",
+        "pressed": null
+      },
+      {
+        "disabled": false,
+        "label": "♡",
+        "pressed": null
+      },
+      {
+        "disabled": false,
+        "label": "泡打粉 100克",
+        "pressed": null
+      },
+      {
+        "disabled": false,
+        "label": "",
+        "pressed": null
+      },
+      {
+        "disabled": false,
+        "label": "",
+        "pressed": null
+      },
+      {
+        "disabled": false,
+        "label": "♡",
+        "pressed": null
+      },
+      {
+        "disabled": false,
+        "label": "无盐黄油 200克",
+        "pressed": null
+      },
+      {
+        "disabled": false,
+        "label": "",
+        "pressed": null
+      },
+      {
+        "disabled": false,
+        "label": "",
+        "pressed": null
+      },
+      {
+        "disabled": false,
+        "label": "♡",
+        "pressed": null
+      },
+      {
+        "disabled": false,
+        "label": "低筋面粉 250克（小包装）",
+        "pressed": null
+      },
+      {
+        "disabled": false,
+        "label": "",
+        "pressed": null
+      },
+      {
+        "disabled": false,
+        "label": "",
+        "pressed": null
+      },
+      {
+        "disabled": false,
+        "label": "♡",
+        "pressed": null
+      },
+      {
+        "disabled": false,
+        "label": "奶油奶酪 200克",
+        "pressed": null
+      },
+      {
+        "disabled": false,
+        "label": "",
+        "pressed": null
+      },
+      {
+        "disabled": false,
+        "label": "",
+        "pressed": null
+      },
+      {
+        "disabled": false,
+        "label": "♡",
+        "pressed": null
+      },
+      {
+        "disabled": false,
+        "label": "鲜鸡蛋 10枚装",
+        "pressed": null
+      },
+      {
+        "disabled": false,
+        "label": "",
+        "pressed": null
+      },
+      {
+        "disabled": false,
+        "label": "",
+        "pressed": null
+      },
+      {
+        "disabled": false,
+        "label": "♡",
+        "pressed": null
+      },
+      {
+        "disabled": false,
+        "label": "中筋面粉 500克",
+        "pressed": null
+      }
+    ],
+    "inputs": [
+      {
+        "disabled": false,
+        "placeholder": "搜索有机食材与好物",
+        "type": "text",
+        "value_characters": 0
+      },
+      {
+        "disabled": false,
+        "placeholder": "问问可可吧…",
+        "type": "text",
+        "value_characters": 0
+      }
+    ],
+    "role_navigation_count": 1,
+    "statuses": [],
+    "title": "Figma Make App"
+  },
+  "api_call_summary": {
+    "GET /api/v1/bootstrap 200": 1,
+    "GET /api/v1/cart 200": 1,
+    "GET /api/v1/categories 200": 1,
+    "GET /api/v1/products 200": 2,
+    "GET /media/images/demo-baking-powder-100g.jpg 200": 1,
+    "GET /media/images/demo-butter-200g.jpg 200": 1,
+    "POST /api/v1/guide/sessions 200": 2,
+    "POST /api/v1/navigation/sessions/{session_id}/opening 200": 1,
+    "GET /api/v1/guide/sessions/{session_id}/status 200": 1
+  },
+  "sse_sequence_types": []
+}

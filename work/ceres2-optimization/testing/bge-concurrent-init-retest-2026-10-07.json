@@ -1,0 +1,17 @@
+{
+  "worker_count": 2,
+  "success_count": 2,
+  "single_instance": true,
+  "results": [
+    {
+      "success": true,
+      "dimensions": 512,
+      "identity": 139939359349008
+    },
+    {
+      "success": true,
+      "dimensions": 512,
+      "identity": 139939359349008
+    }
+  ]
+}

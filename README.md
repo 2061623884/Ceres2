@@ -1,5 +1,7 @@
 # Ceres2 · 智能导购与受控售后
 
+> 当前隔离优化 worktree：`codex/ceres2-optimization-20261007`，暂不合并。启动与检索构建见 [优化运行指南](docs/OPTIMIZATION-20261007.md)；唯一当前状态见 [优化 TASK](tasks/ceres2-optimization.md)。下方 70 SKU、TASK10 与旧验收属于此前版本。
+
 > **2026-10-07 本机 Cursor 接管**：交接快照见 [本机交接文档](docs/CURSOR-HANDOFF-20261007.md)。工作区仍未提交。官方 DeepSeek 请求已关闭 thinking，受控传输通过；真实原句回归仍无候选，记忆未满 10 条，24 小时观察尚未开始。任务最新状态由 TASK10 维护。
 
 > 2026-10-06 本轮：下一阶段体验更新（10 票）。受控技术验证通过，真实模型、浏览器与用户验收仍开放。先看下方更新摘要，再读[接手与剩余验收](docs/NEXT-EXPERIENCE-HANDOFF.md)和[当前十票总 TASK](tasks/ceres2-next-experience.md)。

@@ -1551,9 +1551,7 @@
       "category_id": "snack",
       "image_path": null,
       "image_status": "placeholder",
-      "ingredient_ids": [
-        "potato"
-      ],
+      "ingredient_ids": [],
       "metadata": {
         "catalog_batch": "snack-selection-v1",
         "family_id": "potato_chips",
@@ -1676,9 +1674,7 @@
       "category_id": "snack",
       "image_path": null,
       "image_status": "placeholder",
-      "ingredient_ids": [
-        "potato"
-      ],
+      "ingredient_ids": [],
       "metadata": {
         "catalog_batch": "next-snack-v2",
         "family_id": "potato_chips",
@@ -1824,7 +1820,37 @@
         "fixture_version": "next-activity-v1",
         "provenance": "TASK08 bounded demo fixture; not verified merchant or nutrition data"
       }
+    },
+    {
+      "sku_id": "demo:shrimp-200g",
+      "name": "Demo Shrimp 200g",
+      "name_zh": "演示虾仁200克",
+      "category_id": "seafood",
+      "brand": "演示品牌",
+      "source": "demo",
+      "review_status": "approved",
+      "image_path": null,
+      "image_status": "placeholder",
+      "spec_quantity": 200,
+      "spec_unit": "g",
+      "ingredient_ids": [
+        "shrimp"
+      ],
+      "usage_tags": [
+        "炒饭",
+        "家常"
+      ],
+      "product_type": "shrimp",
+      "metadata": {
+        "catalog_batch": "optimization-demo-v1",
+        "simulation": {
+          "price": true,
+          "inventory": true
+        },
+        "returnable": false,
+        "return_policy_source": "Ceres 模拟商品规则"
+      }
     }
   ],
-  "version": "v1"
+  "version": "optimization-demo-v2"
 }

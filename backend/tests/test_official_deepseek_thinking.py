@@ -54,6 +54,7 @@ globalThis.fetch = async (_url, init) => {
     thinking: Object.hasOwn(body, 'thinking') ? body.thinking : null,
     reasoning_effort: Object.hasOwn(body, 'reasoning_effort') ? body.reasoning_effort : null,
     response_format: Object.hasOwn(body, 'response_format') ? body.response_format : null,
+    tool_choice: Object.hasOwn(body, 'tool_choice') ? body.tool_choice : null,
     stream: body.stream === true,
     tool_count: Array.isArray(body.tools) ? body.tools.length : 0,
   };
@@ -274,7 +275,10 @@ def test_node_official_deepseek_disables_thinking_on_pi_and_expression(tmp_path)
     assert mains and validators, frames
     for row in mains:
         _assert_disabled(row, 1536)
-        assert row['response_format'] == {'type': 'json_object'}
+        # Native tool arguments carry final refs; JSON mode would constrain
+        # the optional prose accompanying an actual tool call (ADR 0004).
+        assert row['response_format'] is None
+        assert row['tool_choice'] == 'auto'
         assert row['tool_count'] > 0
     for row in validators:
         _assert_disabled(row, 256)

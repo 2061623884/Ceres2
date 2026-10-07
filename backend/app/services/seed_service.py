@@ -42,6 +42,13 @@ def seed_catalog(db: Session, fixture_dir: Path | None = None) -> None:
                     if key in product['metadata']:
                         metadata[key] = product['metadata'][key]
             existing.metadata_json = json.dumps(metadata, ensure_ascii=False)
+        if existing is not None and product['sku_id'] in (
+            'demo:snack-original-potato-chips-70g-bag',
+            'demo:snack-original-potato-chips-35g-bag',
+        ):
+            # Correct the two documented raw-potato procurement mappings even
+            # when this worktree was seeded before optimization-demo-v2.
+            existing.ingredient_ids = json.dumps(product['ingredient_ids'], ensure_ascii=False)
     db.flush()
     for offer in supply['offers']:
         present = db.scalar(select(Offer).where(Offer.store_id == offer['store_id'], Offer.sku_id == offer['sku_id']))

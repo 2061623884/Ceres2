@@ -1,0 +1,1209 @@
+{
+  "query": "这批家常菜共有哪几类食材，哪些菜用鸡蛋",
+  "query_revision": "canonical-scope-overview-v3",
+  "selection": {
+    "entity_numbers": [
+      0,
+      1
+    ]
+  },
+  "model_selected_egg_recipe_ids": [
+    "dish-dan-chao-fan",
+    "dish-fanqie-chao-dan"
+  ],
+  "selection_recall_for_four_egg_recipes": "2/4",
+  "selection_recall_interpretation": "This records the model's original selection; the host overview retains canonical facts from retrieved communities and does not claim the selector improved.",
+  "scope": {
+    "retrieved_report_count": 11,
+    "mapped_retrieved_report_count": 11,
+    "retrieved_community_entity_count": 44,
+    "canonical_fact_count": 44,
+    "all_canonical_facts_in_retrieved_community_scope": true,
+    "entity_numbers_in_scope": true
+  },
+  "egg_ingredient_map": {
+    "ingredient_title": "鸡蛋 [ingredient:egg]",
+    "expected_recipe_count": 4,
+    "observed_recipe_count": 4,
+    "all_expected_recipes_present": true,
+    "all_baseline_quantities_present": true,
+    "recipes": [
+      {
+        "dish_id": "dish-dan-chao-fan",
+        "recipe_title": "蛋炒饭 [recipe:dish-dan-chao-fan]",
+        "expected_baseline_quantity": "2pc",
+        "relationship_has_baseline_quantity": true,
+        "relationship_id": "recipe:dish-dan-chao-fan->ingredient:egg",
+        "relationship_source": "REQUIRES: 蛋炒饭 基准 2 人需 2pc，原始用量来源 recipes.json/dish-dan-chao-fan；其他人数和包装由业务服务计算。"
+      },
+      {
+        "dish_id": "dish-fanqie-chao-dan",
+        "recipe_title": "番茄炒蛋 [recipe:dish-fanqie-chao-dan]",
+        "expected_baseline_quantity": "3pc",
+        "relationship_has_baseline_quantity": true,
+        "relationship_id": "recipe:dish-fanqie-chao-dan->ingredient:egg",
+        "relationship_source": "REQUIRES: 番茄炒蛋 基准 2 人需 3pc，原始用量来源 recipes.json/dish-fanqie-chao-dan；其他人数和包装由业务服务计算。"
+      },
+      {
+        "dish_id": "dish-jiajiao-chaodan",
+        "recipe_title": "尖椒炒蛋 [recipe:dish-jiajiao-chaodan]",
+        "expected_baseline_quantity": "3pc",
+        "relationship_has_baseline_quantity": true,
+        "relationship_id": "recipe:dish-jiajiao-chaodan->ingredient:egg",
+        "relationship_source": "REQUIRES: 尖椒炒蛋 基准 2 人需 3pc，原始用量来源 recipes.json/dish-jiajiao-chaodan；其他人数和包装由业务服务计算。"
+      },
+      {
+        "dish_id": "dish-yangzhou-chao-fan",
+        "recipe_title": "扬州炒饭 [recipe:dish-yangzhou-chao-fan]",
+        "expected_baseline_quantity": "2pc",
+        "relationship_has_baseline_quantity": true,
+        "relationship_id": "recipe:dish-yangzhou-chao-fan->ingredient:egg",
+        "relationship_source": "REQUIRES: 扬州炒饭 基准 2 人需 2pc，原始用量来源 recipes.json/dish-yangzhou-chao-fan；其他人数和包装由业务服务计算。"
+      }
+    ]
+  },
+  "ingredient_kind_sources": [
+    {
+      "ingredient_id": "bell_pepper",
+      "expected_kind": "vegetable",
+      "canonical_fact_present": true,
+      "kind_present": true,
+      "source_description": "采购食材 青椒，类别 vegetable；来源 ingredients.json/bell_pepper。采购关系不证明配料、营养、过敏安全或跨食材替代。"
+    },
+    {
+      "ingredient_id": "cabbage",
+      "expected_kind": "vegetable",
+      "canonical_fact_present": true,
+      "kind_present": true,
+      "source_description": "采购食材 卷心菜，类别 vegetable；来源 ingredients.json/cabbage。采购关系不证明配料、营养、过敏安全或跨食材替代。"
+    },
+    {
+      "ingredient_id": "chicken_breast",
+      "expected_kind": "meat",
+      "canonical_fact_present": true,
+      "kind_present": true,
+      "source_description": "采购食材 鸡胸肉，类别 meat；来源 ingredients.json/chicken_breast。采购关系不证明配料、营养、过敏安全或跨食材替代。"
+    },
+    {
+      "ingredient_id": "chili_sauce",
+      "expected_kind": "condiment",
+      "canonical_fact_present": true,
+      "kind_present": true,
+      "source_description": "采购食材 辣椒酱，类别 condiment；来源 ingredients.json/chili_sauce。采购关系不证明配料、营养、过敏安全或跨食材替代。"
+    },
+    {
+      "ingredient_id": "egg",
+      "expected_kind": "egg",
+      "canonical_fact_present": true,
+      "kind_present": true,
+      "source_description": "采购食材 鸡蛋，类别 egg；来源 ingredients.json/egg。采购关系不证明配料、营养、过敏安全或跨食材替代。"
+    },
+    {
+      "ingredient_id": "green_pea",
+      "expected_kind": "vegetable",
+      "canonical_fact_present": true,
+      "kind_present": true,
+      "source_description": "采购食材 豌豆，类别 vegetable；来源 ingredients.json/green_pea。采购关系不证明配料、营养、过敏安全或跨食材替代。"
+    },
+    {
+      "ingredient_id": "oil",
+      "expected_kind": "condiment",
+      "canonical_fact_present": true,
+      "kind_present": true,
+      "source_description": "采购食材 食用油，类别 condiment；来源 ingredients.json/oil。采购关系不证明配料、营养、过敏安全或跨食材替代。"
+    },
+    {
+      "ingredient_id": "peanut",
+      "expected_kind": "staple",
+      "canonical_fact_present": true,
+      "kind_present": true,
+      "source_description": "采购食材 花生，类别 staple；来源 ingredients.json/peanut。采购关系不证明配料、营养、过敏安全或跨食材替代。"
+    },
+    {
+      "ingredient_id": "pork",
+      "expected_kind": "meat",
+      "canonical_fact_present": true,
+      "kind_present": true,
+      "source_description": "采购食材 猪肉，类别 meat；来源 ingredients.json/pork。采购关系不证明配料、营养、过敏安全或跨食材替代。"
+    },
+    {
+      "ingredient_id": "potato",
+      "expected_kind": "vegetable",
+      "canonical_fact_present": true,
+      "kind_present": true,
+      "source_description": "采购食材 土豆，类别 vegetable；来源 ingredients.json/potato。采购关系不证明配料、营养、过敏安全或跨食材替代。"
+    },
+    {
+      "ingredient_id": "rice",
+      "expected_kind": "staple",
+      "canonical_fact_present": true,
+      "kind_present": true,
+      "source_description": "采购食材 大米，类别 staple；来源 ingredients.json/rice。采购关系不证明配料、营养、过敏安全或跨食材替代。"
+    },
+    {
+      "ingredient_id": "salt",
+      "expected_kind": "condiment",
+      "canonical_fact_present": true,
+      "kind_present": true,
+      "source_description": "采购食材 盐，类别 condiment；来源 ingredients.json/salt。采购关系不证明配料、营养、过敏安全或跨食材替代。"
+    },
+    {
+      "ingredient_id": "scallion",
+      "expected_kind": "vegetable",
+      "canonical_fact_present": true,
+      "kind_present": true,
+      "source_description": "采购食材 葱，类别 vegetable；来源 ingredients.json/scallion。采购关系不证明配料、营养、过敏安全或跨食材替代。"
+    },
+    {
+      "ingredient_id": "shrimp",
+      "expected_kind": "seafood",
+      "canonical_fact_present": true,
+      "kind_present": true,
+      "source_description": "采购食材 虾，类别 seafood；来源 ingredients.json/shrimp。采购关系不证明配料、营养、过敏安全或跨食材替代。"
+    },
+    {
+      "ingredient_id": "soy_sauce",
+      "expected_kind": "condiment",
+      "canonical_fact_present": true,
+      "kind_present": true,
+      "source_description": "采购食材 酱油，类别 condiment；来源 ingredients.json/soy_sauce。采购关系不证明配料、营养、过敏安全或跨食材替代。"
+    },
+    {
+      "ingredient_id": "sugar",
+      "expected_kind": "condiment",
+      "canonical_fact_present": true,
+      "kind_present": true,
+      "source_description": "采购食材 糖，类别 condiment；来源 ingredients.json/sugar。采购关系不证明配料、营养、过敏安全或跨食材替代。"
+    },
+    {
+      "ingredient_id": "tomato",
+      "expected_kind": "vegetable",
+      "canonical_fact_present": true,
+      "kind_present": true,
+      "source_description": "采购食材 番茄，类别 vegetable；来源 ingredients.json/tomato。采购关系不证明配料、营养、过敏安全或跨食材替代。"
+    },
+    {
+      "ingredient_id": "vinegar",
+      "expected_kind": "condiment",
+      "canonical_fact_present": true,
+      "kind_present": true,
+      "source_description": "采购食材 醋，类别 condiment；来源 ingredients.json/vinegar。采购关系不证明配料、营养、过敏安全或跨食材替代。"
+    }
+  ],
+  "all_fixture_ingredient_kinds_and_sources_present": true,
+  "answer": "以下是本次检索社区的规范事实视图，基准用量不表示实际采购件数：\n番茄炒蛋 别名 西红柿炒鸡蛋 番茄鸡蛋 基准 2人 必需食材 番茄 300g、鸡蛋 3pc 调料 食用油、盐、糖。调料数量未记录，家庭已有食材数量未知。 [Data: Entities (0)]\n蛋炒饭 别名 鸡蛋炒饭 炒饭 基准 2人 必需食材 大米 300g、鸡蛋 2pc 调料 食用油、盐、葱。调料数量未记录，家庭已有食材数量未知。 [Data: Entities (1)]\n扬州炒饭 别名 什锦炒饭 基准 2人 必需食材 大米 350g、鸡蛋 2pc、虾 80g、豌豆 50g 调料 食用油、盐。调料数量未记录，家庭已有食材数量未知。 [Data: Entities (2)]\n青椒肉丝 别名 尖椒肉丝 基准 2人 必需食材 猪肉 200g、青椒 200g 调料 食用油、盐、酱油。调料数量未记录，家庭已有食材数量未知。 [Data: Entities (3)]\n宫保鸡丁 别名  基准 2人 必需食材 鸡胸肉 250g、花生 50g、青椒 100g 调料 食用油、盐、酱油、醋。调料数量未记录，家庭已有食材数量未知。 [Data: Entities (4)]\n酸辣土豆丝 别名 醋溜土豆丝 基准 2人 必需食材 土豆 350g 调料 食用油、盐、醋、辣椒酱。调料数量未记录，家庭已有食材数量未知。 [Data: Entities (5)]\n回锅肉 别名  基准 2人 必需食材 猪肉 300g、青椒 100g、卷心菜 100g 调料 食用油、盐、酱油。调料数量未记录，家庭已有食材数量未知。 [Data: Entities (6)]\n尖椒炒蛋 别名  基准 2人 必需食材 青椒 200g、鸡蛋 3pc 调料 食用油、盐。调料数量未记录，家庭已有食材数量未知。 [Data: Entities (7)]\n采购食材 青椒，类别 vegetable；来源 ingredients.json/bell_pepper。采购关系不证明配料、营养、过敏安全或跨食材替代。 [Data: Entities (8)]\n采购食材 卷心菜，类别 vegetable；来源 ingredients.json/cabbage。采购关系不证明配料、营养、过敏安全或跨食材替代。 [Data: Entities (9)]\n采购食材 鸡胸肉，类别 meat；来源 ingredients.json/chicken_breast。采购关系不证明配料、营养、过敏安全或跨食材替代。 [Data: Entities (10)]\n采购食材 辣椒酱，类别 condiment；来源 ingredients.json/chili_sauce。采购关系不证明配料、营养、过敏安全或跨食材替代。 [Data: Entities (11)]\n采购食材 鸡蛋，类别 egg；来源 ingredients.json/egg。采购关系不证明配料、营养、过敏安全或跨食材替代。 [Data: Entities (12)]\n采购食材 豌豆，类别 vegetable；来源 ingredients.json/green_pea。采购关系不证明配料、营养、过敏安全或跨食材替代。 [Data: Entities (13)]\n采购食材 食用油，类别 condiment；来源 ingredients.json/oil。采购关系不证明配料、营养、过敏安全或跨食材替代。 [Data: Entities (14)]\n采购食材 花生，类别 staple；来源 ingredients.json/peanut。采购关系不证明配料、营养、过敏安全或跨食材替代。 [Data: Entities (15)]\n采购食材 猪肉，类别 meat；来源 ingredients.json/pork。采购关系不证明配料、营养、过敏安全或跨食材替代。 [Data: Entities (16)]\n采购食材 土豆，类别 vegetable；来源 ingredients.json/potato。采购关系不证明配料、营养、过敏安全或跨食材替代。 [Data: Entities (17)]\n采购食材 大米，类别 staple；来源 ingredients.json/rice。采购关系不证明配料、营养、过敏安全或跨食材替代。 [Data: Entities (18)]\n采购食材 盐，类别 condiment；来源 ingredients.json/salt。采购关系不证明配料、营养、过敏安全或跨食材替代。 [Data: Entities (19)]\n采购食材 葱，类别 vegetable；来源 ingredients.json/scallion。采购关系不证明配料、营养、过敏安全或跨食材替代。 [Data: Entities (20)]\n采购食材 虾，类别 seafood；来源 ingredients.json/shrimp。采购关系不证明配料、营养、过敏安全或跨食材替代。 [Data: Entities (21)]\n采购食材 酱油，类别 condiment；来源 ingredients.json/soy_sauce。采购关系不证明配料、营养、过敏安全或跨食材替代。 [Data: Entities (22)]\n采购食材 糖，类别 condiment；来源 ingredients.json/sugar。采购关系不证明配料、营养、过敏安全或跨食材替代。 [Data: Entities (23)]\n采购食材 番茄，类别 vegetable；来源 ingredients.json/tomato。采购关系不证明配料、营养、过敏安全或跨食材替代。 [Data: Entities (24)]\n采购食材 醋，类别 condiment；来源 ingredients.json/vinegar。采购关系不证明配料、营养、过敏安全或跨食材替代。 [Data: Entities (25)]\n白砂糖 500克 White Sugar 500g 品牌 演示品牌 品类 baking 规格 500g 采购食材 糖 用途 烘焙 甜味。仅供模拟采购，价格库存另查当前业务 Offer。 [Data: Entities (26)]\n鲜鸡蛋 10枚装 Fresh Eggs 10 pack 品牌 演示品牌 品类 baking 规格 10pc 采购食材 鸡蛋 用途 烘焙 蛋糕。仅供模拟采购，价格库存另查当前业务 Offer。 [Data: Entities (27)]\n猪肩肉 500克 Pork Shoulder 500g 品牌 演示品牌 品类 meat 规格 500g 采购食材 猪肉 用途 家常 小炒肉。仅供模拟采购，价格库存另查当前业务 Offer。 [Data: Entities (28)]\n青椒 300克 Bell Pepper 300g 品牌 演示品牌 品类 vegetable 规格 300g 采购食材 青椒 用途 炒菜 小炒肉。仅供模拟采购，价格库存另查当前业务 Offer。 [Data: Entities (29)]\n食用盐 500克 Table Salt 500g 品牌 演示品牌 品类 condiment 规格 500g 采购食材 盐 用途 调味 家常。仅供模拟采购，价格库存另查当前业务 Offer。 [Data: Entities (30)]\n生抽酱油 500毫升 Soy Sauce 500ml 品牌 演示品牌 品类 condiment 规格 500ml 采购食材 酱油 用途 调味 炒菜。仅供模拟采购，价格库存另查当前业务 Offer。 [Data: Entities (31)]\n鸡胸肉 500克 Chicken Breast 500g 品牌 演示品牌 品类 meat 规格 500g 采购食材 鸡胸肉 用途 清淡 晚餐。仅供模拟采购，价格库存另查当前业务 Offer。 [Data: Entities (32)]\n新鲜番茄 500克 Fresh Tomato 500g 品牌 演示品牌 品类 vegetable 规格 500g 采购食材 番茄 用途 家常菜 番茄炒蛋。仅供模拟采购，价格库存另查当前业务 Offer。 [Data: Entities (33)]\n鲜鸡蛋 6枚装 Fresh Eggs 6 pack 品牌 演示品牌 品类 vegetable 规格 6pc 采购食材 鸡蛋 用途 家常菜 炒蛋 番茄炒蛋。仅供模拟采购，价格库存另查当前业务 Offer。 [Data: Entities (34)]\n大米 2公斤 Jasmine Rice 2kg 品牌 演示品牌 品类 staple 规格 2000g 采购食材 大米 用途 主食 炒饭 蛋炒饭。仅供模拟采购，价格库存另查当前业务 Offer。 [Data: Entities (35)]\n小葱 200克 Green Onion 200g 品牌 演示品牌 品类 vegetable 规格 200g 采购食材 葱 用途 调味 家常菜 葱香。仅供模拟采购，价格库存另查当前业务 Offer。 [Data: Entities (36)]\n食用油 500毫升 Cooking Oil 500ml 品牌 演示品牌 品类 staple 规格 500ml 采购食材 食用油 用途 炒菜 家常。仅供模拟采购，价格库存另查当前业务 Offer。 [Data: Entities (37)]\n花生米 200克 Roasted Peanuts 200g 品牌 演示品牌 品类 staple 规格 200g 采购食材 花生 用途 家常菜 宫保鸡丁。仅供模拟采购，价格库存另查当前业务 Offer。 [Data: Entities (38)]\n卷心菜 500克 Green Cabbage 500g 品牌 演示品牌 品类 vegetable 规格 500g 采购食材 卷心菜 用途 火锅 火锅素菜。仅供模拟采购，价格库存另查当前业务 Offer。 [Data: Entities (39)]\n土豆 500克 Potato 500g 品牌 演示品牌 品类 vegetable 规格 500g 采购食材 土豆 用途 火锅 火锅素菜。仅供模拟采购，价格库存另查当前业务 Offer。 [Data: Entities (40)]\n米醋 500毫升 Rice Vinegar 500ml 品牌 演示品牌 品类 condiment 规格 500ml 采购食材 醋 用途 调味 凉拌。仅供模拟采购，价格库存另查当前业务 Offer。 [Data: Entities (41)]\n青豌豆 300克 Frozen Green Peas 300g 品牌 演示品牌 品类 vegetable 规格 300g 采购食材 豌豆 用途 炒饭 家常。仅供模拟采购，价格库存另查当前业务 Offer。 [Data: Entities (42)]\n演示虾仁200克 Demo Shrimp 200g 品牌 演示品牌 品类 seafood 类型 shrimp 规格 200g 采购食材 虾 用途 炒饭 家常。仅供模拟采购，价格库存另查当前业务 Offer。 [Data: Entities (43)]\n\n按必需食材关联的菜谱：\n番茄 [ingredient:tomato]：番茄炒蛋 [recipe:dish-fanqie-chao-dan]\n鸡蛋 [ingredient:egg]：番茄炒蛋 [recipe:dish-fanqie-chao-dan]、蛋炒饭 [recipe:dish-dan-chao-fan]、扬州炒饭 [recipe:dish-yangzhou-chao-fan]、尖椒炒蛋 [recipe:dish-jiajiao-chaodan]\n大米 [ingredient:rice]：蛋炒饭 [recipe:dish-dan-chao-fan]、扬州炒饭 [recipe:dish-yangzhou-chao-fan]\n虾 [ingredient:shrimp]：扬州炒饭 [recipe:dish-yangzhou-chao-fan]\n豌豆 [ingredient:green_pea]：扬州炒饭 [recipe:dish-yangzhou-chao-fan]\n猪肉 [ingredient:pork]：青椒肉丝 [recipe:dish-qingjiao-rousi]、回锅肉 [recipe:dish-huiguo-rou]\n青椒 [ingredient:bell_pepper]：青椒肉丝 [recipe:dish-qingjiao-rousi]、宫保鸡丁 [recipe:dish-gongbao-jiding]、回锅肉 [recipe:dish-huiguo-rou]、尖椒炒蛋 [recipe:dish-jiajiao-chaodan]\n鸡胸肉 [ingredient:chicken_breast]：宫保鸡丁 [recipe:dish-gongbao-jiding]\n花生 [ingredient:peanut]：宫保鸡丁 [recipe:dish-gongbao-jiding]\n土豆 [ingredient:potato]：酸辣土豆丝 [recipe:dish-suanla-tudousi]\n卷心菜 [ingredient:cabbage]：回锅肉 [recipe:dish-huiguo-rou]",
+  "provider_usage": {
+    "completion_calls": [
+      {
+        "completion_tokens": 576,
+        "prompt_tokens": 7878,
+        "total_tokens": 8454,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cache_write_tokens": null,
+          "cached_tokens": 7680
+        },
+        "prompt_cache_hit_tokens": 7680,
+        "prompt_cache_miss_tokens": 198
+      },
+      {
+        "completion_tokens": 863,
+        "prompt_tokens": 6426,
+        "total_tokens": 7289,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cache_write_tokens": null,
+          "cached_tokens": 6272
+        },
+        "prompt_cache_hit_tokens": 6272,
+        "prompt_cache_miss_tokens": 154
+      },
+      {
+        "completion_tokens": 489,
+        "prompt_tokens": 5083,
+        "total_tokens": 5572,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cache_write_tokens": null,
+          "cached_tokens": 4864
+        },
+        "prompt_cache_hit_tokens": 4864,
+        "prompt_cache_miss_tokens": 219
+      },
+      {
+        "completion_tokens": 8,
+        "prompt_tokens": 3068,
+        "total_tokens": 3076,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cache_write_tokens": null,
+          "cached_tokens": 512
+        },
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 2556
+      }
+    ],
+    "embedding_calls": []
+  },
+  "canonical_fact_ids": [
+    "ingredient:bell_pepper",
+    "ingredient:cabbage",
+    "ingredient:chicken_breast",
+    "ingredient:chili_sauce",
+    "ingredient:egg",
+    "ingredient:green_pea",
+    "ingredient:oil",
+    "ingredient:peanut",
+    "ingredient:pork",
+    "ingredient:potato",
+    "ingredient:rice",
+    "ingredient:salt",
+    "ingredient:scallion",
+    "ingredient:shrimp",
+    "ingredient:soy_sauce",
+    "ingredient:sugar",
+    "ingredient:tomato",
+    "ingredient:vinegar",
+    "recipe:dish-dan-chao-fan",
+    "recipe:dish-fanqie-chao-dan",
+    "recipe:dish-gongbao-jiding",
+    "recipe:dish-huiguo-rou",
+    "recipe:dish-jiajiao-chaodan",
+    "recipe:dish-qingjiao-rousi",
+    "recipe:dish-suanla-tudousi",
+    "recipe:dish-yangzhou-chao-fan",
+    "sku:demo:bell-pepper-300g",
+    "sku:demo:cabbage-500g",
+    "sku:demo:chicken-breast-500g",
+    "sku:demo:cooking-oil-500ml",
+    "sku:demo:eggs-10pack",
+    "sku:demo:eggs-fresh-6pack",
+    "sku:demo:green-pea-300g",
+    "sku:demo:peanut-200g",
+    "sku:demo:pork-500g",
+    "sku:demo:potato-500g",
+    "sku:demo:rice-2kg",
+    "sku:demo:salt-500g",
+    "sku:demo:scallion-200g",
+    "sku:demo:shrimp-200g",
+    "sku:demo:soy-sauce-500ml",
+    "sku:demo:sugar-white-500g",
+    "sku:demo:tomato-fresh-500g",
+    "sku:demo:vinegar-500ml"
+  ],
+  "ingredient_relationship_count": 19,
+  "tool_payload_allowlist": [
+    "method",
+    "canonical_facts",
+    "ingredient_recipes",
+    "graph_revision",
+    "query_revision"
+  ],
+  "interpretation": "One real-provider query against the existing v3 GraphRAG index. Canonical overview facts remain limited to entities in communities actually returned by this query.",
+  "source_graph_result": {
+    "method": "global",
+    "canonical_facts": [
+      {
+        "id": "recipe:dish-fanqie-chao-dan",
+        "type": "RECIPE",
+        "title": "番茄炒蛋 [recipe:dish-fanqie-chao-dan]",
+        "description": "番茄炒蛋 别名 西红柿炒鸡蛋 番茄鸡蛋 基准 2人 必需食材 番茄 300g、鸡蛋 3pc 调料 食用油、盐、糖。调料数量未记录，家庭已有食材数量未知。",
+        "human_readable_id": 0
+      },
+      {
+        "id": "recipe:dish-dan-chao-fan",
+        "type": "RECIPE",
+        "title": "蛋炒饭 [recipe:dish-dan-chao-fan]",
+        "description": "蛋炒饭 别名 鸡蛋炒饭 炒饭 基准 2人 必需食材 大米 300g、鸡蛋 2pc 调料 食用油、盐、葱。调料数量未记录，家庭已有食材数量未知。",
+        "human_readable_id": 1
+      },
+      {
+        "id": "recipe:dish-yangzhou-chao-fan",
+        "type": "RECIPE",
+        "title": "扬州炒饭 [recipe:dish-yangzhou-chao-fan]",
+        "description": "扬州炒饭 别名 什锦炒饭 基准 2人 必需食材 大米 350g、鸡蛋 2pc、虾 80g、豌豆 50g 调料 食用油、盐。调料数量未记录，家庭已有食材数量未知。",
+        "human_readable_id": 2
+      },
+      {
+        "id": "recipe:dish-qingjiao-rousi",
+        "type": "RECIPE",
+        "title": "青椒肉丝 [recipe:dish-qingjiao-rousi]",
+        "description": "青椒肉丝 别名 尖椒肉丝 基准 2人 必需食材 猪肉 200g、青椒 200g 调料 食用油、盐、酱油。调料数量未记录，家庭已有食材数量未知。",
+        "human_readable_id": 3
+      },
+      {
+        "id": "recipe:dish-gongbao-jiding",
+        "type": "RECIPE",
+        "title": "宫保鸡丁 [recipe:dish-gongbao-jiding]",
+        "description": "宫保鸡丁 别名  基准 2人 必需食材 鸡胸肉 250g、花生 50g、青椒 100g 调料 食用油、盐、酱油、醋。调料数量未记录，家庭已有食材数量未知。",
+        "human_readable_id": 4
+      },
+      {
+        "id": "recipe:dish-suanla-tudousi",
+        "type": "RECIPE",
+        "title": "酸辣土豆丝 [recipe:dish-suanla-tudousi]",
+        "description": "酸辣土豆丝 别名 醋溜土豆丝 基准 2人 必需食材 土豆 350g 调料 食用油、盐、醋、辣椒酱。调料数量未记录，家庭已有食材数量未知。",
+        "human_readable_id": 5
+      },
+      {
+        "id": "recipe:dish-huiguo-rou",
+        "type": "RECIPE",
+        "title": "回锅肉 [recipe:dish-huiguo-rou]",
+        "description": "回锅肉 别名  基准 2人 必需食材 猪肉 300g、青椒 100g、卷心菜 100g 调料 食用油、盐、酱油。调料数量未记录，家庭已有食材数量未知。",
+        "human_readable_id": 6
+      },
+      {
+        "id": "recipe:dish-jiajiao-chaodan",
+        "type": "RECIPE",
+        "title": "尖椒炒蛋 [recipe:dish-jiajiao-chaodan]",
+        "description": "尖椒炒蛋 别名  基准 2人 必需食材 青椒 200g、鸡蛋 3pc 调料 食用油、盐。调料数量未记录，家庭已有食材数量未知。",
+        "human_readable_id": 7
+      },
+      {
+        "id": "ingredient:bell_pepper",
+        "type": "INGREDIENT",
+        "title": "青椒 [ingredient:bell_pepper]",
+        "description": "采购食材 青椒，类别 vegetable；来源 ingredients.json/bell_pepper。采购关系不证明配料、营养、过敏安全或跨食材替代。",
+        "human_readable_id": 8
+      },
+      {
+        "id": "ingredient:cabbage",
+        "type": "INGREDIENT",
+        "title": "卷心菜 [ingredient:cabbage]",
+        "description": "采购食材 卷心菜，类别 vegetable；来源 ingredients.json/cabbage。采购关系不证明配料、营养、过敏安全或跨食材替代。",
+        "human_readable_id": 9
+      },
+      {
+        "id": "ingredient:chicken_breast",
+        "type": "INGREDIENT",
+        "title": "鸡胸肉 [ingredient:chicken_breast]",
+        "description": "采购食材 鸡胸肉，类别 meat；来源 ingredients.json/chicken_breast。采购关系不证明配料、营养、过敏安全或跨食材替代。",
+        "human_readable_id": 10
+      },
+      {
+        "id": "ingredient:chili_sauce",
+        "type": "INGREDIENT",
+        "title": "辣椒酱 [ingredient:chili_sauce]",
+        "description": "采购食材 辣椒酱，类别 condiment；来源 ingredients.json/chili_sauce。采购关系不证明配料、营养、过敏安全或跨食材替代。",
+        "human_readable_id": 11
+      },
+      {
+        "id": "ingredient:egg",
+        "type": "INGREDIENT",
+        "title": "鸡蛋 [ingredient:egg]",
+        "description": "采购食材 鸡蛋，类别 egg；来源 ingredients.json/egg。采购关系不证明配料、营养、过敏安全或跨食材替代。",
+        "human_readable_id": 12
+      },
+      {
+        "id": "ingredient:green_pea",
+        "type": "INGREDIENT",
+        "title": "豌豆 [ingredient:green_pea]",
+        "description": "采购食材 豌豆，类别 vegetable；来源 ingredients.json/green_pea。采购关系不证明配料、营养、过敏安全或跨食材替代。",
+        "human_readable_id": 13
+      },
+      {
+        "id": "ingredient:oil",
+        "type": "INGREDIENT",
+        "title": "食用油 [ingredient:oil]",
+        "description": "采购食材 食用油，类别 condiment；来源 ingredients.json/oil。采购关系不证明配料、营养、过敏安全或跨食材替代。",
+        "human_readable_id": 14
+      },
+      {
+        "id": "ingredient:peanut",
+        "type": "INGREDIENT",
+        "title": "花生 [ingredient:peanut]",
+        "description": "采购食材 花生，类别 staple；来源 ingredients.json/peanut。采购关系不证明配料、营养、过敏安全或跨食材替代。",
+        "human_readable_id": 15
+      },
+      {
+        "id": "ingredient:pork",
+        "type": "INGREDIENT",
+        "title": "猪肉 [ingredient:pork]",
+        "description": "采购食材 猪肉，类别 meat；来源 ingredients.json/pork。采购关系不证明配料、营养、过敏安全或跨食材替代。",
+        "human_readable_id": 16
+      },
+      {
+        "id": "ingredient:potato",
+        "type": "INGREDIENT",
+        "title": "土豆 [ingredient:potato]",
+        "description": "采购食材 土豆，类别 vegetable；来源 ingredients.json/potato。采购关系不证明配料、营养、过敏安全或跨食材替代。",
+        "human_readable_id": 17
+      },
+      {
+        "id": "ingredient:rice",
+        "type": "INGREDIENT",
+        "title": "大米 [ingredient:rice]",
+        "description": "采购食材 大米，类别 staple；来源 ingredients.json/rice。采购关系不证明配料、营养、过敏安全或跨食材替代。",
+        "human_readable_id": 18
+      },
+      {
+        "id": "ingredient:salt",
+        "type": "INGREDIENT",
+        "title": "盐 [ingredient:salt]",
+        "description": "采购食材 盐，类别 condiment；来源 ingredients.json/salt。采购关系不证明配料、营养、过敏安全或跨食材替代。",
+        "human_readable_id": 19
+      },
+      {
+        "id": "ingredient:scallion",
+        "type": "INGREDIENT",
+        "title": "葱 [ingredient:scallion]",
+        "description": "采购食材 葱，类别 vegetable；来源 ingredients.json/scallion。采购关系不证明配料、营养、过敏安全或跨食材替代。",
+        "human_readable_id": 20
+      },
+      {
+        "id": "ingredient:shrimp",
+        "type": "INGREDIENT",
+        "title": "虾 [ingredient:shrimp]",
+        "description": "采购食材 虾，类别 seafood；来源 ingredients.json/shrimp。采购关系不证明配料、营养、过敏安全或跨食材替代。",
+        "human_readable_id": 21
+      },
+      {
+        "id": "ingredient:soy_sauce",
+        "type": "INGREDIENT",
+        "title": "酱油 [ingredient:soy_sauce]",
+        "description": "采购食材 酱油，类别 condiment；来源 ingredients.json/soy_sauce。采购关系不证明配料、营养、过敏安全或跨食材替代。",
+        "human_readable_id": 22
+      },
+      {
+        "id": "ingredient:sugar",
+        "type": "INGREDIENT",
+        "title": "糖 [ingredient:sugar]",
+        "description": "采购食材 糖，类别 condiment；来源 ingredients.json/sugar。采购关系不证明配料、营养、过敏安全或跨食材替代。",
+        "human_readable_id": 23
+      },
+      {
+        "id": "ingredient:tomato",
+        "type": "INGREDIENT",
+        "title": "番茄 [ingredient:tomato]",
+        "description": "采购食材 番茄，类别 vegetable；来源 ingredients.json/tomato。采购关系不证明配料、营养、过敏安全或跨食材替代。",
+        "human_readable_id": 24
+      },
+      {
+        "id": "ingredient:vinegar",
+        "type": "INGREDIENT",
+        "title": "醋 [ingredient:vinegar]",
+        "description": "采购食材 醋，类别 condiment；来源 ingredients.json/vinegar。采购关系不证明配料、营养、过敏安全或跨食材替代。",
+        "human_readable_id": 25
+      },
+      {
+        "id": "sku:demo:sugar-white-500g",
+        "type": "SKU",
+        "title": "白砂糖 500克 [sku:demo:sugar-white-500g]",
+        "description": "白砂糖 500克 White Sugar 500g 品牌 演示品牌 品类 baking 规格 500g 采购食材 糖 用途 烘焙 甜味。仅供模拟采购，价格库存另查当前业务 Offer。",
+        "human_readable_id": 26
+      },
+      {
+        "id": "sku:demo:eggs-10pack",
+        "type": "SKU",
+        "title": "鲜鸡蛋 10枚装 [sku:demo:eggs-10pack]",
+        "description": "鲜鸡蛋 10枚装 Fresh Eggs 10 pack 品牌 演示品牌 品类 baking 规格 10pc 采购食材 鸡蛋 用途 烘焙 蛋糕。仅供模拟采购，价格库存另查当前业务 Offer。",
+        "human_readable_id": 27
+      },
+      {
+        "id": "sku:demo:pork-500g",
+        "type": "SKU",
+        "title": "猪肩肉 500克 [sku:demo:pork-500g]",
+        "description": "猪肩肉 500克 Pork Shoulder 500g 品牌 演示品牌 品类 meat 规格 500g 采购食材 猪肉 用途 家常 小炒肉。仅供模拟采购，价格库存另查当前业务 Offer。",
+        "human_readable_id": 28
+      },
+      {
+        "id": "sku:demo:bell-pepper-300g",
+        "type": "SKU",
+        "title": "青椒 300克 [sku:demo:bell-pepper-300g]",
+        "description": "青椒 300克 Bell Pepper 300g 品牌 演示品牌 品类 vegetable 规格 300g 采购食材 青椒 用途 炒菜 小炒肉。仅供模拟采购，价格库存另查当前业务 Offer。",
+        "human_readable_id": 29
+      },
+      {
+        "id": "sku:demo:salt-500g",
+        "type": "SKU",
+        "title": "食用盐 500克 [sku:demo:salt-500g]",
+        "description": "食用盐 500克 Table Salt 500g 品牌 演示品牌 品类 condiment 规格 500g 采购食材 盐 用途 调味 家常。仅供模拟采购，价格库存另查当前业务 Offer。",
+        "human_readable_id": 30
+      },
+      {
+        "id": "sku:demo:soy-sauce-500ml",
+        "type": "SKU",
+        "title": "生抽酱油 500毫升 [sku:demo:soy-sauce-500ml]",
+        "description": "生抽酱油 500毫升 Soy Sauce 500ml 品牌 演示品牌 品类 condiment 规格 500ml 采购食材 酱油 用途 调味 炒菜。仅供模拟采购，价格库存另查当前业务 Offer。",
+        "human_readable_id": 31
+      },
+      {
+        "id": "sku:demo:chicken-breast-500g",
+        "type": "SKU",
+        "title": "鸡胸肉 500克 [sku:demo:chicken-breast-500g]",
+        "description": "鸡胸肉 500克 Chicken Breast 500g 品牌 演示品牌 品类 meat 规格 500g 采购食材 鸡胸肉 用途 清淡 晚餐。仅供模拟采购，价格库存另查当前业务 Offer。",
+        "human_readable_id": 32
+      },
+      {
+        "id": "sku:demo:tomato-fresh-500g",
+        "type": "SKU",
+        "title": "新鲜番茄 500克 [sku:demo:tomato-fresh-500g]",
+        "description": "新鲜番茄 500克 Fresh Tomato 500g 品牌 演示品牌 品类 vegetable 规格 500g 采购食材 番茄 用途 家常菜 番茄炒蛋。仅供模拟采购，价格库存另查当前业务 Offer。",
+        "human_readable_id": 33
+      },
+      {
+        "id": "sku:demo:eggs-fresh-6pack",
+        "type": "SKU",
+        "title": "鲜鸡蛋 6枚装 [sku:demo:eggs-fresh-6pack]",
+        "description": "鲜鸡蛋 6枚装 Fresh Eggs 6 pack 品牌 演示品牌 品类 vegetable 规格 6pc 采购食材 鸡蛋 用途 家常菜 炒蛋 番茄炒蛋。仅供模拟采购，价格库存另查当前业务 Offer。",
+        "human_readable_id": 34
+      },
+      {
+        "id": "sku:demo:rice-2kg",
+        "type": "SKU",
+        "title": "大米 2公斤 [sku:demo:rice-2kg]",
+        "description": "大米 2公斤 Jasmine Rice 2kg 品牌 演示品牌 品类 staple 规格 2000g 采购食材 大米 用途 主食 炒饭 蛋炒饭。仅供模拟采购，价格库存另查当前业务 Offer。",
+        "human_readable_id": 35
+      },
+      {
+        "id": "sku:demo:scallion-200g",
+        "type": "SKU",
+        "title": "小葱 200克 [sku:demo:scallion-200g]",
+        "description": "小葱 200克 Green Onion 200g 品牌 演示品牌 品类 vegetable 规格 200g 采购食材 葱 用途 调味 家常菜 葱香。仅供模拟采购，价格库存另查当前业务 Offer。",
+        "human_readable_id": 36
+      },
+      {
+        "id": "sku:demo:cooking-oil-500ml",
+        "type": "SKU",
+        "title": "食用油 500毫升 [sku:demo:cooking-oil-500ml]",
+        "description": "食用油 500毫升 Cooking Oil 500ml 品牌 演示品牌 品类 staple 规格 500ml 采购食材 食用油 用途 炒菜 家常。仅供模拟采购，价格库存另查当前业务 Offer。",
+        "human_readable_id": 37
+      },
+      {
+        "id": "sku:demo:peanut-200g",
+        "type": "SKU",
+        "title": "花生米 200克 [sku:demo:peanut-200g]",
+        "description": "花生米 200克 Roasted Peanuts 200g 品牌 演示品牌 品类 staple 规格 200g 采购食材 花生 用途 家常菜 宫保鸡丁。仅供模拟采购，价格库存另查当前业务 Offer。",
+        "human_readable_id": 38
+      },
+      {
+        "id": "sku:demo:cabbage-500g",
+        "type": "SKU",
+        "title": "卷心菜 500克 [sku:demo:cabbage-500g]",
+        "description": "卷心菜 500克 Green Cabbage 500g 品牌 演示品牌 品类 vegetable 规格 500g 采购食材 卷心菜 用途 火锅 火锅素菜。仅供模拟采购，价格库存另查当前业务 Offer。",
+        "human_readable_id": 39
+      },
+      {
+        "id": "sku:demo:potato-500g",
+        "type": "SKU",
+        "title": "土豆 500克 [sku:demo:potato-500g]",
+        "description": "土豆 500克 Potato 500g 品牌 演示品牌 品类 vegetable 规格 500g 采购食材 土豆 用途 火锅 火锅素菜。仅供模拟采购，价格库存另查当前业务 Offer。",
+        "human_readable_id": 40
+      },
+      {
+        "id": "sku:demo:vinegar-500ml",
+        "type": "SKU",
+        "title": "米醋 500毫升 [sku:demo:vinegar-500ml]",
+        "description": "米醋 500毫升 Rice Vinegar 500ml 品牌 演示品牌 品类 condiment 规格 500ml 采购食材 醋 用途 调味 凉拌。仅供模拟采购，价格库存另查当前业务 Offer。",
+        "human_readable_id": 41
+      },
+      {
+        "id": "sku:demo:green-pea-300g",
+        "type": "SKU",
+        "title": "青豌豆 300克 [sku:demo:green-pea-300g]",
+        "description": "青豌豆 300克 Frozen Green Peas 300g 品牌 演示品牌 品类 vegetable 规格 300g 采购食材 豌豆 用途 炒饭 家常。仅供模拟采购，价格库存另查当前业务 Offer。",
+        "human_readable_id": 42
+      },
+      {
+        "id": "sku:demo:shrimp-200g",
+        "type": "SKU",
+        "title": "演示虾仁200克 [sku:demo:shrimp-200g]",
+        "description": "演示虾仁200克 Demo Shrimp 200g 品牌 演示品牌 品类 seafood 类型 shrimp 规格 200g 采购食材 虾 用途 炒饭 家常。仅供模拟采购，价格库存另查当前业务 Offer。",
+        "human_readable_id": 43
+      }
+    ],
+    "ingredient_recipes": {
+      "ingredient:tomato": {
+        "ingredient": "番茄 [ingredient:tomato]",
+        "recipes": [
+          {
+            "recipe_id": "recipe:dish-fanqie-chao-dan",
+            "title": "番茄炒蛋 [recipe:dish-fanqie-chao-dan]",
+            "relationship_id": "recipe:dish-fanqie-chao-dan->ingredient:tomato",
+            "source_description": "REQUIRES: 番茄炒蛋 基准 2 人需 300g，原始用量来源 recipes.json/dish-fanqie-chao-dan；其他人数和包装由业务服务计算。"
+          }
+        ]
+      },
+      "ingredient:egg": {
+        "ingredient": "鸡蛋 [ingredient:egg]",
+        "recipes": [
+          {
+            "recipe_id": "recipe:dish-fanqie-chao-dan",
+            "title": "番茄炒蛋 [recipe:dish-fanqie-chao-dan]",
+            "relationship_id": "recipe:dish-fanqie-chao-dan->ingredient:egg",
+            "source_description": "REQUIRES: 番茄炒蛋 基准 2 人需 3pc，原始用量来源 recipes.json/dish-fanqie-chao-dan；其他人数和包装由业务服务计算。"
+          },
+          {
+            "recipe_id": "recipe:dish-dan-chao-fan",
+            "title": "蛋炒饭 [recipe:dish-dan-chao-fan]",
+            "relationship_id": "recipe:dish-dan-chao-fan->ingredient:egg",
+            "source_description": "REQUIRES: 蛋炒饭 基准 2 人需 2pc，原始用量来源 recipes.json/dish-dan-chao-fan；其他人数和包装由业务服务计算。"
+          },
+          {
+            "recipe_id": "recipe:dish-yangzhou-chao-fan",
+            "title": "扬州炒饭 [recipe:dish-yangzhou-chao-fan]",
+            "relationship_id": "recipe:dish-yangzhou-chao-fan->ingredient:egg",
+            "source_description": "REQUIRES: 扬州炒饭 基准 2 人需 2pc，原始用量来源 recipes.json/dish-yangzhou-chao-fan；其他人数和包装由业务服务计算。"
+          },
+          {
+            "recipe_id": "recipe:dish-jiajiao-chaodan",
+            "title": "尖椒炒蛋 [recipe:dish-jiajiao-chaodan]",
+            "relationship_id": "recipe:dish-jiajiao-chaodan->ingredient:egg",
+            "source_description": "REQUIRES: 尖椒炒蛋 基准 2 人需 3pc，原始用量来源 recipes.json/dish-jiajiao-chaodan；其他人数和包装由业务服务计算。"
+          }
+        ]
+      },
+      "ingredient:rice": {
+        "ingredient": "大米 [ingredient:rice]",
+        "recipes": [
+          {
+            "recipe_id": "recipe:dish-dan-chao-fan",
+            "title": "蛋炒饭 [recipe:dish-dan-chao-fan]",
+            "relationship_id": "recipe:dish-dan-chao-fan->ingredient:rice",
+            "source_description": "REQUIRES: 蛋炒饭 基准 2 人需 300g，原始用量来源 recipes.json/dish-dan-chao-fan；其他人数和包装由业务服务计算。"
+          },
+          {
+            "recipe_id": "recipe:dish-yangzhou-chao-fan",
+            "title": "扬州炒饭 [recipe:dish-yangzhou-chao-fan]",
+            "relationship_id": "recipe:dish-yangzhou-chao-fan->ingredient:rice",
+            "source_description": "REQUIRES: 扬州炒饭 基准 2 人需 350g，原始用量来源 recipes.json/dish-yangzhou-chao-fan；其他人数和包装由业务服务计算。"
+          }
+        ]
+      },
+      "ingredient:shrimp": {
+        "ingredient": "虾 [ingredient:shrimp]",
+        "recipes": [
+          {
+            "recipe_id": "recipe:dish-yangzhou-chao-fan",
+            "title": "扬州炒饭 [recipe:dish-yangzhou-chao-fan]",
+            "relationship_id": "recipe:dish-yangzhou-chao-fan->ingredient:shrimp",
+            "source_description": "REQUIRES: 扬州炒饭 基准 2 人需 80g，原始用量来源 recipes.json/dish-yangzhou-chao-fan；其他人数和包装由业务服务计算。"
+          }
+        ]
+      },
+      "ingredient:green_pea": {
+        "ingredient": "豌豆 [ingredient:green_pea]",
+        "recipes": [
+          {
+            "recipe_id": "recipe:dish-yangzhou-chao-fan",
+            "title": "扬州炒饭 [recipe:dish-yangzhou-chao-fan]",
+            "relationship_id": "recipe:dish-yangzhou-chao-fan->ingredient:green_pea",
+            "source_description": "REQUIRES: 扬州炒饭 基准 2 人需 50g，原始用量来源 recipes.json/dish-yangzhou-chao-fan；其他人数和包装由业务服务计算。"
+          }
+        ]
+      },
+      "ingredient:pork": {
+        "ingredient": "猪肉 [ingredient:pork]",
+        "recipes": [
+          {
+            "recipe_id": "recipe:dish-qingjiao-rousi",
+            "title": "青椒肉丝 [recipe:dish-qingjiao-rousi]",
+            "relationship_id": "recipe:dish-qingjiao-rousi->ingredient:pork",
+            "source_description": "REQUIRES: 青椒肉丝 基准 2 人需 200g，原始用量来源 recipes.json/dish-qingjiao-rousi；其他人数和包装由业务服务计算。"
+          },
+          {
+            "recipe_id": "recipe:dish-huiguo-rou",
+            "title": "回锅肉 [recipe:dish-huiguo-rou]",
+            "relationship_id": "recipe:dish-huiguo-rou->ingredient:pork",
+            "source_description": "REQUIRES: 回锅肉 基准 2 人需 300g，原始用量来源 recipes.json/dish-huiguo-rou；其他人数和包装由业务服务计算。"
+          }
+        ]
+      },
+      "ingredient:bell_pepper": {
+        "ingredient": "青椒 [ingredient:bell_pepper]",
+        "recipes": [
+          {
+            "recipe_id": "recipe:dish-qingjiao-rousi",
+            "title": "青椒肉丝 [recipe:dish-qingjiao-rousi]",
+            "relationship_id": "recipe:dish-qingjiao-rousi->ingredient:bell_pepper",
+            "source_description": "REQUIRES: 青椒肉丝 基准 2 人需 200g，原始用量来源 recipes.json/dish-qingjiao-rousi；其他人数和包装由业务服务计算。"
+          },
+          {
+            "recipe_id": "recipe:dish-gongbao-jiding",
+            "title": "宫保鸡丁 [recipe:dish-gongbao-jiding]",
+            "relationship_id": "recipe:dish-gongbao-jiding->ingredient:bell_pepper",
+            "source_description": "REQUIRES: 宫保鸡丁 基准 2 人需 100g，原始用量来源 recipes.json/dish-gongbao-jiding；其他人数和包装由业务服务计算。"
+          },
+          {
+            "recipe_id": "recipe:dish-huiguo-rou",
+            "title": "回锅肉 [recipe:dish-huiguo-rou]",
+            "relationship_id": "recipe:dish-huiguo-rou->ingredient:bell_pepper",
+            "source_description": "REQUIRES: 回锅肉 基准 2 人需 100g，原始用量来源 recipes.json/dish-huiguo-rou；其他人数和包装由业务服务计算。"
+          },
+          {
+            "recipe_id": "recipe:dish-jiajiao-chaodan",
+            "title": "尖椒炒蛋 [recipe:dish-jiajiao-chaodan]",
+            "relationship_id": "recipe:dish-jiajiao-chaodan->ingredient:bell_pepper",
+            "source_description": "REQUIRES: 尖椒炒蛋 基准 2 人需 200g，原始用量来源 recipes.json/dish-jiajiao-chaodan；其他人数和包装由业务服务计算。"
+          }
+        ]
+      },
+      "ingredient:chicken_breast": {
+        "ingredient": "鸡胸肉 [ingredient:chicken_breast]",
+        "recipes": [
+          {
+            "recipe_id": "recipe:dish-gongbao-jiding",
+            "title": "宫保鸡丁 [recipe:dish-gongbao-jiding]",
+            "relationship_id": "recipe:dish-gongbao-jiding->ingredient:chicken_breast",
+            "source_description": "REQUIRES: 宫保鸡丁 基准 2 人需 250g，原始用量来源 recipes.json/dish-gongbao-jiding；其他人数和包装由业务服务计算。"
+          }
+        ]
+      },
+      "ingredient:peanut": {
+        "ingredient": "花生 [ingredient:peanut]",
+        "recipes": [
+          {
+            "recipe_id": "recipe:dish-gongbao-jiding",
+            "title": "宫保鸡丁 [recipe:dish-gongbao-jiding]",
+            "relationship_id": "recipe:dish-gongbao-jiding->ingredient:peanut",
+            "source_description": "REQUIRES: 宫保鸡丁 基准 2 人需 50g，原始用量来源 recipes.json/dish-gongbao-jiding；其他人数和包装由业务服务计算。"
+          }
+        ]
+      },
+      "ingredient:potato": {
+        "ingredient": "土豆 [ingredient:potato]",
+        "recipes": [
+          {
+            "recipe_id": "recipe:dish-suanla-tudousi",
+            "title": "酸辣土豆丝 [recipe:dish-suanla-tudousi]",
+            "relationship_id": "recipe:dish-suanla-tudousi->ingredient:potato",
+            "source_description": "REQUIRES: 酸辣土豆丝 基准 2 人需 350g，原始用量来源 recipes.json/dish-suanla-tudousi；其他人数和包装由业务服务计算。"
+          }
+        ]
+      },
+      "ingredient:cabbage": {
+        "ingredient": "卷心菜 [ingredient:cabbage]",
+        "recipes": [
+          {
+            "recipe_id": "recipe:dish-huiguo-rou",
+            "title": "回锅肉 [recipe:dish-huiguo-rou]",
+            "relationship_id": "recipe:dish-huiguo-rou->ingredient:cabbage",
+            "source_description": "REQUIRES: 回锅肉 基准 2 人需 100g，原始用量来源 recipes.json/dish-huiguo-rou；其他人数和包装由业务服务计算。"
+          }
+        ]
+      }
+    },
+    "query_revision": "canonical-scope-overview-v3",
+    "manifest": {
+      "corpus_revision": "ceres-knowledge-v1",
+      "files": {
+        "products.json": "8857a75c26387acb98023dd3b743e369a6d1f01fb1b64c24993fe3b87690f3e1",
+        "recipes.json": "1fd396fe8255961fd8c423817efe0d80a1a0ad8377b26e42104a76886c3ed45c",
+        "ingredients.json": "a9079a1c7ca8d3f94c4efdfa004ede7e48b5ea568f7cb8025804124ad82ca19d",
+        "policies.json": "7a370431a1a9c2df2b818218f3c54cb01946f93fa027aad44021dd1637f10502",
+        "knowledge-provenance.json": "bd0dbb60462ea1db3fdb0d36bb0cd12f8c86aa87e7b9ac1619fa9159bbef0fd9"
+      },
+      "implementation": {
+        "corpus.py": "8d8f1066d2935cc2e18bca77ef3a9af3a8c6aaee1ed6d49180d5edf4c2394e77",
+        "bge.py": "f9b22bee892e61f9954365e3bdca6ebe376edff5eed9995f121797659d9e5654",
+        "hybrid.py": "28cf7acca335d862106984bbec18b41980e2e2e63397f9c32ad8362d0422d9d2",
+        "graph.py": "095f84d5adfa906242ed504b1832d19178d8adcb41bc82e5d0e2213d2f93d8ce",
+        "providers.py": "1d55074c04c1bf40af31361a53de511410ad856ff1e21c902f3a35221a29bd0a"
+      },
+      "counts": {
+        "product": 71,
+        "recipe": 8,
+        "policy": 11
+      },
+      "graph_revision": "ceres-recipe-byog-v3",
+      "graphrag": "3.2.0",
+      "workflows": [
+        "create_communities",
+        "create_community_reports",
+        "generate_text_embeddings"
+      ],
+      "embedding_model": "BAAI/bge-small-zh-v1.5",
+      "embedding_revision": "7999e1d3359715c523056ef9478215996d62a620",
+      "dimensions": 512,
+      "graph_counts": {
+        "entities": 44,
+        "relationships": 61,
+        "text_units": 26
+      },
+      "output_counts": {
+        "entities": 44,
+        "relationships": 61,
+        "text_units": 26,
+        "communities": 11,
+        "community_reports": 11
+      },
+      "completion_model": "deepseek-flash",
+      "provider_host": "api.deepseek.com",
+      "provider_revision": "ceres-graphrag-provider-v1",
+      "community_grounding": "canonical-entity-witness-v1",
+      "calls": [
+        {
+          "kind": "completion",
+          "model": "deepseek-flash",
+          "duration_ms": 8268.015192821622,
+          "usage": {
+            "completion_tokens": 1140,
+            "prompt_tokens": 2860,
+            "total_tokens": 4000,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cache_write_tokens": null,
+              "cached_tokens": 2688
+            },
+            "prompt_cache_hit_tokens": 2688,
+            "prompt_cache_miss_tokens": 172
+          },
+          "streaming": false,
+          "structured": true
+        },
+        {
+          "kind": "completion",
+          "model": "deepseek-flash",
+          "duration_ms": 6079.877751879394,
+          "usage": {
+            "completion_tokens": 1187,
+            "prompt_tokens": 2860,
+            "total_tokens": 4047,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cache_write_tokens": null,
+              "cached_tokens": 2688
+            },
+            "prompt_cache_hit_tokens": 2688,
+            "prompt_cache_miss_tokens": 172
+          },
+          "streaming": false,
+          "structured": true
+        },
+        {
+          "kind": "completion",
+          "model": "deepseek-flash",
+          "duration_ms": 4862.616325961426,
+          "usage": {
+            "completion_tokens": 917,
+            "prompt_tokens": 2729,
+            "total_tokens": 3646,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cache_write_tokens": null,
+              "cached_tokens": 2560
+            },
+            "prompt_cache_hit_tokens": 2560,
+            "prompt_cache_miss_tokens": 169
+          },
+          "streaming": false,
+          "structured": true
+        },
+        {
+          "kind": "completion",
+          "model": "deepseek-flash",
+          "duration_ms": 7365.137219894677,
+          "usage": {
+            "completion_tokens": 1537,
+            "prompt_tokens": 2713,
+            "total_tokens": 4250,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cache_write_tokens": null,
+              "cached_tokens": 2560
+            },
+            "prompt_cache_hit_tokens": 2560,
+            "prompt_cache_miss_tokens": 153
+          },
+          "streaming": false,
+          "structured": true
+        },
+        {
+          "kind": "completion",
+          "model": "deepseek-flash",
+          "duration_ms": 5762.666866881773,
+          "usage": {
+            "completion_tokens": 1161,
+            "prompt_tokens": 3134,
+            "total_tokens": 4295,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cache_write_tokens": null,
+              "cached_tokens": 2944
+            },
+            "prompt_cache_hit_tokens": 2944,
+            "prompt_cache_miss_tokens": 190
+          },
+          "streaming": false,
+          "structured": true
+        },
+        {
+          "kind": "completion",
+          "model": "deepseek-flash",
+          "duration_ms": 8283.035405911505,
+          "usage": {
+            "completion_tokens": 1865,
+            "prompt_tokens": 3563,
+            "total_tokens": 5428,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cache_write_tokens": null,
+              "cached_tokens": 3328
+            },
+            "prompt_cache_hit_tokens": 3328,
+            "prompt_cache_miss_tokens": 235
+          },
+          "streaming": false,
+          "structured": true
+        },
+        {
+          "kind": "completion",
+          "model": "deepseek-flash",
+          "duration_ms": 4676.096180919558,
+          "usage": {
+            "completion_tokens": 1000,
+            "prompt_tokens": 3042,
+            "total_tokens": 4042,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cache_write_tokens": null,
+              "cached_tokens": 2816
+            },
+            "prompt_cache_hit_tokens": 2816,
+            "prompt_cache_miss_tokens": 226
+          },
+          "streaming": false,
+          "structured": true
+        },
+        {
+          "kind": "completion",
+          "model": "deepseek-flash",
+          "duration_ms": 5613.680514041334,
+          "usage": {
+            "completion_tokens": 1257,
+            "prompt_tokens": 3262,
+            "total_tokens": 4519,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cache_write_tokens": null,
+              "cached_tokens": 3072
+            },
+            "prompt_cache_hit_tokens": 3072,
+            "prompt_cache_miss_tokens": 190
+          },
+          "streaming": false,
+          "structured": true
+        },
+        {
+          "kind": "completion",
+          "model": "deepseek-flash",
+          "duration_ms": 4686.380167026073,
+          "usage": {
+            "completion_tokens": 1043,
+            "prompt_tokens": 3211,
+            "total_tokens": 4254,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cache_write_tokens": null,
+              "cached_tokens": 3072
+            },
+            "prompt_cache_hit_tokens": 3072,
+            "prompt_cache_miss_tokens": 139
+          },
+          "streaming": false,
+          "structured": true
+        },
+        {
+          "kind": "completion",
+          "model": "deepseek-flash",
+          "duration_ms": 7109.203769825399,
+          "usage": {
+            "completion_tokens": 1549,
+            "prompt_tokens": 3056,
+            "total_tokens": 4605,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cache_write_tokens": null,
+              "cached_tokens": 2816
+            },
+            "prompt_cache_hit_tokens": 2816,
+            "prompt_cache_miss_tokens": 240
+          },
+          "streaming": false,
+          "structured": true
+        },
+        {
+          "kind": "completion",
+          "model": "deepseek-flash",
+          "duration_ms": 6552.478700876236,
+          "usage": {
+            "completion_tokens": 1411,
+            "prompt_tokens": 3048,
+            "total_tokens": 4459,
+            "completion_tokens_details": null,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cache_write_tokens": null,
+              "cached_tokens": 2816
+            },
+            "prompt_cache_hit_tokens": 2816,
+            "prompt_cache_miss_tokens": 232
+          },
+          "streaming": false,
+          "structured": true
+        },
+        {
+          "kind": "embedding",
+          "model": "BAAI/bge-small-zh-v1.5",
+          "texts": 10,
+          "duration_ms": 20075.572072993964,
+          "prompt_tokens": 599
+        },
+        {
+          "kind": "embedding",
+          "model": "BAAI/bge-small-zh-v1.5",
+          "texts": 16,
+          "duration_ms": 20092.60282595642,
+          "prompt_tokens": 691
+        },
+        {
+          "kind": "embedding",
+          "model": "BAAI/bge-small-zh-v1.5",
+          "texts": 16,
+          "duration_ms": 179.64829597622156,
+          "prompt_tokens": 1177
+        },
+        {
+          "kind": "embedding",
+          "model": "BAAI/bge-small-zh-v1.5",
+          "texts": 16,
+          "duration_ms": 189.8108320310712,
+          "prompt_tokens": 1087
+        },
+        {
+          "kind": "embedding",
+          "model": "BAAI/bge-small-zh-v1.5",
+          "texts": 12,
+          "duration_ms": 109.31981005705893,
+          "prompt_tokens": 941
+        },
+        {
+          "kind": "embedding",
+          "model": "BAAI/bge-small-zh-v1.5",
+          "texts": 3,
+          "duration_ms": 210.88201412931085,
+          "prompt_tokens": 1536
+        },
+        {
+          "kind": "embedding",
+          "model": "BAAI/bge-small-zh-v1.5",
+          "texts": 4,
+          "duration_ms": 303.4038241021335,
+          "prompt_tokens": 2048
+        },
+        {
+          "kind": "embedding",
+          "model": "BAAI/bge-small-zh-v1.5",
+          "texts": 3,
+          "duration_ms": 191.49977108463645,
+          "prompt_tokens": 1536
+        },
+        {
+          "kind": "embedding",
+          "model": "BAAI/bge-small-zh-v1.5",
+          "texts": 1,
+          "duration_ms": 102.92226891033351,
+          "prompt_tokens": 512
+        }
+      ]
+    },
+    "calls": [
+      {
+        "kind": "completion",
+        "model": "deepseek-flash",
+        "duration_ms": 2845.5305360257626,
+        "usage": {
+          "completion_tokens": 576,
+          "prompt_tokens": 7878,
+          "total_tokens": 8454,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cache_write_tokens": null,
+            "cached_tokens": 7680
+          },
+          "prompt_cache_hit_tokens": 7680,
+          "prompt_cache_miss_tokens": 198
+        },
+        "streaming": false,
+        "structured": false
+      },
+      {
+        "kind": "completion",
+        "model": "deepseek-flash",
+        "duration_ms": 4541.53020796366,
+        "usage": {
+          "completion_tokens": 863,
+          "prompt_tokens": 6426,
+          "total_tokens": 7289,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cache_write_tokens": null,
+            "cached_tokens": 6272
+          },
+          "prompt_cache_hit_tokens": 6272,
+          "prompt_cache_miss_tokens": 154
+        },
+        "streaming": false,
+        "structured": false
+      },
+      {
+        "kind": "completion",
+        "model": "deepseek-flash",
+        "duration_ms": 2169.680155115202,
+        "usage": {
+          "completion_tokens": 489,
+          "prompt_tokens": 5083,
+          "total_tokens": 5572,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cache_write_tokens": null,
+            "cached_tokens": 4864
+          },
+          "prompt_cache_hit_tokens": 4864,
+          "prompt_cache_miss_tokens": 219
+        },
+        "streaming": false,
+        "structured": false
+      },
+      {
+        "kind": "completion",
+        "model": "deepseek-flash",
+        "duration_ms": 984.931109007448,
+        "usage": {
+          "completion_tokens": 8,
+          "prompt_tokens": 3068,
+          "total_tokens": 3076,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": {
+            "audio_tokens": null,
+            "cache_write_tokens": null,
+            "cached_tokens": 512
+          },
+          "prompt_cache_hit_tokens": 512,
+          "prompt_cache_miss_tokens": 2556
+        },
+        "streaming": true,
+        "structured": false
+      }
+    ]
+  },
+  "provider_model": "deepseek-flash",
+  "provider_host": "api.deepseek.com"
+}

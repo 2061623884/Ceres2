@@ -138,12 +138,16 @@ def digest_body(body):
 def append_event(db, receipt, kind, payload):
     # Callers either hold the session/receipt write lock or own this sole runner.
     sequence = (db.scalar(select(func.max(GuideRunEvent.sequence)).where(GuideRunEvent.run_id == receipt.run_id)) or 0) + 1
-    db.add(GuideRunEvent(run_id=receipt.run_id, sequence=sequence, type=kind, payload_json=json.dumps(payload, ensure_ascii=False)))
+    db.add(GuideRunEvent(run_id=receipt.run_id, sequence=sequence, type=kind,
+        payload_json=json.dumps(payload, ensure_ascii=False), recorded_at_ms=time.time()*1000))
     db.flush()
 
 
 def event_projection(receipt, row):
-    return {'protocol_version': 1, 'run_id': receipt.run_id, 'sequence': row.sequence, 'type': row.type, 'session_id': receipt.session_id, 'target_task_id': json.loads(receipt.anchor_json).get('task_id'), 'payload': json.loads(row.payload_json)}
+    elapsed_ms = row.recorded_at_ms-receipt.started_at*1000 if row.recorded_at_ms is not None and receipt.started_at is not None else None
+    return {'protocol_version': 1, 'run_id': receipt.run_id, 'sequence': row.sequence, 'type': row.type,
+        'recorded_at_ms':row.recorded_at_ms, 'elapsed_ms':elapsed_ms, 'session_id': receipt.session_id,
+        'target_task_id': json.loads(receipt.anchor_json).get('task_id'), 'payload': json.loads(row.payload_json)}
 
 
 def run_projection(receipt):

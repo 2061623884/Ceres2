@@ -1,0 +1,196 @@
+{
+  "browser": "Firefox 136.0 headless through Mozilla geckodriver 0.37.1",
+  "frontend_origin": "http://127.0.0.1:18444",
+  "isolated_backend_origin": "http://127.0.0.1:18013",
+  "isolated_database": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/work/ceres2-optimization/testing/tmp/browser-demo/business.sqlite3",
+  "journey_steps": [
+    "opened Ceres landing page in isolated native Firefox",
+    "searched the 71-SKU demo catalog for shrimp and opened a rendered result",
+    "opened product detail and added one item to cart",
+    "completed demo checkout and opened its immutable order snapshot",
+    "advanced order through submitted → shipped → delivered in the UI",
+    "entered Momo with the selected delivered order"
+  ],
+  "checks": {
+    "retrieval_rendered_shrimp_product": true,
+    "simulated_order_created": true,
+    "order_state_submitted_to_shipped_to_delivered": true
+  },
+  "result": "failed",
+  "error": "Cannot type into disabled INPUT element: {'bottom': 569.9000244140625, 'height': 18, 'left': 542, 'right': 802, 'top': 551.9000244140625, 'width': 260, 'x': 542, 'y': 551.9000244140625}",
+  "traceback": "Traceback (most recent call last):\n  File \"/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/backend/../work/ceres2-optimization/testing/browser_demo_journey.py\", line 316, in main\n    driver.send_keys(reason, \"签收时发现销售包装破损（Firefox浏览器演示）\")\n  File \"/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/backend/../work/ceres2-optimization/testing/browser_demo_journey.py\", line 157, in send_keys\n    raise BrowserFailure(f\"Cannot type into disabled {state['tag']} element: {state['rect']}\")\nBrowserFailure: Cannot type into disabled INPUT element: {'bottom': 569.9000244140625, 'height': 18, 'left': 542, 'right': 802, 'top': 551.9000244140625, 'width': 260, 'x': 542, 'y': 551.9000244140625}\n",
+  "proxy_api_calls": [
+    {
+      "method": "GET",
+      "path": "/api/v1/bootstrap",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/cart",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/categories",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/products",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/products",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/media/images/demo-butter-200g.jpg",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/media/images/demo-baking-powder-100g.jpg",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/products",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/products",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/media/images/demo-cream-cheese-200g.jpg",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/media/images/demo-cake-flour-250g.jpg",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/products/demo%3Ashrimp-200g",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/cart/items",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/cart",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/checkout/preview",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/checkout/confirm",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/cart",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/orders",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/orders/sim-52f8c16b22e845229e2bd276ed7bf8b8",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/orders/sim-52f8c16b22e845229e2bd276ed7bf8b8/demo-state",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/orders/sim-52f8c16b22e845229e2bd276ed7bf8b8/demo-state",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/guide/sessions",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/navigation/sessions/session-d529962a197e4d0da4c2c3ff5a1c7e54/opening",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/guide/sessions",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/guide/sessions/session-d529962a197e4d0da4c2c3ff5a1c7e54/status",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/mercury/sessions",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/mercury/sessions/ms_939f5ea1de1649fe8954ef73a79eff4d",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/mercury/sessions/ms_939f5ea1de1649fe8954ef73a79eff4d/order",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/mercury/orders",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/mercury/sessions/ms_939f5ea1de1649fe8954ef73a79eff4d/human-ticket",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/orders/sim-52f8c16b22e845229e2bd276ed7bf8b8",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/mercury/sessions/ms_939f5ea1de1649fe8954ef73a79eff4d/aftersales",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/mercury/sessions/ms_939f5ea1de1649fe8954ef73a79eff4d/photos",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/mercury/sessions/ms_939f5ea1de1649fe8954ef73a79eff4d/photos/photo-556b9465c5b34a588d687cf1dbd72760",
+      "status": 200
+    }
+  ],
+  "failure_page_text": "我的模拟订单\n\n模拟数据，不代表真实支付或配送\n\n← 返回订单列表\n\nsim-52f8c16b22e845229e2bd276ed7bf8b8\n\n10/7/2026, 5:47:06 PM · 模拟状态：delivered\n\n演示虾仁200克 × 1\n\n15.90 元 / 件 · 15.90 元\n\n合计 15.90 元\n\n联系墨墨\n主页\n商品\n我再逛逛\n个人中心\n可可 · 选购\n墨墨 · 订单售后\n×\n\n墨墨\n\n模拟订单 · 查询与售后\n\n演示虾仁200克 · store-demo-01 · 订单版本 3\n\n模拟售后 · 先查看提案，再确认提交\n\n问题销售包装数\n照片（最多3张，每张4MB）\n\n照片供人工查看，不自动判断责任或真实性。\n\n查看申请提案\n异步人工工单\n您好！我是墨墨 🍞\n一般政策无需选择订单。我也可以帮您查询模拟订单、物流和售后资格。查询不会提交申请；退款或退货会先展示具体提案，确认后才提交模拟申请。\n✦📦 查订单\n✦🚚 查物流\n✦💰 退款\n✦🔄 退货",
+  "failure_screenshot": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/work/ceres2-optimization/testing/tmp/browser-demo/browser-demo-failure.png"
+}

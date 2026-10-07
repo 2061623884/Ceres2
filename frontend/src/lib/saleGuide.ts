@@ -132,6 +132,9 @@ export interface Product {
   sellable?: boolean;
   source?: string;
   spec_unit?: string | null;
+  spec_quantity: number | null;
+  brand: string | null;
+  available_qty: number | null;
 }
 
 export interface Category {
@@ -580,6 +583,8 @@ export interface TurnStreamEvent {
   run_id: string;
   sequence: number;
   type: string;
+  recorded_at_ms: number | null;
+  elapsed_ms: number | null;
   session_id: string;
   target_task_id?: string | null;
   message_id?: string | null;
@@ -590,6 +595,7 @@ export interface TurnStreamCallbacks {
   onAccepted?: (event: TurnStreamEvent) => void;
   onProgress?: (event: TurnStreamEvent) => void;
   onAnswerDelta?: (event: TurnStreamEvent) => void;
+  onInterimMessage?: (event: TurnStreamEvent) => void;
   onPlanReady?: (event: TurnStreamEvent) => void;
   onClarification?: (event: TurnStreamEvent) => void;
   onTurnCompleted?: (event: TurnStreamEvent) => void;
@@ -642,6 +648,9 @@ function dispatchStreamEvent(event: TurnStreamEvent, callbacks?: TurnStreamCallb
       return null;
     case 'answer.delta':
       callbacks?.onAnswerDelta?.(event);
+      return null;
+    case 'message.interim':
+      callbacks?.onInterimMessage?.(event);
       return null;
     case 'plan.ready':
       callbacks?.onPlanReady?.(event);

@@ -6,7 +6,8 @@ from app.mercury import policy
 CLARIFICATIONS = {
     'query_topic': '请说明要查询订单、物流、退款资格、退货资格还是政策。',
     'item': '请说明要咨询订单中的哪件商品。',
-    'reason': '请说明申请退款或退货的原因。',
+    'reason': '请说明售后申请的原因。',
+    'problem_quantity': '这件商品有几个销售包装存在问题？请按订单中的包装件数说明。',
 }
 
 READS = ('get_order_details', 'get_delivery_status', 'check_refund_eligibility',
@@ -23,7 +24,7 @@ def schemas():
         "name": "search_after_sales_policy", "description": "无需选择订单，检索一般售后政策及来源。政策不证明具体订单资格，不授权申请。",
         "parameters": {"type": "object", "properties": {
             "query": {"type": "string", "minLength": 1},
-            "category": {"type": "string", "enum": ["refund", "return", "delivery"]}},
+            "category": {"type": "string", "enum": list(policy.CATEGORIES)}},
             "required": ["query"]}
     }})
     tools.append({"type": "function", "function": {
@@ -33,10 +34,11 @@ def schemas():
             "required": ["slot"], "additionalProperties": False}
     }})
     tools.append({"type": "function", "function": {
-        "name": "prepare_aftersales_proposal", "description": "仅在用户明确要求申请退款或退货时准备具体提案，不提交申请。整单退款(kind=refund)必须省略item_id或传null；只有用户明确选定整行退货商品时才传item_id。纯资格查询使用查询工具。",
+        "name": "prepare_aftersales_proposal", "description": "用户明确要求申请时才准备提案，不提交。refund是未发货整单退款；return是无理由整行退货；quality是签收后的质量问题登记；fulfillment是签收后的漏送错送或包装破损登记。后两者按问题销售包装数交人工核对，不受不可无理由退货标记拒绝，必须给明确item_id和problem_quantity；不知道数量先询问。纯资格查询使用查询工具。",
         "parameters": {"type": "object", "properties": {
-            "order_id": {"type": "string"}, "kind": {"type": "string", "enum": ["refund", "return"]},
-            "item_id": {"type": ["string", "null"], "description": "仅在用户明确选择整行退货商品时填写；整单退款必须省略或设为null。"}, "reason": {"type": "string", "minLength": 1, "maxLength": 1000}},
+            "order_id": {"type": "string"}, "kind": {"type": "string", "enum": ["refund", "return", "quality", "fulfillment"]},
+            "problem_quantity": {"type": "integer", "minimum": 1},
+            "item_id": {"type": ["string", "null"], "description": "无理由退货、质量或履约登记时填写用户明确选择的订单商品；整单退款必须省略或设为null。"}, "reason": {"type": "string", "minLength": 1, "maxLength": 1000}},
             "required": ["order_id", "kind", "reason"], "additionalProperties": False}
     }})
     from app.schemas.memory import memory_tool_schema
@@ -59,7 +61,7 @@ def execute(name, arguments, *, owner_id, order_id, order_service):
         return {"ok": True, "data": {"slot": args["slot"]}}
     if name == "search_after_sales_policy":
         if (not isinstance(args.get("query"), str) or not args["query"].strip()
-                or ("category" in args and args["category"] not in ("refund", "return", "delivery"))):
+                or ("category" in args and args["category"] not in policy.CATEGORIES)):
             return {"ok": False, "error": "BAD_ARGUMENTS", "message": "政策查询问题或类别不合法。"}
         return policy.search_policies(args["query"], args.get("category"))
     if args.get("order_id") != order_id:
@@ -104,17 +106,19 @@ def proposal_arguments(arguments, order_id, selection_version):
         args = json.loads(arguments)
     except (ValueError, TypeError) as error:
         raise AppError(422, 'BAD_ARGUMENTS', '申请提案参数不合法') from error
-    if (not isinstance(args, dict) or set(args) - {'order_id','kind','item_id','reason'}
-        or args.get('order_id') != order_id or args.get('kind') not in ('refund','return')
-        or not isinstance(args.get('reason'),str) or not args['reason'].strip() or len(args['reason']) > 1000
-        or (args.get('item_id') is not None and not isinstance(args['item_id'],str))):
+    if not isinstance(args, dict) or args.get('order_id') != order_id:
         raise AppError(422, 'BAD_ARGUMENTS', '请明确当前订单、售后类型、商品和原因')
-    return {'kind':args['kind'],'item_id':args.get('item_id'),'reason':args['reason'],
-            'selection_version':selection_version}
+    from pydantic import ValidationError
+    from app.mercury.router import ProposalRequest
+    try:
+        return ProposalRequest.model_validate({**{key:value for key,value in args.items() if key != 'order_id'}, 'selection_version':selection_version}).model_dump()
+    except ValidationError as error:
+        raise AppError(422, 'BAD_ARGUMENTS', '请明确当前订单、售后类型、商品、问题包装数和原因') from error
 
 
 def proposal_summary(preview):
     items = '、'.join(f"{item['name']} × {item['quantity']}" for item in preview['items'])
-    return (f"待确认模拟{'整单退款' if preview['kind'] == 'refund' else '整行退货'}提案：订单 {preview['order_id']}；"
+    label = {'refund':'整单退款', 'return':'整行退货', 'quality':'质量问题登记', 'fulfillment':'履约异常登记'}[preview['kind']]
+    return (f"待确认模拟{label}提案：订单 {preview['order_id']}；"
             f"{items}；预计金额 {preview['amount_fen']/100:.2f} 元；原因：{preview['reason']}；"
             f"政策 {preview['policy_id']}：{preview['policy']} 请查看提案后点击确认提交。未提交任何申请。")

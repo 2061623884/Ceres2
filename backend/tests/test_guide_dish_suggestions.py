@@ -25,7 +25,7 @@ def test_suggestions_then_first_choice_requeries_recipe_and_waits_for_confirmati
     assert events[-1]['type'] == 'turn.completed', events
     result = events[-1]['payload']
     assert '1. 番茄炒蛋' in result['message']
-    assert '2. 蛋炒饭' in result['message']
+    assert '蛋炒饭' in {dish['name'] for dish in result['dish_candidates']}
     assert result['plan'] is None
     assert client.get('/api/v1/cart').json()['items'] == []
     observed = []

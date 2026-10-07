@@ -1,0 +1,21 @@
+# Standards review
+
+Fixed point: `b118dbea3852026c6a04c790b1e27df67c3c9c18`; `commit list=[]`. Reviewed the tracked diff and snapshot sources; excluded generated databases/indexes. This reviewer ran no tests, lint, typecheck, build, or install.
+
+## Findings
+
+No confirmed hard standards violation. Python remains business authority (ADR 0002); fixtures remain local, generated outputs untracked, and the optimization TASK owns status (`AGENTS.md`, `docs/agents/issue-tracker.md`).
+
+**Possible Fowler smell — Duplicated Code:** `runtime/pi/src/worker.ts:147–176,280–301` has similar audit-Agent setup. Ordinary audit failure stops the request; interim audit failure withholds an optional message. This remains a non-actionable heuristic unless an abstraction preserves both contracts; not a standards breach.
+
+## Incremental review
+
+After-sales changes keep explicit package counts/photo scope and commit the application, receipt, and handoff together (`backend/app/mercury/aftersales.py:78–92,198–217`). Seed correction is limited to two provenance-listed chips SKUs and preserves existing Offers (`backend/app/services/seed_service.py:45–56`, `data/fixtures/knowledge-provenance.json:32–42`). Evaluation labels remain human-authored, and development regressions are distinguished from independent acceptance (`backend/app/evaluation/annotate_runs.py:10–35`, `evals/README.md:3–23`).
+
+Event timing uses nullable additive storage and does not rewrite old payloads or cached results; API, exporter, and frontend contracts align (`backend/app/migrations/__init__.py:34–37`, `backend/app/services/guide_run_service.py:146–150`, `backend/app/evaluation/export_runs.py:26–39`, `frontend/src/lib/saleGuide.ts:581–591`). Human-ticket reads exclude later responsibility generations (`backend/app/human/service.py:37–54`), with lifecycle readback coverage (`backend/tests/test_integrated_lifecycle.py:195–212`).
+
+The Pi main request uses native `tool_choice=auto` without JSON mode, supported by the documented same-version A/B evidence; official-host thinking remains disabled (`runtime/pi/src/worker.ts:210–218`, `docs/adr/0004-demo-knowledge-retrieval.md:13`). `finish_response` is a non-business tool gated on `guide_request`; its arguments retain existing answer-kind callers, end the loop, and remain subject to Python `_answer` reference checks (`runtime/pi/src/worker.ts:127–145,227–234,317`, `backend/app/services/pi_product_runtime.py:352–364`). Completion text is not published as interim.
+
+`recipe_facts` validates refs against this run’s searched dishes and ingredient IDs against those dishes, presents fixture-backed base quantities/shared required ingredients, and reads candidate products through current Catalog/Offer (`backend/app/services/pi_product_runtime.py:414–447`, `backend/app/services/dish_service.py:36–39`, `docs/plans/ceres2-optimization-spec.md:114`). It does not propose or mutate a cart. `graph_retrieval` records actual query revision and manifest (`backend/app/services/pi_product_runtime.py:140–153`). The new completion/recipe guards are task-backed, not speculative parameters.
+
+Latest delta: the interim-only prompt rejects positive recipe ingredient, quantity, serving, and shared-ingredient assertions as task facts; `GENERAL_CLAIM_PROMPT` is unchanged (`runtime/pi/src/general-claim.ts:2,4`; `worker.ts:153,282`). Tester reports final `current-prompt-v2` regression 441/441, 16 focused runtime/typecheck/build and thinking/native/controlled checks passed, and exact-prompt semantic smoke 13/13; the latter remains same-model and non-blind (`work/ceres2-optimization/testing/backend-full-regression-current-prompt-v2-2026-10-07.json:1–19`, `interim-claim-semantic-audit-v2-2026-10-07.json:1–20`, `tasks/ceres2-optimization.md:50`). Firefox v6 records one fully visible interim before terminal seq17 and no result-introduction call (`browser-interim-smoke-recipe-facts-visible-v6-2026-10-07.json:39–44,63–100,252–340`); TASK records visible final recipe facts (`tasks/ceres2-optimization.md:52`). It used manual-role fallback and frame-boundary pauses, so does not establish automatic routing or unassisted latency. Task remains 待验收 pending user acceptance, independent scoring, and human review (`tasks/ceres2-optimization.md:52–56`). No standards issue; I ran no tests.

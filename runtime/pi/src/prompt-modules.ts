@@ -16,7 +16,7 @@ const shopping = (capability: TurnContext['capability']) => capability === 'expl
 
 export function selectTools(tools: AgentTool[], capability: TurnContext['capability']): AgentTool[] {
   if (shopping(capability)) return tools;
-  return tools.filter(tool => !shoppingTools.has(tool.name) && (capability !== 'chat' || !['compare_products', 'search_dishes'].includes(tool.name)));
+  return tools.filter(tool => !shoppingTools.has(tool.name) && (capability !== 'chat' || !['compare_products', 'search_dishes', 'search_recipe_relations'].includes(tool.name)));
 }
 
 export function composePrompt(modules: PromptModules, context: TurnContext, capability: TurnContext['capability']): string {

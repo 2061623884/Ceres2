@@ -1,0 +1,1309 @@
+{
+  "index_path": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/data/indexes/hybrid.sqlite3",
+  "model_id": "BAAI/bge-small-zh-v1.5",
+  "model_revision": "7999e1d3359715c523056ef9478215996d62a620",
+  "dimensions": 512,
+  "index_audit": {
+    "counts": {
+      "recipe": 8,
+      "product": 71,
+      "policy": 11
+    },
+    "documents": 90,
+    "all_vectors_512_f32": true,
+    "offers_fixture_excluded": true,
+    "dynamic_price_inventory_fields_absent": true,
+    "manifest": {
+      "corpus_revision": "ceres-knowledge-v1",
+      "files": {
+        "products.json": "8857a75c26387acb98023dd3b743e369a6d1f01fb1b64c24993fe3b87690f3e1",
+        "recipes.json": "1fd396fe8255961fd8c423817efe0d80a1a0ad8377b26e42104a76886c3ed45c",
+        "ingredients.json": "a9079a1c7ca8d3f94c4efdfa004ede7e48b5ea568f7cb8025804124ad82ca19d",
+        "policies.json": "7a370431a1a9c2df2b818218f3c54cb01946f93fa027aad44021dd1637f10502",
+        "knowledge-provenance.json": "bd0dbb60462ea1db3fdb0d36bb0cd12f8c86aa87e7b9ac1619fa9159bbef0fd9"
+      },
+      "implementation": {
+        "corpus.py": "8d8f1066d2935cc2e18bca77ef3a9af3a8c6aaee1ed6d49180d5edf4c2394e77",
+        "bge.py": "f9b22bee892e61f9954365e3bdca6ebe376edff5eed9995f121797659d9e5654",
+        "hybrid.py": "f930a76aa085536ec543ec02830e96174cc81d6ee05427cd740880371cb5f382",
+        "graph.py": "c1a70eddf0c768f4c33c0f46851ff70445b4c495a8b986b86551b3a0b9802cab",
+        "providers.py": "1d55074c04c1bf40af31361a53de511410ad856ff1e21c902f3a35221a29bd0a"
+      },
+      "counts": {
+        "product": 71,
+        "recipe": 8,
+        "policy": 11
+      },
+      "embedding_model": "BAAI/bge-small-zh-v1.5",
+      "embedding_revision": "7999e1d3359715c523056ef9478215996d62a620",
+      "dimensions": 512,
+      "pooling": "normalized-cls",
+      "query_instruction": "",
+      "tokenizer_revision": "zh-unigrams-bigrams-ascii-v2",
+      "rrf_k": 60,
+      "relevance_revision": "retrieval-dev-v2-literal-or-dense",
+      "relevance_floors": {
+        "recipe": 0.54,
+        "product": 0.56,
+        "policy": 0.5
+      },
+      "calibration_sha256": "eb47a57f89fc65d56d3e74a9b68947d096ba485d5c08051f29dc9a97aa12652e"
+    }
+  },
+  "queries": [
+    {
+      "namespace": "recipe",
+      "query": "番茄炒蛋",
+      "expected_positive_ids": [
+        "dish-fanqie-chao-dan"
+      ],
+      "positive_ids_recalled_in_rrf_candidates": [
+        "dish-fanqie-chao-dan"
+      ],
+      "positive_ids_recalled_in_relevance_hits": [
+        "dish-fanqie-chao-dan"
+      ],
+      "hits_empty": false,
+      "sparse_count": 4,
+      "sparse_top5": [
+        {
+          "id": "dish-fanqie-chao-dan",
+          "score": -32.237093246475396
+        },
+        {
+          "id": "dish-jiajiao-chaodan",
+          "score": -10.00417393046775
+        },
+        {
+          "id": "dish-dan-chao-fan",
+          "score": -5.237780786112646
+        },
+        {
+          "id": "dish-yangzhou-chao-fan",
+          "score": -3.671784562182957
+        }
+      ],
+      "dense_count": 8,
+      "dense_top3": [
+        {
+          "id": "dish-fanqie-chao-dan",
+          "score": 0.8098695278167725
+        },
+        {
+          "id": "dish-jiajiao-chaodan",
+          "score": 0.6397520899772644
+        },
+        {
+          "id": "dish-dan-chao-fan",
+          "score": 0.5936989784240723
+        }
+      ],
+      "rrf_top5": [
+        {
+          "id": "dish-fanqie-chao-dan",
+          "score": 0.03278688524590164,
+          "ranks": {
+            "sparse": 1,
+            "dense": 1
+          },
+          "scores": {
+            "sparse": -32.237093246475396,
+            "dense": 0.8098695278167725
+          }
+        },
+        {
+          "id": "dish-jiajiao-chaodan",
+          "score": 0.03225806451612903,
+          "ranks": {
+            "sparse": 2,
+            "dense": 2
+          },
+          "scores": {
+            "sparse": -10.00417393046775,
+            "dense": 0.6397520899772644
+          }
+        },
+        {
+          "id": "dish-dan-chao-fan",
+          "score": 0.031746031746031744,
+          "ranks": {
+            "sparse": 3,
+            "dense": 3
+          },
+          "scores": {
+            "sparse": -5.237780786112646,
+            "dense": 0.5936989784240723
+          }
+        },
+        {
+          "id": "dish-yangzhou-chao-fan",
+          "score": 0.03125,
+          "ranks": {
+            "sparse": 4,
+            "dense": 4
+          },
+          "scores": {
+            "sparse": -3.671784562182957,
+            "dense": 0.4862673282623291
+          }
+        },
+        {
+          "id": "dish-huiguo-rou",
+          "score": 0.015384615384615385,
+          "ranks": {
+            "dense": 5
+          },
+          "scores": {
+            "dense": 0.3898769021034241
+          }
+        }
+      ],
+      "relevance_hits_top5": [
+        {
+          "id": "dish-fanqie-chao-dan",
+          "score": 0.03278688524590164,
+          "ranks": {
+            "sparse": 1,
+            "dense": 1
+          },
+          "scores": {
+            "sparse": -32.237093246475396,
+            "dense": 0.8098695278167725
+          }
+        },
+        {
+          "id": "dish-jiajiao-chaodan",
+          "score": 0.03225806451612903,
+          "ranks": {
+            "sparse": 2,
+            "dense": 2
+          },
+          "scores": {
+            "sparse": -10.00417393046775,
+            "dense": 0.6397520899772644
+          }
+        },
+        {
+          "id": "dish-dan-chao-fan",
+          "score": 0.031746031746031744,
+          "ranks": {
+            "sparse": 3,
+            "dense": 3
+          },
+          "scores": {
+            "sparse": -5.237780786112646,
+            "dense": 0.5936989784240723
+          }
+        }
+      ],
+      "rrf_formula_verified": true
+    },
+    {
+      "namespace": "recipe",
+      "query": "什锦炒饭",
+      "expected_positive_ids": [
+        "dish-yangzhou-chao-fan"
+      ],
+      "positive_ids_recalled_in_rrf_candidates": [
+        "dish-yangzhou-chao-fan"
+      ],
+      "positive_ids_recalled_in_relevance_hits": [
+        "dish-yangzhou-chao-fan"
+      ],
+      "hits_empty": false,
+      "sparse_count": 4,
+      "sparse_top5": [
+        {
+          "id": "dish-yangzhou-chao-fan",
+          "score": -26.749020285790472
+        },
+        {
+          "id": "dish-dan-chao-fan",
+          "score": -12.149119554242557
+        },
+        {
+          "id": "dish-fanqie-chao-dan",
+          "score": -2.107827905954859
+        },
+        {
+          "id": "dish-jiajiao-chaodan",
+          "score": -2.081699384564575
+        }
+      ],
+      "dense_count": 8,
+      "dense_top3": [
+        {
+          "id": "dish-yangzhou-chao-fan",
+          "score": 0.7509927749633789
+        },
+        {
+          "id": "dish-dan-chao-fan",
+          "score": 0.6375530958175659
+        },
+        {
+          "id": "dish-jiajiao-chaodan",
+          "score": 0.5294778347015381
+        }
+      ],
+      "rrf_top5": [
+        {
+          "id": "dish-yangzhou-chao-fan",
+          "score": 0.03278688524590164,
+          "ranks": {
+            "sparse": 1,
+            "dense": 1
+          },
+          "scores": {
+            "sparse": -26.749020285790472,
+            "dense": 0.7509927749633789
+          }
+        },
+        {
+          "id": "dish-dan-chao-fan",
+          "score": 0.03225806451612903,
+          "ranks": {
+            "sparse": 2,
+            "dense": 2
+          },
+          "scores": {
+            "sparse": -12.149119554242557,
+            "dense": 0.6375530958175659
+          }
+        },
+        {
+          "id": "dish-fanqie-chao-dan",
+          "score": 0.03149801587301587,
+          "ranks": {
+            "sparse": 3,
+            "dense": 4
+          },
+          "scores": {
+            "sparse": -2.107827905954859,
+            "dense": 0.49944940209388733
+          }
+        },
+        {
+          "id": "dish-jiajiao-chaodan",
+          "score": 0.03149801587301587,
+          "ranks": {
+            "sparse": 4,
+            "dense": 3
+          },
+          "scores": {
+            "sparse": -2.081699384564575,
+            "dense": 0.5294778347015381
+          }
+        },
+        {
+          "id": "dish-huiguo-rou",
+          "score": 0.015384615384615385,
+          "ranks": {
+            "dense": 5
+          },
+          "scores": {
+            "dense": 0.4646090269088745
+          }
+        }
+      ],
+      "relevance_hits_top5": [
+        {
+          "id": "dish-yangzhou-chao-fan",
+          "score": 0.03278688524590164,
+          "ranks": {
+            "sparse": 1,
+            "dense": 1
+          },
+          "scores": {
+            "sparse": -26.749020285790472,
+            "dense": 0.7509927749633789
+          }
+        },
+        {
+          "id": "dish-dan-chao-fan",
+          "score": 0.03225806451612903,
+          "ranks": {
+            "sparse": 2,
+            "dense": 2
+          },
+          "scores": {
+            "sparse": -12.149119554242557,
+            "dense": 0.6375530958175659
+          }
+        }
+      ],
+      "rrf_formula_verified": true
+    },
+    {
+      "namespace": "product",
+      "query": "炒饭用的虾仁",
+      "expected_positive_ids": [
+        "demo:shrimp-200g"
+      ],
+      "positive_ids_recalled_in_rrf_candidates": [
+        "demo:shrimp-200g"
+      ],
+      "positive_ids_recalled_in_relevance_hits": [
+        "demo:shrimp-200g"
+      ],
+      "hits_empty": false,
+      "sparse_count": 10,
+      "sparse_top5": [
+        {
+          "id": "demo:shrimp-200g",
+          "score": -27.621916772585827
+        },
+        {
+          "id": "demo:rice-2kg",
+          "score": -9.869689976886853
+        },
+        {
+          "id": "demo:green-pea-300g",
+          "score": -7.585407592780761
+        },
+        {
+          "id": "demo:shrimp-paste-200g",
+          "score": -5.777846775049772
+        },
+        {
+          "id": "demo:bell-pepper-300g",
+          "score": -1.864849902220346
+        }
+      ],
+      "dense_count": 10,
+      "dense_top3": [
+        {
+          "id": "demo:shrimp-200g",
+          "score": 0.7040766477584839
+        },
+        {
+          "id": "demo:shrimp-paste-200g",
+          "score": 0.5501391291618347
+        },
+        {
+          "id": "demo:green-pea-300g",
+          "score": 0.5263403058052063
+        }
+      ],
+      "rrf_top5": [
+        {
+          "id": "demo:shrimp-200g",
+          "score": 0.03278688524590164,
+          "ranks": {
+            "sparse": 1,
+            "dense": 1
+          },
+          "scores": {
+            "sparse": -27.621916772585827,
+            "dense": 0.7040766477584839
+          }
+        },
+        {
+          "id": "demo:shrimp-paste-200g",
+          "score": 0.031754032258064516,
+          "ranks": {
+            "sparse": 4,
+            "dense": 2
+          },
+          "scores": {
+            "sparse": -5.777846775049772,
+            "dense": 0.5501391291618347
+          }
+        },
+        {
+          "id": "demo:green-pea-300g",
+          "score": 0.031746031746031744,
+          "ranks": {
+            "sparse": 3,
+            "dense": 3
+          },
+          "scores": {
+            "sparse": -7.585407592780761,
+            "dense": 0.5263403058052063
+          }
+        },
+        {
+          "id": "demo:bell-pepper-300g",
+          "score": 0.031009615384615385,
+          "ranks": {
+            "sparse": 5,
+            "dense": 4
+          },
+          "scores": {
+            "sparse": -1.864849902220346,
+            "dense": 0.5240198373794556
+          }
+        },
+        {
+          "id": "demo:rice-2kg",
+          "score": 0.030834914611005692,
+          "ranks": {
+            "sparse": 2,
+            "dense": 8
+          },
+          "scores": {
+            "sparse": -9.869689976886853,
+            "dense": 0.4939090311527252
+          }
+        }
+      ],
+      "relevance_hits_top5": [
+        {
+          "id": "demo:shrimp-200g",
+          "score": 0.03278688524590164,
+          "ranks": {
+            "sparse": 1,
+            "dense": 1
+          },
+          "scores": {
+            "sparse": -27.621916772585827,
+            "dense": 0.7040766477584839
+          }
+        }
+      ],
+      "rrf_formula_verified": true
+    },
+    {
+      "namespace": "product",
+      "query": "苹果",
+      "expected_positive_ids": [],
+      "positive_ids_recalled_in_rrf_candidates": [],
+      "positive_ids_recalled_in_relevance_hits": [],
+      "hits_empty": true,
+      "sparse_count": 3,
+      "sparse_top5": [
+        {
+          "id": "demo:AC-juice-300ml-bottle",
+          "score": -5.655191240932307
+        },
+        {
+          "id": "demo:AC-fruit-platter-300g-box",
+          "score": -5.563335167687686
+        },
+        {
+          "id": "demo:cn-minute-maid-peach-450ml-bottle",
+          "score": -2.539434893489761
+        }
+      ],
+      "dense_count": 10,
+      "dense_top3": [
+        {
+          "id": "demo:AC-juice-300ml-bottle",
+          "score": 0.5051794052124023
+        },
+        {
+          "id": "demo:AC-fruit-platter-300g-box",
+          "score": 0.4910505712032318
+        },
+        {
+          "id": "demo:tomato-fresh-500g",
+          "score": 0.4611087441444397
+        }
+      ],
+      "rrf_top5": [
+        {
+          "id": "demo:AC-juice-300ml-bottle",
+          "score": 0.03278688524590164,
+          "ranks": {
+            "sparse": 1,
+            "dense": 1
+          },
+          "scores": {
+            "sparse": -5.655191240932307,
+            "dense": 0.5051794052124023
+          }
+        },
+        {
+          "id": "demo:AC-fruit-platter-300g-box",
+          "score": 0.03225806451612903,
+          "ranks": {
+            "sparse": 2,
+            "dense": 2
+          },
+          "scores": {
+            "sparse": -5.563335167687686,
+            "dense": 0.4910505712032318
+          }
+        },
+        {
+          "id": "demo:cn-minute-maid-peach-450ml-bottle",
+          "score": 0.015873015873015872,
+          "ranks": {
+            "sparse": 3
+          },
+          "scores": {
+            "sparse": -2.539434893489761
+          }
+        },
+        {
+          "id": "demo:tomato-fresh-500g",
+          "score": 0.015873015873015872,
+          "ranks": {
+            "dense": 3
+          },
+          "scores": {
+            "dense": 0.4611087441444397
+          }
+        },
+        {
+          "id": "demo:eggs-fresh-6pack",
+          "score": 0.015625,
+          "ranks": {
+            "dense": 4
+          },
+          "scores": {
+            "dense": 0.45361465215682983
+          }
+        }
+      ],
+      "relevance_hits_top5": [],
+      "rrf_formula_verified": true
+    },
+    {
+      "namespace": "policy",
+      "query": "未发货取消订单",
+      "expected_positive_ids": [
+        "P-REF-01"
+      ],
+      "positive_ids_recalled_in_rrf_candidates": [
+        "P-REF-01"
+      ],
+      "positive_ids_recalled_in_relevance_hits": [
+        "P-REF-01"
+      ],
+      "hits_empty": false,
+      "sparse_count": 10,
+      "sparse_top5": [
+        {
+          "id": "P-REF-01",
+          "score": -36.85588120418392
+        },
+        {
+          "id": "P-ORD-01",
+          "score": -30.045931813620662
+        },
+        {
+          "id": "P-PRI-01",
+          "score": -7.187368305147075
+        },
+        {
+          "id": "P-DEL-01",
+          "score": -6.949963373605035
+        },
+        {
+          "id": "P-QUA-01",
+          "score": -6.811072267271938
+        }
+      ],
+      "dense_count": 10,
+      "dense_top3": [
+        {
+          "id": "P-REF-01",
+          "score": 0.7524361610412598
+        },
+        {
+          "id": "P-ORD-01",
+          "score": 0.6430987119674683
+        },
+        {
+          "id": "P-RET-02",
+          "score": 0.6203026175498962
+        }
+      ],
+      "rrf_top5": [
+        {
+          "id": "P-REF-01",
+          "score": 0.03278688524590164,
+          "ranks": {
+            "sparse": 1,
+            "dense": 1
+          },
+          "scores": {
+            "sparse": -36.85588120418392,
+            "dense": 0.7524361610412598
+          }
+        },
+        {
+          "id": "P-ORD-01",
+          "score": 0.03225806451612903,
+          "ranks": {
+            "sparse": 2,
+            "dense": 2
+          },
+          "scores": {
+            "sparse": -30.045931813620662,
+            "dense": 0.6430987119674683
+          }
+        },
+        {
+          "id": "P-DEL-01",
+          "score": 0.030776515151515152,
+          "ranks": {
+            "sparse": 4,
+            "dense": 6
+          },
+          "scores": {
+            "sparse": -6.949963373605035,
+            "dense": 0.5314828753471375
+          }
+        },
+        {
+          "id": "P-RET-01",
+          "score": 0.030776515151515152,
+          "ranks": {
+            "sparse": 6,
+            "dense": 4
+          },
+          "scores": {
+            "sparse": -6.554153190012903,
+            "dense": 0.6115294694900513
+          }
+        },
+        {
+          "id": "P-PRI-01",
+          "score": 0.03036576949620428,
+          "ranks": {
+            "sparse": 3,
+            "dense": 9
+          },
+          "scores": {
+            "sparse": -7.187368305147075,
+            "dense": 0.5122076272964478
+          }
+        }
+      ],
+      "relevance_hits_top5": [
+        {
+          "id": "P-REF-01",
+          "score": 0.03278688524590164,
+          "ranks": {
+            "sparse": 1,
+            "dense": 1
+          },
+          "scores": {
+            "sparse": -36.85588120418392,
+            "dense": 0.7524361610412598
+          }
+        },
+        {
+          "id": "P-ORD-01",
+          "score": 0.03225806451612903,
+          "ranks": {
+            "sparse": 2,
+            "dense": 2
+          },
+          "scores": {
+            "sparse": -30.045931813620662,
+            "dense": 0.6430987119674683
+          }
+        },
+        {
+          "id": "P-DEL-01",
+          "score": 0.030776515151515152,
+          "ranks": {
+            "sparse": 4,
+            "dense": 6
+          },
+          "scores": {
+            "sparse": -6.949963373605035,
+            "dense": 0.5314828753471375
+          }
+        },
+        {
+          "id": "P-RET-01",
+          "score": 0.030776515151515152,
+          "ranks": {
+            "sparse": 6,
+            "dense": 4
+          },
+          "scores": {
+            "sparse": -6.554153190012903,
+            "dense": 0.6115294694900513
+          }
+        },
+        {
+          "id": "P-PRI-01",
+          "score": 0.03036576949620428,
+          "ranks": {
+            "sparse": 3,
+            "dense": 9
+          },
+          "scores": {
+            "sparse": -7.187368305147075,
+            "dense": 0.5122076272964478
+          }
+        }
+      ],
+      "rrf_formula_verified": true
+    },
+    {
+      "namespace": "policy",
+      "query": "生鲜坏了能退吗",
+      "expected_positive_ids": [
+        "P-QUA-01"
+      ],
+      "positive_ids_recalled_in_rrf_candidates": [
+        "P-QUA-01"
+      ],
+      "positive_ids_recalled_in_relevance_hits": [
+        "P-QUA-01"
+      ],
+      "hits_empty": false,
+      "sparse_count": 10,
+      "sparse_top5": [
+        {
+          "id": "P-RET-02",
+          "score": -12.936778617679808
+        },
+        {
+          "id": "P-QUA-01",
+          "score": -6.20524867426785
+        },
+        {
+          "id": "P-RET-01",
+          "score": -5.718885398202646
+        },
+        {
+          "id": "P-REF-01",
+          "score": -4.413979115149673
+        },
+        {
+          "id": "P-ORD-01",
+          "score": -3.4953421229303148
+        }
+      ],
+      "dense_count": 10,
+      "dense_top3": [
+        {
+          "id": "P-RET-02",
+          "score": 0.6446715593338013
+        },
+        {
+          "id": "P-QUA-01",
+          "score": 0.565921425819397
+        },
+        {
+          "id": "P-RET-01",
+          "score": 0.536763072013855
+        }
+      ],
+      "rrf_top5": [
+        {
+          "id": "P-RET-02",
+          "score": 0.03278688524590164,
+          "ranks": {
+            "sparse": 1,
+            "dense": 1
+          },
+          "scores": {
+            "sparse": -12.936778617679808,
+            "dense": 0.6446715593338013
+          }
+        },
+        {
+          "id": "P-QUA-01",
+          "score": 0.03225806451612903,
+          "ranks": {
+            "sparse": 2,
+            "dense": 2
+          },
+          "scores": {
+            "sparse": -6.20524867426785,
+            "dense": 0.565921425819397
+          }
+        },
+        {
+          "id": "P-RET-01",
+          "score": 0.031746031746031744,
+          "ranks": {
+            "sparse": 3,
+            "dense": 3
+          },
+          "scores": {
+            "sparse": -5.718885398202646,
+            "dense": 0.536763072013855
+          }
+        },
+        {
+          "id": "P-REF-01",
+          "score": 0.03125,
+          "ranks": {
+            "sparse": 4,
+            "dense": 4
+          },
+          "scores": {
+            "sparse": -4.413979115149673,
+            "dense": 0.50926673412323
+          }
+        },
+        {
+          "id": "P-ORD-01",
+          "score": 0.030536130536130537,
+          "ranks": {
+            "sparse": 5,
+            "dense": 6
+          },
+          "scores": {
+            "sparse": -3.4953421229303148,
+            "dense": 0.503177285194397
+          }
+        }
+      ],
+      "relevance_hits_top5": [
+        {
+          "id": "P-RET-02",
+          "score": 0.03278688524590164,
+          "ranks": {
+            "sparse": 1,
+            "dense": 1
+          },
+          "scores": {
+            "sparse": -12.936778617679808,
+            "dense": 0.6446715593338013
+          }
+        },
+        {
+          "id": "P-QUA-01",
+          "score": 0.03225806451612903,
+          "ranks": {
+            "sparse": 2,
+            "dense": 2
+          },
+          "scores": {
+            "sparse": -6.20524867426785,
+            "dense": 0.565921425819397
+          }
+        },
+        {
+          "id": "P-RET-01",
+          "score": 0.031746031746031744,
+          "ranks": {
+            "sparse": 3,
+            "dense": 3
+          },
+          "scores": {
+            "sparse": -5.718885398202646,
+            "dense": 0.536763072013855
+          }
+        },
+        {
+          "id": "P-REF-01",
+          "score": 0.03125,
+          "ranks": {
+            "sparse": 4,
+            "dense": 4
+          },
+          "scores": {
+            "sparse": -4.413979115149673,
+            "dense": 0.50926673412323
+          }
+        },
+        {
+          "id": "P-ORD-01",
+          "score": 0.030536130536130537,
+          "ranks": {
+            "sparse": 5,
+            "dense": 6
+          },
+          "scores": {
+            "sparse": -3.4953421229303148,
+            "dense": 0.503177285194397
+          }
+        }
+      ],
+      "rrf_formula_verified": true
+    },
+    {
+      "namespace": "policy",
+      "query": "火星定制商品特殊条款",
+      "expected_positive_ids": [],
+      "positive_ids_recalled_in_rrf_candidates": [],
+      "positive_ids_recalled_in_relevance_hits": [],
+      "hits_empty": true,
+      "sparse_count": 10,
+      "sparse_top5": [
+        {
+          "id": "P-QUA-01",
+          "score": -9.168019748729765
+        },
+        {
+          "id": "P-RET-01",
+          "score": -9.132935101057548
+        },
+        {
+          "id": "P-STK-01",
+          "score": -8.006203198602055
+        },
+        {
+          "id": "P-ORD-01",
+          "score": -7.061207079494898
+        },
+        {
+          "id": "P-RET-02",
+          "score": -6.838782854208641
+        }
+      ],
+      "dense_count": 10,
+      "dense_top3": [
+        {
+          "id": "P-RET-02",
+          "score": 0.46823471784591675
+        },
+        {
+          "id": "P-RET-01",
+          "score": 0.43203553557395935
+        },
+        {
+          "id": "P-SAF-01",
+          "score": 0.42362886667251587
+        }
+      ],
+      "rrf_top5": [
+        {
+          "id": "P-RET-01",
+          "score": 0.03225806451612903,
+          "ranks": {
+            "sparse": 2,
+            "dense": 2
+          },
+          "scores": {
+            "sparse": -9.132935101057548,
+            "dense": 0.43203553557395935
+          }
+        },
+        {
+          "id": "P-QUA-01",
+          "score": 0.03177805800756621,
+          "ranks": {
+            "sparse": 1,
+            "dense": 5
+          },
+          "scores": {
+            "sparse": -9.168019748729765,
+            "dense": 0.41226130723953247
+          }
+        },
+        {
+          "id": "P-RET-02",
+          "score": 0.03177805800756621,
+          "ranks": {
+            "sparse": 5,
+            "dense": 1
+          },
+          "scores": {
+            "sparse": -6.838782854208641,
+            "dense": 0.46823471784591675
+          }
+        },
+        {
+          "id": "P-SAF-01",
+          "score": 0.031024531024531024,
+          "ranks": {
+            "sparse": 6,
+            "dense": 3
+          },
+          "scores": {
+            "sparse": -5.699929383377585,
+            "dense": 0.42362886667251587
+          }
+        },
+        {
+          "id": "P-STK-01",
+          "score": 0.03057889822595705,
+          "ranks": {
+            "sparse": 3,
+            "dense": 8
+          },
+          "scores": {
+            "sparse": -8.006203198602055,
+            "dense": 0.4048336148262024
+          }
+        }
+      ],
+      "relevance_hits_top5": [],
+      "rrf_formula_verified": true
+    },
+    {
+      "namespace": "policy",
+      "query": "怎么修自行车",
+      "expected_positive_ids": [],
+      "positive_ids_recalled_in_rrf_candidates": [],
+      "positive_ids_recalled_in_relevance_hits": [],
+      "hits_empty": true,
+      "sparse_count": 4,
+      "sparse_top5": [
+        {
+          "id": "P-ORD-01",
+          "score": -11.127637871635457
+        },
+        {
+          "id": "P-SAF-01",
+          "score": -2.6144700694729774
+        },
+        {
+          "id": "P-QUA-01",
+          "score": -2.515450077876614
+        },
+        {
+          "id": "P-RET-01",
+          "score": -2.4878892368415753
+        }
+      ],
+      "dense_count": 10,
+      "dense_top3": [
+        {
+          "id": "P-ORD-01",
+          "score": 0.3992740511894226
+        },
+        {
+          "id": "P-FUL-01",
+          "score": 0.31315314769744873
+        },
+        {
+          "id": "P-HUM-01",
+          "score": 0.22735758125782013
+        }
+      ],
+      "rrf_top5": [
+        {
+          "id": "P-ORD-01",
+          "score": 0.03278688524590164,
+          "ranks": {
+            "sparse": 1,
+            "dense": 1
+          },
+          "scores": {
+            "sparse": -11.127637871635457,
+            "dense": 0.3992740511894226
+          }
+        },
+        {
+          "id": "P-SAF-01",
+          "score": 0.031754032258064516,
+          "ranks": {
+            "sparse": 2,
+            "dense": 4
+          },
+          "scores": {
+            "sparse": -2.6144700694729774,
+            "dense": 0.22023609280586243
+          }
+        },
+        {
+          "id": "P-RET-01",
+          "score": 0.03055037313432836,
+          "ranks": {
+            "sparse": 4,
+            "dense": 7
+          },
+          "scores": {
+            "sparse": -2.4878892368415753,
+            "dense": 0.21508072316646576
+          }
+        },
+        {
+          "id": "P-QUA-01",
+          "score": 0.030158730158730156,
+          "ranks": {
+            "sparse": 3,
+            "dense": 10
+          },
+          "scores": {
+            "sparse": -2.515450077876614,
+            "dense": 0.20356802642345428
+          }
+        },
+        {
+          "id": "P-FUL-01",
+          "score": 0.016129032258064516,
+          "ranks": {
+            "dense": 2
+          },
+          "scores": {
+            "dense": 0.31315314769744873
+          }
+        }
+      ],
+      "relevance_hits_top5": [],
+      "rrf_formula_verified": true
+    },
+    {
+      "namespace": "recipe",
+      "query": "蛋",
+      "expected_positive_ids": [
+        "dish-fanqie-chao-dan",
+        "dish-dan-chao-fan",
+        "dish-yangzhou-chao-fan",
+        "dish-jiajiao-chaodan"
+      ],
+      "positive_ids_recalled_in_rrf_candidates": [
+        "dish-fanqie-chao-dan",
+        "dish-dan-chao-fan",
+        "dish-yangzhou-chao-fan",
+        "dish-jiajiao-chaodan"
+      ],
+      "positive_ids_recalled_in_relevance_hits": [
+        "dish-fanqie-chao-dan",
+        "dish-dan-chao-fan",
+        "dish-yangzhou-chao-fan",
+        "dish-jiajiao-chaodan"
+      ],
+      "hits_empty": false,
+      "sparse_count": 4,
+      "sparse_top5": [
+        {
+          "id": "dish-fanqie-chao-dan",
+          "score": -3.032486099003223
+        },
+        {
+          "id": "dish-dan-chao-fan",
+          "score": -3.00558388664371
+        },
+        {
+          "id": "dish-jiajiao-chaodan",
+          "score": -2.940525426575016
+        },
+        {
+          "id": "dish-yangzhou-chao-fan",
+          "score": -1.5405190921710166
+        }
+      ],
+      "dense_count": 8,
+      "dense_top3": [
+        {
+          "id": "dish-fanqie-chao-dan",
+          "score": 0.5628390312194824
+        },
+        {
+          "id": "dish-jiajiao-chaodan",
+          "score": 0.5566490888595581
+        },
+        {
+          "id": "dish-dan-chao-fan",
+          "score": 0.5262964963912964
+        }
+      ],
+      "rrf_top5": [
+        {
+          "id": "dish-fanqie-chao-dan",
+          "score": 0.03278688524590164,
+          "ranks": {
+            "sparse": 1,
+            "dense": 1
+          },
+          "scores": {
+            "sparse": -3.032486099003223,
+            "dense": 0.5628390312194824
+          }
+        },
+        {
+          "id": "dish-dan-chao-fan",
+          "score": 0.03200204813108039,
+          "ranks": {
+            "sparse": 2,
+            "dense": 3
+          },
+          "scores": {
+            "sparse": -3.00558388664371,
+            "dense": 0.5262964963912964
+          }
+        },
+        {
+          "id": "dish-jiajiao-chaodan",
+          "score": 0.03200204813108039,
+          "ranks": {
+            "sparse": 3,
+            "dense": 2
+          },
+          "scores": {
+            "sparse": -2.940525426575016,
+            "dense": 0.5566490888595581
+          }
+        },
+        {
+          "id": "dish-yangzhou-chao-fan",
+          "score": 0.03125,
+          "ranks": {
+            "sparse": 4,
+            "dense": 4
+          },
+          "scores": {
+            "sparse": -1.5405190921710166,
+            "dense": 0.36715543270111084
+          }
+        },
+        {
+          "id": "dish-gongbao-jiding",
+          "score": 0.015384615384615385,
+          "ranks": {
+            "dense": 5
+          },
+          "scores": {
+            "dense": 0.31170037388801575
+          }
+        }
+      ],
+      "relevance_hits_top5": [
+        {
+          "id": "dish-fanqie-chao-dan",
+          "score": 0.03278688524590164,
+          "ranks": {
+            "sparse": 1,
+            "dense": 1
+          },
+          "scores": {
+            "sparse": -3.032486099003223,
+            "dense": 0.5628390312194824
+          }
+        },
+        {
+          "id": "dish-dan-chao-fan",
+          "score": 0.03200204813108039,
+          "ranks": {
+            "sparse": 2,
+            "dense": 3
+          },
+          "scores": {
+            "sparse": -3.00558388664371,
+            "dense": 0.5262964963912964
+          }
+        },
+        {
+          "id": "dish-jiajiao-chaodan",
+          "score": 0.03200204813108039,
+          "ranks": {
+            "sparse": 3,
+            "dense": 2
+          },
+          "scores": {
+            "sparse": -2.940525426575016,
+            "dense": 0.5566490888595581
+          }
+        },
+        {
+          "id": "dish-yangzhou-chao-fan",
+          "score": 0.03125,
+          "ranks": {
+            "sparse": 4,
+            "dense": 4
+          },
+          "scores": {
+            "sparse": -1.5405190921710166,
+            "dense": 0.36715543270111084
+          }
+        }
+      ],
+      "rrf_formula_verified": true
+    }
+  ],
+  "positive_recall_validation": {
+    "single_character_egg_query_expected_ids": [
+      "dish-fanqie-chao-dan",
+      "dish-dan-chao-fan",
+      "dish-yangzhou-chao-fan",
+      "dish-jiajiao-chaodan"
+    ],
+    "failures": [],
+    "all_expected_ids_in_rrf_candidates": true,
+    "all_expected_ids_in_relevance_hits": true
+  }
+}

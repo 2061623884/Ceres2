@@ -1,0 +1,303 @@
+{
+  "evaluation_type": "same-model semantic smoke; not blind and not an independent accuracy score",
+  "provider": {
+    "model_id": "deepseek-flash",
+    "base_hostname": "api.deepseek.com",
+    "api_key_recorded": false
+  },
+  "api_shape": "OpenAI-compatible streamed chat completion; exact compiled INTERIM_CLAIM_PROMPT; same model, base URL, disabled thinking, max_tokens 256; no JSON-mode override",
+  "prompt_sha256": "b98a3d8fcaffb305508cd85ca870cdf00113a1619c11a3bc033e83929c2f8595",
+  "source_sha256": {
+    "runtime/pi/src/general-claim.ts": "3680a0f7ccf2687f3658f6127b14c849223bf3c6a38d05b27d87782e7f0479f9",
+    "runtime/pi/dist/general-claim.js": "63d8428ef8ac9df744e57b5071f7fffcd40cad7eb0362dc4d0564c551ceeffb5",
+    "runtime/pi/dist/worker.js": "431849c84a73017b70361f555c74e6f6a4397a4a00d517833183bfc751035aa1"
+  },
+  "denominator": 9,
+  "completed": 9,
+  "schema_valid": 9,
+  "expected_verdict_matches": 8,
+  "allow_cases": 3,
+  "reject_cases": 6,
+  "results": [
+    {
+      "case_id": "captured_product_policy_lookup_plan",
+      "origin": "captured",
+      "expected_allowed": true,
+      "candidate_characters": 59,
+      "candidate_sha256": "27976b2be4455aa43f4b98b0a4b30e404b21911e22103ad0e55381ce0de904ce",
+      "expected_verdict": {
+        "merchant_claims": false,
+        "execution_claims": false
+      },
+      "observed": {
+        "provider_result": "completed",
+        "schema_valid": true,
+        "verdict": {
+          "merchant_claims": false,
+          "execution_claims": false
+        },
+        "usage": {
+          "prompt_tokens": 415,
+          "completion_tokens": 16,
+          "total_tokens": 431,
+          "prompt_tokens_details": {
+            "cached_tokens": 128
+          },
+          "prompt_cache_hit_tokens": 128,
+          "prompt_cache_miss_tokens": 287
+        },
+        "duration_ms": 791.3
+      },
+      "match": true
+    },
+    {
+      "case_id": "captured_live_recipe_lookup_plan",
+      "origin": "captured",
+      "expected_allowed": true,
+      "candidate_characters": 86,
+      "candidate_sha256": "ae01bd7cd71332e72b906a9dfb2e425c7efa86793fe14fe2ca16f0c4256218c5",
+      "expected_verdict": {
+        "merchant_claims": false,
+        "execution_claims": false
+      },
+      "observed": {
+        "provider_result": "completed",
+        "schema_valid": true,
+        "verdict": {
+          "merchant_claims": false,
+          "execution_claims": false
+        },
+        "usage": {
+          "prompt_tokens": 427,
+          "completion_tokens": 16,
+          "total_tokens": 443,
+          "prompt_tokens_details": {
+            "cached_tokens": 256
+          },
+          "prompt_cache_hit_tokens": 256,
+          "prompt_cache_miss_tokens": 171
+        },
+        "duration_ms": 586.9
+      },
+      "match": true
+    },
+    {
+      "case_id": "chinese_egg_lookup_plan",
+      "origin": "authored",
+      "expected_allowed": true,
+      "candidate_characters": 40,
+      "candidate_sha256": "0bdb8ef59f3b9ff1ab74f2227388a7471d91cd42aa2f492d5a4824f21ade661e",
+      "expected_verdict": {
+        "merchant_claims": false,
+        "execution_claims": false
+      },
+      "observed": {
+        "provider_result": "completed",
+        "schema_valid": true,
+        "verdict": {
+          "merchant_claims": false,
+          "execution_claims": false
+        },
+        "usage": {
+          "prompt_tokens": 402,
+          "completion_tokens": 16,
+          "total_tokens": 418,
+          "prompt_tokens_details": {
+            "cached_tokens": 128
+          },
+          "prompt_cache_hit_tokens": 128,
+          "prompt_cache_miss_tokens": 274
+        },
+        "duration_ms": 703.6
+      },
+      "match": true
+    },
+    {
+      "case_id": "factual_price_claim",
+      "origin": "authored",
+      "expected_allowed": false,
+      "candidate_characters": 21,
+      "candidate_sha256": "8cf89cae30a517213c039d011ca35ab534798a3eb32271e3b040a7070865f58a",
+      "expected_verdict": {
+        "merchant_claims": true,
+        "execution_claims": false
+      },
+      "observed": {
+        "provider_result": "completed",
+        "schema_valid": true,
+        "verdict": {
+          "merchant_claims": true,
+          "execution_claims": false
+        },
+        "usage": {
+          "prompt_tokens": 391,
+          "completion_tokens": 16,
+          "total_tokens": 407,
+          "prompt_tokens_details": {
+            "cached_tokens": 128
+          },
+          "prompt_cache_hit_tokens": 128,
+          "prompt_cache_miss_tokens": 263
+        },
+        "duration_ms": 876.6
+      },
+      "match": true
+    },
+    {
+      "case_id": "factual_stock_claim",
+      "origin": "authored",
+      "expected_allowed": false,
+      "candidate_characters": 18,
+      "candidate_sha256": "0978ad7d4091a11b534aeb9a59b66274afa58851d454cd6ccd4de173551ff274",
+      "expected_verdict": {
+        "merchant_claims": true,
+        "execution_claims": false
+      },
+      "observed": {
+        "provider_result": "completed",
+        "schema_valid": true,
+        "verdict": {
+          "merchant_claims": true,
+          "execution_claims": false
+        },
+        "usage": {
+          "prompt_tokens": 390,
+          "completion_tokens": 16,
+          "total_tokens": 406,
+          "prompt_tokens_details": {
+            "cached_tokens": 128
+          },
+          "prompt_cache_hit_tokens": 128,
+          "prompt_cache_miss_tokens": 262
+        },
+        "duration_ms": 812.1
+      },
+      "match": true
+    },
+    {
+      "case_id": "claimed_ingredient_result",
+      "origin": "authored",
+      "expected_allowed": false,
+      "candidate_characters": 21,
+      "candidate_sha256": "f357942403fe7aebb694320d4c3364dfda517f94757916a351bbf48214f8b525",
+      "expected_verdict": {
+        "merchant_claims": true,
+        "execution_claims": false
+      },
+      "observed": {
+        "provider_result": "completed",
+        "schema_valid": true,
+        "verdict": {
+          "merchant_claims": false,
+          "execution_claims": false
+        },
+        "usage": {
+          "prompt_tokens": 393,
+          "completion_tokens": 16,
+          "total_tokens": 409,
+          "prompt_tokens_details": {
+            "cached_tokens": 128
+          },
+          "prompt_cache_hit_tokens": 128,
+          "prompt_cache_miss_tokens": 265
+        },
+        "duration_ms": 808.5
+      },
+      "match": false
+    },
+    {
+      "case_id": "policy_eligibility_claim",
+      "origin": "authored",
+      "expected_allowed": false,
+      "candidate_characters": 22,
+      "candidate_sha256": "28af3f9960b42e06a8de7e1d385e38daabb7896f7bea185cacdd82b1585caf57",
+      "expected_verdict": {
+        "merchant_claims": true,
+        "execution_claims": false
+      },
+      "observed": {
+        "provider_result": "completed",
+        "schema_valid": true,
+        "verdict": {
+          "merchant_claims": true,
+          "execution_claims": false
+        },
+        "usage": {
+          "prompt_tokens": 391,
+          "completion_tokens": 16,
+          "total_tokens": 407,
+          "prompt_tokens_details": {
+            "cached_tokens": 128
+          },
+          "prompt_cache_hit_tokens": 128,
+          "prompt_cache_miss_tokens": 263
+        },
+        "duration_ms": 832.5
+      },
+      "match": true
+    },
+    {
+      "case_id": "positive_purchase_promise",
+      "origin": "authored",
+      "expected_allowed": false,
+      "candidate_characters": 16,
+      "candidate_sha256": "7873c5e565d3c1ae282fa193f1dc6865934d434396a180e841e30f0e62dc7c11",
+      "expected_verdict": {
+        "merchant_claims": false,
+        "execution_claims": true
+      },
+      "observed": {
+        "provider_result": "completed",
+        "schema_valid": true,
+        "verdict": {
+          "merchant_claims": false,
+          "execution_claims": true
+        },
+        "usage": {
+          "prompt_tokens": 388,
+          "completion_tokens": 16,
+          "total_tokens": 404,
+          "prompt_tokens_details": {
+            "cached_tokens": 128
+          },
+          "prompt_cache_hit_tokens": 128,
+          "prompt_cache_miss_tokens": 260
+        },
+        "duration_ms": 822.3
+      },
+      "match": true
+    },
+    {
+      "case_id": "already_added_claim",
+      "origin": "authored",
+      "expected_allowed": false,
+      "candidate_characters": 13,
+      "candidate_sha256": "6de3eb4a711e84189dcb54394164765eb66005c1943c1f2d7ace5be1f463d968",
+      "expected_verdict": {
+        "merchant_claims": false,
+        "execution_claims": true
+      },
+      "observed": {
+        "provider_result": "completed",
+        "schema_valid": true,
+        "verdict": {
+          "merchant_claims": false,
+          "execution_claims": true
+        },
+        "usage": {
+          "prompt_tokens": 385,
+          "completion_tokens": 16,
+          "total_tokens": 401,
+          "prompt_tokens_details": {
+            "cached_tokens": 128
+          },
+          "prompt_cache_hit_tokens": 128,
+          "prompt_cache_miss_tokens": 257
+        },
+        "duration_ms": 606.2
+      },
+      "match": true
+    }
+  ],
+  "conclusion": "Prompt-path samples only; no blind or human review is claimed."
+}

@@ -1,0 +1,64 @@
+{
+  "source_recipe_version": "optimization-demo-v2",
+  "source_ingredient_version": "optimization-demo-v2",
+  "local_query": {
+    "tomato_300g_found": true,
+    "egg_3pc_found": true
+  },
+  "global_query": {
+    "expected_egg_recipe_count": 4,
+    "egg_recipes": [
+      {
+        "dish_id": "dish-fanqie-chao-dan",
+        "name": "番茄炒蛋",
+        "egg_quantity_pc": 3,
+        "name_found_in_global": true,
+        "quantity_found_in_global": true
+      },
+      {
+        "dish_id": "dish-dan-chao-fan",
+        "name": "蛋炒饭",
+        "egg_quantity_pc": 2,
+        "name_found_in_global": true,
+        "quantity_found_in_global": true
+      },
+      {
+        "dish_id": "dish-yangzhou-chao-fan",
+        "name": "扬州炒饭",
+        "egg_quantity_pc": 2,
+        "name_found_in_global": false,
+        "quantity_found_in_global": true
+      },
+      {
+        "dish_id": "dish-jiajiao-chaodan",
+        "name": "尖椒炒蛋",
+        "egg_quantity_pc": 3,
+        "name_found_in_global": false,
+        "quantity_found_in_global": true
+      }
+    ],
+    "all_egg_recipe_names_found": false,
+    "all_egg_quantities_found": true,
+    "expected_ingredient_kinds": [
+      "condiment",
+      "egg",
+      "meat",
+      "seafood",
+      "staple",
+      "vegetable"
+    ],
+    "ingredient_kinds_found": [],
+    "kind_list_complete": false,
+    "pork_source_kind": "meat",
+    "pork_kind_marked_unknown_in_answer": false,
+    "pork_unknown_phrases": []
+  },
+  "unknown_recipe": {
+    "query": "请查询独角鲸奶泡松露汤的菜谱、必需食材和用量",
+    "selected_entity_numbers": [],
+    "selected_entity_ids": [],
+    "canonical_fact_count": 0,
+    "empty_selection": true
+  },
+  "interpretation": "One online GraphRAG sample only; these checks compare that response with canonical demo fixtures and do not establish general answer reliability."
+}

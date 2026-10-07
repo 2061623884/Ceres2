@@ -1,0 +1,25 @@
+{
+  "browser": "Firefox 136.0 headless through Mozilla geckodriver 0.37.1",
+  "frontend_origin": "http://127.0.0.1:18444",
+  "isolated_backend_origin": "http://127.0.0.1:18013",
+  "isolated_database": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/work/ceres2-optimization/testing/tmp/browser-demo/business.sqlite3",
+  "journey_steps": [],
+  "checks": {},
+  "result": "failed",
+  "error": "Timed out waiting for text 'Ceres的朋友'; last=False",
+  "traceback": "Traceback (most recent call last):\n  File \"/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/backend/../work/ceres2-optimization/testing/browser_demo_journey.py\", line 254, in main\n    wait_text(driver, \"Ceres的朋友\")\n  File \"/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/backend/../work/ceres2-optimization/testing/browser_demo_journey.py\", line 174, in wait_text\n    wait_until(driver, \"return document.body && document.body.innerText.includes(arguments[0])\", f\"text {text!r}\", seconds)\n  File \"/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/backend/../work/ceres2-optimization/testing/browser_demo_journey.py\", line 170, in wait_until\n    raise BrowserFailure(f\"Timed out waiting for {description}; last={last!r}\")\nBrowserFailure: Timed out waiting for text 'Ceres的朋友'; last=False\n",
+  "proxy_api_calls": [
+    {
+      "method": "GET",
+      "path": "/api/v1/bootstrap",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/cart",
+      "status": 200
+    }
+  ],
+  "failure_page_text": "哈喽，\nCeres的朋友!\n今日心情\n演示\n😡\n😕\n😐\n🙂\n😍\n为你准备\n查看全部 ↗\n轻盈计划\n\n减脂餐\n\n成品轻食选购（演示）\n\n当季鲜选\n\n生鲜采买\n\n当季食材一键备货\n\n主页\n商品\n订单\n个人中心",
+  "failure_screenshot": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/work/ceres2-optimization/testing/tmp/browser-demo/browser-demo-failure.png"
+}

@@ -1,0 +1,27 @@
+{
+  "query": "这批家常菜共有哪几类食材，哪些菜用鸡蛋",
+  "tool_result_keys": [
+    "dishes",
+    "graph_evidence",
+    "is_demo"
+  ],
+  "graph_evidence_keys": [
+    "canonical_facts",
+    "graph_revision",
+    "ingredient_recipes",
+    "method",
+    "query_revision"
+  ],
+  "graph_evidence_keys_match_contract": true,
+  "graph_method": "global",
+  "query_revision": "canonical-scope-overview-v3",
+  "canonical_fact_count": 44,
+  "ingredient_relation_count": 19,
+  "egg_relation_count": 4,
+  "returned_dish_count": 5,
+  "forbidden_summary_or_report_keys_present": [],
+  "free_community_summary_not_forwarded": true,
+  "source_sample_retrieved_report_count": 11,
+  "source_sample_had_retrieved_report_context": true,
+  "interpretation": "Uses the actual sampled GraphRAG Global canonical facts and relationship map, then inspects the host Pi tool projection. The Pi result omits the generated GraphRAG answer and community report context."
+}

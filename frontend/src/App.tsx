@@ -5,6 +5,7 @@ import { answerGuideQuestion, type GuideQuestion } from './lib/productQuestions'
 import './role-chat.css'
 import { openNavigation, closeOpening, routeText, ackPrompt, chooseRole, type BeforeText, type ChatRole, type Handoff, type Opening, type RouteDecision } from './lib/chatNavigation'
 import ComparisonCards from './ComparisonCards'
+import ProductDetail from './ProductDetail'
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { MercuryChat } from './MercuryChat'
 import { HumanOperatorPage } from './HumanOperatorPage'
@@ -433,23 +434,23 @@ function CartDrawer({
 }
 
 // ── Shelf Screen ──────────────────────────────────────────────
-function ProductCard({ p, onAdd, adding }: { p: Product; onAdd: (skuId: string) => void; adding: boolean }) {
+function ProductCard({ p, onAdd, adding, onOpen }: { p: Product; onAdd: (skuId: string) => void; adding: boolean; onOpen: (skuId: string) => void }) {
   const [liked, setLiked] = useState(false)
   const displayName = p.name_zh || p.name
   const unitLabel = p.spec_unit ? `/${p.spec_unit}` : ''
   return (
     <article className="group flex flex-col overflow-hidden rounded-[22px] border border-black/[0.06] bg-white transition-colors duration-200 hover:border-black/[0.13]">
       <div className="relative aspect-[1/0.91] overflow-hidden bg-[#f2f2f4]">
-        <img src={productImageUrl(p.image_path)} alt={displayName} className="h-full w-full object-cover" loading="lazy" />
-        <span className="absolute left-3 top-3 rounded-md bg-white/95 px-2 py-1 text-[9px] font-medium tracking-[0.02em] text-[#5f655f]">产地可溯源</span>
+        <button className="h-full w-full" aria-label={`查看${displayName}详情`} onClick={()=>onOpen(p.sku_id)}><img src={productImageUrl(p.image_path)} alt={displayName} className="h-full w-full object-cover" loading="lazy" /></button>
+        <span className="absolute left-3 top-3 rounded-md bg-white/95 px-2 py-1 text-[9px] font-medium tracking-[0.02em] text-[#5f655f]">演示商品</span>
         <button onClick={() => setLiked(v => !v)} aria-label={liked ? `取消收藏${displayName}` : `收藏${displayName}`} className="absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full bg-white/95 text-[15px] text-[#4c554c] transition active:scale-90">
           {liked ? '♥' : '♡'}
         </button>
         <span className="absolute right-1 top-10 scale-90"><DemoBadge /></span>
       </div>
       <div className="flex flex-col gap-1.5 px-4 pb-4 pt-3.5">
-        <p className="line-clamp-2 text-[14px] font-semibold leading-tight text-[#20211f]">{displayName}</p>
-        <div className="flex items-center gap-1 text-[10px] font-medium tracking-[0.01em] text-[#8a8d85]"><span className="text-[#d98a37]">★</span> 4.9 <span className="text-[#c7c8c1]">·</span> 今日采摘</div>
+        <button className="line-clamp-2 text-left text-[14px] font-semibold leading-tight text-[#20211f]" onClick={()=>onOpen(p.sku_id)}>{displayName}</button>
+        <div className="text-[10px] font-medium text-[#8a8d85]">{p.spec_quantity}{p.spec_unit} · 模拟供给</div>
         <div className="mt-1.5 flex items-center justify-between">
           <span className="text-[15px] font-extrabold tracking-tight text-[#171816]" style={{ fontFamily: "'Instrument Sans', 'Noto Sans SC', sans-serif" }}>
             {yuan(p.price_fen ?? 0)}
@@ -495,6 +496,7 @@ function ShelfScreen({
   const [cartBusy, setCartBusy] = useState(false)
   const [cartError, setCartError] = useState<string | null>(null)
   const [addingSku, setAddingSku] = useState<string | null>(null)
+  const [detailSku, setDetailSku] = useState<string | null>(null)
   const productsRef = useRef<HTMLDivElement>(null)
 
   const PROMO_CARDS = [
@@ -690,7 +692,7 @@ function ShelfScreen({
         <div ref={productsRef} className="mb-3 flex items-end justify-between">
           <div>
             <h2 className="text-[19px] font-semibold tracking-[-0.06em] text-[#202124]">{search ? '搜索结果' : '人气鲜品'}</h2>
-            <p className="mt-0.5 text-[10px] font-medium tracking-[0.02em] text-[#7c7c80]">最快 30 分钟送达</p>
+            <p className="mt-0.5 text-[10px] font-medium tracking-[0.02em] text-[#7c7c80]">模拟配送进度见订单</p>
           </div>
           <button className="flex items-center gap-1 rounded-full border border-black/[0.08] bg-transparent px-3.5 py-2 text-[10px] font-medium text-[#505055] transition active:scale-95">综合排序⌄ <DemoBadge /></button>
         </div>
@@ -704,11 +706,12 @@ function ShelfScreen({
         {!loading && !error && products.length === 0 && <p className="py-8 text-center text-sm text-black/40">暂无商品</p>}
         <div className="grid grid-cols-2 gap-3">
           {products.map(p => (
-            <ProductCard key={p.sku_id} p={p} onAdd={handleAdd} adding={addingSku === p.sku_id} />
+            <ProductCard key={p.sku_id} p={p} onAdd={handleAdd} adding={addingSku === p.sku_id} onOpen={setDetailSku} />
           ))}
         </div>
       </div>
       <CartDrawer onCheckout={() => { setCartOpen(false); setCheckoutOpen(true) }} open={cartOpen} cart={cart} onClose={() => setCartOpen(false)} onUpdateQty={handleUpdateQty} loading={cartBusy} error={cartError} />
+      {detailSku && <ProductDetail skuId={detailSku} onClose={()=>setDetailSku(null)} onAdd={handleAdd} adding={addingSku===detailSku} />}
       {checkoutOpen && <SimulatedCheckout onCartChange={onCartChange} onClose={() => setCheckoutOpen(false)} onViewOrders={() => { setCheckoutOpen(false); onViewOrders() }} />}
     </div>
   )
@@ -1278,6 +1281,19 @@ function ChatScreen({
     })
   }, [])
 
+  const receiveInterim = useCallback((placeholderId: string, event: {payload?: Record<string, unknown>}) => {
+    const id = event.payload?.message_id
+    const content = event.payload?.content
+    if (typeof id !== 'string' || typeof content !== 'string') return
+    setMsgs(current => {
+      if(current.some(message => message.id === id)) return current
+      const placeholder = current.findIndex(message => message.id === placeholderId)
+      const message: Msg = {id,role:'ai',text:content}
+      return placeholder < 0 ? [...current,message]
+        : [...current.slice(0,placeholder),message,...current.slice(placeholder)]
+    })
+  }, [])
+
   const updatePhase = useCallback((requestId: string, phase: string) => {
     phaseRef.current.set(requestId, progressPhaseLabel(phase))
     setProgressText(progressPhaseLabel(phase) || null)
@@ -1368,6 +1384,7 @@ function ChatScreen({
           signal:controller.signal,
           onProgress:event => updatePhase(run.request_id, String(event.payload?.phase ?? 'understanding')),
           onAnswerDelta:event => receiveDelta(placeholderId,event),
+          onInterimMessage:event => { if(!controller.signal.aborted) receiveInterim(placeholderId,event) },
         }).then(async turn => {
           const snapshot = await readSnapshot(getGuideSession(session.session_id, false))
           if (!controller.signal.aborted) mergeTerminalTurn(turn, snapshot, placeholderId)
@@ -1382,7 +1399,7 @@ function ChatScreen({
     } finally {
       if (generation === initializationRef.current) setRestoring(false)
     }
-  }, [viewContext.category_id, viewContext.page, applyAuthoritativeSnapshot, mergeTerminalTurn, finishTransport, receiveDelta, updatePhase, readSnapshot])
+  }, [viewContext.category_id, viewContext.page, applyAuthoritativeSnapshot, mergeTerminalTurn, finishTransport, receiveDelta, receiveInterim, updatePhase, readSnapshot])
 
   useEffect(() => { void initSession(); return () => { initializationRef.current += 1 } }, [initSession])
 
@@ -1412,6 +1429,7 @@ function ChatScreen({
         signal:controller.signal,
         onProgress:event => updatePhase(requestId,String(event.payload?.phase ?? 'understanding')),
         onAnswerDelta:event => receiveDelta(placeholderId,event),
+        onInterimMessage:event => { if(!controller.signal.aborted) receiveInterim(placeholderId,event) },
       }, displayedPlan, shownCandidates, routeId)
       if (controller.signal.aborted) return
       const latest = await readSnapshot(getGuideSession(sessionId, false))
@@ -1419,8 +1437,8 @@ function ChatScreen({
         const accepted = mergeTerminalTurn(turn, latest, placeholderId)
         const freshQuestion = turn.active_question?.question_id === turn.assistant_message_id && !!turn.active_question
         const eligible = turn.runtime_status === 'completed' && turn.answer_kind !== 'general_explanation' &&
-          (freshQuestion || !!turn.product_cards?.length || !!turn.product_evidence?.length || !!turn.confirmation_result ||
-           turn.no_matches === true || (turn.plan_effect === 'replace' && !!turn.plan))
+          ((freshQuestion && !!turn.active_question?.options.length) || !!turn.product_cards?.length || !!turn.confirmation_result ||
+           (turn.plan_effect === 'replace' && !!turn.plan))
         if (accepted && eligible) queueIntroduction({source_kind: 'turn', source_id: requestId}, latest, actionEpoch)
       }
       if (turn.confirmation_result) onCartRefresh()
@@ -1439,7 +1457,7 @@ function ChatScreen({
     } finally {
       finishTransport(requestId)
     }
-  }, [sessionId, confirming, restoring, viewContext, applyAuthoritativeSnapshot, mergeTerminalTurn, receiveDelta, updatePhase, finishTransport, onCartRefresh, readSnapshot, beforeText, onInteraction, queueIntroduction])
+  }, [sessionId, confirming, restoring, viewContext, applyAuthoritativeSnapshot, mergeTerminalTurn, receiveDelta, receiveInterim, updatePhase, finishTransport, onCartRefresh, readSnapshot, beforeText, onInteraction, queueIntroduction])
 
   const resumedHandoff = useRef<string | null>(null)
   useEffect(() => {

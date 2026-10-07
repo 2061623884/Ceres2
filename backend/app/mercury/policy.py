@@ -1,32 +1,18 @@
-"""Static, versioned query policy facts; no demo database dependency."""
-# Rules selectively carried from the user's Mercury seed; all fulfillment remains simulated.
-POLICIES = [
-    ('P-REF-01', 'refund', '未发货订单退款',
-     '未发货订单可申请整单模拟退款；已发货或已签收的订单不支持仅退款，签收后可查询退货资格。',
-     '退款,取消,不想要,未发货,仅退款'),
-    ('P-RET-01', 'return', '签收后退货',
-     '签收后 7 天内，可退货商品可按单明细整行申请模拟退货退款。超过七天或标记不可退货的商品不符合该规则；签收时间或商品可退货标记未知时，不能确认资格。',
-     '退货,七天,7天,签收'),
-    ('P-RET-02', 'return', '不支持退货的商品',
-     '生鲜等标注“不可退货”的商品不支持退货；规则未知时不能确认符合资格。',
-     '生鲜,水果,不能退,不支持退货,不可退'),
-    ('P-DEL-01', 'delivery', '模拟配送信息',
-     '模拟配送进度以订单业务记录为准，缺少物流记录时不能推测送达时间；没有真实履约。',
-     '配送,送达,多久送到,几点到,延迟,还没到'),
-]
+"""Shared policy hybrid retrieval; no order qualification or application writes."""
+import json
+from app.core.config import get_settings
+
+CATEGORIES = ('price', 'stock', 'delivery', 'order', 'refund', 'fulfillment', 'quality', 'return', 'safety', 'human')
 
 
 def search_policies(query, category=None):
-    rows = [row for row in POLICIES if category is None or row[1] == category]
-    scored = [(sum(keyword in query for keyword in row[4].split(',')), row) for row in rows]
-    scored.sort(key=lambda pair: -pair[0])
-    hits = [row for score, row in scored if score][:3]
-    if not hits and category:
-        hits = rows
-    return {'ok': True, 'data': [{
-        **dict(zip(('policy_id', 'category', 'title', 'content'), row[:4])),
-        'source': {'name': 'Ceres 模拟售后规则', 'version': '2026-10-06', 'policy_id': row[0]},
-    } for row in hits]}
+    from app.services.knowledge_service import knowledge
+    retrieval = knowledge.search(query, 'policy', limit=3, category=category)
+    corpus = json.loads((get_settings().root_dir/'data/fixtures/policies.json').read_text())
+    records = {row['policy_id']: row for row in corpus['policies']}
+    return {'ok': True, 'data': [{**records[hit['id']],
+        'source': {'name': corpus['source_name'], 'version': corpus['version'], 'policy_id': hit['id']}}
+        for hit in retrieval['hits']], 'retrieval': retrieval}
 
 
 def policy_summary(data):
@@ -37,4 +23,3 @@ def policy_summary(data):
         f"{item['source']['policy_id']}（版本 {item['source']['version']}）"
         for item in data)
     return facts + '；以上是一般政策，具体订单资格尚未核实；未提交任何申请。'
-

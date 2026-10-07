@@ -1,0 +1,202 @@
+{
+  "browser": "Firefox 136.0 headless through Mozilla geckodriver 0.37.1",
+  "provider": {
+    "model_id": "deepseek-flash",
+    "base_hostname": "api.deepseek.com",
+    "api_key_recorded": false
+  },
+  "source_sha256": {
+    "backend/app/prompts/experience.json": "793ed7aef9636f69d0082e991a80d7c38d0f753613dd0827bf20490d87231afe",
+    "backend/app/prompts/experience.py": "d66693ea9c11b7d5ff50df83c133389f0d7104d013f10f6194dc7666a26502a3",
+    "backend/app/services/pi_product_runtime.py": "d1285f785ce2e71c4de63eb6ef7a31af153d0d17071de2c2f73702e05ddb82f3",
+    "backend/app/services/pi_product_turn_service.py": "d04bd133427377e37d36d46bd5debdb131046f9083460de010fed7450e9062a9",
+    "backend/app/services/guide_run_service.py": "2bbb7494279eb79ce7ba18f07eacedf08e5321bde6c167065bdd54c98a7a1451",
+    "backend/app/models/guide.py": "40e273a2918cee5dfa00f299d1757ecf4982cad3f9290604d30eb38bb0218c52",
+    "backend/app/evaluation/export_runs.py": "9974050b2aa9c8b2c472532622e1f71d45eb25db3cccf23d5672c09f9ca504a5",
+    "runtime/pi/src/worker.ts": "886e77de443fc10e0c495860365740b3c6da492a4bc4ae7742ba12ddb4796a51",
+    "runtime/pi/dist/worker.js": "431849c84a73017b70361f555c74e6f6a4397a4a00d517833183bfc751035aa1",
+    "runtime/pi/src/general-claim.ts": "3680a0f7ccf2687f3658f6127b14c849223bf3c6a38d05b27d87782e7f0479f9",
+    "runtime/pi/dist/general-claim.js": "63d8428ef8ac9df744e57b5071f7fffcd40cad7eb0362dc4d0564c551ceeffb5",
+    "runtime/pi/src/prompt-modules.ts": "fbcf407ac3be56b9df06e0e177f9e84a1413a03b1060c8d16e8aa379fcc27625",
+    "work/ceres2-optimization/testing/sitecustomize.py": "81842b2454afbf3dfb11db9d0d5613018360dee780b10be89151ce9aaa6d72fd",
+    "work/ceres2-optimization/testing/strip_response_format_preload.mjs": "10332d19363f31b3054188810fea8b243db70bd26b8b82d6d3e5f9e96e0c7015",
+    "data/fixtures/products.json": "8857a75c26387acb98023dd3b743e369a6d1f01fb1b64c24993fe3b87690f3e1",
+    "data/fixtures/recipes.json": "1fd396fe8255961fd8c423817efe0d80a1a0ad8377b26e42104a76886c3ed45c",
+    "data/fixtures/policies.json": "7a370431a1a9c2df2b818218f3c54cb01946f93fa027aad44021dd1637f10502",
+    "evals/ceres2-optimization-retrieval-dev.json": "eb47a57f89fc65d56d3e74a9b68947d096ba485d5c08051f29dc9a97aa12652e",
+    "frontend/src/App.tsx": "3413ab5bb8bda86b5e45e2687ad68a044fdbe3b67b91279508d45dad1b652508",
+    "frontend/src/lib/saleGuide.ts": "5065b636392c57d8b2cba51a17d39ef3dc227123ef63fe195e84dea30d1058d0",
+    "frontend/dist/index.html": "1cff6e4ced401ee46b49bab85800f83ee4ff758e7dbd67debd9633edcc26f418"
+  },
+  "frontend_dist_asset_sha256": {
+    "frontend/dist/assets/a49bc.svg": "d74de112979c2704639c2eaa10ebd0965570bb931dfbf955e1534505a3f312d4",
+    "frontend/dist/assets/index-BGfOXWqC.css": "3f414980b295757eb960743c65265df6994846dbb88a1fb0c9b2b26acdf1f247",
+    "frontend/dist/assets/index-DGjQKDZ4.js": "8a3c84a8ea8bc50ebec8c244287a6fadfa9a8df0b18665edd9d5a1347eb6e7ef"
+  },
+  "production_worker_modified": false,
+  "test_preload_or_sitecustomize": false,
+  "sse_observation": "Tester proxy forwards complete event frames and pauses after each message.interim until Firefox DOM bubble-count delta is sampled; event payloads are unchanged.",
+  "steps": [
+    "opened the built Grok-style Ceres UI in native Firefox",
+    "opened Keke and waited for its public message input",
+    "routed once, used the visible manual-role fallback, and resumed the same request",
+    "observed the browser DOM and public SSE event ordering"
+  ],
+  "manual_role_fallback_used": true,
+  "outcome": {
+    "terminal_type": "turn.completed",
+    "terminal_sequence": 17,
+    "interim_sequence": 3,
+    "interim_preceded_terminal": true,
+    "interim_recorded_at_ms": 1791373228278.6233,
+    "interim_elapsed_ms": 2354.51904296875,
+    "interim_content_characters": 38,
+    "interim_content_sha256": "3ded8c639e989ebb4c0cbb4cbea6c479bdd43c4db37748dc77518866ec5670e2",
+    "interim_message_ids": [
+      "run-b8ffaeb104754ddfbe2907092f88bf8a:interim:1"
+    ],
+    "interim_message_ids_unique": true,
+    "interim_dom_bubble_records": [
+      {
+        "message_id": "run-b8ffaeb104754ddfbe2907092f88bf8a:interim:1",
+        "sequence": 3,
+        "bubbles_before": 1,
+        "bubbles_after": 2,
+        "bubble_delta": 1,
+        "one_bubble_for_event": true,
+        "loading_or_progress_visible": true
+      }
+    ],
+    "one_bubble_per_interim_event": true,
+    "interim_gate_timeouts": 0,
+    "dom_exposes_message_id": false,
+    "ui_bubbles_before_terminal": {
+      "assistant_bubble_character_counts": [
+        37,
+        38
+      ],
+      "assistant_text_bubble_count": 2,
+      "input_count": 1,
+      "loading_bubble_count": 0,
+      "progress_indicator_visible": true
+    },
+    "ui_bubbles_after_terminal": {
+      "assistant_bubble_character_counts": [
+        37,
+        38,
+        194
+      ],
+      "assistant_text_bubble_count": 3,
+      "input_count": 1,
+      "loading_bubble_count": 0,
+      "progress_indicator_visible": false
+    },
+    "dom_observed_ms_after_send": 9960.3,
+    "sse_sequence_types": [
+      {
+        "type": "accepted",
+        "sequence": 1
+      },
+      {
+        "type": "progress",
+        "sequence": 2
+      },
+      {
+        "type": "message.interim",
+        "sequence": 3,
+        "message_id": "run-b8ffaeb104754ddfbe2907092f88bf8a:interim:1",
+        "content_characters": 38,
+        "content_sha256": "3ded8c639e989ebb4c0cbb4cbea6c479bdd43c4db37748dc77518866ec5670e2",
+        "recorded_at_ms": 1791373228278.6233,
+        "elapsed_ms": 2354.51904296875
+      },
+      {
+        "type": "progress",
+        "sequence": 4
+      },
+      {
+        "type": "progress",
+        "sequence": 5
+      },
+      {
+        "type": "progress",
+        "sequence": 6
+      },
+      {
+        "type": "progress",
+        "sequence": 7
+      },
+      {
+        "type": "answer.delta",
+        "sequence": 8
+      },
+      {
+        "type": "answer.delta",
+        "sequence": 9
+      },
+      {
+        "type": "answer.delta",
+        "sequence": 10
+      },
+      {
+        "type": "answer.delta",
+        "sequence": 11
+      },
+      {
+        "type": "answer.delta",
+        "sequence": 12
+      },
+      {
+        "type": "answer.delta",
+        "sequence": 13
+      },
+      {
+        "type": "answer.delta",
+        "sequence": 14
+      },
+      {
+        "type": "answer.delta",
+        "sequence": 15
+      },
+      {
+        "type": "answer.delta",
+        "sequence": 16
+      },
+      {
+        "type": "turn.completed",
+        "sequence": 17,
+        "runtime_status": "completed",
+        "answer_status": "accepted",
+        "finish_response_calls": 1,
+        "candidate_statuses": [
+          "ready",
+          "absent"
+        ]
+      }
+    ],
+    "backend_thread_dump_captured": false
+  },
+  "result": "passed",
+  "service": {
+    "health": "ok",
+    "business_data_mode": "demo",
+    "configured_for_live_provider": true,
+    "database": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/work/ceres2-optimization/testing/tmp/browser-interim/streaming-current-v4/business.sqlite3"
+  },
+  "api_call_summary": {
+    "GET /api/v1/bootstrap 200": 1,
+    "GET /api/v1/cart 200": 1,
+    "GET /api/v1/categories 200": 1,
+    "GET /api/v1/products 200": 2,
+    "GET /media/images/demo-baking-powder-100g.jpg 200": 1,
+    "GET /media/images/demo-butter-200g.jpg 200": 1,
+    "POST /api/v1/guide/sessions 200": 2,
+    "POST /api/v1/navigation/sessions/{session_id}/opening 200": 1,
+    "GET /api/v1/guide/sessions/{session_id}/status 200": 1,
+    "POST /api/v1/navigation/sessions/{session_id}/routes 200": 1,
+    "POST /api/v1/navigation/sessions/{session_id}/switches 200": 1,
+    "GET /api/v1/guide/sessions/{session_id} 200": 2,
+    "POST /api/v1/guide/sessions/{session_id}/turns/stream 200": 1
+  },
+  "final_screenshot_ignored_path": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/work/ceres2-optimization/testing/tmp/browser-interim/streaming-current-v4/browser-interim-final.png"
+}

@@ -1,0 +1,520 @@
+{
+  "sample_id": "product-policy-current-v4",
+  "sample_revision": "native-tools-finish-response-interim-audit-v1",
+  "instrumentation": {
+    "runtime_events_safe_projection": true,
+    "test_sitecustomize_enabled": true,
+    "node_message_shape": false,
+    "wire_fetch_mode": "disabled",
+    "wire_override_scope": null,
+    "production_worker_modified": false
+  },
+  "provider": {
+    "configured": true,
+    "model_id": "deepseek-flash",
+    "base_hostname": "api.deepseek.com",
+    "api_key_value_recorded": false
+  },
+  "route": {
+    "status": "unavailable",
+    "manual_role_choice_used": true
+  },
+  "request": {
+    "sha256": "773e84a1e4e77b9f02466f2740bd0f6ece6af45682dc15fcd73689b88955718d",
+    "length": 57
+  },
+  "source_sha256": {
+    "backend/app/prompts/experience.json": "793ed7aef9636f69d0082e991a80d7c38d0f753613dd0827bf20490d87231afe",
+    "backend/app/prompts/experience.py": "d66693ea9c11b7d5ff50df83c133389f0d7104d013f10f6194dc7666a26502a3",
+    "backend/app/services/pi_product_runtime.py": "d1285f785ce2e71c4de63eb6ef7a31af153d0d17071de2c2f73702e05ddb82f3",
+    "backend/app/services/pi_product_turn_service.py": "d04bd133427377e37d36d46bd5debdb131046f9083460de010fed7450e9062a9",
+    "backend/app/services/guide_run_service.py": "2bbb7494279eb79ce7ba18f07eacedf08e5321bde6c167065bdd54c98a7a1451",
+    "backend/app/models/guide.py": "40e273a2918cee5dfa00f299d1757ecf4982cad3f9290604d30eb38bb0218c52",
+    "backend/app/evaluation/export_runs.py": "9974050b2aa9c8b2c472532622e1f71d45eb25db3cccf23d5672c09f9ca504a5",
+    "runtime/pi/src/worker.ts": "886e77de443fc10e0c495860365740b3c6da492a4bc4ae7742ba12ddb4796a51",
+    "runtime/pi/dist/worker.js": "431849c84a73017b70361f555c74e6f6a4397a4a00d517833183bfc751035aa1",
+    "runtime/pi/src/prompt-modules.ts": "fbcf407ac3be56b9df06e0e177f9e84a1413a03b1060c8d16e8aa379fcc27625",
+    "work/ceres2-optimization/testing/sitecustomize.py": "81842b2454afbf3dfb11db9d0d5613018360dee780b10be89151ce9aaa6d72fd",
+    "work/ceres2-optimization/testing/strip_response_format_preload.mjs": "10332d19363f31b3054188810fea8b243db70bd26b8b82d6d3e5f9e96e0c7015",
+    "data/fixtures/products.json": "8857a75c26387acb98023dd3b743e369a6d1f01fb1b64c24993fe3b87690f3e1",
+    "data/fixtures/recipes.json": "1fd396fe8255961fd8c423817efe0d80a1a0ad8377b26e42104a76886c3ed45c",
+    "data/fixtures/policies.json": "7a370431a1a9c2df2b818218f3c54cb01946f93fa027aad44021dd1637f10502",
+    "evals/ceres2-optimization-retrieval-dev.json": "eb47a57f89fc65d56d3e74a9b68947d096ba485d5c08051f29dc9a97aa12652e"
+  },
+  "observed": {
+    "sse_frame_count": 27,
+    "event_type_counts": {
+      "accepted": 1,
+      "progress": 8,
+      "message.interim": 1,
+      "answer.delta": 16,
+      "turn.completed": 1
+    },
+    "terminal_event": "turn.completed",
+    "runtime_status": "completed",
+    "answer_kind": "business_facts",
+    "answer_status": "accepted",
+    "finish_response_tool_calls": 1,
+    "product_card_count": 0,
+    "dish_candidate_count": 0,
+    "final_message_count": 2,
+    "interims_precede_terminal": true,
+    "interim_opportunities": 4,
+    "interim_candidate_status_counts": {
+      "ready": 1,
+      "absent": 3
+    },
+    "interim_candidates": [
+      {
+        "status": "ready",
+        "text_characters": 51,
+        "tool_call_count": 1
+      },
+      {
+        "status": "absent",
+        "text_characters": 0,
+        "tool_call_count": 2
+      },
+      {
+        "status": "absent",
+        "text_characters": 0,
+        "tool_call_count": 1
+      },
+      {
+        "status": "absent",
+        "text_characters": 0,
+        "tool_call_count": 1
+      }
+    ],
+    "interim_published_count": 1,
+    "answer_delta_characters": 372,
+    "interim_records": [
+      {
+        "message_id": "run-dbfc7ad380184324b7fdd5ba8525e731:interim:1",
+        "content_length": 51,
+        "content_sha256": "8fbad20384bf5ee694c44c1b2ec71d1b88080e17384704e61048246f73a71fb8",
+        "host_recorded_at_ms": 1791372894811.9287,
+        "host_elapsed_ms": 2763.4189453125,
+        "browser_display_time_ms": null
+      }
+    ],
+    "model_usage": [
+      {
+        "kind": "main",
+        "model": "deepseek-flash",
+        "provider_host": "api.deepseek.com",
+        "duration_ms": 1510.072635,
+        "usage": {
+          "input": 259,
+          "output": 109,
+          "cacheRead": 4096,
+          "cacheWrite": 0,
+          "totalTokens": 4464
+        },
+        "cost": null
+      },
+      {
+        "kind": "interim_audit",
+        "model": "deepseek-flash",
+        "provider_host": "api.deepseek.com",
+        "duration_ms": 820.8270620000001,
+        "usage": {
+          "input": 278,
+          "output": 16,
+          "cacheRead": 128,
+          "cacheWrite": 0,
+          "totalTokens": 422
+        },
+        "cost": null
+      },
+      {
+        "kind": "main",
+        "model": "deepseek-flash",
+        "provider_host": "api.deepseek.com",
+        "duration_ms": 1112.610373,
+        "usage": {
+          "input": 701,
+          "output": 111,
+          "cacheRead": 5376,
+          "cacheWrite": 0,
+          "totalTokens": 6188
+        },
+        "cost": null
+      },
+      {
+        "kind": "main",
+        "model": "deepseek-flash",
+        "provider_host": "api.deepseek.com",
+        "duration_ms": 920.3800360000005,
+        "usage": {
+          "input": 1843,
+          "output": 38,
+          "cacheRead": 6144,
+          "cacheWrite": 0,
+          "totalTokens": 8025
+        },
+        "cost": null
+      },
+      {
+        "kind": "main",
+        "model": "deepseek-flash",
+        "provider_host": "api.deepseek.com",
+        "duration_ms": 813.1991660000003,
+        "usage": {
+          "input": 243,
+          "output": 74,
+          "cacheRead": 7808,
+          "cacheWrite": 0,
+          "totalTokens": 8125
+        },
+        "cost": null
+      },
+      {
+        "kind": "main",
+        "model": "deepseek-flash",
+        "provider_host": "api.deepseek.com",
+        "duration_ms": 1081.9585449999995,
+        "usage": {
+          "input": 225,
+          "output": 134,
+          "cacheRead": 8064,
+          "cacheWrite": 0,
+          "totalTokens": 8423
+        },
+        "cost": null
+      }
+    ],
+    "usage_fields_valid": true,
+    "append_event_host_times_valid": true,
+    "interim_display_clock_claimed": false,
+    "error_code": null
+  },
+  "export": {
+    "schema_version": "ceres-eval-capture-v1",
+    "record_count": 1,
+    "has_observed_usage_field": true,
+    "has_retrieval_field": true,
+    "labels_still_null_before_annotation": true,
+    "has_source_snapshot": true,
+    "run_started_at_ms_present": true,
+    "event_timestamps_are_separate_fields": true,
+    "raw_capture_path": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/data/generated/evals/pi-real-provider-product-policy-current-v4-capture-2026-10-07.jsonl"
+  },
+  "raw_sse_ignored_path": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/work/ceres2-optimization/testing/tmp/pi-real-smoke/product-policy-current-v4/guide-sse.jsonl",
+  "safe_runtime_diagnostics_path": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/work/ceres2-optimization/testing/tmp/pi-real-smoke/product-policy-current-v4/runtime-event-diagnostics.json",
+  "safe_fetch_diagnostics_path": null,
+  "owner_id_or_provider_key_recorded": false,
+  "result": "completed",
+  "isolated_service": {
+    "health": "ok",
+    "business_data_mode": "demo",
+    "configured_for_live_provider": true
+  },
+  "sse_has_terminal_completion": true,
+  "runtime_events_diagnostic": {
+    "event_type_counts": {
+      "agent_start": 1,
+      "turn_start": 5,
+      "message_start": 12,
+      "message_end": 12,
+      "model_usage": 6,
+      "interim_candidate": 4,
+      "tool_execution_start": 6,
+      "interim_audit": 1,
+      "tool_execution_end": 6,
+      "turn_end": 5,
+      "retrieval": 3,
+      "agent_end": 1
+    },
+    "safe_events": [
+      {
+        "type": "agent_start"
+      },
+      {
+        "type": "turn_start"
+      },
+      {
+        "type": "message_start"
+      },
+      {
+        "type": "message_end"
+      },
+      {
+        "type": "message_start"
+      },
+      {
+        "type": "message_end"
+      },
+      {
+        "type": "model_usage",
+        "kind": "main",
+        "model": "deepseek-flash",
+        "provider_host": "api.deepseek.com",
+        "duration_ms": 1510.072635,
+        "usage": {
+          "input": 259,
+          "output": 109,
+          "cacheRead": 4096,
+          "cacheWrite": 0,
+          "totalTokens": 4464
+        },
+        "cost": null
+      },
+      {
+        "type": "interim_candidate",
+        "status": "ready",
+        "text_characters": 51,
+        "tool_call_count": 1
+      },
+      {
+        "type": "tool_execution_start",
+        "tool_name": "guide_request"
+      },
+      {
+        "type": "model_usage",
+        "kind": "interim_audit",
+        "model": "deepseek-flash",
+        "provider_host": "api.deepseek.com",
+        "duration_ms": 820.8270620000001,
+        "usage": {
+          "input": 278,
+          "output": 16,
+          "cacheRead": 128,
+          "cacheWrite": 0,
+          "totalTokens": 422
+        },
+        "cost": null
+      },
+      {
+        "type": "interim_audit",
+        "approved": true
+      },
+      {
+        "type": "tool_execution_end"
+      },
+      {
+        "type": "message_start"
+      },
+      {
+        "type": "message_end"
+      },
+      {
+        "type": "turn_end"
+      },
+      {
+        "type": "turn_start"
+      },
+      {
+        "type": "message_start"
+      },
+      {
+        "type": "message_end"
+      },
+      {
+        "type": "model_usage",
+        "kind": "main",
+        "model": "deepseek-flash",
+        "provider_host": "api.deepseek.com",
+        "duration_ms": 1112.610373,
+        "usage": {
+          "input": 701,
+          "output": 111,
+          "cacheRead": 5376,
+          "cacheWrite": 0,
+          "totalTokens": 6188
+        },
+        "cost": null
+      },
+      {
+        "type": "interim_candidate",
+        "status": "absent",
+        "text_characters": 0,
+        "tool_call_count": 2
+      },
+      {
+        "type": "tool_execution_start",
+        "tool_name": "search_products"
+      },
+      {
+        "type": "retrieval"
+      },
+      {
+        "type": "tool_execution_end"
+      },
+      {
+        "type": "message_start"
+      },
+      {
+        "type": "message_end"
+      },
+      {
+        "type": "tool_execution_start",
+        "tool_name": "search_after_sales_policy"
+      },
+      {
+        "type": "retrieval"
+      },
+      {
+        "type": "tool_execution_end"
+      },
+      {
+        "type": "message_start"
+      },
+      {
+        "type": "message_end"
+      },
+      {
+        "type": "turn_end"
+      },
+      {
+        "type": "turn_start"
+      },
+      {
+        "type": "message_start"
+      },
+      {
+        "type": "message_end"
+      },
+      {
+        "type": "model_usage",
+        "kind": "main",
+        "model": "deepseek-flash",
+        "provider_host": "api.deepseek.com",
+        "duration_ms": 920.3800360000005,
+        "usage": {
+          "input": 1843,
+          "output": 38,
+          "cacheRead": 6144,
+          "cacheWrite": 0,
+          "totalTokens": 8025
+        },
+        "cost": null
+      },
+      {
+        "type": "interim_candidate",
+        "status": "absent",
+        "text_characters": 0,
+        "tool_call_count": 1
+      },
+      {
+        "type": "tool_execution_start",
+        "tool_name": "search_products"
+      },
+      {
+        "type": "retrieval"
+      },
+      {
+        "type": "tool_execution_end"
+      },
+      {
+        "type": "message_start"
+      },
+      {
+        "type": "message_end"
+      },
+      {
+        "type": "turn_end"
+      },
+      {
+        "type": "turn_start"
+      },
+      {
+        "type": "message_start"
+      },
+      {
+        "type": "message_end"
+      },
+      {
+        "type": "model_usage",
+        "kind": "main",
+        "model": "deepseek-flash",
+        "provider_host": "api.deepseek.com",
+        "duration_ms": 813.1991660000003,
+        "usage": {
+          "input": 243,
+          "output": 74,
+          "cacheRead": 7808,
+          "cacheWrite": 0,
+          "totalTokens": 8125
+        },
+        "cost": null
+      },
+      {
+        "type": "interim_candidate",
+        "status": "absent",
+        "text_characters": 0,
+        "tool_call_count": 1
+      },
+      {
+        "type": "tool_execution_start",
+        "tool_name": "explore_products"
+      },
+      {
+        "type": "tool_execution_end"
+      },
+      {
+        "type": "message_start"
+      },
+      {
+        "type": "message_end"
+      },
+      {
+        "type": "turn_end"
+      },
+      {
+        "type": "turn_start"
+      },
+      {
+        "type": "message_start"
+      },
+      {
+        "type": "message_end"
+      },
+      {
+        "type": "model_usage",
+        "kind": "main",
+        "model": "deepseek-flash",
+        "provider_host": "api.deepseek.com",
+        "duration_ms": 1081.9585449999995,
+        "usage": {
+          "input": 225,
+          "output": 134,
+          "cacheRead": 8064,
+          "cacheWrite": 0,
+          "totalTokens": 8423
+        },
+        "cost": null
+      },
+      {
+        "type": "tool_execution_start",
+        "tool_name": "finish_response"
+      },
+      {
+        "type": "tool_execution_end"
+      },
+      {
+        "type": "message_start"
+      },
+      {
+        "type": "message_end"
+      },
+      {
+        "type": "turn_end"
+      },
+      {
+        "type": "agent_end"
+      }
+    ],
+    "runtime_status": "completed",
+    "exception": null,
+    "test_child_launch_instrumentation": {
+      "worker_launches_matched": 0,
+      "node_options_injected": false,
+      "fetch_mode_injected": false,
+      "fetch_report_path_configured": false,
+      "rejected_text_capture_path_injected": false
+    },
+    "raw_text_or_request_body_recorded": false,
+    "provider_secret_recorded": false
+  }
+}

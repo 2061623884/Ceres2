@@ -704,6 +704,16 @@
       "offer_version": 1,
       "is_demo": true,
       "provenance": "next-activity-v1 explicitly simulated offer"
+    },
+    {
+      "store_id": "store-demo-01",
+      "sku_id": "demo:shrimp-200g",
+      "price_fen": 1590,
+      "available_qty": 25,
+      "sellable": true,
+      "offer_version": 1,
+      "is_demo": true,
+      "provenance": "Ceres2 optimization declared demo Offer; not a merchant quote"
     }
   ],
   "store": {
@@ -712,5 +722,5 @@
     "name": "演示超市（模拟数据）",
     "store_id": "store-demo-01"
   },
-  "version": "v1"
+  "version": "optimization-demo-v2"
 }

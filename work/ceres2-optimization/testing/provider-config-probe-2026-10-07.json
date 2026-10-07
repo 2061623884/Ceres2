@@ -1,0 +1,9 @@
+{
+  "source_exists": true,
+  "model_id": "deepseek-flash",
+  "base_hostname": "api.deepseek.com",
+  "api_key_present": true,
+  "base_url_valid": true,
+  "config_complete": true,
+  "network_checked": false
+}

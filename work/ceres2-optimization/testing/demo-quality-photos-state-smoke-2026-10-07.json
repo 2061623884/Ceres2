@@ -1,0 +1,38 @@
+{
+  "order_id": "sim-cd61361de4ec4b1e87cb345320e70769",
+  "sku_id": "demo:shrimp-200g",
+  "returnable": false,
+  "state_versions": [
+    {
+      "status": "submitted",
+      "version": 1
+    },
+    {
+      "status": "shipped",
+      "version": 2
+    },
+    {
+      "status": "delivered",
+      "version": 3
+    }
+  ],
+  "snapshot_unchanged": {
+    "store_id": true,
+    "items": true,
+    "total_fen": true
+  },
+  "quality_quantity": 1,
+  "photo_id": "photo-90bc3effbd6049fdb63aaae67f2d2be7",
+  "application_id": "asa-1c295f8304cc460ab6eee7d72726d21f",
+  "receipt_id": "asr-7cb439139858430d8f6451e76a2834ba",
+  "ticket_id": "ht_005cdf08633d4e8e981b8a0602b8d9df",
+  "quality_confirmation_replay_equal": true,
+  "stale_state_rejected": true,
+  "out_of_owner_photo_read_status": 404,
+  "operator_without_token_status": 403,
+  "operator_scoped_photo_status": 200,
+  "wrong_ticket_photo_status": 404,
+  "oversize_photo_rejected": true,
+  "wrong_signature_rejected": true,
+  "sample_is_demo_not_real_fulfillment": true
+}

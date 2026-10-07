@@ -1,0 +1,18 @@
+{
+  "browser": "Firefox 136.0 headless through Mozilla geckodriver 0.37.1",
+  "provider": {
+    "model_id": "deepseek-flash",
+    "base_hostname": "api.deepseek.com",
+    "api_key_recorded": false
+  },
+  "production_worker_modified": false,
+  "test_preload_or_sitecustomize": false,
+  "steps": [],
+  "outcome": {},
+  "result": "failed",
+  "failure_stage": "service_startup",
+  "failure_class": "RuntimeError",
+  "failure_fingerprint": "d3f4c15ddb5e4c663aee4d3fd2d8c93333531cc758dc05cd3269abef8bc36bfe",
+  "api_call_summary": {},
+  "sse_sequence_types": []
+}

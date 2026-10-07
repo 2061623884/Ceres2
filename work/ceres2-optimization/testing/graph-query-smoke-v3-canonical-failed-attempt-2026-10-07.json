@@ -1,0 +1,10 @@
+{
+  "provider_model": "deepseek-flash",
+  "provider_host": "api.deepseek.com",
+  "failure": {
+    "type": "ValueError",
+    "status_code": null,
+    "code": null,
+    "error_type": null
+  }
+}

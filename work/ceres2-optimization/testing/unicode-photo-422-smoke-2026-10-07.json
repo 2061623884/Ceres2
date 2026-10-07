@@ -1,0 +1,7 @@
+{
+  "status_code": 422,
+  "error_code": "PHOTO_INVALID",
+  "unicode_payload_rejected_as_422": true,
+  "database_worktree_local": true,
+  "provider_credentials_used": false
+}

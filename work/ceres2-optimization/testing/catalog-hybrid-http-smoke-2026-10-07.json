@@ -1,0 +1,47 @@
+{
+  "catalog_count": 71,
+  "query": "炒饭用的虾仁",
+  "target_sku": "demo:shrimp-200g",
+  "target_source": {
+    "file": "products.json",
+    "record_id": "demo:shrimp-200g"
+  },
+  "target_ranks": {
+    "sparse": 1,
+    "dense": 1
+  },
+  "target_scores": {
+    "sparse": -10.102104625464776,
+    "dense": 0.7040766477584839
+  },
+  "target_rrf_score": 0.03278688524590164,
+  "corpus_revision": "ceres-knowledge-v1",
+  "rrf_formula_matches": true,
+  "offer_before": {
+    "price_fen": 1590,
+    "available_qty": 25,
+    "offer_version": 1
+  },
+  "offer_after": {
+    "price_fen": 1777,
+    "available_qty": 3,
+    "offer_version": 2
+  },
+  "retrieval_evidence_stable_after_offer_change": true,
+  "unknown_query_count": 0,
+  "wrong_category_count": 0,
+  "comparison_filter": {
+    "product_type": "shrimp",
+    "category_id": "seafood",
+    "below_budget": {
+      "budget_fen": 1600,
+      "current_price_fen": 1777,
+      "result_count": 0
+    },
+    "raised_budget_fen": 2000,
+    "returned_count": 1,
+    "returned_sku": "demo:shrimp-200g",
+    "returned_current_price_fen": 1777,
+    "source_record_id": "demo:shrimp-200g"
+  }
+}

@@ -24,7 +24,7 @@ def test_mercury_general_return_policy_without_order_has_conditions_and_source(m
     completed = [json.loads(line[6:]) for line in response.text.splitlines() if line.startswith('data: ')][-1]
     assert completed['status'] == 'completed', completed
     text = completed['final_text']
-    assert 'P-RET-01' in text and '2026-10-06' in text
+    assert 'P-RET-01' in text and '2026-10-07-demo-v1' in text
     assert '7 天' in text and '整行' in text and '来源' in text
     assert '具体订单资格尚未核实' in text and '未提交任何申请' in text
     assert '退款已到账' not in text and '您的商品一定能退' not in text
@@ -59,7 +59,7 @@ def test_keke_general_policy_without_order_uses_same_traceable_rules_without_sho
     events = turn(client, '先了解退货政策', 'keke-policy-no-order')
     assert events[-1]['type'] == 'turn.completed', events
     text = events[-1]['payload']['message']
-    assert 'P-RET-01' in text and '2026-10-06' in text
+    assert 'P-RET-01' in text and '2026-10-07-demo-v1' in text
     assert '7 天' in text and '整行' in text and '来源' in text
     assert '具体订单资格尚未核实' in text and '未提交任何申请' in text
     assert '退款已到账' not in text and '您的商品一定能退' not in text

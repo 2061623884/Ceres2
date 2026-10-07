@@ -34,11 +34,24 @@ def ticket_view(db, ticket):
     summary = None if order is None else {'order_id': order.order_id, 'status': order.status,
         'total_fen': order.total_fen, 'items': [{'name': item['name'], 'quantity': item['quantity']}
                                               for item in json.loads(order.snapshot_json)['items']]}
+    from app.mercury.aftersales_models import AfterSalesPhoto, AfterSalesReceipt, AfterSalesApplication, AfterSalesProposal
+    photos = db.scalars(select(AfterSalesPhoto).where(AfterSalesPhoto.case_id == case.case_id,
+        AfterSalesPhoto.order_id == ticket.order_id, AfterSalesPhoto.owner_id == case.owner_id)).all()
+    # Closing this ticket returns a later responsibility generation to the
+    # agent. Applications prepared then belong to that later issue, not here.
+    applications = db.scalars(select(AfterSalesReceipt).join(AfterSalesApplication,
+        AfterSalesApplication.application_id == AfterSalesReceipt.application_id).join(AfterSalesProposal,
+        AfterSalesProposal.proposal_id == AfterSalesApplication.proposal_id).where(
+        AfterSalesReceipt.case_id == case.case_id, AfterSalesApplication.order_id == ticket.order_id,
+        AfterSalesReceipt.owner_id == case.owner_id,
+        AfterSalesProposal.responsibility_generation < ticket.generation)).all()
     return {'ticket_id': ticket.ticket_id, 'case_id': case.case_id, 'owner_id': case.owner_id,
         'order_id': ticket.order_id, 'order_summary': summary, 'reason': ticket.reason,
         'summary': ticket.summary, 'status': ticket.status, 'generation': ticket.generation,
         'version': ticket.version, 'history': json.loads(ticket.history_json),
-        'messages': json.loads(ticket.messages_json)}
+        'messages': json.loads(ticket.messages_json),
+        'photos': [{'photo_id':photo.photo_id, 'content_type':photo.content_type} for photo in photos],
+        'applications': [json.loads(row.result_json) for row in applications]}
 
 
 def create_ticket(db, case, summary, reason):

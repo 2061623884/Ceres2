@@ -134,6 +134,45 @@ def test_real_graph_interrupt_model_proposal_never_submits(web):
     assert confirm(client,url,pid).status_code == 200
 
 
+@pytest.mark.parametrize('kind,reason,policy_id', [('quality','商品发霉','P-QUA-01'),
+    ('fulfillment','漏送一个包装','P-FUL-01')])
+def test_problem_quantity_clarification_resumes_without_submission(web, kind, reason, policy_id):
+    from types import SimpleNamespace
+    from app.mercury.router import get_query_model
+    client, _, url = web
+    assert client.put(url+'/order', json={'order_id':'denied','selection_version':1}).status_code == 200
+    class Model:
+        def chat(self, messages, tools=None):
+            if messages[-1]['content'] == '1个销售包装':
+                name = 'prepare_aftersales_proposal'
+                arguments = {'order_id':'denied','kind':kind,'item_id':'sku',
+                    'problem_quantity':1,'reason':reason}
+            else:
+                name, arguments = 'request_clarification', {'slot':'problem_quantity'}
+            return SimpleNamespace(content='', tool_calls=[SimpleNamespace(id='quality',
+                function=SimpleNamespace(name=name, arguments=json.dumps(arguments)))])
+        def cancel(self): pass
+    client.app.dependency_overrides[get_query_model] = Model
+    response = client.post(url+'/turns/stream', json={'message':f'面粉{reason}，申请处理','request_id':'problem-missing-count'})
+    assert 'awaiting_details' in response.text and '销售包装' in response.text, response.text
+    assert client.get(url+'/aftersales').json() == {'proposal':None,'receipts':[],'simulated':True}
+    response = client.post(url+'/turns/stream', json={'message':'1个销售包装','request_id':'problem-count'})
+    assert 'awaiting_confirmation' in response.text, response.text
+    saved = client.get(url+'/aftersales').json()
+    assert saved['receipts'] == []
+    assert saved['proposal']['kind'] == kind and saved['proposal']['problem_quantity'] == 1
+    assert saved['proposal']['policy_id'] == policy_id
+    assert saved['proposal']['amount_fen'] == 617
+    receipt = confirm(client, url, saved['proposal']['proposal_id']).json()
+    assert receipt['status'] == 'requested' and receipt['problem_quantity'] == 1
+    assert confirm(client, url, saved['proposal']['proposal_id']).json() == receipt
+    assert client.get(url).json()['responsibility'] == 'human'
+    from app.human.service import latest_ticket
+    with web[1]() as db:
+        ticket = latest_ticket(db, url.split('/')[-1])
+        assert ticket.reason == kind+'_application'
+
+
 def test_atomic_precommit_failure_then_retry(web,monkeypatch):
     from sqlalchemy.orm import Session
     from app.mercury.aftersales_models import AfterSalesApplication,AfterSalesReceipt

@@ -25,7 +25,9 @@ WORKER = Path(__file__).resolve().parents[3] / 'runtime' / 'pi' / 'dist' / 'work
 
 
 class PiProductRuntime:
-    def __init__(self, catalog: CatalogService, assert_current: Callable[[], None], *, run_id: str, route_request: Callable[[dict], dict], context: dict, memory_command: Callable[[dict], dict], product_search: Callable[[dict], tuple], comparison_search: Callable[[dict], tuple], candidate_resolve: Callable[[str], dict], history_command: Callable[[dict], dict], explore_products: Callable[[dict], dict], select_question_products: Callable[[dict], dict], activity_active: Callable[[], bool]):
+    def __init__(self, catalog: CatalogService, assert_current: Callable[[], None], *, run_id: str, route_request: Callable[[dict], dict], context: dict, memory_command: Callable[[dict], dict], product_search: Callable[[dict], tuple], comparison_search: Callable[[dict], tuple], candidate_resolve: Callable[[str], dict], history_command: Callable[[dict], dict], explore_products: Callable[[dict], dict], select_question_products: Callable[[dict], dict], activity_active: Callable[[], bool], publish_interim: Callable[[str, str], None]):
+        self.publish_interim = publish_interim
+        self.interim_messages = {}
         self.activity_active = activity_active
         self.select_question_products = select_question_products
         self.question_selections = {}
@@ -80,6 +82,10 @@ class PiProductRuntime:
             result = search_policies(arguments['query'], arguments.get('category'))
             ref = f'policy-{uuid4().hex}'
             self.policy_results[ref] = result
+            self.events.append({'type':'retrieval', 'namespace':'policy', 'query':arguments['query'],
+                'sparse':result['retrieval']['sparse'], 'dense':result['retrieval']['dense'],
+                'hits':[{key:hit[key] for key in ('id','ranks','scores','rrf_score')} for hit in result['retrieval']['hits']],
+                'manifest':result['retrieval']['manifest']})
             return {**result, 'policy_ref':ref}
         if name == 'history_command':
             result = self.history_command(arguments)
@@ -106,6 +112,8 @@ class PiProductRuntime:
         if name == 'search_products':
             products, total = self.product_search(arguments)
             self.searched = True
+            self.events.append({'type':'retrieval', 'namespace':'product', 'query':arguments.get('query'),
+                'hits':[{'id':product['sku_id'], **product['retrieval']} for product in products if 'retrieval' in product]})
             rows = []
             for product in products:
                 ref = f'product-{uuid4().hex[:16]}'
@@ -122,19 +130,27 @@ class PiProductRuntime:
                 self.products[ref] = {**product, 'ref':ref}
             self.comparison_refs = set(self.products)
             return {'products':list(self.products.values()), 'total':total, 'is_demo':True}
-        if name == 'search_dishes':
+        if name in ('search_dishes', 'search_recipe_relations'):
             if self.activity_active():
                 raise AppError(422, 'ACTIVITY_SCOPE_CONFLICT', '当前活动只选购成品；如需菜谱食材，请明确开始新的购买目标。')
             self.dishes_searched = True
             from app.services.dish_service import DishService
             service = DishService(self.catalog)
+            matches, graph = service.graph_search(arguments['query']) if name == 'search_recipe_relations' else (service.search(arguments['query']), None)
+            if graph is not None:
+                self.events.append({'type':'graph_retrieval', 'query':arguments['query'], 'method':graph['method'],
+                    'graph_revision':graph['manifest']['graph_revision'], 'query_revision':graph['query_revision'],
+                    'manifest':graph['manifest'], 'calls':graph['calls'],
+                    'recipe_ids':[dish['dish_id'] for dish in matches]})
             rows = []
-            for dish in service.search(arguments['query'])[:5]:
+            for dish in matches[:5]:
                 ref = f'dish-{uuid4().hex}'
                 self.dishes[ref] = dish
                 rows.append({**dish, 'ref':ref, 'candidates':service.candidates(dish)})
             self.searched = True
-            return {'dishes':rows, 'is_demo':True}
+            return {'dishes':rows, 'is_demo':True, **({'graph_evidence': {'method':graph['method'],
+                'canonical_facts':graph['canonical_facts'], 'ingredient_recipes':graph['ingredient_recipes'],
+                'graph_revision':graph['manifest']['graph_revision'], 'query_revision':graph['query_revision']}} if graph else {})}
         if name == 'propose_dish':
             if self.activity_active():
                 raise AppError(422, 'ACTIVITY_SCOPE_CONFLICT', '当前活动只选购成品；如需菜谱食材，请明确开始新的购买目标。')
@@ -248,6 +264,20 @@ class PiProductRuntime:
                     if frame['type'] == 'event':
                         self.events.append(frame['event'])
                         self.events = self.events[-256:]
+                    elif frame['type'] == 'interim_message':
+                        identity, text = frame['message_id'], frame['text']
+                        if (frame['approved'] is not True or not isinstance(identity, str)
+                                or not identity.startswith(self.run_id+':interim:')
+                                or not isinstance(text, str) or not text.strip()):
+                            raise AppError(502, 'PI_PROTOCOL_INVALID', '过程中途消息合同错误')
+                        if identity in self.interim_messages:
+                            if self.interim_messages[identity] != text:
+                                raise AppError(502, 'PI_PROTOCOL_INVALID', '中途消息身份对应不同内容')
+                            continue
+                        if not should_stop() and time.monotonic() < deadline:
+                            self.assert_current()
+                            self.publish_interim(identity, text)
+                            self.interim_messages[identity] = text
                     elif frame['type'] == 'tool_call':
                         if should_stop():
                             return self._close('stopped')
@@ -330,7 +360,7 @@ class PiProductRuntime:
         outcome = self._answer_value(answer)
         # A shopping result may carry one independently queried policy. Each
         # reference is validated before the host publishes either result.
-        if answer.get('answer_kind') in ('exploration', 'question_selection', 'products', 'comparison', 'purchase_plan') and 'policy_ref' in answer:
+        if answer.get('answer_kind') in ('exploration', 'question_selection', 'products', 'comparison', 'purchase_plan', 'recipe_facts') and 'policy_ref' in answer:
             outcome['policy_message'] = self._policy_message(answer['policy_ref'])
         return outcome
 
@@ -381,6 +411,40 @@ class PiProductRuntime:
             if dishes:
                 lines.append('尚未选定或加购；食材供给会在准备清单时核对，价格和库存为模拟数据。')
             return {'status': 'completed', 'message': '\n'.join(lines), 'products': [], 'dish_candidates': candidates}
+        if kind == 'recipe_facts':
+            refs, ingredient_ids = answer.get('dish_refs'), answer.get('ingredient_ids', [])
+            if (not isinstance(refs, list) or any(not isinstance(ref, str) or ref not in self.dishes for ref in refs)
+                    or not isinstance(ingredient_ids, list) or any(not isinstance(identity, str) for identity in ingredient_ids)):
+                raise AppError(422, 'PI_UNKNOWN_REFERENCE', '菜谱事实必须来自本次查询的菜谱和食材')
+            if not self.dishes_searched:
+                raise AppError(422, 'PI_EVIDENCE_MISSING', '请先查询真实菜谱')
+            dishes = [self.dishes[ref] for ref in dict.fromkeys(refs)][:5]
+            used = {item['ingredient_id'] for dish in dishes for item in dish['required_items']} | {identity for dish in dishes for identity in dish['pantry_items']}
+            if set(ingredient_ids)-used:
+                raise AppError(422, 'PI_UNKNOWN_REFERENCE', '食材不属于本次选定的菜谱事实')
+            corpus = json.loads((get_settings().root_dir/'data/fixtures/ingredients.json').read_text())
+            names = {row['ingredient_id']:row['name_zh'] for row in corpus['ingredients']}
+            lines = ['菜谱基准用量（不是采购包装数）：'] if dishes else ['本次未取得选定菜谱的可核对事实。']
+            for dish in dishes:
+                required = '、'.join(names[item['ingredient_id']]+' '+ ' '.join(
+                    f"{item['quantity_'+unit]:g}{unit}" for unit in ('g','ml','pc') if 'quantity_'+unit in item) for item in dish['required_items'])
+                lines.append(f"{dish['name']}：基准{dish['base_people']}人；必需食材 {required}；来源 recipes.json/{dish['dish_id']}。")
+                if dish['pantry_items']:
+                    lines.append('基础调料：'+'、'.join(names[identity] for identity in dish['pantry_items'])+'；数量未记录，家庭已有量未知。')
+            if len(dishes)>1:
+                shared = set.intersection(*({item['ingredient_id'] for item in dish['required_items']} for dish in dishes))
+                lines.append('共用必需食材：'+('、'.join(names[identity] for identity in sorted(shared)) if shared else '当前这几道菜没有共用必需食材记录')+'。')
+            products = {}
+            from app.services.dish_service import DishService
+            for dish in dishes:
+                candidates = DishService(self.catalog).candidates(dish)
+                for identity in ingredient_ids:
+                    for product in candidates.get(identity, []):
+                        products[product['sku_id']] = product
+            if ingredient_ids:
+                lines.append('指定食材的当前采购候选（仅信息查询，尚未选定或加购）：')
+                lines.append(self._facts(list(products.values())))
+            return {'status':'completed','message':'\n'.join(lines),'products':list(products.values())}
         if kind == 'purchase_plan':
             if self.comparison_requested:
                 raise AppError(422, 'COMPARISON_SELECTION_REQUIRED', '请先展示比较候选并由用户选定')

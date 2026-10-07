@@ -1,0 +1,49 @@
+{
+  "browser": "Firefox 136.0 headless through Mozilla geckodriver 0.37.1",
+  "provider": {
+    "model_id": "deepseek-flash",
+    "base_hostname": "api.deepseek.com",
+    "api_key_recorded": false
+  },
+  "production_worker_modified": false,
+  "test_preload_or_sitecustomize": false,
+  "steps": [
+    "opened the built Grok-style Ceres UI in native Firefox",
+    "opened Keke and explicitly selected the Keke role",
+    "sent one live soda lookup from the visible Keke chat",
+    "observed the browser DOM and public SSE event ordering"
+  ],
+  "outcome": {
+    "terminal_type": null,
+    "interim_event_seen": false,
+    "ui_bubbles_at_end": {
+      "assistant_bubble_character_counts": [
+        37
+      ],
+      "assistant_text_bubble_count": 1,
+      "input_count": 1,
+      "loading_bubble_count": 0
+    },
+    "sse_sequence_types": []
+  },
+  "result": "failed",
+  "service": {
+    "health": "ok",
+    "business_data_mode": "demo",
+    "configured_for_live_provider": true,
+    "database": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-optimization-20261007/work/ceres2-optimization/testing/tmp/browser-interim/business.sqlite3"
+  },
+  "api_call_summary": {
+    "GET /api/v1/bootstrap 200": 1,
+    "GET /api/v1/cart 200": 1,
+    "GET /api/v1/categories 200": 1,
+    "GET /api/v1/products 200": 2,
+    "GET /media/images/demo-baking-powder-100g.jpg 200": 1,
+    "GET /media/images/demo-butter-200g.jpg 200": 1,
+    "POST /api/v1/guide/sessions 200": 2,
+    "POST /api/v1/navigation/sessions/session-0fc99d5eb8354efdb018f9c670f2ac07/opening 200": 1,
+    "POST /api/v1/navigation/sessions/session-0fc99d5eb8354efdb018f9c670f2ac07/switches 200": 1,
+    "GET /api/v1/guide/sessions/{session_id}/status 200": 1,
+    "POST /api/v1/navigation/sessions/session-0fc99d5eb8354efdb018f9c670f2ac07/routes 200": 1
+  }
+}

@@ -1,6 +1,6 @@
 """Read-only SKU and current store-offer projection for HTTP and Pi."""
 import json
-from sqlalchemy import func, or_, select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 from app.models.catalog import CatalogProduct
 from app.models.store import Offer
@@ -50,8 +50,19 @@ class CatalogService:
         if category_id:
             query = query.where(CatalogProduct.category_id == category_id)
         if q:
-            pattern = f'%{q}%'
-            query = query.where(or_(CatalogProduct.name.ilike(pattern), CatalogProduct.name_zh.ilike(pattern), CatalogProduct.brand.ilike(pattern)))
+            from app.services.knowledge_service import knowledge
+            allowed = list(self.db.scalars(select(CatalogProduct.sku_id).where(
+                CatalogProduct.review_status == 'approved',
+                *([CatalogProduct.category_id == category_id] if category_id else []))))
+            retrieval = knowledge.search(q, 'product', limit=20, allowed_ids=allowed)
+            hits = {hit['id']: hit for hit in retrieval['hits']}
+            rows = self.db.execute(query.where(CatalogProduct.sku_id.in_(hits))).all()
+            current = {product.sku_id: product_to_dict(product, offer) for product, offer in rows}
+            ranked = [{**current[identity], 'retrieval': {'source': hit['document']['source'],
+                'ranks': hit['ranks'], 'scores': hit['scores'], 'rrf_score': hit['rrf_score'],
+                'corpus_revision': retrieval['manifest']['corpus_revision']}}
+                for identity, hit in hits.items() if identity in current]
+            return ranked[(page-1)*page_size:page*page_size], len(ranked)
         total = self.db.scalar(select(func.count()).select_from(query.subquery()))
         rows = self.db.execute(query.order_by(CatalogProduct.sku_id).offset((page - 1) * page_size).limit(page_size))
         return [product_to_dict(product, offer) for product, offer in rows], total
