@@ -4,15 +4,16 @@
 
 ## 1. 先确认版本，再接手
 
-**最终四票候选尚未冻结；不要把目前可下载的 WIP 当作可直接验收的成品。** 本段为 2026-10-07 交接准备快照，后续以总 TASK 的精确候选和发布映射更新。
+**受控云端交付已完成；真实模型对照、用户前端／浏览器和本人验收仍开放。** 核心与比较支持按各自精确版本测试／审查，不把 WIP 当完成版本，也不把受控测试当真实效果通过。
 
 - 新实现起点：公开 `main` 的 `4bed9c891261e382122d424825b649989ea92c92`。不需要等待不可得的历史 `f45c4ff92f96f535d156a2f88053ae10e8486fa1` 才开始本次重建；也没有恢复、合并或验收该旧候选。
 - 集成分支：`ceres2/judge-prefetch-rebuild-20261007`。**01 技术交付发布已核实**：远端 `19822b146637fbf9cbba75dcf499984d393a4605` 对应本地文档后继 `4b576321317d6755cb2ef5845ceca6f89ba3e2b5`，完整 tree 均为 `cfb1028c1330537bc703bfff27591e109e61ea13`；见[发布映射](../work/judge-prefetch/publication-role-entry-final.json)。这仅是 01 里程碑，不是四票最终候选。
 - 01 修复 `9f2eff1265c373736cc5f8683c8ccaa680959c30` 已合入 `46f3fcf47d544e0c0ecead0abc13cb23d63a38b8`。480/480 backend、其中重叠的 149 项 focused、Pi typecheck/build 和依赖检查对应同一 244 文件冻结源码，两轴复审关闭原问题；01 状态仍为“待验收”。见[Tester 报告](../work/judge-prefetch-rebuild/01-role-entry-verification.md)、[源文件等价记录](../work/judge-prefetch-rebuild/01-role-entry-final-source.json)及[01 TASK](../tasks/ceres2-judge-prefetch-01-role-entry.md)。
-- 旧独立 WIP `f323d15751c141e0ded4763a3881bbda6355eae3` 仅供源码保全，不能代替已审查修复。02 云端技术门槛现已完成，产品提交 `0aaffb39549db2704c6c0c414e3819277023e7a6` 已合入 `7ea06a343f95043cc5c1948ef74fc139e0de2280`，已核实发布为远端 `e434e1b5419dfadec9db65dea13b63974a9d701e`，对应本地交付 `0559d9ed17e65cb4f6f8dfab80b83152e6fe280e`，完整 tree 均为 `18b51049c0d847eed04fac3ec26ba36c4afe16fa`；[02 发布映射](../work/judge-prefetch/publication-policy-evidence-final.json)。03 核心已完成并通过专项／两轴复审：产品提交 `35a30fab775764cfcbc01ee84599fb450b6411bd` 已合入 `d6a40886926bf203b53c52db27d2177b1b3dcb80`，该核心已发布核实为远端 `70a9f8c68ff99de7eb9b062dc1262d287e48b26e`，对应本地 `1170a2eec96454edcf46b18c1fd735ac67ddb2ca`，tree `a022f3abe73b00943a420c3ad3e1da19c38546ca`；[03 映射](../work/judge-prefetch/publication-query-reuse-core.json)。04 已在冻结核心 `d6a40886926bf203b53c52db27d2177b1b3dcb80` 上完成一次 558 backend 全量；[核心报告](../work/judge-prefetch-rebuild/04-core-verification.md)和[精确审计](../work/judge-prefetch-rebuild/04-core-final-source.json)保留范围。核心交接／证据两轴审查无阻塞；独立 comparison 支持及其文档审查仍开放，四票最终交付尚未完成。
-- 最终交接须由集成者登记：准确远端分支／完整 commit、对应本地受测源码或完整 diff、tree 等价证明、各层报告及用户前端 commit。缺少最终冻结信息时，不开始四票整体验收；可以按已交付的 01 合同准备本地前端适配。
+- 旧独立 WIP `f323d15751c141e0ded4763a3881bbda6355eae3` 仅供源码保全，不能代替已审查修复。02 云端技术门槛现已完成，产品提交 `0aaffb39549db2704c6c0c414e3819277023e7a6` 已合入 `7ea06a343f95043cc5c1948ef74fc139e0de2280`，已核实发布为远端 `e434e1b5419dfadec9db65dea13b63974a9d701e`，对应本地交付 `0559d9ed17e65cb4f6f8dfab80b83152e6fe280e`，完整 tree 均为 `18b51049c0d847eed04fac3ec26ba36c4afe16fa`；[02 发布映射](../work/judge-prefetch/publication-policy-evidence-final.json)。03 核心已完成并通过专项／两轴复审：产品提交 `35a30fab775764cfcbc01ee84599fb450b6411bd` 已合入 `d6a40886926bf203b53c52db27d2177b1b3dcb80`，该核心已发布核实为远端 `70a9f8c68ff99de7eb9b062dc1262d287e48b26e`，对应本地 `1170a2eec96454edcf46b18c1fd735ac67ddb2ca`，tree `a022f3abe73b00943a420c3ad3e1da19c38546ca`；[03 映射](../work/judge-prefetch/publication-query-reuse-core.json)。04 已在冻结核心 `d6a40886926bf203b53c52db27d2177b1b3dcb80` 上完成一次 558 backend 全量；[核心报告](../work/judge-prefetch-rebuild/04-core-verification.md)和[精确审计](../work/judge-prefetch-rebuild/04-core-final-source.json)保留范围。核心交接／证据两轴审查无阻塞；独立 comparison 支持及其最终文档也已通过自己的受控验证／两轴审查，具体范围见下节。
+- 最终核心已核实发布为 `88310f00836d29362e33384ffd959e9939e31a42`，对应本地 `56f0e6f1d4e1e42d4e574f09df55fde0dce8615f`，tree `c916518853289f246e64b1ccdac609f9599f42d7`；[核心映射](../work/judge-prefetch/publication-core-final.json)。比较支持在此核心之后独立交付，runner/test/最终文档 pins 见[支持 source 证据](../work/judge-prefetch-rebuild/04-comparison-support-final-source.json)。
+- 最终交接须由集成者登记：准确远端分支／完整 commit、对应本地受测源码或完整 diff、tree 等价证明、各层报告及用户前端 commit。验收前核对核心与当前支持各自精确 source/build pin，再固定用户前端版本；不能把旧 WIP 或不同构建混入结论。
 
-用户现有本地 Ceres2 保留了 **24 文件未提交补丁**，以及本地 `.env`、数据库与前端改动，必须原地保护。最终发布核实后，从用户已配置并核实的 Ceres2 remote fetch 最终分支，按确认的完整 SHA **另建独立本地 worktree** 验收；不要在脏工作树上 reset／checkout 覆盖、强制 stash、清理或整包套用补丁。新 worktree 使用独立安装与新隔离数据库；不要复制在用数据库、索引、session、订单或凭据。凭据仍由用户在本地管理，不要求上传或迁入云端。
+用户 2026-10-07 本地补充时报告 Ceres2 有 **24 文件未提交补丁**，以及本地 `.env`、数据库与前端改动，必须原地保护。最终发布核实后，从用户已配置并核实的 Ceres2 remote fetch 最终分支，按确认的完整 SHA **另建独立本地 worktree** 验收；不要在脏工作树上 reset／checkout 覆盖、强制 stash、清理或整包套用补丁。新 worktree 使用独立安装与新隔离数据库；不要复制在用数据库、索引、session、订单或凭据。凭据仍由用户在本地管理，不要求上传或迁入云端。
 
 开始前只需核对实际 checkout、未提交改动、Prompt、依赖和构建产物适用版本。候选未变且已有同版证据时，不要求重跑未受影响的整套 unit suite；产品修复后重验受影响项，并完成原规格要求的最终集成门槛，不能拼接不同版本成绩。
 
@@ -31,7 +32,7 @@ Python 继续独占业务事实、权限、确认和事务；导航、政策结�
 
 分别记录以下层级，不写笼统的“全绿”：
 
-- **受控服务端/runtime 与 wire**：01 技术门槛见上述同源报告，[Standards](../work/judge-prefetch-rebuild/reviews/standards-01-rereview.md)／[Spec](../work/judge-prefetch-rebuild/reviews/spec-01-rereview.md)两轴复审均关闭原问题；02 同版 524 backend（含重叠专项 44）、guard proof、Pi build/typecheck、依赖与两轴复审已完成，见[02 报告](../work/judge-prefetch-rebuild/02-policy-evidence-verification.md)；03 修复后 152 项专项（含 34 复用／安全用例）及两轴复审已完成，见[03 报告](../work/judge-prefetch-rebuild/03-query-reuse-verification.md)；04 最终同版核心全量 558 已完成；核心文档已完成两轴审查，独立 comparison 支持／文档仍待闭合。有限[基线烟测](../work/judge-prefetch-rebuild/baseline-verification.md)不替代功能验收。
+- **受控服务端/runtime 与 wire**：01 技术门槛见上述同源报告，[Standards](../work/judge-prefetch-rebuild/reviews/standards-01-rereview.md)／[Spec](../work/judge-prefetch-rebuild/reviews/spec-01-rereview.md)两轴复审均关闭原问题；02 同版 524 backend（含重叠专项 44）、guard proof、Pi build/typecheck、依赖与两轴复审已完成，见[02 报告](../work/judge-prefetch-rebuild/02-policy-evidence-verification.md)；03 修复后 152 项专项（含 34 复用／安全用例）及两轴复审已完成，见[03 报告](../work/judge-prefetch-rebuild/03-query-reuse-verification.md)；04 最终同版核心全量 558 已完成；核心文档及独立 comparison 支持／文档均已完成各自两轴审查；支持另有 22 项受控通过，含重叠 actual-app/Pi upper/lower 两项，不是旧新真实模型实验。有限[基线烟测](../work/judge-prefetch-rebuild/baseline-verification.md)不替代功能验收。
 - **测试隔离更正**：旧 Node guard 因生产子进程不继承 NODE_OPTIONS 而未在实际 Pi worker 强制加载。旧源码／测试成绩不改写；测试 harness 已修复并有四项真实子进程守卫证明，最终全阶段验证使用新 launcher。详见[更正与证据](../work/judge-prefetch-rebuild/node-guard-correction.md)。
 - **真实模型／Kev／语言品质／usage／时延**：本交接未执行，须用户冻结配置、有限用例及整次额度后亲自运行。
 - **typed DOM／真实浏览器**：前端由用户本地实现，本轮云端不修改 `frontend/` 文件；构建或 HTTP fixture 不能替代浏览器结果。
@@ -158,9 +159,17 @@ Python 继续独占业务事实、权限、确认和事务；导航、政策结�
 
 最终核心冻结为 `d6a40886926bf203b53c52db27d2177b1b3dcb80`／tree `2fad3a1c8e74593dc19ee929211be0d35a323938`；一次完整 backend 558 passed，248 个源码及受测 harness 前后不变，617 个 Node 子进程（581 个 Pi worker）均有 guard-loaded 审计。五个 dist artifact 的 hash 首次在全量期间记录，终态相同；不把该观察写成运行前 hash 捕获。
 
-未接受的 comparison CLI／测试／文档未进入核心全量的 worktree。它们日后只能凭各自精确 artifact hash、受影响测试和两轴审查闭合；缺少真实 provider 测量仍为未执行／unknown，不能从核心 558 或模拟统计推导收益。任何后来改变的文件不能被说成已在更早核心 capture 中测试。
+Comparison CLI／测试／文档当时未进入核心全量 worktree，随后已凭独立 artifact hash、22 项受影响测试及两轴审查闭合；含重叠的 upper/lower 当前 app／真实 Pi SDK loopback 两项，全部假 key。缺少真实 provider 测量仍为未执行／unknown，不能从核心 558 或模拟统计推导收益。任何后来改变的文件都不被说成已在更早核心 capture 中测试。
 
-[核心文档 Standards](../work/judge-prefetch-rebuild/reviews/standards-core-documentation.md)及[Spec](../work/judge-prefetch-rebuild/reviews/spec-core-docs-final.md)对固定文档 `a1ef364813c327585716ba2628914ee53b2f7895` 均无阻塞；本后继仅登记审查结果／链接。Comparison 草稿与任何后续变更仍需自己的精确证据。
+[核心文档 Standards](../work/judge-prefetch-rebuild/reviews/standards-core-documentation.md)及[Spec](../work/judge-prefetch-rebuild/reviews/spec-core-docs-final.md)对固定文档 `a1ef364813c327585716ba2628914ee53b2f7895` 均无阻塞；本后继仅登记审查结果／链接。Comparison 已有下面的独立精确证据；任何后续变更仍需自己的适用版本证据。
+
+### 已交付的手动比较支持
+
+入口为[详细操作与限制](../work/judge-prefetch-rebuild/LIVE-COMPARE.md)，不是旧 41-case live runner。默认 preview 不导入配置、不联网、不起子进程、不创建输出；只有用户手动 `--execute` 才按其固定 source/build/model、有限 case/repeat/order 与整体时间计划启动隔离样本。没有默认费用许可，也不能只凭金额上限运行；MemoryWorker 可额外调用其独立模型，停止本地进程不能保证远端已受理工作停止计费。
+
+[22 项支持报告](../work/judge-prefetch-rebuild/04-comparison-support-verification.md)、[最终 source/build/guard pin](../work/judge-prefetch-rebuild/04-comparison-support-final-source.json)、[27 次历史 capture](../work/judge-prefetch-rebuild/04-comparison-support-history.json)及独立 [Standards](../work/judge-prefetch-rebuild/reviews/standards-comparison-support-final.md)／[Spec](../work/judge-prefetch-rebuild/reviews/spec-comparison-support-final.md)保留完整适用范围。Runner `ec4deeba…` 与 test `96a20271…` 是最终受测字节；说明文档 `bcaa110e…` 在测试后完成并独立审阅，原 captured doc hash 不改写。两项 actual-app/Pi 是 22 的重叠子集，不把总数相加。
+
+真实 old/new 比较仍未执行；不同源码结果标 bundled old/new，相同源码只能是 smoke。已知来源、HTTP／tokens／cost／quality／render timing 的缺口仍为 unknown；“unmatched”固定语句含“退货”，不能预称必然空检索。完整本地前端／浏览器、真实效果和自然记忆／Dream 的原验收矩阵保留，四个 CLI case 不代替它。Raw capture 只在本地保留，公开 checkout 使用上述 curated 证据。
 
 ## 7. 回报格式与收尾
 

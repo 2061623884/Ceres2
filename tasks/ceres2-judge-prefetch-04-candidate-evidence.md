@@ -1,6 +1,6 @@
 # 04：同版集成与调用对照
 
-- 状态：进行中（2026-10-07：核心同版 558 backend 全量已通过；核心交接文档两轴无阻塞；独立 comparison 支持及其文档审查、外部验收仍开放）
+- 状态：待验收（2026-10-07：受控核心 558 backend、独立比较支持 22 项及核心／支持两轴审查已交付；真实对照、前端／浏览器和本人验收仍开放）
 - 拆分：已批准；功能依赖保持 01 → 02 → 03 → 04
 - 执行授权：2026-10-07 用户已授权从 GitHub 基线重新 implement-spec／TDD／Agent Team 实施、可追溯提交及分支推送；前置功能与专职 Tester 门槛保留。
 - 负责人：集成者维护最终候选与文档；专职 Tester 使用独立工作树 `../worktrees/04-core-verification`、分支 `ceres2/judge-prefetch-04-core-20261007`；专职 Tester 执行所有验证命令，Standards／Spec 独立只读审查。共享文件按 [执行决定](../docs/REBUILD-DECISIONS.md#4-写入所有权与可并行支持项) 交接。
@@ -53,17 +53,25 @@
 
 [最终核心报告](../work/judge-prefetch-rebuild/04-core-verification.md)、[source/harness/build 审计](../work/judge-prefetch-rebuild/04-core-final-source.json)与[五次 capture 摘要](../work/judge-prefetch-rebuild/04-core-verification-history.json)固定精确范围。248 个源码文件及受测 harness 前后一致；全套 617 个 Node PID（581 个 Pi worker）均加载 guard，没有意外 block。五个 dist artifact 的 hash 首次在全量运行中记录、终态相同，不冒称为运行前 artifact hash。
 
-尚未接受的比较 runner／其测试草稿不进入此 worktree，防止 harness fingerprint 漂移。其后若只加入独立支持脚本／文档且不改变 app 或 harness runtime，另留精确 per-artifact hash 与受影响测试；不得宣称后来改变的支持代码早已在本次核心全量中执行，也不盲目重复未变 backend。最终支持项／文档仍需单独审查，真实采样／浏览器／本人验收保持开放。
+当时尚未接受的比较 runner／测试草稿未进入此 worktree，防止 harness fingerprint 漂移。其后若只加入独立支持脚本／文档且不改变 app 或 harness runtime，另留精确 per-artifact hash 与受影响测试；不得宣称后来改变的支持代码早已在本次核心全量中执行，也不盲目重复未变 backend。最终支持项已按下节独立测试／审查闭合；真实采样／浏览器／本人验收保持开放。
 
 ## 核心文档／证据审查闭合
 
 [Standards](../work/judge-prefetch-rebuild/reviews/standards-core-documentation.md)与[Spec](../work/judge-prefetch-rebuild/reviews/spec-core-docs-final.md)独立核对文档提交 `a1ef364813c327585716ba2628914ee53b2f7895`，均无核心文档／证据阻塞。其 pins 保留全部 248 源码与四个受测 harness hash、五次原始 capture/output 哈希及子进程审计的交叉核对；未接受 comparison 草稿明确排除。后继仅登记本节审查结果和报告链接，不改变核心技术内容。
 
-核心可独立发布可追踪 checkpoint；comparison 继续按独立 artifact 测试和审查完成，不能阻止已核实核心备份，也不能随核心声明已验收。真实 provider／浏览器及本人验收继续开放，04 整体状态仍为进行中。
+核心可独立发布可追踪 checkpoint；comparison 后续已按下节独立 artifact 测试／审查闭合，不能追溯称它进入早先核心全量。真实 provider／浏览器及本人验收继续开放，04 整体仍待验收。
+
+## 独立比较支持与最终受控交付
+
+- 核心已核实发布为远端 `88310f00836d29362e33384ffd959e9939e31a42`，对应本地 `56f0e6f1d4e1e42d4e574f09df55fde0dce8615f`，精确 tree 均为 `c916518853289f246e64b1ccdac609f9599f42d7`；[映射](../work/judge-prefetch/publication-core-final.json)。当前支持是该核心之后的独立提交，不改变 248 个核心源码或受测 harness runtime。
+- [手动比较说明](../work/judge-prefetch-rebuild/LIVE-COMPARE.md)及 runner／test 形成精确支持范围。[Tester 报告](../work/judge-prefetch-rebuild/04-comparison-support-verification.md)记录 **22 passed**，其中 upper/lower 配置的真实当前 app／Pi SDK loopback 两项是重叠子集，另行 affected 2 不能再相加；全部为假 key／本地 provider，非旧新真实模型对照。
+- Runner `ec4deeba2a98c2f028f7316b733d42507cc449466b5517688291465fd15cd8e5`、test `96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9` 与最终两次 capture 前后相同；[精确 source/build/guard 证据](../work/judge-prefetch-rebuild/04-comparison-support-final-source.json)保留原受测文档 hash。最终文档 `bcaa110e4bb2a92e6be08643a6c453f96a8a35e30e882f8149f7574f9ff2ca51` 在测试后完成，已获独立 [Standards](../work/judge-prefetch-rebuild/reviews/standards-comparison-support-final.md)／[Spec](../work/judge-prefetch-rebuild/reviews/spec-comparison-support-final.md)审阅，不能回填成受测字节。
+- [27 次历史 capture](../work/judge-prefetch-rebuild/04-comparison-support-history.json)保留 RED、fixture／descriptor／大小写 alias 修复及被替代 21 项成绩。没有为了加入支持重跑未变核心，也不把支持测试冒充核心全量的一部分。
+- Preview 默认不触碰配置、网络、子进程或输出。真实执行仅由用户明确手动触发，必须固定两源／build／模型、有限 case/repeat/order 与整体时间上限；无金额默认额度，不支持只凭费用上限运行。保留 MemoryWorker／远端已接收请求的费用风险；HTTP、tokens、成本、质量与渲染时延未知。旧／新为 bundled comparison，不归因全额收益于预取。
 
 ## 下一步与证据
 
-前三票已完成云端专项与核心审查，冻结核心全量已完成，继续独立支持／文档验证；真实比较前仍须注明模型／数据版本及已授权界限。当前 01–03 同版受控核心全量已完成；独立支持／文档审查和真实模型比较尚未闭合，不以核心通过标记 04 整体验收。
+前三票已完成云端专项与核心审查，受控核心、独立支持和两轴审查已完成，继续用户本地前端／真实浏览器及获授权的有限真实比较；执行前仍须固定模型／数据／build 版本与明确限额。当前 01–03 同版受控核心全量及独立支持／文档审查已完成；真实模型比较与其他外部层未执行，不标记 04 整体已验收。
 
 ## 有界传输支持项（可提前准备，非新增业务票）
 

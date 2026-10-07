@@ -18,8 +18,10 @@ Ceres2 是一个面向商超购物场景的 AI 应用原型：帮助用户把“
 - **角色入口**：只有可可新自由文本进行一次是否转墨墨的入口判断；yes 等用户确认切换，no／uncertain／timeout／error 保留原文继续可可。墨墨文字和结构化按钮不新增角色或政策 Kev；返回购物只靠明确按钮，不自动续接旧购物授权。
 - **同一 Pi 与政策证据**：留在可可的文字使用独立政策判断，yes 按完整原文预取现有静态规则并提供真实引用、来源、版本和状态。首次 Pi 理解保留相关任务、问题与引用，不再依赖四能力标签；后续由 guide_request 控制相关上下文。
 - **事实与完整请求**：政策不是具体订单资格或提交授权；购物、澄清、普通解释、历史／记忆结果与政策及职责边界可同时保留。未匹配、部分和错误分别投影；Python 保留当前请求、取消、deadline 与事务保护。
-- **请求内复用／多引用**：03 已完成精确 scope/query/category/版本复用、有效早期引用及多范围宿主输出，并通过 152 项专项（含重叠 34 复用／安全用例）和核心两轴复审；[03 TASK](tasks/ceres2-judge-prefetch-03-query-reuse.md)保留精确候选。固定 runtime_summary 独立于 256-event 诊断尾部；硬错误缺值仍为未知。04 的同版核心全量现已通过；核心文档／证据两轴审查无阻塞；独立 comparison 支持及其文档审查和外部层仍未闭合，不能称四票整体已验收。
-- **当前受控核心**：冻结提交 `d6a40886926bf203b53c52db27d2177b1b3dcb80` 的 **558 backend** 全量通过，248 个源码 hash 与最终核心审查／专项一致；依赖、Pi typecheck/build 与 guard／isolation 同版通过，见[04 核心报告](work/judge-prefetch-rebuild/04-core-verification.md)。01 的 480、02 的 524、03 的 152 各保留适用版本，重叠数字不相加。最新已核实 03 核心远端为 `70a9f8c68ff99de7eb9b062dc1262d287e48b26e`，详见[03 发布映射](work/judge-prefetch/publication-query-reuse-core.json)及[03 scoped 报告](work/judge-prefetch-rebuild/03-query-reuse-verification.md)；后续 04 全量按源码等价映射到该核心；独立支持／文档不由该 checkpoint 自动完成。真实 provider、前端／浏览器和用户本人验收仍开放。
+- **请求内复用／多引用**：03 已完成精确 scope/query/category/版本复用、有效早期引用及多范围宿主输出，并通过 152 项专项（含重叠 34 复用／安全用例）和核心两轴复审；[03 TASK](tasks/ceres2-judge-prefetch-03-query-reuse.md)保留精确候选。固定 runtime_summary 独立于 256-event 诊断尾部；硬错误缺值仍为未知。04 的同版核心全量现已通过；核心文档／证据两轴审查无阻塞；独立 comparison 支持也已通过自身 22 项及两轴审阅。真实对照与前端／浏览器／本人验收未完成，不能称四票整体已验收。
+- **当前受控核心**：冻结提交 `d6a40886926bf203b53c52db27d2177b1b3dcb80` 的 **558 backend** 全量通过，248 个源码 hash 与最终核心审查／专项一致；依赖、Pi typecheck/build 与 guard／isolation 同版通过，见[04 核心报告](work/judge-prefetch-rebuild/04-core-verification.md)。01 的 480、02 的 524、03 的 152 各保留适用版本，重叠数字不相加。已核实最终核心远端为 `88310f00836d29362e33384ffd959e9939e31a42`，详见[核心映射](work/judge-prefetch/publication-core-final.json)；比较支持作为后续独立受测／审阅产物加入，不回填为早先核心全量范围。真实 provider、前端／浏览器和用户本人验收仍开放。
+
+- **手动比较支持**：[LIVE-COMPARE](work/judge-prefetch-rebuild/LIVE-COMPARE.md)默认 preview 惰性执行；独立 **22 项**通过，含重叠的两个真实当前 app／Pi SDK loopback case（假 key），见[支持报告](work/judge-prefetch-rebuild/04-comparison-support-verification.md)。真实用户执行须固定两源／build／模型和有限时间计划；MemoryWorker 与远端已受理请求可产生费用。未知 usage／成本／质量不填零，支持测试不是旧新真实效果比较。
 
 ## 历史体验更新（2026-10-06）
 
@@ -40,7 +42,7 @@ Ceres2 是一个面向商超购物场景的 AI 应用原型：帮助用户把“
 - **本地运行或接手**：以[当前接手指南](docs/JUDGE-PREFETCH-HANDOFF.md)为入口，先核对准确分支／SHA并保护本地未提交修改；旧十票／Ubuntu 指南仅作历史背景，不沿用旧模型、商品数、41 live 或 426／37 成绩。
 - **了解产品与来源**：[PROJECT](PROJECT.md)、[产品定义](prd.md)、[参考项目与采用边界](docs/REFERENCES.md)。[原 16 票索引](tasks/ceres2-upgrade.md)保留原阶段范围与历史证据。
 
-核心 README／TASK／交接与证据已通过[文档 Standards](work/judge-prefetch-rebuild/reviews/standards-core-documentation.md)和[文档 Spec](work/judge-prefetch-rebuild/reviews/spec-core-docs-final.md)独立审查；comparison 草稿不在该范围内。
+核心 README／TASK／交接与证据已通过[文档 Standards](work/judge-prefetch-rebuild/reviews/standards-core-documentation.md)和[文档 Spec](work/judge-prefetch-rebuild/reviews/spec-core-docs-final.md)独立审查；comparison 不在早先核心文档审查范围内，现由独立[支持 Standards](work/judge-prefetch-rebuild/reviews/standards-comparison-support-final.md)／[Spec](work/judge-prefetch-rebuild/reviews/spec-comparison-support-final.md)审阅，测试后最终文档 hash 单独保留。
 
 部分历史／中间证据仅保留在云端，未随公开仓库发布。当前公开依据是单票已提交的 curated 报告、source manifest、执行摘要、两轴审查与精确发布映射；原始日志／临时数据库不保证可从公开 checkout 取得，不能把失效的历史链接当作新版本证据。
 
