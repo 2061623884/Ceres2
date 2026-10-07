@@ -24,7 +24,7 @@ def schemas():
         "name": "search_after_sales_policy", "description": "无需选择订单，检索一般售后政策及来源。政策不证明具体订单资格，不授权申请。",
         "parameters": {"type": "object", "properties": {
             "query": {"type": "string", "minLength": 1},
-            "category": {"type": "string", "enum": ["refund", "return", "delivery"]}},
+            "category": {"type": "string", "enum": list(policy.CATEGORIES)}},
             "required": ["query"]}
     }})
     tools.append({"type": "function", "function": {
@@ -46,7 +46,7 @@ def schemas():
     return tools
 
 
-def execute(name, arguments, *, owner_id, order_id, order_service):
+def execute(name, arguments, *, owner_id, order_id, order_service, deadline=None):
     if name not in READS and name not in ("search_after_sales_policy", "request_clarification"):
         return {"ok": False, "error": "READ_ONLY", "message": "当前仅支持查询，未提交任何申请。"}
     try:
@@ -61,9 +61,9 @@ def execute(name, arguments, *, owner_id, order_id, order_service):
         return {"ok": True, "data": {"slot": args["slot"]}}
     if name == "search_after_sales_policy":
         if (not isinstance(args.get("query"), str) or not args["query"].strip()
-                or ("category" in args and args["category"] not in ("refund", "return", "delivery"))):
+                or ("category" in args and args["category"] not in policy.CATEGORIES)):
             return {"ok": False, "error": "BAD_ARGUMENTS", "message": "政策查询问题或类别不合法。"}
-        return policy.search_policies(args["query"], args.get("category"))
+        return policy.search_policies(args["query"], args.get("category"), deadline=deadline)
     if args.get("order_id") != order_id:
         return {"ok": False, "error": "ORDER_NOT_FOUND", "message": "请先选择要查询的订单。"}
     return order_service.read(name, owner_id, order_id)

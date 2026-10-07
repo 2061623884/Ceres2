@@ -43,3 +43,13 @@ T01 落地政策接口后，本 owner 在 Mercury tools/graph 单独接线：pol
 - 覆盖八个测试文件：本票 evidence/migration，加原 aftersales、human、checkout、aftersales_migration、aftersales_proposal_migration、guide_migration。
 - Standards 两次修复 delta 独立只读复审无未解决发现。Spec 最终 delta 由主会话登记。
 - 这仅允许核心业务暂存合并；T07 的 Mercury policy categories/deadline 接线仍待 T01 正式集成并单独验证。不得据此解除 T05 对完整 T07 的依赖，或声称最终整合/浏览器/本人验收通过。
+
+## T01 后的 Mercury 接线完成候选
+
+T01 canonical `ccf272b752f096ce0d80f7d0a4f29b19c05b0a77` 合入本票后，公开 HTTP RED `93034dd` 的 11 例由 Tester 全部复现：旧三域声明/校验不支持十域，政策 worker 取到新 30 秒 fallback 而非原处理余量。
+
+产品 delta `79a7eff` 仅修改 `mercury/tools.py` 与 `mercury/graph.py` 五行：schema 与参数校验共用 policy.CATEGORIES，graph 的原始 deadline 经 execute 传至 search_policies。Mercury 原本的15秒与5轮限制不变；图没有现成 stop callback，本票不新增无实际来源的取消参数。
+
+Tester 在本工作树按自身 runtime lock 安装并构建后，受影响组 **63 passed / 38.24s**，包含新11例与 Mercury public/provider/wire、shared policy、aftersales/human。源码/harness 无漂移。首次扩展运行因该工作树尚缺 Pi SDK 而中断，保留为 invalid setup 记录，不算产品失败或正式通过。
+
+这些结果替代上文“待T01接口”的实现阻塞；最终 T07 技术释放还须该小 delta 两轴复审与 Merger 同版合入确认。核心75和本次63是不同固定 pin/范围，不求和冒充全量整合测试。真实模型、完整BGE/GraphRAG、最终整合和用户本人验收仍未由本票执行。

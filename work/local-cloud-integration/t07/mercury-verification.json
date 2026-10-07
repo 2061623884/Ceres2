@@ -1,0 +1,28 @@
+{
+  "label": "t07-mercury-policy-ready-green",
+  "command": [
+    "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/test_merge_mercury_policy_public.py",
+    "tests/test_mercury_public.py",
+    "tests/test_mercury_provider.py",
+    "tests/test_mercury_wire.py",
+    "tests/test_next_shared_policy_public.py",
+    "tests/test_aftersales_public.py",
+    "tests/test_human_public.py",
+    "-q",
+    "-p",
+    "pytest_asyncio.plugin"
+  ],
+  "head": "79a7efffadaeac3706dc54db2066f6ababcb6848",
+  "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/backend",
+  "exit_code": 0,
+  "elapsed_seconds": 40.494,
+  "source_changes_during_run": [],
+  "harness_changes_during_run": [],
+  "summary": [
+    "63 passed in 38.24s"
+  ],
+  "raw_record_sha256": "43613d2264b7c880a5094687e64eb86afda66d8482149c5e36c779298c11a6bf"
+}

@@ -1,6 +1,6 @@
 # Ceres2 local-cloud integration
 
-- 状态：进行中（规划已形成，产品尚未实施/验收）
+- 状态：进行中（T01 和 T07 核心已合入；T07 Mercury 已合入并核验；T02/T03 进行中）
 - 主责任：主会话；集成分支唯一写入者为 Merger
 - Spec：[规格](../docs/plans/ceres2-local-cloud-integration-spec.md)
 - Workspace：[恢复说明](../CERES2-WORKSPACE.md)
@@ -44,7 +44,7 @@ Git 静态计数：baseline→incoming **340** 个变更路径；local-start→i
 
 ## 当前证据与下一步
 
-规划阶段只执行 Git clone/show/diff/status 和文档写入，没有产品修改、安装、测试、build、服务启动或真实 API。当前所有集成测试均 not run；来源 558/441 等不继承。规划提交后主会话分配 worktree，按 frontier 实施。发布由主会话协调授权工具，绝不合并 main 或修改原分支。
+T01 与 T07 核心已按下文固定 pin 受控验证并合入；T02/T03 分片正在实施，T07 Mercury 已通过独立两轴复审并合入，postmerge 最小验证已通过。来源历史成绩不继承；完整九票同版回归、真实验证与用户验收未完成。发布由主会话协调授权工具，绝不合并 main 或修改原分支。
 
 ## 已绑定工作者
 
@@ -75,3 +75,17 @@ T01 conftest 的 controlled_policy_source 只允许 policy namespace；T02 接�
 `6ba93b2` 经165受影响用例、runtime typecheck/build、guard2及两轴修复复审后合入 `3ecf15e8`；产品目录与受测 pin 相同。T01 为待验收，实际 BGE质量、最终集成/本人验收仍开放。当前 frontier：T02 与 T03 并行；T07 owner 同时只写 Mercury deadline/category 调用链。T02独占 conftest 和商品/fixture调用链；T03独占 Pi上下文/工具/Prompt及独立test，双方不得共享文件。T01的policy/knowledge已冻结供消费，需要接口变更先协调owner，不私改。
 
 T07核心postmerge最小检查在15c0ad6冻结工作树13passed无漂移，证据已记录；这不解除其Mercury接线或T05阻塞。直接 Guide15秒涵盖同步授权，独立navigation预检不共用跨请求预算，重放/重连不重置。
+
+
+## 2026-10-07 恢复核对
+
+恢复时 canonical 为 `ccf272b752f096ce0d80f7d0a4f29b19c05b0a77`，工作树干净。独立固定工作树上的 T01 postmerge 最小检查为18 passed，另有 runtime build 和实际 Node guard 2 passed；三份 capture 均无源码/harness 漂移。此检查不替代九票最终回归。
+
+T02 恢复 pin `911a7a0`，catalog API/service 有两份保留中的未提交改动；T03 恢复 pin `90d1ac3`，干净。不得把更早分片 GREEN 当作这两个完整候选通过。T07 Mercury 产品 pin `79a7eff`、交接 `24ee4d0` 已有63 affected passed，尚无该 delta 两轴报告，故尚未合入或释放 T05。
+
+最后已核实远端映射仍是 local `15c0ad6` → remote `5564ff1d6fe1916c9042c5cffabdbfdbb8cae2e7`。T01 `ccf272b` 发布载荷已准备，实际发布由主会话核实；载荷存在不等于推送成功。
+
+
+T07 Mercury 两轴均 clear 后，`24ee4d0` 无冲突合入 `4616798`，产品目录与受测 `79a7eff` 零差异。固定 postmerge 最小验证已交 Tester；完成后可解除 T05 的 T07 依赖，T02/T04 仍各自必须完成。详情以 T07 TASK 为准。
+
+T07 Mercury 固定 `4616798` postmerge 11 passed / 7.25s，无源码/harness 漂移；T05 的 T07 依赖已解除，T02/T04 依赖保持。此结果不等于完整最终验收。

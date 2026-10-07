@@ -1,6 +1,6 @@
 # T03：同 Pi 原生完成与混合引用
 
-- 状态：待开始
+- 状态：进行中（T01 已技术放行；当前实现尚未整体放行）
 - 负责人：runtime owner (T01→T03 交接)；主会话绑定实际 worker/worktree 后方可写入
 - 规格：[本轮规格](../docs/plans/ceres2-local-cloud-integration-spec.md)
 - 总任务：[集成 TASK](ceres2-local-cloud-integration.md)
@@ -20,4 +20,4 @@
 
 ## 当前阻塞、下一步、证据
 
-尚未实现；等待上列依赖交付。本票是可独立演示/验证的业务切片，不允许只搬文件并宣称完成。Tester 和两轴审查证据由主会话在收到后登记；历史来源报告不能代替本票结果。
+恢复 pin `90d1ac3`，工作树干净；同 Pi native finish 与 recipe facts 已有早期分片证据，当前完整候选待 runtime owner 和 Tester 核对。 依赖 T01 已技术放行；当前候选仍需固定源码受影响验证及独立两轴审查。早期分片成绩不继承为本票整体通过。

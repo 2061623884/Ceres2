@@ -25,3 +25,8 @@ Fresh synthetic DB/checkpoints, fake credentials and loopback provider only. Act
 Python 3.12.14/Node 24.19.0 differs from incoming historical Python 3.11/Node 22.19.0. Runtime installed independently from its own lock, including successful offline reinstall from this task's fresh package cache. Business environment includes verified T07 Pillow 12.3.0 pin. Full incoming knowledge lock resolves under dry-run using documented official CPU Torch index; no full knowledge installation, BGE weights, GraphRAG build, actual model provider, user browser or human acceptance is claimed.
 
 Tests use an explicit model-recall double at the retrieval-worker boundary for policy HTTP cases; production has no lexical fallback. Real worker JSONL tests separately verify subprocess/provenance/failure/deadline behavior. This is controlled integration correctness, not real BGE relevance or language-quality evidence. Final nine-ticket same-candidate regression and independent final reviews remain separate.
+
+
+## Frozen canonical postmerge check
+
+Tester captures at canonical `ccf272b752f096ce0d80f7d0a4f29b19c05b0a77` in a detached verification worktree: `t01-postmerge-minimum` 18 passed / 11.30s, `t01-postmerge-runtime-build` exit 0, and `t01-postmerge-portable-guard` 2 passed / 3.87s. All report no source or harness drift. Raw records remain in the workspace test-evidence/runs directory. These are focused postmerge checks, not a final aggregate or real-provider validation.

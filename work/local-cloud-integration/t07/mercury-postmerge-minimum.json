@@ -1,0 +1,22 @@
+{
+  "label": "t07-mercury-postmerge-minimum",
+  "command": [
+    "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/test_merge_mercury_policy_public.py",
+    "-q",
+    "-p",
+    "pytest_asyncio.plugin"
+  ],
+  "head": "46167988f686c54851670115277b6a6e6a20937e",
+  "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-t07-4616798/backend",
+  "exit_code": 0,
+  "elapsed_seconds": 9.211,
+  "source_changes_during_run": [],
+  "harness_changes_during_run": [],
+  "summary": [
+    "11 passed in 7.25s"
+  ],
+  "raw_record_sha256": "9a6d06d85be60945d7875b2b94ac8fe4876ecc456f8963b5541a48a886d3264f"
+}

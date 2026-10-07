@@ -1,6 +1,6 @@
 # T02：Canonical 商品召回与当前 Offer
 
-- 状态：待开始
+- 状态：进行中（T01 已技术放行；当前实现尚未整体放行）
 - 负责人：prepare_shopping_filter_slice（shopping owner）；主会话绑定实际 worker/worktree 后方可写入
 - 规格：[本轮规格](../docs/plans/ceres2-local-cloud-integration-spec.md)
 - 总任务：[集成 TASK](ceres2-local-cloud-integration.md)
@@ -20,7 +20,7 @@
 
 ## 当前阻塞、下一步、证据
 
-尚未实现；等待上列依赖交付。本票是可独立演示/验证的业务切片，不允许只搬文件并宣称完成。Tester 和两轴审查证据由主会话在收到后登记；历史来源报告不能代替本票结果。
+恢复 pin `911a7a0`，catalog API/service 两份未提交改动保留；由 shopping owner 继续准备完整候选。 依赖 T01 已技术放行；当前候选仍需固定源码受影响验证及独立两轴审查。早期分片成绩不继承为本票整体通过。
 
 负责 catalog/comparison/explore 运行内检索链透传原 deadline/取消；普通商品 HTTP 明确单请求预算，不因检索调用重置预算。不得写 knowledge core 或共享 schema；接口需求交当前 owner。
 

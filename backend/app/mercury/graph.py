@@ -200,7 +200,7 @@ def build_graph(saver, owner_id, model, deadline, order_service, case, run_id, m
             try:
                 result = before_deadline(lambda: query_tools.execute(
                     call["function"]["name"], call["function"]["arguments"],
-                    owner_id=owner_id, order_id=state["order_id"], order_service=order_service), deadline)
+                    owner_id=owner_id, order_id=state["order_id"], order_service=order_service, deadline=deadline), deadline)
             except QueryDeadlineExceeded:
                 return budget_stop({**state, "messages": messages, "facts": facts})
             except Exception as error:
