@@ -1,12 +1,12 @@
 # 可可角色判断与政策预检索：总 TASK
 
-- 状态：进行中（规划与基线准备；尚无本轮产品／测试交付）
+- 状态：进行中（规划已发布；01 逐行为 TDD 实施中，02–04 依赖未释放）
 - 拆分：已批准；功能依赖保持 01 → 02 → 03 → 04
 - 执行授权：2026-10-07 用户已批准从真实 GitHub 基线重新 implement-spec／TDD／Agent Team 实施、可追溯提交与分支推送。前端由用户本地处理；详见 [执行决定](../docs/REBUILD-DECISIONS.md)。
 - 负责人：主会话维护状态、权限与集成候选；各票唯一实现者按交接绑定，专职 Tester 独占验证，集成者独占提交／合并。
 - 规格：[可可角色判断与政策预检索](../docs/plans/ceres2-judge-prefetch-spec.md)
 - 范围：替换混合 11 分类；Coco-only 角色入口；Momo 直达与按钮返回；安全首次上下文；政策判断、预检索与同 Pi 注入；同请求范围复用与补查；同版证据与真实调用比较。
-- 当前成果：真实基线及四票规划导入；功能、受控验证、真实模型、用户本地前端／浏览器分别建新证据。规划提交与远端 SHA 待集成者登记；旧成绩不继承。
+- 当前成果：真实基线、四票规划与固定参考清单已发布为远端 `61172a49a850b41673bf5f988eaa0b9140f8772c`，对应本地 `2c705d09746d293c3d47b02edb42cffb7b47cb9b`，精确 tree 均为 `5e35abaeca156a8a139a079ded4af286e7fb5da8`；[发布映射](../work/judge-prefetch/publication-planning.json)。[新基线验证](../work/judge-prefetch-rebuild/baseline-verification.md)通过有限烟测，不代表 01 功能通过。真实模型、用户本地前端／浏览器与本人验收未执行；旧成绩不继承。
 
 ## 2026-10-07 当前执行差异
 
@@ -31,10 +31,14 @@
 - 04 维护集成 fixture、版本清单与报告，专职 Tester 唯一执行测试／lint／typecheck／build；业务缺陷回所属票修复，再重新冻结与复验，不能静默把功能延期到 04。
 - 共享入口、schema、Prompt、fixture 和索引的实际文件由主会话先列单一写入负责人，再交接；不得在同一文件上开并行实现者。总 TASK／PROJECT 由主会话协调。
 
+## 当前局部支持证据
+
+官方 DeepSeek 五条辅助请求路径的有界支持已集成，详见 [04 支持项记录](ceres2-judge-prefetch-04-candidate-evidence.md#2026-10-07-有界传输支持项)及[Tester 报告](../work/judge-prefetch-rebuild/thinking-transport-verification.md)。主 Pi／validator 两条路径仍待 01 接入及重新验证；04 的功能依赖没有释放。当前只报告有边界的受控结果，不宣称完整功能、独立审查或真实 provider 通过。
+
 ## 总体验收与证据
 
 各票全部验收项、同候选安全回归、独立 Standards／Spec 审查及真实调用对照分别记录。受控测试、真实模型、真实浏览器、本人验收分层；未满足者保留待验收或阻塞。性能无未经确认的阈值，未知用量不填零。旧阶段未闭合证据仍由[原总 TASK](ceres2-next-experience.md)维护，不借本任务宣称解决。
 
 ## 阻塞／下一步
 
-规划与真实基线提交后，从 01 开始逐行为红 → 绿；02／03／04 继续等待各自前置云端交付。官方 DeepSeek thinking 是 04 记录的有界传输支持项，可提前准备但不释放 04 功能验收。真实 provider 采样须先核实配置及有限额度；前端由用户本地接手。各里程碑在本地 commit、授权分支发布、远端完整 SHA 读取与精确 tree 一致性核实后发布；GitHub connector 生成不同提交 SHA 时保留本地／远端 SHA 的持久映射回执，当前尚无本轮功能通过结论。
+01 独立实现者从已发布规划对应的 worktree 开始逐行为红 → 绿；02／03／04 继续等待各自前置云端交付。官方 DeepSeek thinking 是 04 记录的有界传输支持项，可提前准备但不释放 04 功能验收。真实 provider 采样须先核实配置及有限额度；前端由用户本地接手。各里程碑在本地 commit、授权分支发布、远端完整 SHA 读取与精确 tree 一致性核实后发布；GitHub connector 生成不同提交 SHA 时保留本地／远端 SHA 的持久映射回执，当前尚无本轮功能通过结论。

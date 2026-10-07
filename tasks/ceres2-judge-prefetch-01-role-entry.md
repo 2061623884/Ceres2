@@ -1,9 +1,9 @@
 # 01：可可入口与按钮返回
 
-- 状态：待开始
+- 状态：进行中（2026-10-07：规划已发布，01 已获准逐行为 TDD 实施）
 - 拆分：已批准；功能依赖保持 01 → 02 → 03 → 04
 - 执行授权：2026-10-07 用户已授权从 GitHub 基线重新 implement-spec／TDD／Agent Team 实施、可追溯提交及分支推送；前置功能与专职 Tester 门槛保留。
-- 负责人：主会话绑定本票唯一实现者／worktree；专职 Tester 执行所有验证命令，Standards／Spec 独立只读审查。共享文件按 [执行决定](../docs/REBUILD-DECISIONS.md#4-写入所有权与可并行支持项) 交接。
+- 负责人：01 独立实现者，工作树 `../worktrees/01-role-entry`，分支 `ceres2/judge-prefetch-01-role-entry-20261007`；专职 Tester 执行所有验证命令，集成者维护 TASK／PROJECT、提交和合并，Standards／Spec 独立只读审查。共享文件按 [执行决定](../docs/REBUILD-DECISIONS.md#4-写入所有权与可并行支持项) 交接。
 - 上级：[总 TASK](ceres2-judge-prefetch.md)；依据：[规格](../docs/plans/ceres2-judge-prefetch-spec.md)。本票不得继承旧版通过成绩。
 
 ## 2026-10-07 当前执行差异
@@ -43,4 +43,4 @@
 
 ## 下一步与证据
 
-规划提交后，按已批准公共接缝先红测再最小实现，Tester 独立验证。当前无本轮测试结果。依据来源及旧测试导航见规格 Further Notes。
+规划里程碑已于 2026-10-07 发布并核实：[提交映射](../work/judge-prefetch/publication-planning.json)。01 从本地 `2c705d09746d293c3d47b02edb42cffb7b47cb9b` 开始，逐行为红 → 绿由 Tester 独立执行；当前尚无 01 功能完成结论。既有烟测属于[新基线验证](../work/judge-prefetch-rebuild/baseline-verification.md)，不替代本票新行为与安全回归。依据来源及旧测试导航见规格 Further Notes。

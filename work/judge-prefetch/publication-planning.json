@@ -1,0 +1,14 @@
+{
+  "remote_commit": "61172a49a850b41673bf5f988eaa0b9140f8772c",
+  "local_commit": "2c705d09746d293c3d47b02edb42cffb7b47cb9b",
+  "tree": "5e35abaeca156a8a139a079ded4af286e7fb5da8",
+  "branch": "ceres2/judge-prefetch-rebuild-20261007",
+  "verified": true,
+  "phase": "planning only",
+  "repository": "https://github.com/2061623884/Ceres2",
+  "remote_commit_url": "https://github.com/2061623884/Ceres2/commit/61172a49a850b41673bf5f988eaa0b9140f8772c",
+  "verification_owner": "Main integration coordinator",
+  "evidence": "Remote branch HEAD and commit tree read through the authorized GitHub connector; exact tree equality with the local planning commit confirmed. Commit SHAs differ because publication creates remote commit metadata.",
+  "scope": "Planning/provenance/reference/recovery documents and controlled verification harness only. No reconstructed product behavior is claimed complete.",
+  "verification_date_utc": "2026-10-07"
+}

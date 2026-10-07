@@ -40,6 +40,13 @@
 
 主会话冻结和维护候选，专职 Tester 独占执行全部测试／lint／typecheck／build 与实测，独立审查者只读。本票维护集成 fixture、版本清单和证据报告；共享 fixture 修改与所属业务票交接，禁止多个实现者同时写共享入口。无新业务功能所有权。
 
+## 2026-10-07 有界传输支持项
+
+- 已集成局部支持提交 `4944f7ea5ec02f1443685e6665154347ba9540d8`，集成 merge `37f3ad88bdb7f1bf84aa83e0c78a9a67b6e2d3ea`。其产品源码与 Tester 冻结六文件及完整受控 source map 一致。
+- [专职 Tester 报告](../work/judge-prefetch-rebuild/thinking-transport-verification.md)：五条实际请求路径（Momo、提取、Dream、结果表达及表达 validator）在官方主机发送关闭 thinking 字段；非官方主机及相似后缀保持字段不存在。18/18 专项／既有 provider 用例、12/12 相关回归、Pi typecheck/build 通过；各 RED 失败保留。
+- `worker.ts` 未在此提交修改。主 Pi 及其 validator 两条路径仍待 01 所有者串行接入，并须重新验证全部七条路径。独立 Standards／Spec 审查、全量集成、真实模型和用户前端验收均未由这份局部报告证明。
+- 此支持项不释放 04 的 03 前置依赖，也不代表 01–04 完成；模型、原输出额度与前端未改。
+
 ## 下一步与证据
 
 等待前三票云端交付与对应验证环境条件；验证计划执行前注明模型与数据版本，完成后交用户审阅收益及本人验收。当前未运行任何测试或模型；不以文档发布标记验收。

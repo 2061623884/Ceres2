@@ -5,6 +5,7 @@ import { Agent } from '@earendil-works/pi-agent-core';
 import { streamSimple } from '@earendil-works/pi-ai/api/openai-completions';
 import type { Model } from '@earendil-works/pi-ai';
 import { GENERAL_CLAIM_PROMPT } from './general-claim.js';
+import { officialDeepSeekSampling } from './official-deepseek.js';
 
 class ExpressionError extends Error {
   constructor(readonly code:string, cause?:unknown) { super(code, {cause}); }
@@ -50,7 +51,10 @@ async function run(start:Start) {
   let validations=Promise.resolve();
   const seen=new Set<string>();
   const generationUsage=observeUsage();
-  const agent=new Agent({initialState:{model,thinkingLevel:'off',tools:[],systemPrompt:start.prompt},streamFn:(_model,context,options)=>streamSimple(model,context,{...options,apiKey:start.model.apiKey,maxTokens:512,onProviderStreamEvent:generationUsage.onEvent})});
+  const agent=new Agent({initialState:{model,thinkingLevel:'off',tools:[],systemPrompt:start.prompt},streamFn:(_model,context,options)=>{
+    const samplingParams=officialDeepSeekSampling(start.model.baseUrl,options?.samplingParams);
+    return streamSimple(model,context,{...options,apiKey:start.model.apiKey,maxTokens:512,onProviderStreamEvent:generationUsage.onEvent,...(samplingParams?{samplingParams}:{})});
+  }});
   const stop=(error:unknown, fallback='generation_provider')=>{
     if(!failure) {
       const cause=error instanceof ExpressionError ? error.cause??error : error;
@@ -66,7 +70,10 @@ async function run(start:Start) {
   const validate=async(unit:{text:string;fact_ref:string})=>{
     if(failed) return;
     const validationUsage=observeUsage();
-    validator=new Agent({initialState:{model,thinkingLevel:'off',tools:[],systemPrompt:GENERAL_CLAIM_PROMPT},streamFn:(_model,context,options)=>streamSimple(model,context,{...options,apiKey:start.model.apiKey,maxTokens:256,onProviderStreamEvent:validationUsage.onEvent})});
+    validator=new Agent({initialState:{model,thinkingLevel:'off',tools:[],systemPrompt:GENERAL_CLAIM_PROMPT},streamFn:(_model,context,options)=>{
+      const samplingParams=officialDeepSeekSampling(start.model.baseUrl,options?.samplingParams);
+      return streamSimple(model,context,{...options,apiKey:start.model.apiKey,maxTokens:256,onProviderStreamEvent:validationUsage.onEvent,...(samplingParams?{samplingParams}:{})});
+    }});
     validator.subscribe(event=>{
       if(event.type==='message_end'&&event.message.role==='assistant'&&event.message.content.some(block=>block.type==='toolCall')) stop(new ExpressionError('validation_tool_call'));
     });
