@@ -9,7 +9,8 @@
 - 仓库：[2061623884/Ceres2](https://github.com/2061623884/Ceres2)。
 - 本地分支：`codex/ceres2-local-followup-20261008`；工作树：`/data/amax/Documents/projects/Agent/Agent产品/Ceres2-integration-20261008`。
 - 已知起点：`170fac0bc75fcc855897b073337ba218abeb5b7d`，tree `295499ee22cc30485d38eba82e96330a39d7d573`。
-- 最终评测工具代码：`739f13ead0c53ce9d82519efc30f51263e29ab45`；初候选为`e855d691d0a446c9e5385196134b55f2ec609320`，第一轮修复为`4e021e46e8c16671ae1366ec09c11f39bad01bd6`。最终29项/15.73s证据对应739的实际源码；后继本地交付提交只补文档/独立复审和离线报告，不改变该源码。
+- 真实100执行使用工具源码`739f13ead0c53ce9d82519efc30f51263e29ab45`、执行HEAD `00b397443bd7258d2166c6445ac4ac066cefd21d`；原29项/15.73s验证属于739。初候选为`e855d691d0a446c9e5385196134b55f2ec609320`，第一轮修复为`4e021e46e8c16671ae1366ec09c11f39bad01bd6`。
+- 本次真实报告候选为`fbb44854a412da8d77a7ec30426d240756a9d261`；实测后的评测driver/harness修复为`4008faacae169d18de80f6a444f59c47a93915b7`，最终两处必填签名清理为`cbca5d15bd40bd200f542d0eeaa1bc8192af9424`。后续交接提交不改变该源码；未重新真实采样或重评分，产品非evaluation路径始终与170起点一致。
 - 参考评测：[Ceres1 72bb1b99bf040c8b0bae5d026888bc059bc9423d](ceres1-evaluation-reference.md)；借方法与公开样本组织，不继承其成绩、runtime 或旧状态。
 - 原本地优化 `6734c7fe79e670df2dae12b065dcc49c0b10a307` 保留快照；后续在本工作树，原main与其他工作树保留。
 - 不合并。用户最新明确授权复用原模型配置、完成真实报告后发布本交付分支；普通push后核实远端SHA，最终完整交付SHA以分支与主会话回报为准。原工程配置/运行数据不修改，未执行rebase/cherry-pick/force push；旧00b397工具交付阶段只在本地。
@@ -50,7 +51,7 @@
 | Pi/前端类型与构建 | 全部退出0，warning保留 | [Node/build](../work/local-followup/01/node-builds-final.md)；Node22.19与本树独立锁/依赖 |
 | 官方GraphRAG | 5通过，官方库构建/local/global/wire | [组件](../work/local-followup/03/graph-official-library.md)；受控provider与deterministic encoder，非真实图LLM质量 |
 | 真实BGE | 4通过，含18公开检索校准、冷/热15秒预算 | [BGE](../work/local-followup/03/real-bge.md)、[指标v2](../work/local-followup/03/retrieval-dev-metrics-v2.md)；BM25/dense/RRF、macro/micro分别列出 |
-| 浏览器 | 先前本机170fac0 Firefox HTTPS run11通过 | [原本机报告](../work/local-cloud-integration/local-acceptance-20261008/LOCAL-ACCEPTANCE-RESULTS.md)；受控provider/检索，当前未新增浏览器执行 |
+| 原准备阶段浏览器 | 先前本机170fac0 Firefox HTTPS run11通过 | [原本机报告](../work/local-cloud-integration/local-acceptance-20261008/LOCAL-ACCEPTANCE-RESULTS.md)；受控provider/检索。本次独立商品订单浏览器另列下节 |
 | 原工具阶段100任务计划 | planned100/attempted0/not_run100，业务unknown100 | [独立清单](../work/local-followup/04/ACCEPTANCE-MANIFEST.md)保留旧离线v1-v4；仅描述旧批次，不覆盖本次真实运行 |
 
 历史云端746/5、183及Ceres1成绩不进入本表计数。RED、修复前失败、首轮GREEN失败和评分夹具版本变更均保留 `work/local-followup/01/02/`。检索指标v1和v2来自同一原始18条结果，增加macro说明只是离线更正，不新增检索执行。
@@ -75,7 +76,17 @@ e855候选的[Standards](../work/local-followup/05/STANDARDS-REVIEW.md)未发现
 | 实际Firefox | 当前built UI→独立真实API/SQLite，商品详情/加购/模拟结算/发货/签收通过，1 delivered模拟订单；Guide0/无新模型调用，本人UI与完整Guide浏览器仍待验收 |
 | 实际usage | 409条provider SSE观测记录：primary340/interim审校68/general审校1，已观测totalTokens2,229,367为下界；4/100 call-summary不完整，cacheWrite/cost均未知，不推费用；Graph与Memory单列 |
 
-唯一公开`dev-01:trial:3`首轮completed但未生成plan，声明confirm_plan时driver解引用null导致TypeError；保存完整已有capture/before/after，确认HTTP未发，原outcome为runner_failed/质量unknown，不重跑伪造成功。公开场景还暴露在库精确SKU被答无匹配、规格未澄清、预算内商品无plan等失败。Kev配置缺失，实际判断0/100，9条routing业务失败；critical观察0/eligible99不能签为系统安全。新报告保留失败/脚本问题和原始hash，不将64条tail未截断当4个summary完整。
+唯一公开`dev-01:trial:3`首轮completed但未生成plan，声明confirm_plan时driver解引用null导致TypeError；保存完整已有capture/before/after，确认HTTP未发，原outcome为runner_failed/质量unknown，不重跑伪造成功。公开场景还暴露在库精确SKU被答无匹配、规格未澄清、预算内商品无plan等失败。Kev配置缺失，实际判断0/100，9条routing业务失败；critical观察0/eligible99不能签为系统安全。新报告保留失败/脚本问题和原始hash；100个run均未因64-record tail上限截断，不等于4个缺失的call summary完整。
+
+## 实测后的工具修复与验证
+
+独立审查后仅修改评测driver与本轮执行harness，不改变Pi/检索/订单等产品行为。声明confirm_plan却没有当前plan时，driver现在给出明确ValueError，继续保留原runner_failed、capture和前后状态；这不解决模型未给plan的业务失败。Graph未观测证据保留null/not_evaluated，成功证据按必需字段读取，实际0/空集仍保留。配置入口统一窄reader，清除继承环境中当前Settings的大小写别名后注入获准值；保留HOME/TLS/proxy。两个没有当前调用方的参数默认值已移除，调用方明确传值。
+
+- 四模块受控回归：**35 passed/14.03s**，对应4008的源码快照，见[组合验证](../work/local-followup/01/tool-combined-after-real-harness-casefold-fix.md)。
+- 最后两处签名清理：仅harness模块 **5 passed/0.48s**，执行时HEAD为4008、工作树包含后来提交到cbca的签名；见[最终5项](../work/local-followup/05/real-harness-final-signature-cleanup-green.md)。这5项与前35项重叠，不加总，也不声称cbca重跑了35项。
+- 最终受影响源码11项见[新清单](../work/local-followup/04/real-model-20261008/REAL-HARNESS-FINAL-SOURCE-HASHES.sha256)。真实执行的旧41项SOURCE-HASHES和6项dist清单保留原样，只用于旧实测溯源。
+
+[Standards最终复审](../work/local-followup/05/REAL-STANDARDS-FINAL-REVIEW.md)确认本轮已发现违规及默认参数问题关闭；[Spec最终复审](../work/local-followup/05/REAL-SPEC-FINAL-REVIEW.md)确认窄修符合当前调用契约，整体规格仍开放。修复依据及各轮RED/GREEN见[记录](../work/local-followup/05/REAL-REVIEW-RESOLUTION.md)。这些修复之后没有新增真实模型、服务或浏览器运行，原66/30/4保持不变。
 
 ## 未完成、失败与限制
 

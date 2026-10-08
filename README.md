@@ -6,9 +6,9 @@ Ceres2 是商超购物 AI 原型：将购买目标与约束转成可检查、可
 
 ## 当前状态
 
-2026-10-08，本机后续入口为[本轮 TASK](tasks/ceres2-local-followup.md)与[方案](docs/plans/ceres2-local-followup-spec.md)。工作树 `Ceres2-integration-20261008`、分支 `codex/ceres2-local-followup-20261008`、起点 `170fac0`。评测工具29项通过后，按用户授权复用amax原模型配置完成100次真实尝试：机器业务66通过/30失败/4未知，核心三次全通过11/20，运行15秒100/100；详见[真实任务报告](work/local-followup/04/real-model-20261008/REAL-TASK-EVALUATION.md)。真实官方Graph、90次提取、合成Dream与独立Firefox商品订单旅程见[组件报告](work/local-followup/04/real-model-20261008/REAL-COMPONENT-VERIFICATION.md)。产品非evaluation源码仍未改；旧全量752通过/4环境失败及补验保留原版本。交接见[本地文档](docs/LOCAL-CHANGES-HANDOFF.md)。
+2026-10-09，本机后续入口为[本轮 TASK](tasks/ceres2-local-followup.md)与[方案](docs/plans/ceres2-local-followup-spec.md)。工作树 `Ceres2-integration-20261008`、分支 `codex/ceres2-local-followup-20261008`、起点 `170fac0`。评测工具29项通过后，按用户授权复用amax原模型配置完成100次真实尝试：机器业务66通过/30失败/4未知，核心三次全通过11/20，运行15秒100/100；详见[真实任务报告](work/local-followup/04/real-model-20261008/REAL-TASK-EVALUATION.md)。真实官方Graph、90次提取、合成Dream与独立Firefox商品订单旅程见[组件报告](work/local-followup/04/real-model-20261008/REAL-COMPONENT-VERIFICATION.md)。产品非evaluation源码仍未改；旧全量752通过/4环境失败及补验保留原版本。交接见[本地文档](docs/LOCAL-CHANGES-HANDOFF.md)。
 
-本轮按implement-spec参考Ceres1固定72bb1b9；工具/产品源码固定739、实际执行HEAD为00b397，后继提交补本次报告/脚本/交接。最新用户授权真实执行后常规推送该交付分支，不合并、不过写原工程。后续按[04剩余任务](tasks/ceres2-local-followup-04-real-evaluation-feedback.md#后续实施顺序与可观察交付)处理实测暴露的商品false negative/澄清/plan和脚本依赖错误、Kev缺配及真实Guide图任务；自然度、完整Guide浏览器及本人验收未完成。原配置通过隔离进程限定注入的实际启动方式见[工具说明](docs/LOCAL-FOLLOWUP-EVALUATION.md#按本次授权复用amax配置)，仍使用8015/8446且保留原listener。先前本机BGE/受控Firefox证据在[原准备报告](work/local-cloud-integration/local-acceptance-20261008/LOCAL-ACCEPTANCE-RESULTS.md)，不和新实测混为一版。
+本轮按implement-spec参考Ceres1固定72bb1b9；真实执行HEAD为00b397、使用739评测源码。实测后driver/harness窄修最终源码cbca，4008组合35项与最终签名5项按版本分别留证，两轴复审已完成；没有重新采样/评分原100，不能合并测试计数。最新用户授权真实执行后常规推送该交付分支，不合并、不过写原工程。后续按[04剩余任务](tasks/ceres2-local-followup-04-real-evaluation-feedback.md#后续实施顺序与可观察交付)处理商品漏匹配、澄清/plan、Kev缺配及真实Guide图任务；自然度、完整Guide浏览器及本人验收未完成。原配置通过隔离进程限定注入的实际启动方式见[工具说明](docs/LOCAL-FOLLOWUP-EVALUATION.md#按本次授权复用amax配置)，仍使用8015/8446且保留原listener。先前本机BGE/受控Firefox证据在[原准备报告](work/local-cloud-integration/local-acceptance-20261008/LOCAL-ACCEPTANCE-RESULTS.md)，不和新实测混为一版。
 
 下列保留云端交付时的能力与验证版本；其浏览器阻塞是当时的云端记录，不覆盖上面的本机 Firefox 证据。
 

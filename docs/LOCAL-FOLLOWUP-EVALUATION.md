@@ -107,3 +107,5 @@ backend全量、官方GraphRAG受控组件、真实BGE公开检索、实际浏�
 该有限测试入口只读取原`.env`获准字段，明确使用`data/runtime/real-model-20261008/`与当前新索引，监听8015；生产MemoryWorker保持启用。它不会填充新树blank.env。结束以SIGINT优雅停止。模型/API/Kev配置改变时建立新批次，不沿用本次resume；启动服务和真实采样仍由专职Tester执行。
 
 本次已完成同一60包的20pilot+80resume，正式batch/score/report在独立Tester忽略目录，40公开与20隔离输入hash未变；[真实任务报告](../work/local-followup/04/real-model-20261008/REAL-TASK-EVALUATION.md)列命令与hash，[组件报告](../work/local-followup/04/real-model-20261008/REAL-COMPONENT-VERIFICATION.md)列新hybrid/Graph、真实提取/合成Dream和独立Firefox订单旅程。真实100结果66/30/4，核心三次11/20；当前图任务调用0、Kev缺配、人工自然度未知，不能把组件功能成功签成整体质量通过。
+
+当前driver/harness源码为`cbca5d15bd40bd200f542d0eeaa1bc8192af9424`：缺plan确认诊断、Graph未知证据、进程配置隔离与必填签名已按审查修复，35项组合回归与最后5项harness验证按各自版本留证。实际100仍对应旧执行HEAD `00b397443bd7258d2166c6445ac4ac066cefd21d`，修复后未重新采样/评分。旧41项清单只用于实际执行溯源；当前受影响11项见[最终源码清单](../work/local-followup/04/real-model-20261008/REAL-HARNESS-FINAL-SOURCE-HASHES.sha256)，完整对应关系见[交接](LOCAL-CHANGES-HANDOFF.md#实测后的工具修复与验证)。

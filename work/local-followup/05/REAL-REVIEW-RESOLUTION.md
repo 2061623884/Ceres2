@@ -10,6 +10,10 @@
 | 主会话复核 | Settings环境变量大小写不敏感，须一并移除小写/混合别名；新增实际RED，再casefold清理，移除没有当前生产调用的可选mapping参数 | real-harness-casefold-red/green.md |
 | Standards判断性重复 | 三个dotenv来源/字段声明重复；收敛至harness_config，供preflight/provider/Dream实际调用 | 仅窄配置reader/环境应用，不搭配置平台 |
 
-最终受控fixture验证为四模块35 passed/14.03s，1条禁用pytest插件后asyncio_mode警告，见[最终回归](../01/tool-combined-after-real-harness-casefold-fix.md)。最新11项修复源码清单为[REAL-HARNESS-CASEFOLD-SOURCE-HASHES.sha256](../04/real-model-20261008/REAL-HARNESS-CASEFOLD-SOURCE-HASHES.sha256)。此前30项、首次35项与中间RED保留各自版本，数目不加总。
+4008阶段受控fixture验证为四模块35 passed/14.03s，1条禁用pytest插件后asyncio_mode警告，见[组合回归](../01/tool-combined-after-real-harness-casefold-fix.md)。该阶段源码清单为[REAL-HARNESS-CASEFOLD-SOURCE-HASHES.sha256](../04/real-model-20261008/REAL-HARNESS-CASEFOLD-SOURCE-HASHES.sha256)。此前30项、首次35项与中间RED保留各自版本，数目不加总。
 
 实际100轨迹/判分/模型输入与原41项SOURCE-HASHES未修改，没有新真实模型/browser/service调用。实测66/30/4和TypeError原记录仍适用于旧执行版本；后续driver诊断修复不算原模型任务变成功。新harness修复是受控合同回归，尚未重新真实采样，不能把旧41清单当新代码清单。
+
+4008的Standards delta另指出`read_source_values`与`audit_graph_result`有两个没有当前调用方的参数默认值。cbca移除默认，三个reader caller与唯一audit caller均明确传值；没有增加新逻辑。仅harness模块[最终5项](real-harness-final-signature-cleanup-green.md)通过/0.48s，执行时HEAD4008、工作树包含最终必填签名；这5项重叠于前35项，不计成40项或宣称cbca重跑全组合。最终受影响11项见[清单](../04/real-model-20261008/REAL-HARNESS-FINAL-SOURCE-HASHES.sha256)。
+
+[Standards最终](REAL-STANDARDS-FINAL-REVIEW.md)确认本轮已发现问题关闭，无新增smell；[Spec最终](REAL-SPEC-FINAL-REVIEW.md)确认窄修与调用契约一致、实测版本和整体未验收边界保持。独立两轴复审均只读，不替代Tester检查或用户接受。

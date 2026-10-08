@@ -1,6 +1,6 @@
 # Ceres2 本机后续开发
 
-- 状态：进行中（真实100次已尝试，机器判分66通过/30失败/4未知；真实Graph与Memory留证、报告/审查/常规推送整理中；739产品/工具源码保持冻结，整体及本人验收尚未完成）
+- 状态：进行中（本次真实测评与窄修交付待验收；真实100次机器判分66通过/30失败/4未知，原轨迹保留；当前driver/harness源码cbca，两轴复审及版本分开的35项/最后5项验证完成，收尾常规推送核实；整体及本人验收尚未完成）
 - 主责任：本机主会话，唯一协调分支、状态、文件责任和交付；专职 Tester 独占测试/构建/安装/运行验证，Standards/Spec 独立只读。
 - 起点：`170fac0bc75fcc855897b073337ba218abeb5b7d`
 - 分支：`codex/ceres2-local-followup-20261008`
@@ -25,10 +25,10 @@
 ## 实施票与依赖
 
 - [01 Ceres1适配、用例与批次分析](ceres2-local-followup-01-evaluation-foundation.md)：待验收，受控实现/验证及最终审查已冻结。
-- [02 公共HTTP/SSE任务执行](ceres2-local-followup-02-public-baseline.md)：待验收，七条runner测试与受控真实API smoke完成。
+- [02 公共HTTP/SSE任务执行](ceres2-local-followup-02-public-baseline.md)：待验收，原七条runner测试/受控真实API smoke、本次真实100采集及缺plan诊断的第八条runner验证完成。
 - [03 完整回归与组件/浏览器覆盖](ceres2-local-followup-03-comprehensive-verification.md)：待验收，分层证据已留；全量环境失败和对应补验保持原记录。
 - [04 真实评测与失败反馈](ceres2-local-followup-04-real-evaluation-feedback.md)：进行中，本次真实100报告已完成，业务失败/未知、Kev/图任务/更多driver/人工反馈仍待后续。
-- [05 双轴审查与独立交付](ceres2-local-followup-05-review-handoff.md)：进行中，原工具两轴已完成；本次报告/脚本与远端交付审查整理中，未完成项不冒充全实现。
+- [05 双轴审查与独立交付](ceres2-local-followup-05-review-handoff.md)：待验收，本次工具/报告两轴复审完成；常规push读回核实后等待用户审阅，不关闭更广规格。
 
 ## 验收
 
@@ -42,6 +42,6 @@
 
 ## 所有权与边界
 
-主会话维护方案、TASK、分支与参考适配。followup_eval/followup_experience为初次实现owner；review_fixes完成唯一审查修复实施，当前739源码全部冻结。test_optimization独占执行验证/组件，独立验收Tester维护隔离样本与离线清单。共享schema/DB/migration/fixture/Pi/Prompt/前端未转交，无问题证据不得改动；新增实际缺陷先明确唯一owner。
+主会话维护方案、TASK、分支与参考适配。followup_eval/followup_experience为初次实现owner；review_fixes完成原739审查修复。real_runner_fix是本次真实结果之后driver/harness窄修的唯一owner，当前源码冻结于cbca；原模型任务/源码清单不覆盖为新版本。test_optimization独占执行验证/组件，独立验收Tester维护隔离样本与实际批次。[35项组合](../work/local-followup/01/tool-combined-after-real-harness-casefold-fix.md)属于4008；[最终5项](../work/local-followup/05/real-harness-final-signature-cleanup-green.md)仅验证后来提交到cbca的两处必填签名，不加总。[Standards](../work/local-followup/05/REAL-STANDARDS-FINAL-REVIEW.md)/[Spec](../work/local-followup/05/REAL-SPEC-FINAL-REVIEW.md)最终复审已完成，未重新采样/评分原100。共享schema/DB/migration/fixture/Pi/Prompt/前端未转交，无问题证据不得改动；新增实际缺陷先明确唯一owner。
 
 新业务库、索引、模型缓存与凭据不入Git；所有交易/履约仍模拟。上一轮源码/受控证据保持版本，不继承为本轮验收。按用户最新授权仅只读复用原模型配置、发布本交付分支；不修改原工程、不合并、不部署、不执行rebase/cherry-pick/force push。主会话唯一协调本地提交与常规推送，worker禁止自行发布。
