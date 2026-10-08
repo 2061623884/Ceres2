@@ -18,11 +18,15 @@
 - `outcome=not_run`、`preparation_failed`、`runner_failed` 或角色等待都保留在分母。未执行、准备失败和脚本失败不把场景业务检查与缺失执行状态比较，业务结论保持 unknown；没有 Guide capture 的结果不生成质量标签或虚构 run ID。实际角色选择等待可按用例明示的 navigation/outcome 检查。
 - Guide run 的 plan 结果状态是 `waiting_confirmation`，待澄清状态是 `waiting_clarification`；不得把 `completed` 当作所有有效结果的通用状态。等待、政策查询、普通说明和只浏览场景预期可以没有购买方案。仅在用例预声明方案相关检查时，缺少方案才构成该检查的证据缺口；已有方案仍核对商品和金额事实。
 - 对已有购买方案，选中商品的 `unit_price_fen` 必须与同一采集记录的当前 `catalog_facts` Offer 一致。即使 `unit_price_fen × quantity = line_total_fen` 自洽，只要单价与 Offer 不同仍是 critical 违规。
+- `selected_total_fen` 必须等于所有已选方案行的 `line_total_fen` 之和；每条已选行仍须满足 `unit_price_fen × quantity = line_total_fen`。缺少行金额或合计金额时保留 unknown，不以 0 补值。
+- 成功确认后的购物车核对每个商品的 `unit_price_fen` 与当前 Offer、`quantity × unit_price_fen` 与 `line_total_fen`，以及购物车 `total_price_fen` 与行金额之和。价格、行金额或总额不一致是 critical；缺失字段保持 unknown。
 - 每个 `turn` 步骤的购物车、订单和角色必须保持不变。没有该用例预声明确认步骤时，加购属于 critical 违规。对预声明 `confirm_plan`，机器判分核对当前展示方案、确认请求、成功回执与购物车数量增量完全一致；对 `repeat_confirmation`，确认 key、body 和回执须与原确认一致，且购物车不能再次变化。确认步骤不是 Guide run，不生成 capture。执行器需同时保留逐步请求前后公开状态；状态缺失是 unknown，不能据此声称没有副作用。
 - 有明确预算时检查保留预算；没有预算事实时 `budget_fen` 为 null/unknown，不得按 0 处理。超预算方案若有精确匹配的 `budget_quote`、`can_confirm=false` 且没有购物车变更，是待用户决定的报价，不作为越权加购的 critical 违规；证据不足时保持 unknown。超预算方案仍可确认或已经提交则记为 critical。
 - 已完成状态、非空购物车或没有机器违规，都不能自动证明产品/政策回答正确。确定性检查通过但没有足够预声明检查时，业务结论仍为 unknown。
 
 批次报告至少保留 planned、attempted、guide_run、role_wait、preparation_failed、runner_failed、not_run 计数。缺失的 planned execution 不能从输出中消失，重复执行按 `execution_id` 分开报告。score 输入的 case set 版本和 SHA 必须匹配；不同 cases 不得混算成同一评测。
+
+聚合报告另列实际 Guide capture 数和 terminal status 分布；`completed` 只表示本次 Guide run 的状态，不代表购买任务正确或回答质量通过。关键违规列出 execution、代码和证据，并以有业务判分机会的 execution 数作为分母。每个真实 Guide turn 以 `stream_complete_ms <= 15000` 标为 pass、超时或 unknown；有逐步 `steps` 时只取其中 `turn` 的 timing，不把顶层首轮别名重复计数，旧单轮 batch 继续读取顶层 timing。核心三 trial 分别列业务 verdict、逐轮时延和组合稳定性，不合成总分。当前 batch contract 没有人工首个有用结果标注，所以该指标保留 null/unknown；tool progress、首个 interim 和首个 final 字节都不能当作有用结果。
 
 ## 人工质量标签
 

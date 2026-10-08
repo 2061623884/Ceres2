@@ -1,6 +1,6 @@
 # Ceres2 本机后续开发
 
-- 状态：进行中（本地受控实现/测试已完成，最终双轴审查准备；真实评测配置阻塞，尚未本人验收）
+- 状态：进行中（双轴发现已修复并通过29项共同验证，待delta复审/本地交付；真实评测配置阻塞，尚未本人验收）
 - 主责任：本机主会话，唯一协调分支、状态、文件责任和交付；专职 Tester 独占测试/构建/安装/运行验证，Standards/Spec 独立只读。
 - 起点：`170fac0bc75fcc855897b073337ba218abeb5b7d`
 - 分支：`codex/ceres2-local-followup-20261008`
@@ -12,7 +12,7 @@
 
 本机准备已完成，来源和实际验证见[冻结结果](../work/local-cloud-integration/local-acceptance-20261008/LOCAL-ACCEPTANCE-RESULTS.md)。该结果属于仍无新产品修改的 `170fac0`：真实 BGE/新 hybrid smoke、静态新库、受控 provider 的 Firefox HTTPS 旅程通过；并非真实模型质量或整体验收。
 
-用户最新明确按implement-spec实施，完成后不合并先审阅；并要求参考Ceres1 `72bb1b99bf040c8b0bae5d026888bc059bc9423d`，以尽可能完整的测试/评测为主。分支已从170建立，旧amax/main现场保持独立。当前六个CLI与共享capture模块、三个测试模块及40公开用例已实现；专职Tester同一源码冻结执行26项全部通过，见[最终工具验证](../work/local-followup/01/tool-combined-final.md)。包含CLI→真实TCP FastAPI/Pi的受控模型smoke，不能视为真实provider质量通过。
+用户最新明确按implement-spec实施，完成后不合并先审阅；并要求参考Ceres1 `72bb1b99bf040c8b0bae5d026888bc059bc9423d`，以尽可能完整的测试/评测为主。分支已从170建立，旧amax/main现场保持独立。当前六个CLI与共享capture模块、三个测试模块及40公开用例已实现；初次26项通过后两轴审查/Root自查定位指标、不可比较值与金额总和缺口，单一owner修复，专职Tester最终同一冻结29项全部通过，见[最终工具验证](../work/local-followup/01/tool-combined-reviewfix-final.md)。包含CLI→真实TCP FastAPI/Pi的受控模型smoke，不能视为真实provider质量通过。
 
 参考适配见[Ceres1方法](../docs/ceres1-evaluation-reference.md)，分层验证见[覆盖计划](../work/local-followup/COVERAGE-PLAN.md)。40公开和20新验收已分别冻结，100次离线计划已生成：actual attempts0、not_run100、business unknown100，见[独立清单](../work/local-followup/04/ACCEPTANCE-MANIFEST.md)；原未执行误fail的报告与离线更正保留，不增加模型调用次数。下一步双轴审查，然后可信配置就绪时先核心pilot再续完整计划。产品优化按失败证据安排，订单后端只补阻碍闭环的问题。
 

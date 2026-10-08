@@ -45,6 +45,18 @@ resume只执行not_run，已失败尝试保留；输入hash、计划或API目标
 
 机器结果仅说明预声明硬条件和公开事实。它检查当前Offer、金额与逐步授权；合法确认与重复副作用分开。缺失/null证据不当成零或满足，合法无方案由eq null声明。准备失败、脚本失败和未执行保留计划分母；完成状态不能替代质量。
 
+汇总报告使用与评分完全相同的原batch字节；人工标注改变batch后须重新离线评分，不能把旧score配新batch。
+
+```bash
+../.venv/bin/python -m app.evaluation.report_batch \
+  --cases ../evals/ceres2-local-followup-dev.json \
+  --batch ../work/local-followup/tmp/baseline-public.json \
+  --score ../work/local-followup/tmp/baseline-score.json \
+  --output ../work/local-followup/tmp/baseline-report.json
+```
+
+报告分别列实际Guide终态、观察到的critical及观察分母、每轮15秒达标/超时/未知、核心三次业务/时延组合结果和usage覆盖。Guide completed不等于整案质量；首个有用结果未人工标注时保留unknown/null，不以首interim或首字节代替。
+
 自然度、政策/菜谱语义及最终任务满意度使用人工v2 JSONL，沿用`owner_id/run_id/verdict/error_type/severity/expected_behavior/rationale/reviewer/reviewed_at`；verdict为pass/fail/needs_review。记录只绑定实际owner/run，未审阅保持null。
 
 ```bash

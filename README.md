@@ -6,7 +6,7 @@ Ceres2 是商超购物 AI 原型：将购买目标与约束转成可检查、可
 
 ## 当前状态
 
-2026-10-08，本机后续开发入口为[本轮 TASK](tasks/ceres2-local-followup.md)与[方案](docs/plans/ceres2-local-followup-spec.md)。工作树 `Ceres2-integration-20261008`、本地分支 `codex/ceres2-local-followup-20261008`，起点 `170fac0`。新增评测采集/评分/标注/失败归档/对照/报告工具，三组同命令26项通过；40公开+20独立维护验收形成100计划，但实际模型执行为0。产品非evaluation源码未改；完整回归原始752通过/4环境失败，对应补验通过，不能改写全量全绿。交付入口见[本地交接](docs/LOCAL-CHANGES-HANDOFF.md)与[工具步骤](docs/LOCAL-FOLLOWUP-EVALUATION.md)。
+2026-10-08，本机后续开发入口为[本轮 TASK](tasks/ceres2-local-followup.md)与[方案](docs/plans/ceres2-local-followup-spec.md)。工作树 `Ceres2-integration-20261008`、本地分支 `codex/ceres2-local-followup-20261008`，起点 `170fac0`。新增评测采集/评分/标注/失败归档/对照/报告工具，审查修复后三组同命令29项通过；40公开+20独立维护验收形成100计划，但实际模型执行为0。产品非evaluation源码未改；完整回归原始752通过/4环境失败，对应补验通过，不能改写全量全绿。交付入口见[本地交接](docs/LOCAL-CHANGES-HANDOFF.md)与[工具步骤](docs/LOCAL-FOLLOWUP-EVALUATION.md)。
 
 本轮按implement-spec参考Ceres1固定72bb1b9的方法；下一步双轴审查/本地审阅，配置就绪后真实pilot，再依据失败推进对话/检索改进。用户最新要求不合并，最新AGENTS另禁止推送或修改原项目。请按[本机并行启动入口](work/local-cloud-integration/local-acceptance-20261008/ACCEPTANCE-PLAN.md#本机并行启动入口)使用规划backend `8015` / frontend `8446`，保留原listener。真实模型、完整图质量、Memory/Dream和本人验收尚未完成。本机先前的BGE smoke/seed/受控Firefox证据留在[原准备报告](work/local-cloud-integration/local-acceptance-20261008/LOCAL-ACCEPTANCE-RESULTS.md)，有独立适用版本。
 

@@ -4,8 +4,7 @@ import hashlib
 import json
 from pathlib import Path
 
-from app.evaluation.annotate_runs import RunAnnotation
-from app.evaluation.batch_runs import CAPTURE_SCHEMA_VERSION, captures_for_row
+from app.evaluation.batch_runs import annotation_for_capture, captures_for_row
 
 
 CASE_SCHEMA_VERSION = 'ceres-local-followup-dev-cases-v1'
@@ -124,7 +123,7 @@ def _expected_plan_items(snapshot):
     ])
 
 
-def _score_confirmation_step(step, violations, evidence_gaps):
+def _score_confirmation_step(step, violations, evidence_gaps, catalog_items):
     before = step.get('before')
     after = step.get('after')
     _record_step_invariants(before, after, violations, evidence_gaps, cart_unchanged=False)
@@ -190,6 +189,68 @@ def _score_confirmation_step(step, violations, evidence_gaps):
                 actual=_normalized_items(receipt['items_added']),
                 source=f'steps.{step["index"]}.confirmation_receipt.items_added',
             ))
+        else:
+            found, cart_items = _read_path(after, 'cart.items')
+            if not found or cart_items is None:
+                evidence_gaps.append({
+                    'code': 'confirmed_cart_items_missing',
+                    'step': step['index'],
+                })
+            else:
+                line_total_sum = 0
+                line_totals_complete = True
+                for item_index, item in enumerate(cart_items):
+                    sku_id = item.get('sku_id')
+                    quantity = item.get('quantity')
+                    unit_price = item.get('unit_price_fen')
+                    line_total = item.get('line_total_fen')
+                    source = f'steps.{step["index"]}.after.cart.items#{item_index}'
+                    offer = next((
+                        fact for fact in catalog_items or []
+                        if fact.get('sku_id') == sku_id
+                    ), None)
+                    if offer is None:
+                        evidence_gaps.append({
+                            'code': 'catalog_offer_missing', 'sku_id': sku_id,
+                        })
+                    elif offer.get('price_fen') is None or unit_price is None:
+                        evidence_gaps.append({
+                            'code': 'cart_catalog_price_missing', 'sku_id': sku_id,
+                        })
+                    elif unit_price != offer['price_fen']:
+                        violations.append(_violation(
+                            'cart_catalog_price_mismatch', 'critical',
+                            expected=offer['price_fen'], actual=unit_price,
+                            source=f'{source}.unit_price_fen',
+                        ))
+
+                    if line_total is None:
+                        line_totals_complete = False
+                    else:
+                        line_total_sum += line_total
+                    if quantity is None or unit_price is None or line_total is None:
+                        evidence_gaps.append({
+                            'code': 'cart_line_amount_missing', 'sku_id': sku_id,
+                        })
+                    elif quantity * unit_price != line_total:
+                        violations.append(_violation(
+                            'cart_line_total_mismatch', 'critical',
+                            expected=quantity * unit_price, actual=line_total,
+                            source=f'{source}.line_total_fen',
+                        ))
+
+                total_found, cart_total = _read_path(after, 'cart.total_price_fen')
+                if not total_found or cart_total is None:
+                    evidence_gaps.append({
+                        'code': 'confirmed_cart_total_missing',
+                        'step': step['index'],
+                    })
+                elif line_totals_complete and cart_total != line_total_sum:
+                    violations.append(_violation(
+                        'cart_total_mismatch', 'critical',
+                        expected=line_total_sum, actual=cart_total,
+                        source=f'steps.{step["index"]}.after.cart.total_price_fen',
+                    ))
     return {
         'idempotency_key': key,
         'confirmation_body': body,
@@ -197,7 +258,7 @@ def _score_confirmation_step(step, violations, evidence_gaps):
     }
 
 
-def _score_steps(case, row, violations, evidence_gaps):
+def _score_steps(case, row, violations, evidence_gaps, catalog_items):
     declared_steps = case.get('steps', [])
     recorded_steps = row.get('steps')
     if recorded_steps is None:
@@ -234,7 +295,9 @@ def _score_steps(case, row, violations, evidence_gaps):
             ))
 
         if step['op'] == 'confirm_plan' and declared:
-            confirmation = _score_confirmation_step(step, violations, evidence_gaps)
+            confirmation = _score_confirmation_step(
+                step, violations, evidence_gaps, catalog_items,
+            )
             confirmations.append(confirmation)
         elif step['op'] == 'repeat_confirmation' and declared:
             _record_step_invariants(
@@ -287,20 +350,8 @@ def _score_execution(case, row, execution_id, trial):
         raise ValueError(f'Unsupported outcome for {execution_id}: {outcome}')
     human_run_labels = []
     for run_capture in captures:
-        if run_capture['schema_version'] != CAPTURE_SCHEMA_VERSION:
-            raise ValueError(f'Unsupported capture schema_version for {execution_id}')
-        labels = run_capture['labels']
-        if labels is not None:
-            if labels['schema_version'] != 'ceres-run-annotation-v2':
-                raise ValueError(f'Unsupported annotation schema_version for {execution_id}')
-            annotation = RunAnnotation.model_validate({
-                field: value for field, value in labels.items() if field != 'schema_version'
-            })
-            if (annotation.owner_id, annotation.run_id) != (run_capture['owner_id'], run_capture['run_id']):
-                raise ValueError(f'Annotation owner/run mismatch for execution_id {execution_id}')
-            verdict = annotation.verdict
-        else:
-            verdict = None
+        annotation = annotation_for_capture(run_capture, f'execution_id {execution_id}')
+        verdict = annotation.verdict if annotation is not None else None
         human_run_labels.append({
             'owner_id': run_capture['owner_id'],
             'run_id': run_capture['run_id'],
@@ -312,6 +363,7 @@ def _score_execution(case, row, execution_id, trial):
     violations = []
     evidence_gaps = []
     checks_evaluated = 0
+    catalog_items = (row.get('catalog_facts') or {}).get('items')
 
     checks_to_evaluate = (
         [] if outcome in ('not_run', 'preparation_failed', 'runner_failed')
@@ -328,15 +380,28 @@ def _score_execution(case, row, execution_id, trial):
                 'expected': check['expected'],
             })
             continue
+        try:
+            matched = _matches(actual, check['operator'], check['expected'])
+        except TypeError as exc:
+            evidence_gaps.append({
+                'code': 'check_value_not_comparable',
+                'path': check['path'],
+                'expected': check['expected'],
+                'actual': actual,
+                'actual_type': type(actual).__name__,
+                'exception_type': type(exc).__name__,
+                'reason': str(exc),
+            })
+            continue
         checks_evaluated += 1
-        if not _matches(actual, check['operator'], check['expected']):
+        if not matched:
             violations.append(_violation(
                 'hard_check_failed', 'major', expected=check['expected'],
                 actual=actual, source=check['path'],
             ))
 
     if outcome in ('guide_run', 'role_choice_required'):
-        _score_steps(case, row, violations, evidence_gaps)
+        _score_steps(case, row, violations, evidence_gaps, catalog_items)
         if outcome == 'guide_run' and capture is None:
             evidence_gaps.append({'code': 'capture_missing', 'path': 'capture'})
         after = row.get('after')
@@ -344,7 +409,8 @@ def _score_execution(case, row, execution_id, trial):
         plan_found, plan = _read_path(guide, 'plan') if guide_found else (False, None)
         if outcome == 'guide_run' and plan_found and plan is not None:
             plan_items = plan.get('items')
-            catalog_items = (row.get('catalog_facts') or {}).get('items')
+            selected_line_total = 0
+            selected_lines_complete = isinstance(plan_items, list)
             if not isinstance(plan_items, list):
                 evidence_gaps.append({'code': 'plan_items_missing', 'path': 'after.guide.plan.items'})
             else:
@@ -360,8 +426,7 @@ def _score_execution(case, row, execution_id, trial):
                         evidence_gaps.append({
                             'code': 'catalog_offer_missing', 'sku_id': sku_id,
                         })
-                        continue
-                    if item.get('unit_price_fen') is None or offer.get('price_fen') is None:
+                    elif item.get('unit_price_fen') is None or offer.get('price_fen') is None:
                         evidence_gaps.append({
                             'code': 'catalog_offer_price_missing', 'sku_id': sku_id,
                         })
@@ -380,10 +445,25 @@ def _score_execution(case, row, execution_id, trial):
                                 expected=quantity * item['unit_price_fen'], actual=line_total,
                                 source=f'after.guide.plan.items#{sku_id}.line_total_fen',
                             ))
+                        selected_line_total += line_total
                     else:
+                        selected_lines_complete = False
                         evidence_gaps.append({
                             'code': 'plan_line_amount_missing', 'sku_id': sku_id,
                         })
+
+            selected_total = plan.get('selected_total_fen')
+            if selected_total is None:
+                evidence_gaps.append({
+                    'code': 'selected_total_missing',
+                    'path': 'after.guide.plan.selected_total_fen',
+                })
+            elif selected_lines_complete and selected_total != selected_line_total:
+                violations.append(_violation(
+                    'selected_total_mismatch', 'critical',
+                    expected=selected_line_total, actual=selected_total,
+                    source='after.guide.plan.selected_total_fen',
+                ))
 
             budget_found, budget = _read_path(after, 'guide.conditions.budget_fen')
             if not budget_found:
@@ -391,9 +471,7 @@ def _score_execution(case, row, execution_id, trial):
             if budget_found:
                 if budget is None:
                     evidence_gaps.append({'code': 'budget_unknown', 'path': 'after.guide.conditions.budget_fen'})
-                elif plan.get('selected_total_fen') is None:
-                    evidence_gaps.append({'code': 'selected_total_missing', 'path': 'after.guide.plan.selected_total_fen'})
-                elif plan['selected_total_fen'] > budget:
+                elif selected_total is not None and selected_total > budget:
                     quote = plan.get('budget_quote')
                     is_pending_quote = (
                         plan.get('can_confirm') is False

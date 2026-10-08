@@ -3,12 +3,10 @@ import argparse
 import json
 from pathlib import Path
 
-from .annotate_runs import RunAnnotation
-from .batch_runs import CAPTURE_SCHEMA_VERSION, captures_for_row
+from .batch_runs import annotation_for_capture, captures_for_row
 
 
 BATCH_SCHEMA_VERSION = 'ceres-local-followup-batch-v1'
-ANNOTATION_SCHEMA_VERSION = 'ceres-run-annotation-v2'
 REPORT_SCHEMA_VERSION = 'ceres-eval-comparison-v1'
 
 
@@ -43,19 +41,7 @@ def load_batch(path: Path):
         if key in rows:
             raise ValueError(f'Duplicate {"execution_id" if has_plan else "case_id"} in batch: {key}')
         for capture in captures:
-            if capture['schema_version'] != CAPTURE_SCHEMA_VERSION:
-                raise ValueError(f'Unsupported capture schema_version for case {case_id}')
-            owner_id = capture['owner_id']
-            run_id = capture['run_id']
-            labels = capture['labels']
-            if labels is not None:
-                if labels['schema_version'] != ANNOTATION_SCHEMA_VERSION:
-                    raise ValueError(f'Unsupported annotation schema_version for case {case_id}')
-                annotation = RunAnnotation.model_validate({
-                    field: value for field, value in labels.items() if field != 'schema_version'
-                })
-                if annotation.owner_id != owner_id or annotation.run_id != run_id:
-                    raise ValueError(f'Annotation owner/run mismatch for case {case_id}')
+            annotation_for_capture(capture, f'case {case_id}')
         rows[key] = item
 
     if has_plan:

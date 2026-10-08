@@ -6,8 +6,7 @@ import json
 import math
 from pathlib import Path
 
-from app.evaluation.annotate_runs import RunAnnotation
-from app.evaluation.batch_runs import CAPTURE_SCHEMA_VERSION, captures_for_row
+from app.evaluation.batch_runs import annotation_for_capture, captures_for_row
 
 
 CASE_SCHEMA_VERSION = 'ceres-local-followup-dev-cases-v1'
@@ -16,6 +15,11 @@ SCORE_SCHEMA_VERSION = 'ceres-local-followup-score-v1'
 REPORT_SCHEMA_VERSION = 'ceres-local-followup-report-v1'
 VERDICTS = ('pass', 'fail', 'unknown')
 TIMING_FIELDS = ('first_interim_ms', 'first_final_ms', 'stream_complete_ms')
+TURN_DEADLINE_MS = 15000
+GUIDE_TERMINAL_STATUSES = (
+    'completed', 'waiting_clarification', 'waiting_confirmation', 'protected',
+    'stopped', 'failed', 'interrupted',
+)
 
 
 def _counts():
@@ -38,6 +42,55 @@ def _latency_summary(values):
     }
 
 
+def _turn_records(row):
+    if 'steps' in row:
+        return [
+            (step['capture'], step.get('timing'))
+            for step in row['steps']
+            if step['op'] == 'turn' and step.get('capture') is not None
+        ]
+    if row.get('capture') is not None:
+        return [(row['capture'], row.get('timing'))]
+    return []
+
+
+def _deadline_counts(records):
+    counts = {'samples': len(records), 'pass': 0, 'timeout': 0, 'unknown': 0}
+    for _, timing in records:
+        duration = timing.get('stream_complete_ms') if timing is not None else None
+        if duration is None:
+            counts['unknown'] += 1
+        elif duration <= TURN_DEADLINE_MS:
+            counts['pass'] += 1
+        else:
+            counts['timeout'] += 1
+    return counts
+
+
+def _critical_violations(score_rows):
+    eligible = 0
+    executions = set()
+    details = []
+    for score_row in score_rows:
+        if score_row['outcome'] in ('guide_run', 'role_choice_required'):
+            eligible += 1
+        for violation in score_row.get('violations', []):
+            if violation.get('severity') != 'critical':
+                continue
+            executions.add(score_row['execution_id'])
+            details.append({
+                'case_id': score_row['case_id'],
+                'execution_id': score_row['execution_id'],
+                **violation,
+            })
+    return {
+        'executions_with_findings': len(executions),
+        'findings': len(details),
+        'execution_denominator': eligible,
+        'details': details,
+    }, executions
+
+
 def _case_execution_key(row, has_plan):
     return row['execution_id'] if has_plan else row['case_id']
 
@@ -54,24 +107,15 @@ def _capture_labels(captures, identities):
     }
     run_summaries = []
     for capture in captures:
-        if capture['schema_version'] != CAPTURE_SCHEMA_VERSION:
-            raise ValueError(f'Unsupported capture schema_version for run {capture["run_id"]}')
+        annotation = annotation_for_capture(capture, f'run {capture["run_id"]}')
         identity = (capture['owner_id'], capture['run_id'])
         if identity in identities:
             raise ValueError(f'Duplicate capture owner/run: {identity[0]} / {identity[1]}')
         identities.add(identity)
 
-        labels = capture['labels']
-        if labels is None:
+        if annotation is None:
             unreviewed += 1
         else:
-            if labels['schema_version'] != 'ceres-run-annotation-v2':
-                raise ValueError(f'Unsupported annotation schema_version for run {capture["run_id"]}')
-            annotation = RunAnnotation.model_validate({
-                field: value for field, value in labels.items() if field != 'schema_version'
-            })
-            if (annotation.owner_id, annotation.run_id) != identity:
-                raise ValueError(f'Annotation owner/run mismatch for run {capture["run_id"]}')
             reviewed += 1
             verdicts[annotation.verdict] += 1
             if annotation.verdict == 'fail':
@@ -203,6 +247,7 @@ def aggregate_report(cases_path: Path, batch_path: Path, score_path: Path, outpu
     business_verdicts = _counts()
     categories = {}
     core_rows = []
+    core_cases = []
     for case in case_set['cases']:
         case_scores = [row for row in score['cases'] if row['case_id'] == case['case_id']]
         category = categories.setdefault(case['category'], {
@@ -233,30 +278,85 @@ def aggregate_report(cases_path: Path, batch_path: Path, score_path: Path, outpu
                     and verdict_counts['pass'] == 3
                 ),
             })
+            core_cases.append((case['case_id'], case_scores))
 
     timings = {field: [] for field in TIMING_FIELDS}
     all_captures = []
     identities = set()
+    guide_statuses = {status: 0 for status in GUIDE_TERMINAL_STATUSES}
+    guide_statuses['unknown'] = 0
+    turn_records_by_execution = {}
     for key, score_row in score_rows.items():
         batch_row = batch_rows.get(key)
         if batch_row is None:
+            turn_records_by_execution[key] = []
             continue
         row_captures = captures_for_row(batch_row)
         all_captures.extend(row_captures)
-        if 'steps' in batch_row:
-            run_steps = [step for step in batch_row['steps'] if step['op'] == 'turn']
-            timing_rows = [
-                step['timing'] for step in run_steps if step.get('capture') is not None
-            ]
-        else:
-            timing_rows = [batch_row['timing']] if batch_row.get('capture') is not None else []
-        for timing in timing_rows:
+        for capture_row in row_captures:
+            status = capture_row.get('status')
+            guide_statuses[status if status in GUIDE_TERMINAL_STATUSES else 'unknown'] += 1
+        turn_records = _turn_records(batch_row)
+        turn_records_by_execution[key] = turn_records
+        for _, timing in turn_records:
+            if timing is None:
+                continue
             for field in TIMING_FIELDS:
-                value = timing[field]
+                value = timing.get(field)
                 if value is not None:
                     timings[field].append(value)
 
+    critical_violations, critical_execution_ids = _critical_violations(score['cases'])
+    core_trial_stability = []
+    for case_id, case_scores in core_cases:
+        trials = []
+        for score_row in case_scores:
+            execution_id = score_row['execution_id']
+            turn_deadline = _deadline_counts(turn_records_by_execution.get(execution_id, []))
+            has_critical = execution_id in critical_execution_ids
+            performance_pass = (
+                turn_deadline['samples'] > 0
+                and turn_deadline['pass'] == turn_deadline['samples']
+            )
+            trials.append({
+                'trial': score_row['trial'],
+                'execution_id': execution_id,
+                'business_verdict': score_row['business_verdict'],
+                'critical_violation': has_critical,
+                'turn_deadline_15s': turn_deadline,
+                'business_and_performance_pass': (
+                    score_row['business_verdict'] == 'pass'
+                    and not has_critical
+                    and performance_pass
+                ),
+            })
+        core_trial_stability.append({
+            'case_id': case_id,
+            'trials': trials,
+            'three_trials_business_pass': (
+                len(trials) == 3
+                and all(trial['business_verdict'] == 'pass' for trial in trials)
+            ),
+            'three_trials_performance_pass': (
+                len(trials) == 3
+                and all(
+                    trial['turn_deadline_15s']['samples'] > 0
+                    and trial['turn_deadline_15s']['pass'] == trial['turn_deadline_15s']['samples']
+                    for trial in trials
+                )
+            ),
+            'three_trials_combined_pass': (
+                len(trials) == 3
+                and all(trial['business_and_performance_pass'] for trial in trials)
+            ),
+        })
+
     human, provider_coverage, run_summaries = _capture_labels(all_captures, identities)
+    turn_deadline = _deadline_counts([
+        record
+        for execution_records in turn_records_by_execution.values()
+        for record in execution_records
+    ])
     report = {
         'schema_version': REPORT_SCHEMA_VERSION,
         'case_set': case_set_identity,
@@ -266,8 +366,27 @@ def aggregate_report(cases_path: Path, batch_path: Path, score_path: Path, outpu
         },
         'counts': score['counts'],
         'business_verdicts': business_verdicts,
+        'guide_runs': {
+            'observed': len(all_captures),
+            'terminal_statuses': guide_statuses,
+        },
+        'critical_violations': critical_violations,
+        'turn_deadline_15s': {'limit_ms': TURN_DEADLINE_MS, **turn_deadline},
+        'first_useful_result_ms': {
+            'samples': turn_deadline['samples'],
+            'observed': 0,
+            'unknown': turn_deadline['samples'],
+            'p50': None,
+            'p95': None,
+            'human_annotated': False,
+            'definition': (
+                'Not measured in the current batch contract; tool progress and first interim/final bytes '
+                'are not evidence of a useful result.'
+            ),
+        },
         'categories': categories,
         'core_cases': core_rows,
+        'core_trial_stability': core_trial_stability,
         'latency_ms': {
             field: _latency_summary(values) for field, values in timings.items()
         },

@@ -5,8 +5,7 @@ import hashlib
 import json
 from pathlib import Path
 
-from app.evaluation.annotate_runs import RunAnnotation
-from app.evaluation.batch_runs import CAPTURE_SCHEMA_VERSION, captures_for_row
+from app.evaluation.batch_runs import annotation_for_capture, captures_for_row
 
 
 CASE_SCHEMA_VERSION = 'ceres-local-followup-dev-cases-v1'
@@ -48,22 +47,10 @@ def failure_intake(cases_path: Path, batch_path: Path, output_path: Path):
         trial = row.get('trial', 1)
         captures = captures_for_row(row)
         for capture_index, capture in enumerate(captures, start=1):
-            if capture['schema_version'] != CAPTURE_SCHEMA_VERSION:
-                raise ValueError(f'Unsupported capture schema_version for case {case_id}')
+            annotation = annotation_for_capture(capture, f'case {case_id}')
             identity = (capture['owner_id'], capture['run_id'])
             if identity in source_runs:
                 raise ValueError(f'Duplicate capture owner/run: {identity[0]} / {identity[1]}')
-            labels = capture['labels']
-            annotation = None
-            if labels is not None:
-                if labels['schema_version'] != 'ceres-run-annotation-v2':
-                    raise ValueError(f'Unsupported annotation schema_version for case {case_id}')
-                annotation = RunAnnotation.model_validate({
-                    field: value for field, value in labels.items()
-                    if field != 'schema_version'
-                })
-                if (annotation.owner_id, annotation.run_id) != identity:
-                    raise ValueError(f'Annotation owner/run mismatch for case {case_id}')
             source_runs[identity] = {
                 'case_id': case_id,
                 'execution_id': execution_id,

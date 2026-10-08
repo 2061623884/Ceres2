@@ -487,6 +487,182 @@ def test_evaluation_report_cli_keeps_denominators_multirun_timing_and_usage_unkn
     }
 
 
+def test_report_cli_separates_run_status_critical_deadline_and_unannotated_usefulness(tmp_path):
+    import hashlib
+
+    cases = {
+        'schema_version': 'ceres-local-followup-dev-cases-v1',
+        'version': 'report-terminal-metrics-v1',
+        'cases': [
+            {
+                'case_id': 'core-three-trials', 'message': '请给出购买方案。',
+                'category': 'purchase_planning', 'scenario_family': 'core-three-trials',
+                'split': 'regression', 'core': True,
+                'expected_behavior': '逐次保留业务、运行状态和各轮时延证据。',
+                'fact_sources': [], 'steps': [{'op': 'turn', 'message': '继续说明。'}],
+                'checks': [],
+            },
+            {
+                'case_id': 'legacy-single-turn', 'message': '价格依据是什么？',
+                'category': 'policy', 'scenario_family': 'legacy-timing',
+                'split': 'regression', 'core': False,
+                'expected_behavior': '保留旧版单轮顶层 timing。',
+                'fact_sources': [], 'checks': [],
+            },
+        ],
+    }
+    cases_path = tmp_path / 'cases.json'
+    cases_path.write_text(json.dumps(cases, ensure_ascii=False), encoding='utf-8')
+    case_set = {
+        'version': cases['version'],
+        'sha256': hashlib.sha256(cases_path.read_bytes()).hexdigest(),
+    }
+
+    plan = [
+        {'case_id': 'core-three-trials', 'trial': trial,
+         'execution_id': f'core-three-trials:trial:{trial}'}
+        for trial in (1, 2, 3)
+    ] + [
+        {'case_id': 'legacy-single-turn', 'trial': 1,
+         'execution_id': 'legacy-single-turn:trial:1'},
+    ]
+    trial_turns = {
+        1: [
+            ('completed', {'first_interim_ms': 30, 'first_final_ms': 60, 'stream_complete_ms': 100}),
+            ('waiting_confirmation', {'first_interim_ms': 500, 'first_final_ms': 900, 'stream_complete_ms': 16000}),
+        ],
+        2: [
+            ('protected', None),
+            ('waiting_clarification', {'first_interim_ms': 120, 'first_final_ms': 200, 'stream_complete_ms': 14999}),
+        ],
+        3: [
+            ('stopped', {'first_interim_ms': 250, 'first_final_ms': 400, 'stream_complete_ms': 15000}),
+            ('failed', {'first_interim_ms': 260, 'first_final_ms': 410, 'stream_complete_ms': 15001}),
+        ],
+    }
+    batch_rows = []
+    score_rows = []
+    business_verdicts = {1: 'pass', 2: 'unknown', 3: 'fail'}
+    for trial, turn_specs in trial_turns.items():
+        execution_id = f'core-three-trials:trial:{trial}'
+        run_captures = []
+        steps = []
+        for index, (status, timing) in enumerate(turn_specs):
+            run = capture(
+                f'owner-trial-{trial}', f'{execution_id}-run-{index}',
+                f'owner-trial-{trial}-session', f'{execution_id}:step:{index}', None, None,
+            )
+            run['status'] = status
+            run_captures.append(run)
+            steps.append({
+                'index': index, 'op': 'turn', 'capture': run, 'timing': timing,
+                'timing_source': 'client_monotonic_from_run_post_start',
+                'timing_run_id': run['run_id'],
+            })
+        batch_rows.append({
+            'case_id': 'core-three-trials', 'trial': trial, 'execution_id': execution_id,
+            'outcome': 'guide_run', 'capture': run_captures[-1],
+            'captures': run_captures, 'steps': steps,
+            # Top-level timing aliases the first turn for legacy consumers; it must not add a sample.
+            'timing': turn_specs[0][1], 'timing_run_id': run_captures[0]['run_id'],
+        })
+        violations = ([{
+            'code': 'unauthorized_confirmation_cart_change', 'severity': 'critical',
+            'source': 'steps.1.after.cart',
+        }] if trial == 3 else [])
+        score_rows.append({
+            'case_id': 'core-three-trials', 'trial': trial, 'execution_id': execution_id,
+            'outcome': 'guide_run', 'business_verdict': business_verdicts[trial],
+            'human_quality': None, 'human_quality_scope': 'last_guide_run',
+            'human_run_labels': [], 'violations': violations,
+        })
+
+    legacy_run = capture('owner-legacy', 'legacy-run', 'legacy-session', 'legacy-request', None, None)
+    legacy_timing = {
+        'first_interim_ms': 40, 'first_final_ms': 80, 'stream_complete_ms': 250,
+    }
+    batch_rows.append({
+        'case_id': 'legacy-single-turn', 'trial': 1,
+        'execution_id': 'legacy-single-turn:trial:1', 'outcome': 'guide_run',
+        'capture': legacy_run, 'timing': legacy_timing,
+    })
+    score_rows.append({
+        'case_id': 'legacy-single-turn', 'trial': 1,
+        'execution_id': 'legacy-single-turn:trial:1', 'outcome': 'guide_run',
+        'business_verdict': 'pass', 'human_quality': None,
+        'human_quality_scope': 'last_guide_run', 'human_run_labels': [], 'violations': [],
+    })
+
+    batch_path = tmp_path / 'batch.json'
+    batch_path.write_text(json.dumps({
+        'schema_version': 'ceres-local-followup-batch-v1',
+        'case_set': case_set, 'plan': plan, 'cases': batch_rows,
+    }, ensure_ascii=False), encoding='utf-8')
+    score_path = tmp_path / 'score.json'
+    score_path.write_text(json.dumps({
+        'schema_version': 'ceres-local-followup-score-v1',
+        'case_set': case_set,
+        'batch_sha256': hashlib.sha256(batch_path.read_bytes()).hexdigest(),
+        'counts': {
+            'planned': 4, 'attempted': 4, 'guide_run': 4, 'role_wait': 0,
+            'preparation_failed': 0, 'runner_failed': 0, 'not_run': 0,
+        },
+        'cases': score_rows,
+    }, ensure_ascii=False), encoding='utf-8')
+    output = tmp_path / 'report.json'
+
+    result = subprocess.run(
+        [sys.executable, '-m', 'app.evaluation.report_batch',
+         '--cases', str(cases_path), '--batch', str(batch_path),
+         '--score', str(score_path), '--output', str(output)],
+        cwd=Path(__file__).resolve().parents[1], env=os.environ.copy(),
+        capture_output=True, text=True,
+    )
+
+    assert result.returncode == 0, result.stderr
+    report = json.loads(output.read_text(encoding='utf-8'))
+    assert report['business_verdicts'] == {'pass': 2, 'fail': 1, 'unknown': 1}
+    assert report['guide_runs'] == {
+        'observed': 7,
+        'terminal_statuses': {
+            'completed': 2, 'waiting_clarification': 1, 'waiting_confirmation': 1,
+            'protected': 1, 'stopped': 1, 'failed': 1, 'interrupted': 0, 'unknown': 0,
+        },
+    }
+    assert report['critical_violations'] == {
+        'executions_with_findings': 1, 'findings': 1, 'execution_denominator': 4,
+        'details': [{
+            'case_id': 'core-three-trials',
+            'execution_id': 'core-three-trials:trial:3',
+            'code': 'unauthorized_confirmation_cart_change',
+            'severity': 'critical', 'source': 'steps.1.after.cart',
+        }],
+    }
+    assert report['turn_deadline_15s'] == {
+        'limit_ms': 15000, 'samples': 7, 'pass': 4, 'timeout': 2, 'unknown': 1,
+    }
+    assert report['first_useful_result_ms'] == {
+        'samples': 7, 'observed': 0, 'unknown': 7,
+        'p50': None, 'p95': None, 'human_annotated': False,
+        'definition': (
+            'Not measured in the current batch contract; tool progress and first interim/final bytes '
+            'are not evidence of a useful result.'
+        ),
+    }
+    assert report['latency_ms']['stream_complete_ms'] == {
+        'samples': 6, 'p50': 14999, 'p95': 16000,
+    }
+    core = report['core_trial_stability'][0]
+    assert core['three_trials_business_pass'] is False
+    assert core['three_trials_performance_pass'] is False
+    assert core['three_trials_combined_pass'] is False
+    assert [trial['turn_deadline_15s'] for trial in core['trials']] == [
+        {'samples': 2, 'pass': 1, 'timeout': 1, 'unknown': 0},
+        {'samples': 2, 'pass': 1, 'timeout': 0, 'unknown': 1},
+        {'samples': 2, 'pass': 1, 'timeout': 1, 'unknown': 0},
+    ]
+
+
 def test_annotate_batch_cli_joins_v2_labels_and_preserves_unrun_outcomes(tmp_path):
     source = tmp_path / 'captures.json'
     annotations_path = tmp_path / 'annotations.jsonl'
@@ -928,6 +1104,342 @@ def test_score_batch_cli_marks_self_consistent_wrong_offer_price_critical_and_ke
     assert rows[execution_ids['planned-but-not-run']]['case_id'] == 'planned-but-not-run'
     assert rows[execution_ids['planned-but-not-run']]['outcome'] == 'not_run'
     assert rows[execution_ids['planned-but-not-run']]['business_verdict'] == 'unknown'
+
+
+def test_score_batch_cli_keeps_noncomparable_checks_unknown_and_continues(tmp_path):
+    import hashlib
+
+    cases = {
+        'schema_version': 'ceres-local-followup-dev-cases-v1',
+        'version': 'noncomparable-checks-v1',
+        'cases': [
+            {
+                'case_id': 'noncomparable-checks', 'message': '请给出当前待确认方案。',
+                'category': 'purchase_planning', 'scenario_family': 'noncomparable-check-values',
+                'split': 'regression', 'core': False,
+                'expected_behavior': '非可比较证据保持unknown，不阻断批次或本题后续检查。',
+                'fact_sources': [],
+                'checks': [
+                    {'path': 'after.guide.plan.note', 'operator': 'min', 'expected': 100},
+                    {'path': 'after.guide.plan.note', 'operator': 'contains', 'expected': 1},
+                    {'path': 'after.guide.plan.can_confirm', 'operator': 'length', 'expected': 1},
+                    {'path': 'capture.status', 'operator': 'eq', 'expected': 'waiting_confirmation'},
+                ],
+            },
+            {
+                'case_id': 'later-valid-case', 'message': '一般政策问题是什么？',
+                'category': 'policy', 'scenario_family': 'later-valid-case',
+                'split': 'regression', 'core': False,
+                'expected_behavior': '非可比较检查不能中断后续合法案例评分。',
+                'fact_sources': [],
+                'checks': [
+                    {'path': 'capture.status', 'operator': 'eq', 'expected': 'completed'},
+                    {'path': 'after.guide.plan', 'operator': 'eq', 'expected': None},
+                ],
+            },
+        ],
+    }
+    cases_path = tmp_path / 'cases.json'
+    cases_path.write_text(json.dumps(cases, ensure_ascii=False), encoding='utf-8')
+    case_set = {
+        'version': cases['version'],
+        'sha256': hashlib.sha256(cases_path.read_bytes()).hexdigest(),
+    }
+    before = {
+        'guide': {'plan': None, 'conditions': {}},
+        'cart': {'items': [], 'total_price_fen': 0},
+        'orders': [], 'opening': {'role': 'keke'},
+    }
+    noncomparable_after = {
+        'guide': {
+            'plan': {
+                'items': [], 'selected_total_fen': 0, 'note': 'bad-string',
+                'can_confirm': False,
+            },
+            'conditions': {},
+        },
+        'cart': {'items': [], 'total_price_fen': 0},
+        'orders': [], 'opening': {'role': 'keke'},
+    }
+    valid_after = {
+        'guide': {'plan': None, 'conditions': {}},
+        'cart': {'items': [], 'total_price_fen': 0},
+        'orders': [], 'opening': {'role': 'keke'},
+    }
+    waiting_capture = capture('check-owner', 'waiting-run', 'check-session', 'request-1', None, None)
+    waiting_capture['status'] = 'waiting_confirmation'
+    completed_capture = capture('check-owner-2', 'completed-run', 'check-session-2', 'request-2', None, None)
+    batch_rows = [
+        {
+            'case_id': 'noncomparable-checks', 'outcome': 'guide_run',
+            'capture': waiting_capture, 'before': before, 'after': noncomparable_after,
+        },
+        {
+            'case_id': 'later-valid-case', 'outcome': 'guide_run',
+            'capture': completed_capture, 'before': valid_after, 'after': valid_after,
+        },
+    ]
+    batch_path = tmp_path / 'batch.json'
+    batch_path.write_text(json.dumps({
+        'schema_version': 'ceres-local-followup-batch-v1',
+        'case_set': case_set, 'cases': batch_rows,
+    }, ensure_ascii=False), encoding='utf-8')
+    output = tmp_path / 'score.json'
+
+    result = subprocess.run(
+        [sys.executable, '-m', 'app.evaluation.score_batch',
+         '--cases', str(cases_path), '--batch', str(batch_path), '--output', str(output)],
+        cwd=Path(__file__).resolve().parents[1], env=os.environ.copy(),
+        capture_output=True, text=True,
+    )
+
+    assert result.returncode == 0, result.stderr
+    scored = json.loads(output.read_text(encoding='utf-8'))
+    assert scored['counts'] == {
+        'planned': 2, 'attempted': 2, 'guide_run': 2, 'role_wait': 0,
+        'preparation_failed': 0, 'runner_failed': 0, 'not_run': 0,
+    }
+    rows = {row['case_id']: row for row in scored['cases']}
+    noncomparable = rows['noncomparable-checks']
+    assert noncomparable['business_verdict'] == 'unknown'
+    assert noncomparable['violations'] == []
+    gaps = noncomparable['evidence_gaps']
+    assert [gap['path'] for gap in gaps] == [
+        'after.guide.plan.note',
+        'after.guide.plan.note',
+        'after.guide.plan.can_confirm',
+    ]
+    assert [gap['actual_type'] for gap in gaps] == ['str', 'str', 'bool']
+    assert all(gap['code'] == 'check_value_not_comparable' for gap in gaps)
+    assert all(gap['exception_type'] == 'TypeError' and gap['reason'] for gap in gaps)
+    assert rows['later-valid-case']['business_verdict'] == 'pass'
+    assert rows['later-valid-case']['evidence_gaps'] == []
+
+    cases['cases'][0]['checks'][0]['operator'] = 'typo'
+    cases_path.write_text(json.dumps(cases, ensure_ascii=False), encoding='utf-8')
+    wrong_operator_case_set = {
+        'version': cases['version'],
+        'sha256': hashlib.sha256(cases_path.read_bytes()).hexdigest(),
+    }
+    wrong_operator_batch = {
+        'schema_version': 'ceres-local-followup-batch-v1',
+        'case_set': wrong_operator_case_set, 'cases': batch_rows,
+    }
+    batch_path.write_text(json.dumps(wrong_operator_batch, ensure_ascii=False), encoding='utf-8')
+    wrong_operator = subprocess.run(
+        [sys.executable, '-m', 'app.evaluation.score_batch',
+         '--cases', str(cases_path), '--batch', str(batch_path),
+         '--output', str(tmp_path / 'wrong-operator-score.json')],
+        cwd=Path(__file__).resolve().parents[1], env=os.environ.copy(),
+        capture_output=True, text=True,
+    )
+    assert wrong_operator.returncode != 0
+    assert 'Unsupported check operator: typo' in wrong_operator.stderr
+
+
+def test_score_batch_cli_checks_plan_and_confirmed_cart_amounts(tmp_path):
+    import hashlib
+
+    sku_id = 'demo:cn-pepsi-original-330ml-can'
+    cases = {
+        'schema_version': 'ceres-local-followup-dev-cases-v1',
+        'version': 'money-closure-v1',
+        'cases': [
+            {
+                'case_id': 'wrong-selected-total', 'message': '买两罐百事可乐。',
+                'category': 'purchase_planning', 'scenario_family': 'selected-total-sum',
+                'split': 'regression', 'core': False,
+                'expected_behavior': 'selected_total_fen等于已选行金额合计。',
+                'fact_sources': [f'data/fixtures/offers.json#{sku_id}'],
+                'checks': [{'path': 'capture.status', 'operator': 'eq', 'expected': 'waiting_confirmation'}],
+            },
+            {
+                'case_id': 'wrong-confirmed-cart-money', 'message': '确认将两罐加入购物车。',
+                'category': 'purchase_planning', 'scenario_family': 'confirmed-cart-money',
+                'split': 'regression', 'core': False,
+                'expected_behavior': '确认回执后的购物车价格、行金额和总额与Offer及数量一致。',
+                'fact_sources': [f'data/fixtures/offers.json#{sku_id}'],
+                'steps': [{'op': 'confirm_plan'}],
+                'checks': [
+                    {'path': 'capture.status', 'operator': 'eq', 'expected': 'waiting_confirmation'},
+                    {'path': 'steps.1.confirmation_receipt.status', 'operator': 'eq', 'expected': 'success'},
+                    {'path': 'after.cart.total_price_fen', 'operator': 'eq', 'expected': 600},
+                ],
+            },
+            {
+                'case_id': 'missing-plan-amount', 'message': '给两罐百事可乐方案。',
+                'category': 'purchase_planning', 'scenario_family': 'missing-plan-amount',
+                'split': 'regression', 'core': False,
+                'expected_behavior': '缺少行金额或selected_total时保持unknown，不补成0。',
+                'fact_sources': [f'data/fixtures/offers.json#{sku_id}'],
+                'checks': [{'path': 'capture.status', 'operator': 'eq', 'expected': 'waiting_confirmation'}],
+            },
+            {
+                'case_id': 'selected-total-without-catalog', 'message': '给出自洽的两罐方案。',
+                'category': 'purchase_planning', 'scenario_family': 'selected-total-without-catalog',
+                'split': 'regression', 'core': False,
+                'expected_behavior': '即使Offer证据缺失，仍按已知选中行金额核对selected_total。',
+                'fact_sources': [],
+                'checks': [{'path': 'capture.status', 'operator': 'eq', 'expected': 'waiting_confirmation'}],
+            },
+        ],
+    }
+    cases_path = tmp_path / 'cases.json'
+    cases_path.write_text(json.dumps(cases, ensure_ascii=False), encoding='utf-8')
+    case_set = {
+        'version': cases['version'],
+        'sha256': hashlib.sha256(cases_path.read_bytes()).hexdigest(),
+    }
+    empty_cart = {'items': [], 'total_price_fen': 0}
+    initial = {
+        'guide': {'task_id': None, 'plan': None, 'conditions': {}},
+        'cart': empty_cart, 'orders': [], 'opening': {'role': 'keke'},
+    }
+
+    def plan_item(line_total=600):
+        item = {
+            'sku_id': sku_id, 'quantity': 2, 'remaining_quantity': 2,
+            'unit_price_fen': 300, 'selected': True,
+        }
+        if line_total is not None:
+            item['line_total_fen'] = line_total
+        return item
+
+    def snapshot(plan, cart=None):
+        return {
+            'guide': {'task_id': 'task-money', 'plan': plan, 'conditions': {}},
+            'cart': cart or empty_cart,
+            'orders': [], 'opening': {'role': 'keke'},
+        }
+
+    def plan(plan_id, selected_total=600, line_total=600):
+        result = {
+            'plan_id': plan_id, 'plan_version': 1,
+            'items': [plan_item(line_total)],
+        }
+        if selected_total is not None:
+            result['selected_total_fen'] = selected_total
+        return result
+
+    wrong_total_plan = plan('plan-wrong-total', selected_total=601)
+    missing_amount_plan = plan('plan-missing-amount', selected_total=None, line_total=None)
+    no_catalog_plan = plan('plan-no-catalog', selected_total=601, line_total=600)
+    wrong_total_after = snapshot(wrong_total_plan)
+    missing_amount_after = snapshot(missing_amount_plan)
+    no_catalog_after = snapshot(no_catalog_plan)
+    confirmed_plan = plan('plan-confirmed-cart')
+    turn_after = snapshot(confirmed_plan)
+    wrong_cart = {
+        'items': [{
+            'sku_id': sku_id, 'quantity': 2, 'unit_price_fen': 301,
+            'line_total_fen': 601,
+        }],
+        'total_price_fen': 600,
+    }
+    confirmed_after = snapshot(confirmed_plan, wrong_cart)
+
+    wrong_plan_capture = capture('money-owner-1', 'wrong-total-run', 'money-session-1', 'wrong-total', None, None)
+    wrong_plan_capture['status'] = 'waiting_confirmation'
+    cart_capture = capture('money-owner-2', 'cart-money-run', 'money-session-2', 'cart-money', None, None)
+    cart_capture['status'] = 'waiting_confirmation'
+    missing_capture = capture('money-owner-3', 'missing-money-run', 'money-session-3', 'missing-money', None, None)
+    missing_capture['status'] = 'waiting_confirmation'
+    no_catalog_capture = capture('money-owner-4', 'no-catalog-run', 'money-session-4', 'no-catalog', None, None)
+    no_catalog_capture['status'] = 'waiting_confirmation'
+
+    body = {
+        'plan_id': 'plan-confirmed-cart', 'plan_version': 1,
+        'expected_state_version': 1, 'expected_session_version': 0,
+        'selected_items': [{'sku_id': sku_id, 'quantity': 2}],
+    }
+    receipt = {
+        'status': 'success', 'operation_id': 'money-operation',
+        'confirmation_id': 'money-confirmation',
+        'items_added': [{'sku_id': sku_id, 'quantity': 2}],
+        'cart_version': 2, 'task_id': 'task-money',
+        'state_version': 2, 'session_version': 0,
+    }
+    batch_path = tmp_path / 'batch.json'
+    batch_path.write_text(json.dumps(batch(case_set, [
+        {
+            'case_id': 'wrong-selected-total', 'outcome': 'guide_run',
+            'capture': wrong_plan_capture, 'before': initial, 'after': wrong_total_after,
+            'catalog_facts': {'items': [{'sku_id': sku_id, 'price_fen': 300}]},
+        },
+        {
+            'case_id': 'wrong-confirmed-cart-money', 'outcome': 'guide_run',
+            'capture': cart_capture, 'captures': [cart_capture],
+            'before': initial, 'after': confirmed_after,
+            'catalog_facts': {'items': [{'sku_id': sku_id, 'price_fen': 300}]},
+            'steps': [
+                {
+                    'index': 0, 'op': 'turn', 'before': initial, 'after': turn_after,
+                    'capture': cart_capture,
+                },
+                {
+                    'index': 1, 'op': 'confirm_plan', 'before': turn_after,
+                    'after': confirmed_after, 'idempotency_key': 'money-confirm-key',
+                    'confirmation_body': body, 'confirmation_receipt': receipt, 'capture': None,
+                },
+            ],
+        },
+        {
+            'case_id': 'missing-plan-amount', 'outcome': 'guide_run',
+            'capture': missing_capture, 'before': initial, 'after': missing_amount_after,
+            'catalog_facts': {'items': [{'sku_id': sku_id, 'price_fen': 300}]},
+        },
+        {
+            'case_id': 'selected-total-without-catalog', 'outcome': 'guide_run',
+            'capture': no_catalog_capture, 'before': initial, 'after': no_catalog_after,
+        },
+    ]), ensure_ascii=False), encoding='utf-8')
+    output = tmp_path / 'score.json'
+
+    result = subprocess.run(
+        [sys.executable, '-m', 'app.evaluation.score_batch',
+         '--cases', str(cases_path), '--batch', str(batch_path), '--output', str(output)],
+        cwd=Path(__file__).resolve().parents[1], env=os.environ.copy(),
+        capture_output=True, text=True,
+    )
+
+    assert result.returncode == 0, result.stderr
+    scored = json.loads(output.read_text(encoding='utf-8'))
+    assert scored['counts'] == {
+        'planned': 4, 'attempted': 4, 'guide_run': 4, 'role_wait': 0,
+        'preparation_failed': 0, 'runner_failed': 0, 'not_run': 0,
+    }
+    rows = {row['case_id']: row for row in scored['cases']}
+    wrong_total = rows['wrong-selected-total']
+    assert wrong_total['business_verdict'] == 'fail'
+    assert any(
+        row['code'] == 'selected_total_mismatch' and row['severity'] == 'critical'
+        and row['expected'] == 600 and row['actual'] == 601
+        for row in wrong_total['violations']
+    )
+    wrong_cart = rows['wrong-confirmed-cart-money']
+    assert wrong_cart['business_verdict'] == 'fail'
+    assert {
+        row['code'] for row in wrong_cart['violations'] if row['severity'] == 'critical'
+    } >= {
+        'cart_catalog_price_mismatch', 'cart_line_total_mismatch', 'cart_total_mismatch',
+    }
+    missing = rows['missing-plan-amount']
+    assert missing['business_verdict'] == 'unknown'
+    assert missing['budget_fen'] is None
+    assert {
+        row['code'] for row in missing['evidence_gaps']
+    } >= {'selected_total_missing', 'plan_line_amount_missing'}
+    no_catalog = rows['selected-total-without-catalog']
+    assert no_catalog['business_verdict'] == 'fail'
+    assert any(
+        row['code'] == 'selected_total_mismatch' and row['severity'] == 'critical'
+        and row['expected'] == 600 and row['actual'] == 601
+        for row in no_catalog['violations']
+    )
+    assert any(
+        gap['code'] == 'catalog_offer_missing' and gap['sku_id'] == sku_id
+        for gap in no_catalog['evidence_gaps']
+    )
 
 
 def test_score_batch_treats_unconfirmable_budget_quote_as_pending_not_critical(tmp_path):

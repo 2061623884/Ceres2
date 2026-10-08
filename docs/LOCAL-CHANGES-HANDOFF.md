@@ -42,7 +42,7 @@
 | --- | --- | --- |
 | 本机产品backend完整回归 | 原始 **752 passed /4 failed**，不改称全绿 | 精确170fac0 tracked freeze；[完整报告](../work/local-followup/01/product-baseline-170-full.md) |
 | 上述4项环境补验 | 嵌套隔离缺pytest改用业务环境1通过；BGE缓存补齐后该文件4通过（含3个原失败） | 同产品源码；不与原计数相加；完整报告列每个失败、补验日志/source/model/index hash |
-| 新评测工具 | 三组同一命令 **26通过**；18 eval、7 runner、1 app smoke为其组成，不能再相加 | [共同冻结](../work/local-followup/01/tool-combined-final.md)；213文件清单前后未变，实际source hash与170产品scope分别留证 |
+| 新评测工具 | 审查修复后同一命令 **29通过**；21 eval、7 runner、1 app smoke为其组成，不能再相加 | [最终共同冻结](../work/local-followup/01/tool-combined-reviewfix-final.md)；213文件manifest `29bdaf543db8b498dc30adb9deab2da14c8eeaac9bcaf456cc0612f71716ae91` 前后未变；原26项属于e855候选 |
 | CLI→真实API受控集成 | 1通过，真实TCP FastAPI/Pi，模型为loopback fixture | [smoke](../work/local-followup/01/app-controlled-http-smoke.md)；不启动生产lifespan/Memory，不称真实provider |
 | Pi/前端类型与构建 | 全部退出0，warning保留 | [Node/build](../work/local-followup/01/node-builds-final.md)；Node22.19与本树独立锁/依赖 |
 | 官方GraphRAG | 5通过，官方库构建/local/global/wire | [组件](../work/local-followup/03/graph-official-library.md)；受控provider与deterministic encoder，非真实图LLM质量 |
@@ -51,6 +51,8 @@
 | 100任务计划 | planned100/attempted0/not_run100，业务unknown100 | [独立清单](../work/local-followup/04/ACCEPTANCE-MANIFEST.md)；仅离线计划/重评分，没有HTTP或模型调用 |
 
 历史云端746/5、183及Ceres1成绩不进入本表计数。RED、修复前失败、首轮GREEN失败和评分夹具版本变更均保留 `work/local-followup/01/02/`。检索指标v1和v2来自同一原始18条结果，增加macro说明只是离线更正，不新增检索执行。
+
+e855候选的[Standards](../work/local-followup/05/STANDARDS-REVIEW.md)未发现硬违规，提出重复校验/步骤分派两项判断性smell；[Spec](../work/local-followup/05/SPEC-REVIEW.md)指出指标缺失与不可比较值中断。单一修复owner补Guide终态、critical观察分母、逐轮15秒和核心业务/时延组合稳定性，首useful明确未知；不可比较TypeError保留原因后继续，未知operator配置错误仍传播。另补plan选中行合计与确认后cart单价/行额/总额核对；缺Offer仍能核对已知行额，缺金额不填零。四个实际caller共享标注校验；执行/判分分派保持独立，防止评分以执行器自身为期望。三个新增CLI负例与受影响整组均通过，修前报告未覆盖新source，delta复审另留证。
 
 ## 未完成、失败与限制
 
