@@ -13,3 +13,9 @@
 最终专职Tester共同运行21项evaluation、7项runner、1项受控真实TCP FastAPI/Pi smoke：29 passed，15.87s。适用源码为213文件manifest `29bdaf543db8b498dc30adb9deab2da14c8eeaac9bcaf456cc0612f71716ae91`，前后未变，见[最终报告](../01/tool-combined-reviewfix-final.md)。这些结果不代表真实provider质量、100次任务已执行或本人验收。
 
 上述修复仅涉及evaluation与其测试/rubric；非evaluation产品源码相对170起点未变。原始失败及首次审查报告保留，不覆盖。
+
+## 4e021候选delta复审的补充发现
+
+[Standards delta](STANDARDS-DELTA-REVIEW.md)确认无硬违规，重复校验已处理，独立执行/评分分派为可接受取舍。[Spec delta](SPEC-DELTA-REVIEW.md)另指出两处诊断漏项：行额已知但数量/单价缺失时合计仍可核对；成功receipt商品不匹配后仍须核对cart金额。两项不构成已知错误被判pass的漏洞，但会遗漏可观察的critical细项或将可判的合计错误降为unknown，仍按现有rubric修复。
+
+专职Tester分别证实receipt/cart漏报RED及部分行额合计RED，见`amount-delta-red.md`与`amount-delta-partial-total-red.md`；首轮RED未到达后一个断言，第二次调整断言顺序及源码版本另留证，没有把未执行断言算作红测通过。中间仅修合计后的结果继续RED在receipt场景，见`amount-delta-partial-total-intermediate.md`。两项修复后窄GREEN 1 passed，最终共同29 passed/15.73s，见[最终金额delta冻结](../01/tool-combined-final-delta.md)，213文件manifest `8d3724cba223fb46bc46eb198aaf3a378c2096e1e930b4648fda6f5ee1b6aa1a`前后未变。缺细节仍保持evidence gap，已知合计相符不自动pass；成功回执mismatch后独立列出cart金额违规。最终独立复审另留结果，本文不代签。

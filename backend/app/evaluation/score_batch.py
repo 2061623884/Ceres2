@@ -182,14 +182,14 @@ def _score_confirmation_step(step, violations, evidence_gaps, catalog_items):
                 'confirmation_not_successful', 'major', expected='success',
                 actual=receipt['status'], source=f'steps.{step["index"]}.confirmation_receipt.status',
             ))
-        elif body is not None and _normalized_items(receipt['items_added']) != _normalized_items(body['selected_items']):
-            violations.append(_violation(
-                'confirmation_receipt_mismatch', 'critical',
-                expected=_normalized_items(body['selected_items']),
-                actual=_normalized_items(receipt['items_added']),
-                source=f'steps.{step["index"]}.confirmation_receipt.items_added',
-            ))
         else:
+            if body is not None and _normalized_items(receipt['items_added']) != _normalized_items(body['selected_items']):
+                violations.append(_violation(
+                    'confirmation_receipt_mismatch', 'critical',
+                    expected=_normalized_items(body['selected_items']),
+                    actual=_normalized_items(receipt['items_added']),
+                    source=f'steps.{step["index"]}.confirmation_receipt.items_added',
+                ))
             found, cart_items = _read_path(after, 'cart.items')
             if not found or cart_items is None:
                 evidence_gaps.append({
@@ -410,7 +410,7 @@ def _score_execution(case, row, execution_id, trial):
         if outcome == 'guide_run' and plan_found and plan is not None:
             plan_items = plan.get('items')
             selected_line_total = 0
-            selected_lines_complete = isinstance(plan_items, list)
+            selected_line_totals_complete = isinstance(plan_items, list)
             if not isinstance(plan_items, list):
                 evidence_gaps.append({'code': 'plan_items_missing', 'path': 'after.guide.plan.items'})
             else:
@@ -438,6 +438,10 @@ def _score_execution(case, row, execution_id, trial):
                         ))
                     quantity = item.get('quantity')
                     line_total = item.get('line_total_fen')
+                    if line_total is None:
+                        selected_line_totals_complete = False
+                    else:
+                        selected_line_total += line_total
                     if quantity is not None and item.get('unit_price_fen') is not None and line_total is not None:
                         if quantity * item['unit_price_fen'] != line_total:
                             violations.append(_violation(
@@ -445,9 +449,7 @@ def _score_execution(case, row, execution_id, trial):
                                 expected=quantity * item['unit_price_fen'], actual=line_total,
                                 source=f'after.guide.plan.items#{sku_id}.line_total_fen',
                             ))
-                        selected_line_total += line_total
                     else:
-                        selected_lines_complete = False
                         evidence_gaps.append({
                             'code': 'plan_line_amount_missing', 'sku_id': sku_id,
                         })
@@ -458,7 +460,7 @@ def _score_execution(case, row, execution_id, trial):
                     'code': 'selected_total_missing',
                     'path': 'after.guide.plan.selected_total_fen',
                 })
-            elif selected_lines_complete and selected_total != selected_line_total:
+            elif selected_line_totals_complete and selected_total != selected_line_total:
                 violations.append(_violation(
                     'selected_total_mismatch', 'critical',
                     expected=selected_line_total, actual=selected_total,

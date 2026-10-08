@@ -1282,6 +1282,15 @@ def test_score_batch_cli_checks_plan_and_confirmed_cart_amounts(tmp_path):
                 'fact_sources': [],
                 'checks': [{'path': 'capture.status', 'operator': 'eq', 'expected': 'waiting_confirmation'}],
             },
+            {
+                'case_id': 'selected-total-with-missing-line-details',
+                'message': '给出总额与已知行金额不符的方案。',
+                'category': 'purchase_planning', 'scenario_family': 'selected-total-partial-line',
+                'split': 'regression', 'core': False,
+                'expected_behavior': '行金额已知时即使数量或单价缺失，仍核对selected_total。',
+                'fact_sources': [f'data/fixtures/offers.json#{sku_id}'],
+                'checks': [{'path': 'capture.status', 'operator': 'eq', 'expected': 'waiting_confirmation'}],
+            },
         ],
     }
     cases_path = tmp_path / 'cases.json'
@@ -1324,9 +1333,13 @@ def test_score_batch_cli_checks_plan_and_confirmed_cart_amounts(tmp_path):
     wrong_total_plan = plan('plan-wrong-total', selected_total=601)
     missing_amount_plan = plan('plan-missing-amount', selected_total=None, line_total=None)
     no_catalog_plan = plan('plan-no-catalog', selected_total=601, line_total=600)
+    partial_line_plan = plan('plan-partial-line', selected_total=601, line_total=600)
+    partial_line_plan['items'][0].pop('quantity')
+    partial_line_plan['items'][0].pop('unit_price_fen')
     wrong_total_after = snapshot(wrong_total_plan)
     missing_amount_after = snapshot(missing_amount_plan)
     no_catalog_after = snapshot(no_catalog_plan)
+    partial_line_after = snapshot(partial_line_plan)
     confirmed_plan = plan('plan-confirmed-cart')
     turn_after = snapshot(confirmed_plan)
     wrong_cart = {
@@ -1346,6 +1359,8 @@ def test_score_batch_cli_checks_plan_and_confirmed_cart_amounts(tmp_path):
     missing_capture['status'] = 'waiting_confirmation'
     no_catalog_capture = capture('money-owner-4', 'no-catalog-run', 'money-session-4', 'no-catalog', None, None)
     no_catalog_capture['status'] = 'waiting_confirmation'
+    partial_line_capture = capture('money-owner-5', 'partial-line-run', 'money-session-5', 'partial-line', None, None)
+    partial_line_capture['status'] = 'waiting_confirmation'
 
     body = {
         'plan_id': 'plan-confirmed-cart', 'plan_version': 1,
@@ -1355,7 +1370,7 @@ def test_score_batch_cli_checks_plan_and_confirmed_cart_amounts(tmp_path):
     receipt = {
         'status': 'success', 'operation_id': 'money-operation',
         'confirmation_id': 'money-confirmation',
-        'items_added': [{'sku_id': sku_id, 'quantity': 2}],
+        'items_added': [{'sku_id': sku_id, 'quantity': 1}],
         'cart_version': 2, 'task_id': 'task-money',
         'state_version': 2, 'session_version': 0,
     }
@@ -1392,6 +1407,12 @@ def test_score_batch_cli_checks_plan_and_confirmed_cart_amounts(tmp_path):
             'case_id': 'selected-total-without-catalog', 'outcome': 'guide_run',
             'capture': no_catalog_capture, 'before': initial, 'after': no_catalog_after,
         },
+        {
+            'case_id': 'selected-total-with-missing-line-details', 'outcome': 'guide_run',
+            'capture': partial_line_capture,
+            'before': initial, 'after': partial_line_after,
+            'catalog_facts': {'items': [{'sku_id': sku_id, 'price_fen': 300}]},
+        },
     ]), ensure_ascii=False), encoding='utf-8')
     output = tmp_path / 'score.json'
 
@@ -1405,7 +1426,7 @@ def test_score_batch_cli_checks_plan_and_confirmed_cart_amounts(tmp_path):
     assert result.returncode == 0, result.stderr
     scored = json.loads(output.read_text(encoding='utf-8'))
     assert scored['counts'] == {
-        'planned': 4, 'attempted': 4, 'guide_run': 4, 'role_wait': 0,
+        'planned': 5, 'attempted': 5, 'guide_run': 5, 'role_wait': 0,
         'preparation_failed': 0, 'runner_failed': 0, 'not_run': 0,
     }
     rows = {row['case_id']: row for row in scored['cases']}
@@ -1416,12 +1437,21 @@ def test_score_batch_cli_checks_plan_and_confirmed_cart_amounts(tmp_path):
         and row['expected'] == 600 and row['actual'] == 601
         for row in wrong_total['violations']
     )
+    partial_line = rows['selected-total-with-missing-line-details']
+    assert partial_line['business_verdict'] == 'fail'
+    assert any(
+        row['code'] == 'selected_total_mismatch' and row['severity'] == 'critical'
+        and row['expected'] == 600 and row['actual'] == 601
+        for row in partial_line['violations']
+    )
+    assert any(gap['code'] == 'plan_line_amount_missing' for gap in partial_line['evidence_gaps'])
     wrong_cart = rows['wrong-confirmed-cart-money']
     assert wrong_cart['business_verdict'] == 'fail'
     assert {
         row['code'] for row in wrong_cart['violations'] if row['severity'] == 'critical'
     } >= {
-        'cart_catalog_price_mismatch', 'cart_line_total_mismatch', 'cart_total_mismatch',
+        'confirmation_receipt_mismatch', 'cart_catalog_price_mismatch',
+        'cart_line_total_mismatch', 'cart_total_mismatch',
     }
     missing = rows['missing-plan-amount']
     assert missing['business_verdict'] == 'unknown'
