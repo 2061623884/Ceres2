@@ -95,3 +95,15 @@ resume只执行not_run，已失败尝试保留；输入hash、计划或API目标
 ## 单独门槛
 
 backend全量、官方GraphRAG受控组件、真实BGE公开检索、实际浏览器、真实主模型/图模型/Memory-Dream及本人接受分别留证。完整售后、初始化订单/记忆和更多业务动作driver未由本工具实现；已有受控生命周期测试单独报告。这些缺口不通过增加一句自然语言期望追认为已覆盖。
+
+## 按本次授权复用amax配置
+
+用户已明确允许只读使用原amax `.env`模型配置真实测评并发布交付分支。本次实际主/Memory模型为`deepseek-flash`；采用隔离进程注入，不拷贝原运行状态或整份配置，也不写密钥到Git。以下真实服务命令从本工作树根目录执行（Node22.19环境及本树独立依赖已准备）：
+
+```sh
+.venv/bin/python work/local-followup/04/real-model-20261008/provider_job.py serve
+```
+
+该有限测试入口只读取原`.env`获准字段，明确使用`data/runtime/real-model-20261008/`与当前新索引，监听8015；生产MemoryWorker保持启用。它不会填充新树blank.env。结束以SIGINT优雅停止。模型/API/Kev配置改变时建立新批次，不沿用本次resume；启动服务和真实采样仍由专职Tester执行。
+
+本次已完成同一60包的20pilot+80resume，正式batch/score/report在独立Tester忽略目录，40公开与20隔离输入hash未变；[真实任务报告](../work/local-followup/04/real-model-20261008/REAL-TASK-EVALUATION.md)列命令与hash，[组件报告](../work/local-followup/04/real-model-20261008/REAL-COMPONENT-VERIFICATION.md)列新hybrid/Graph、真实提取/合成Dream和独立Firefox订单旅程。真实100结果66/30/4，核心三次11/20；当前图任务调用0、Kev缺配、人工自然度未知，不能把组件功能成功签成整体质量通过。

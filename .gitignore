@@ -45,3 +45,4 @@ work/**/playwright-report/
 *.sqlite-*
 **/compiled/
 work/**/pytest-tmp/
+work/local-followup/04/real-model-20261008/raw/

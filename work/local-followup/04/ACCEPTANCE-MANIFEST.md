@@ -13,7 +13,7 @@
 
 新增用例从 Ceres2 当前静态商品、Offer、菜谱和政策事实重新编写，加入多菜共享食材合并、菜谱需求到销售包装的覆盖与余量、多条目预算报价、跨商品单位价格比较、属性证据未知、具体订单角色边界和订单状态政策分界等约束。用例正文仅保存在受忽略的独立工作目录，公开 evals 未改动。
 
-该集与公开回归集共享产品目录、政策体系及部分上位任务类型；本地 Tester 已能查看公开集，因此不能称严格盲测。多商品规划、预算、菜谱事实、政策查询、角色路由等场景族存在有意覆盖重合；结果只能作为本轮独立维护的验收样本，不能单独证明统计泛化。当前仅定义离线计划，真实 provider、真实模型与用户本人质量判断仍未执行。
+该集与公开回归集共享产品目录、政策体系及部分上位任务类型；本地 Tester 已能查看公开集，因此不能称严格盲测。多商品规划、预算、菜谱事实、政策查询、角色路由等场景族存在有意覆盖重合；结果只能作为本轮独立维护的验收样本，不能单独证明统计泛化。上文 v1–v4 记录的是不同版本下的离线计划重评分；其“真实模型未执行”仅适用于那些离线产物。后续实际运行的真实模型批次单独记录在本清单末尾及[真实任务评测报告](real-model-20261008/REAL-TASK-EVALUATION.md)，不覆盖此前离线证据。
 
 ## 离线计划评分证据
 
@@ -73,4 +73,19 @@ v4 产物保存在被忽略的临时目录，未加入 Git：`score-plan-v4.json
 
 实际计数：planned 100、attempted 0、not_run 100、Guide runs 0；业务 verdict 为 pass 0、fail 0、unknown 100。观察到的终态数为 0；critical findings 为 0、execution denominator 也为 0，不能当作关键违规检查通过。15 秒阈值为 15,000 ms、samples 0；first useful result 的 samples/observed/unknown 均为 0，`human_annotated=false`，没有人工效用结论。20 个核心案例均未执行，不能得出三次稳定性结论；provider usage、cost 和时延均无样本。
 
-重查后被忽略目录一级文件只新增 `score-plan-v4.json` 与 `report-plan-v4.json`；原 20 条正文文件名仍为 `acceptance-20.json`，其正文未读取输出或改写。
+在 v4 离线复核时，被忽略目录一级文件只新增 `score-plan-v4.json` 与 `report-plan-v4.json`；原 20 条正文文件名仍为 `acceptance-20.json`，该阶段未读取或改写题面。之后的真实模型任务评测按单独授权由唯一 Tester 读取原验收题面并执行，输入文件未改名或改写；后续公开材料仍只登记其版本/hash 与聚合结果。
+
+## 实际模型任务评测批次（2026-10-08）
+
+实际运行、评分与限制详见[真实任务评测报告](real-model-20261008/REAL-TASK-EVALUATION.md)。本节只登记批次身份与关键聚合数；v1–v4 的离线计划与评分文件均保留，不被本次执行覆盖。
+
+- 源码工作树 HEAD：`00b397443bd7258d2166c6445ac4ac066cefd21d`；该次评测所固定的实现源码提交：`739f13ead0c53ce9d82519efc30f51263e29ab45`。运行事件中的 `loaded_code_equivalence=unknown`，不据此宣称精确运行时等价。
+- 输入组合包：`ceres2-local-followup-60-case-bundle-2026-10-08-v1`，SHA-256 `107bdb6d70d1731719c061a30c2a295b5d218d7732075fbdfcdd9b965c87b1d5`。既有计划文件仍为 100 planned、0 attempted，SHA-256 `01f203014a7e3faaf6dee1672c1de0b4cbbfff54ed0d7c42363dc77499d1acd8`；实际执行写入新的 ignored batch，不覆盖此计划或 v1–v4 文件。
+- 实际批次 `work/local-followup/tmp/independent-acceptance/real-live-batch.json` SHA-256 `db0b98e3adce9879644bf7fabeea90b6ab928885424ce5b917a3204e77d87918`；score SHA-256 `3c3b74f1d3ed189b12875897ff7a61926eb21689ddca9625f6838aa740cb96f7`；report SHA-256 `dde87227d4f38085c07dc78448c696252c559e26ae3c05b835e4efb94a10cb5a`。pilot20 score/report SHA-256 分别为 `525ccbc89dcb8f1cb3d771a1a9d981984520472ffc06f235e60714d31287e6aa` 与 `81b319a4445d867df03b5e33e8ffffe76bc3236d2066eb6f1bd7dd0f757c6963`。
+- 100 planned / 100 attempted / 0 not_run；阶段结果 `guide_run=99`、`runner_failed=1`。100 个执行行均保留 Guide receipt/capture，终态是 completed 66、waiting_confirmation 24、failed 9、protected 1。业务 verdict 是 pass 66、fail 30、unknown 4。该“runner_failed”是模型没有返回依赖后续确认动作所需的 plan，runner 在构造该动作时出现 TypeError；原执行未重跑，详见报告。
+- 关键违规 findings 为 0，计算分母为 99 个可评分执行行；这不是 100 条均无风险或安全性通过的结论。15 秒时限样本 100、通过 100；核心集 20 个案例各运行 3 次，严格三次业务全通过为 11/20，核心业务 verdict 汇总 pass 44、fail 13、unknown 3。人工 reviewed=0，first useful result unknown=100。
+- `message.interim` 实际出现在 39/100 个 run（43 个 SSE interim 事件）；33 次在 `turn.completed` 前，6 次在 `error` 终态前，均先于该 run 的 stream closure。该数只描述消息事件与时序，不代表 interim 有用、自然或质量合格。
+- 捕获到 409 条 provider-call usage 记录；input/output/totalTokens/cacheRead 的实际 provider SSE 观测和分别为 2,200,915 / 28,452 / 2,229,367 / 2,030,720，cacheWrite 在 409 条均为 null。96/100 run 的 provider-call summary 完整，但 full usage field completeness 为 0/100；值是已观察下界，不能当作完整任务 token/cost。
+- 100 行真实任务分为公开执行 80 行与独立验收 20 行。公开部分 verdict 为 pass 55、fail 22、unknown 3；独立验收只记录聚合 verdict pass 11、fail 8、unknown 1，不在本清单或报告披露其题面、标识或逐项结果。
+- 实际模型为 DeepSeek Flash（`deepseek-flash`，API host `api.deepseek.com`）；非 secret 配置 SHA-256 `f1bd1b5983a0a07206a4bb1f549130b4a8b8b49afcb7b0bef845634503f2cbec`。密钥不写入清单、报告或 Git。
+- 本次实际模型评测并不等于整体验收：浏览器端到端、人工自然度/有用性标注仍未完成。KEV 未配置，角色路由用例没有真实 Kev 判断；GraphRAG 构建与独立 query smoke 虽成功，但 100 个 Guide 任务中的 Graph 调用数为 0。

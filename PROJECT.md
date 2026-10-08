@@ -1,8 +1,8 @@
 # Ceres2：本机后续开发（当前）
 
-更新：2026-10-08。当前入口为[本机后续 TASK](tasks/ceres2-local-followup.md)与[方案](docs/plans/ceres2-local-followup-spec.md)，分支 `codex/ceres2-local-followup-20261008`，起点 `170fac0bc75fcc855897b073337ba218abeb5b7d`。评测工具与40公开用例/20独立维护验收已冻结，最终代码`739f13ead0c53ce9d82519efc30f51263e29ab45`的29项共同验证/两轴复审完成；100任务只生成计划，0真实调用。产品非evaluation源码未改，基线完整回归原始752/4，4环境失败后针对补验通过；适用版本与局限见[本地交接](docs/LOCAL-CHANGES-HANDOFF.md)。下一步用户审阅本地工具交付，配置就绪后真实pilot，再围绕可可对话/时延、检索/菜谱和反馈闭环实施有依据的优化；顺序见[04剩余任务](tasks/ceres2-local-followup-04-real-evaluation-feedback.md#后续实施顺序与可观察交付)。订单后端以维持闭环为范围。
+更新：2026-10-08。入口为[本机 TASK](tasks/ceres2-local-followup.md)与[方案](docs/plans/ceres2-local-followup-spec.md)，分支`codex/ceres2-local-followup-20261008`、起点`170fac0bc75fcc855897b073337ba218abeb5b7d`。739评测工具29项及原双轴完成后，在00b397使用用户授权的原amax DeepSeek Flash配置实际尝试100次；business66/30/4、core三次全通过11/20、15秒100/100。[真实任务报告](work/local-followup/04/real-model-20261008/REAL-TASK-EVALUATION.md)和[组件/Memory/Firefox报告](work/local-followup/04/real-model-20261008/REAL-COMPONENT-VERIFICATION.md)分层留证。产品源码未改，旧全量752/4与环境补验保留原pin。当前整理报告/交接及常规发布，之后用户审阅；商品漏匹配、澄清/plan、Kev及真实Guide图任务按[04](tasks/ceres2-local-followup-04-real-evaluation-feedback.md#后续实施顺序与可观察交付)推进，订单后端维持模拟闭环。
 
-用户最新要求按implement-spec完成测试/评测，参考Ceres1固定72bb1b9，完成后不合并先审阅；此前合并约定撤销。五票任务图及唯一状态在本轮TASK。真实模型、完整图质量、Memory/Dream和本人验收仍待独立证据，配置缺项已由Tester确认；先推进可离线实施与完整回归，不覆盖原现场。后续本地开发统一在新工作树，旧优化分支保留快照。
+用户最新明确要求复用原amax `.env`模型配置真实执行、补报告并推送本分支；不合并约定继续。五票任务图与唯一状态在TASK。主模型/官方图/提取与合成Dream已实测；Kev仍缺、100正式任务Graph调用0，完整Guide浏览器、自然度/有用性人工标注及本人验收未完成。不得以零critical观察或组件180秒预算通过宣称整体验收。原配置/运行数据不修改，后续本地开发仍在新工作树，旧优化分支保留快照。
 
 ## 九票集成发布时记录
 

@@ -2,6 +2,8 @@
 
 当前任务入口：[TASK](../tasks/ceres2-local-followup.md)，行为方案：[规格](plans/ceres2-local-followup-spec.md)，工具步骤：[评测使用说明](LOCAL-FOLLOWUP-EVALUATION.md)。本文件不代替任务状态或本人验收。
 
+本次用户进一步授权只读调用原amax模型配置、真实测评后常规推送。本次真实报告见[100次任务评测](../work/local-followup/04/real-model-20261008/REAL-TASK-EVALUATION.md)和[组件/Memory/Firefox](../work/local-followup/04/real-model-20261008/REAL-COMPONENT-VERIFICATION.md)：100次实际尝试，机器business66通过/30失败/4未知；不宣称整体通过。原0次离线计划是工具阶段历史，保留原版，不覆盖本次结果。
+
 ## 分支与来源
 
 - 仓库：[2061623884/Ceres2](https://github.com/2061623884/Ceres2)。
@@ -10,7 +12,7 @@
 - 最终评测工具代码：`739f13ead0c53ce9d82519efc30f51263e29ab45`；初候选为`e855d691d0a446c9e5385196134b55f2ec609320`，第一轮修复为`4e021e46e8c16671ae1366ec09c11f39bad01bd6`。最终29项/15.73s证据对应739的实际源码；后继本地交付提交只补文档/独立复审和离线报告，不改变该源码。
 - 参考评测：[Ceres1 72bb1b99bf040c8b0bae5d026888bc059bc9423d](ceres1-evaluation-reference.md)；借方法与公开样本组织，不继承其成绩、runtime 或旧状态。
 - 原本地优化 `6734c7fe79e670df2dae12b065dcc49c0b10a307` 保留快照；后续在本工作树，原main与其他工作树保留。
-- 本轮按最新用户要求不合并；用户本轮AGENTS另禁止推送或修改原项目。本轮仅协调本地提交，没有发布新远端分支；交付完整SHA以本地分支和最终回报为准。
+- 不合并。用户最新明确授权复用原模型配置、完成真实报告后发布本交付分支；普通push后核实远端SHA，最终完整交付SHA以分支与主会话回报为准。原工程配置/运行数据不修改，未执行rebase/cherry-pick/force push；旧00b397工具交付阶段只在本地。
 
 ## 本地目标与已实现能力
 
@@ -49,7 +51,7 @@
 | 官方GraphRAG | 5通过，官方库构建/local/global/wire | [组件](../work/local-followup/03/graph-official-library.md)；受控provider与deterministic encoder，非真实图LLM质量 |
 | 真实BGE | 4通过，含18公开检索校准、冷/热15秒预算 | [BGE](../work/local-followup/03/real-bge.md)、[指标v2](../work/local-followup/03/retrieval-dev-metrics-v2.md)；BM25/dense/RRF、macro/micro分别列出 |
 | 浏览器 | 先前本机170fac0 Firefox HTTPS run11通过 | [原本机报告](../work/local-cloud-integration/local-acceptance-20261008/LOCAL-ACCEPTANCE-RESULTS.md)；受控provider/检索，当前未新增浏览器执行 |
-| 100任务计划 | planned100/attempted0/not_run100，业务unknown100 | [独立清单](../work/local-followup/04/ACCEPTANCE-MANIFEST.md)；仅离线计划/重评分，没有HTTP或模型调用 |
+| 原工具阶段100任务计划 | planned100/attempted0/not_run100，业务unknown100 | [独立清单](../work/local-followup/04/ACCEPTANCE-MANIFEST.md)保留旧离线v1-v4；仅描述旧批次，不覆盖本次真实运行 |
 
 历史云端746/5、183及Ceres1成绩不进入本表计数。RED、修复前失败、首轮GREEN失败和评分夹具版本变更均保留 `work/local-followup/01/02/`。检索指标v1和v2来自同一原始18条结果，增加macro说明只是离线更正，不新增检索执行。
 
@@ -59,9 +61,25 @@ e855候选的[Standards](../work/local-followup/05/STANDARDS-REVIEW.md)未发现
 
 739的[Standards最终](../work/local-followup/05/STANDARDS-FINAL-REVIEW.md)未发现硬违规或新增smell；[Spec最终](../work/local-followup/05/SPEC-FINAL-REVIEW.md)确认已发现代码问题修复，未发现此次差异仍有代码缺陷，仍明确整体规格未完成。独立Tester对原100未运行批次做最终v4离线复核，仍是unknown100/实际执行0；不同评分版本保留，不把重复离线处理计作模型执行。
 
+## 本次真实执行与实际缺口
+
+执行HEAD `00b397443bd7258d2166c6445ac4ac066cefd21d`，业务/评测工具源码仍为739。原amax配置仅限定字段注入隔离进程，主/提取/Dream模型均`deepseek-flash`，provider host为`api.deepseek.com`；密钥未复制到Git或输出。原库/索引/session/checkpoint未导入。
+
+| 本次范围 | 实际结果与口径 |
+| --- | --- |
+| 真实100次任务 | 100 attempted/0 not_run；机器business66 pass/30 fail/4 unknown。Guide终态另为66 completed/24 waiting_confirmation/9 failed/1 protected，数值不可互相替代 |
+| 核心稳定性 | 20核心各三次，60试次44 pass/13 fail/3 unknown；三次均business pass11/20 |
+| 15秒与多消息 | 100/100运行时样本达15秒；39/100 run有43条message.interim，首次interim P50/P95约2.06/3.36秒；首useful/自然度无人标注，仍未知 |
+| 真实RAG组件 | 固定BGE新hybrid、官方GraphRAG3.2 build成功；44 entities/61 relationships。Local/Global约18.0/18.7秒，用180秒独立组件预算；正式100中Graph工具调用0，不证明Guide15秒图检索或图收益 |
+| Memory | 正式90 extraction jobs completed，usage不持久化；正式owner未达门槛，自然Dream0。另独立10合成自动记忆触发1次真实Dream；内容质量未人工验收 |
+| 实际Firefox | 当前built UI→独立真实API/SQLite，商品详情/加购/模拟结算/发货/签收通过，1 delivered模拟订单；Guide0/无新模型调用，本人UI与完整Guide浏览器仍待验收 |
+| 实际usage | 409条provider SSE观测记录：primary340/interim审校68/general审校1，已观测totalTokens2,229,367为下界；4/100 call-summary不完整，cacheWrite/cost均未知，不推费用；Graph与Memory单列 |
+
+唯一公开`dev-01:trial:3`首轮completed但未生成plan，声明confirm_plan时driver解引用null导致TypeError；保存完整已有capture/before/after，确认HTTP未发，原outcome为runner_failed/质量unknown，不重跑伪造成功。公开场景还暴露在库精确SKU被答无匹配、规格未澄清、预算内商品无plan等失败。Kev配置缺失，实际判断0/100，9条routing业务失败；critical观察0/eligible99不能签为系统安全。新报告保留失败/脚本问题和原始hash，不将64条tail未截断当4个summary完整。
+
 ## 未完成、失败与限制
 
-真实主模型/Kev、真实GraphRAG构建与回答、Memory extraction/Dream、完整多轮售后评测及本人接受仍未完成。本工作树独立配置缺主provider URL/key/model、Kev、Memory/Dream模型及人工operator token；不复制原项目凭据，不从模板猜模型。生产15秒/5轮合同保留，没有提高预算或更换模型宣称改进。
+本次真实主模型、Graph组件、提取、合成Dream和独立商品订单浏览器已执行。仍未完成真实Kev、正式Guide里的Graph调用/15秒门槛、自然Dream、完整多轮售后/Memory driver、完整Guide浏览器及本人接受。生产15秒/5轮合同未改；本次模型来自用户明确“使用原配置”指令，不能拿历史qwen结果直接对照宣称改善。
 
 完整回归4个原环境失败虽然已补验，原始全量仍是752/4；最初全量shell完整调用串未单独保存，报告如实列出该溯源缺口，不补造命令。没有当前真实模型质量/成本改善结论。新验收与公开集共享部分上位类型，Tester可见公开集，不能称严格盲测/泛化。工具支持小型采购多轮，未支持完整订单/售后/Memory setup driver；现有受控生命周期测试与这些真实评测缺口分开。
 
@@ -69,9 +87,9 @@ e855候选的[Standards](../work/local-followup/05/STANDARDS-REVIEW.md)未发现
 
 本轮没有业务schema迁移。原静态fixtures为73商品/73Offer、8菜谱、11政策；当前新业务库和索引按本工作树可重复seed/build，数据库/会话/订单/checkpoint不从旧库导入。业务库、索引、固定BGE缓存、独立venv/node_modules、`.env`及原始日志留Git外；tracked evidence保留内容hash和命令/版本入口。
 
-[交付检查](../work/local-followup/05/FINAL-DELIVERY-CHECK.md)复核213文件源码与最终测试manifest一致，并对本树`.env`只核对字段是否非空：`OPENAI_BASE_URL`、`OPENAI_API_KEY`、`LLM_MODEL`、`MEMORY_EXTRACTION_MODEL`、`MEMORY_DREAM_MODEL`、`KEV_BASE_URL`、`HUMAN_OPERATOR_TOKEN`均未配置；不记录值、不挪用原配置。它是配置缺项和交付差异证据，不是实际模型测试。
+[旧交付检查](../work/local-followup/05/FINAL-DELIVERY-CHECK.md)记录00b397时新树空白.env，不作为本次进程配置结论。本次`provider_job.py`通过dotenv只读原amax获准字段并注入进程，禁读本树blank.env、设置新DB/checkpoint；没有复制全文件或密钥。本次Kev仍缺、operator访问未配置，不能复用旧数据弥补。启动入口见[工具说明](LOCAL-FOLLOWUP-EVALUATION.md#按本次授权复用amax配置)，原配置模型变更后必须另建新批次。
 
-真实采样在可信本机独立`.env`配置就绪后，由Tester先核对获准模型/provider及有限调用范围，执行20核心pilot检查判分，再在同source/data/index/model条件续跑剩余计划。GraphRAG build用独立有限正数timeout；Memory/Dream与浏览器单列。启动入口使用本机空闲规划的backend8015/frontend8446，保留其他listener；见[本机准备](../work/local-cloud-integration/local-acceptance-20261008/ACCEPTANCE-PLAN.md)。
+本次先完成Graph/hybrid冻结再20核心pilot、同条件续80，没有中途改模型/索引/源码或重跑失败。服务均已优雅停止，8015/8446无listener，原listener保留。后续新增优化必须保留本批作为基线；更正脚本/评分另留版本，不能把重评分计作新增模型执行。Graph build预算900秒、组件query180秒，与生产Guide15秒分开。
 
 ## 云端重合与本地新增
 

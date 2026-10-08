@@ -53,7 +53,9 @@
 
 ## 当前本机后续阶段（2026-10-08）
 
-当前本地任务为 `tasks/ceres2-local-followup.md`，工作树 `Ceres2-integration-20261008`、分支 `codex/ceres2-local-followup-20261008`，起点 `170fac0`。用户最新要求按implement-spec完成、完成后不合并先审阅，并加强测试/评测、参考Ceres1固定72bb1b9；此前完成后合并约定已撤销。implement-spec内部合并步骤改为本分支唯一文件owner实施，不执行merge/rebase/cherry-pick/force push或部署。用户本轮提供的AGENTS禁止推送或修改原项目，本轮只由主会话协调本地提交；下段历史发布授权不作为当前推送授权。Tester独占验证、两轴独立只读与保留原main现场/旧运行数据继续适用，53项为前次冻结记录。旧九票owner不作为新任务活跃句柄，具体范围由本机主会话分配。
+用户最新明确要求“调用amax上.env里面的模型配置进行真实执行测评，补全报告，最后推送”。本次允许专职Tester只读原工程`.env`的模型/provider及当前角色判断服务配置，导入本树隔离进程或Git忽略的独立配置；不复制原DB、索引、会话、checkpoint或其他运行状态，不输出凭据。主会话完成真实报告和本地提交后可常规推送`codex/ceres2-local-followup-20261008`至`2061623884/Ceres2`并读回核实，不允许merge/rebase/cherry-pick/force push或部署。该明确授权替代下面本轮先前“禁止旧凭据/推送”在上述有限范围内的约定；Tester独占验证、独立验收正文隔离和原工程只读保持适用。
+
+当前本地任务为 `tasks/ceres2-local-followup.md`，工作树 `Ceres2-integration-20261008`、分支 `codex/ceres2-local-followup-20261008`，起点 `170fac0`。用户要求按implement-spec完成、完成后不合并先审阅，并加强测试/评测、参考Ceres1固定72bb1b9；此前完成后合并约定已撤销。implement-spec内部合并步骤改为本分支唯一文件owner实施，不执行merge/rebase/cherry-pick/force push或部署。本轮初始AGENTS曾禁止推送与迁入凭据，现按上一段明确限定的新授权执行；原项目禁止修改，发布由主会话唯一协调。下段历史发布授权不扩大本次范围。Tester独占验证、两轴独立只读与保留原main现场/旧运行数据继续适用，53项为前次冻结记录。旧九票owner不作为新任务活跃句柄，具体范围由本机主会话分配。
 
 ## 上一轮集成阶段说明（2026-10-07）
 
