@@ -1,6 +1,6 @@
 # 05 双轴审查与本地交付
 
-- 状态：待验收；真实100及组件报告、driver/harness审查修复和cbca两轴最终复审完成；常规推送/远端读回核实收尾，等待用户审阅，整体规格/本人验收仍开放。
+- 状态：待验收；真实100及组件报告、driver/harness审查修复和cbca两轴最终复审完成；源码/报告候选已普通push、远端读回一致，等待用户审阅，整体规格/本人验收仍开放。
 - 负责人：主会话；Standards/Spec 两个独立只读 reviewer，Tester 复验修复。
 - 所属：[总 TASK](ceres2-local-followup.md)；[规格](../docs/plans/ceres2-local-followup-spec.md)。
 - 前置：01—04 实际结果与未完成项明确；不得将阻塞冒充完成。
@@ -19,4 +19,4 @@
 
 [Standards最终复审](../work/local-followup/05/REAL-STANDARDS-FINAL-REVIEW.md)确认本次已发现问题关闭；[Spec最终复审](../work/local-followup/05/REAL-SPEC-FINAL-REVIEW.md)确认窄修及结果版本边界，正式Graph/Kev/自然Dream/人工反馈等整体缺口继续开放。
 
-交接见[文档](../docs/LOCAL-CHANGES-HANDOFF.md)，未提交本机内容见[清单](../docs/LOCAL-UNCOMMITTED-INVENTORY.md)。下一步Tester最终交付检查、文档提交，普通push/读回SHA，用户审阅；不关闭更广整体规格或本人验收。
+交接见[文档](../docs/LOCAL-CHANGES-HANDOFF.md)，未提交本机内容见[清单](../docs/LOCAL-UNCOMMITTED-INVENTORY.md)。[Tester发布前检查](../work/local-followup/05/REAL-FINAL-PUBLICATION-CHECK.md)无阻断；源码/报告候选`3cc8d804bb3fbd7f405bfb73f4f44c65b3550205`已普通push并读回一致，见[回执](../work/local-followup/05/REAL-PUBLICATION-RECEIPT.md)。发布状态文档后继不改变源码或测试适用版本，其最终完整SHA由主会话再次推送/读回回报。下一步用户审阅及04未完成项，不关闭更广整体规格或本人验收。

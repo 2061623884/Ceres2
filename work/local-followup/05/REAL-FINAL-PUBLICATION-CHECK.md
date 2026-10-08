@@ -19,3 +19,9 @@
 - 在本次 staged diff 中新增或变更的 31 个相对本地 evidence 链接及 Markdown anchors 均可解析。未要求重验 `PROJECT.md` 中未由本次改动引入的历史 archive/reference 链接。
 
 无发布前置阻断项。主会话可在提交后按用户授权执行普通 push，并读回远端 SHA；不得把本报告或旧评测证据表述为整体已验收。
+
+## Post-publication 文档增量
+
+主会话已报告源码/报告候选 `3cc8d804bb3fbd7f405bfb73f4f44c65b3550205` 普通 push，并于 `2026-10-08 16:55:38 UTC` 用 `git ls-remote` 读回同一分支 SHA；发布回执 `REAL-PUBLICATION-RECEIPT.md` 中记录了命令和候选 tree `07118095d8fd4b801e8a8401b98887f1d1f56d56`。当前本地 HEAD 与 tree 均和回执候选相符。本 Tester 未执行 push，也未独立访问 remote。
+
+候选 A 之后的暂存增量仅含四份 Markdown：handoff、主 TASK、05 TASK 与发布回执；无源码、测试、fixture、运行态或索引文件。四个新增相对本地证据链接均解析；文件名检查未发现密钥/数据库/私有 case 产物，有限 secret-pattern 扫描无命中。文档把“已核实 A 发布”与之后尚未推送的文档状态 B 分开；B 的完整 SHA 待主会话提交、普通 push 及读回后在主回复中给出。本报告本次增量另行 stage 后，`git diff --cached --check` 再次退出 0；未运行测试、模型、服务或构建。

@@ -13,7 +13,7 @@
 - 本次真实报告候选为`fbb44854a412da8d77a7ec30426d240756a9d261`；实测后的评测driver/harness修复为`4008faacae169d18de80f6a444f59c47a93915b7`，最终两处必填签名清理为`cbca5d15bd40bd200f542d0eeaa1bc8192af9424`。后续交接提交不改变该源码；未重新真实采样或重评分，产品非evaluation路径始终与170起点一致。
 - 参考评测：[Ceres1 72bb1b99bf040c8b0bae5d026888bc059bc9423d](ceres1-evaluation-reference.md)；借方法与公开样本组织，不继承其成绩、runtime 或旧状态。
 - 原本地优化 `6734c7fe79e670df2dae12b065dcc49c0b10a307` 保留快照；后续在本工作树，原main与其他工作树保留。
-- 不合并。用户最新明确授权复用原模型配置、完成真实报告后发布本交付分支；普通push后核实远端SHA，最终完整交付SHA以分支与主会话回报为准。原工程配置/运行数据不修改，未执行rebase/cherry-pick/force push；旧00b397工具交付阶段只在本地。
+- 不合并。本次源码/报告候选`3cc8d804bb3fbd7f405bfb73f4f44c65b3550205`已普通push并读回远端SHA一致，见[发布回执](../work/local-followup/05/REAL-PUBLICATION-RECEIPT.md)。其后仅补发布状态/回执，最终完整交付SHA以分支与主会话再次读回回报为准。原工程配置/运行数据不修改，未执行rebase/cherry-pick/force push；旧00b397工具交付阶段只在本地。
 
 ## 本地目标与已实现能力
 
