@@ -1,6 +1,6 @@
 # Ceres2：本机后续开发（当前）
 
-更新：2026-10-08。当前入口为[本机后续 TASK](tasks/ceres2-local-followup.md)与[方案](docs/plans/ceres2-local-followup-spec.md)，分支 `codex/ceres2-local-followup-20261008`，起点 `170fac0bc75fcc855897b073337ba218abeb5b7d`。评测工具与40公开用例/20独立维护验收已冻结，审查修复后29项共同验证通过；100任务只生成计划，0真实调用。产品非evaluation源码未改，基线完整回归原始752/4，4环境失败后针对补验通过；适用版本与局限见[本地交接](docs/LOCAL-CHANGES-HANDOFF.md)。下一步两轴delta复审/用户审阅，配置就绪后真实pilot，再围绕可可对话/时延、检索/菜谱和反馈闭环实施有依据的优化。订单后端以维持闭环为范围。
+更新：2026-10-08。当前入口为[本机后续 TASK](tasks/ceres2-local-followup.md)与[方案](docs/plans/ceres2-local-followup-spec.md)，分支 `codex/ceres2-local-followup-20261008`，起点 `170fac0bc75fcc855897b073337ba218abeb5b7d`。评测工具与40公开用例/20独立维护验收已冻结，最终代码`739f13ead0c53ce9d82519efc30f51263e29ab45`的29项共同验证/两轴复审完成；100任务只生成计划，0真实调用。产品非evaluation源码未改，基线完整回归原始752/4，4环境失败后针对补验通过；适用版本与局限见[本地交接](docs/LOCAL-CHANGES-HANDOFF.md)。下一步用户审阅本地工具交付，配置就绪后真实pilot，再围绕可可对话/时延、检索/菜谱和反馈闭环实施有依据的优化；顺序见[04剩余任务](tasks/ceres2-local-followup-04-real-evaluation-feedback.md#后续实施顺序与可观察交付)。订单后端以维持闭环为范围。
 
 用户最新要求按implement-spec完成测试/评测，参考Ceres1固定72bb1b9，完成后不合并先审阅；此前合并约定撤销。五票任务图及唯一状态在本轮TASK。真实模型、完整图质量、Memory/Dream和本人验收仍待独立证据，配置缺项已由Tester确认；先推进可离线实施与完整回归，不覆盖原现场。后续本地开发统一在新工作树，旧优化分支保留快照。
 

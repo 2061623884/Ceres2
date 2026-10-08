@@ -13,6 +13,6 @@
 - [ ] 实际浏览器旅程另列 provider 是否受控，错误与未运行如实保留；不把 DOM 或 API 通过称本人验收。
 - [ ] 所有结果对应源码、未提交内容、fixture、索引、模型/Prompt 和命令；历史计数不继承。
 
-证据：[产品完整752/4与环境补验](../work/local-followup/01/product-baseline-170-full.md)、[新工具26项](../work/local-followup/01/tool-combined-final.md)、[构建](../work/local-followup/01/node-builds-final.md)、[官方库5项](../work/local-followup/03/graph-official-library.md)、[真实BGE4项](../work/local-followup/03/real-bge.md)、[18开发指标v2](../work/local-followup/03/retrieval-dev-metrics-v2.md)。产品source为170 tracked freeze；新工具绑定单独实际hash，不把两者混成同一全量pin。当前没有产品源码变化。
+证据：[产品完整752/4与环境补验](../work/local-followup/01/product-baseline-170-full.md)、[最终补修后新工具29项](../work/local-followup/01/tool-combined-final-delta.md)、[构建](../work/local-followup/01/node-builds-final.md)、[官方库5项](../work/local-followup/03/graph-official-library.md)、[真实BGE4项](../work/local-followup/03/real-bge.md)、[18开发指标v2](../work/local-followup/03/retrieval-dev-metrics-v2.md)。产品source为170 tracked freeze；新工具对应代码`739f13ead0c53ce9d82519efc30f51263e29ab45`及213文件manifest，不把两者混成同一全量pin。原[26项](../work/local-followup/01/tool-combined-final.md)保留e855候选证据。当前没有产品源码变化。
 
-现有本机Firefox run11保持170对应产品证据；当前不新增浏览器运行，不称真实model/UI本人通过。下一步：双轴审查和用户审阅；只对新发现真实问题作必要复验。
+现有本机Firefox run11保持170对应产品证据；当前不新增浏览器运行，不称真实model/UI本人通过。739最终两轴审查完成，下一步用户审阅；只对新发现真实问题作必要复验。
