@@ -1,0 +1,53 @@
+{
+  "model": "BAAI/bge-small-zh-v1.5",
+  "revision": "7999e1d3359715c523056ef9478215996d62a620",
+  "token": false,
+  "allow_patterns": [
+    "config.json",
+    "model.safetensors",
+    "tokenizer.json",
+    "tokenizer_config.json",
+    "special_tokens_map.json",
+    "vocab.txt"
+  ],
+  "cache": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-integration-20261008/.cache/huggingface",
+  "snapshot": "/data/amax/Documents/projects/Agent/Agent产品/Ceres2-integration-20261008/.cache/huggingface/models--BAAI--bge-small-zh-v1.5/snapshots/7999e1d3359715c523056ef9478215996d62a620",
+  "files": [
+    {
+      "name": "config.json",
+      "bytes": 776,
+      "sha256": "3853a7979202c348751b753e36f579c41d8da7d36af617d3d907e1fc9b441f2a",
+      "symlink": true
+    },
+    {
+      "name": "model.safetensors",
+      "bytes": 95827648,
+      "sha256": "354763b9b1357bc9c44f62c6be2276321081ed2567773608c0d0785b61d5a026",
+      "symlink": true
+    },
+    {
+      "name": "tokenizer.json",
+      "bytes": 439125,
+      "sha256": "48cea5d44424912a6fd1ea647bf4fe50b55ab8b1e5879c3275f80e339e8fae26",
+      "symlink": true
+    },
+    {
+      "name": "tokenizer_config.json",
+      "bytes": 367,
+      "sha256": "e6f3b96db926a37d4039995fbf5ad17de158dfb8f6343d607e4dbaad18d75f5a",
+      "symlink": true
+    },
+    {
+      "name": "special_tokens_map.json",
+      "bytes": 125,
+      "sha256": "b6d346be366a7d1d48332dbc9fdf3bf8960b5d879522b7799ddba59e76237ee3",
+      "symlink": true
+    },
+    {
+      "name": "vocab.txt",
+      "bytes": 109540,
+      "sha256": "45bbac6b341c319adc98a532532882e91a9cefc0329aa57bac9ae761c27b291c",
+      "symlink": true
+    }
+  ]
+}

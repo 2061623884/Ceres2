@@ -51,7 +51,11 @@
 
 采用 single-context：按需维护根目录 `GLOSSARY.md` 和 `docs/adr/`，读取规则见 `docs/agents/domain.md`。
 
-## 本轮已授权阶段说明（2026-10-07）
+## 当前本机后续阶段（2026-10-08）
+
+当前本地任务为 `tasks/ceres2-local-followup.md`，工作树 `Ceres2-integration-20261008`、分支 `codex/ceres2-local-followup-20261008`，起点 `170fac0`。用户最新要求按implement-spec完成、完成后不合并先审阅，并加强测试/评测、参考Ceres1固定72bb1b9；此前完成后合并约定已撤销。implement-spec内部合并步骤改为本分支唯一文件owner实施，不执行merge/rebase/cherry-pick/force push或部署。用户本轮提供的AGENTS禁止推送或修改原项目，本轮只由主会话协调本地提交；下段历史发布授权不作为当前推送授权。Tester独占验证、两轴独立只读与保留原main现场/旧运行数据继续适用，53项为前次冻结记录。旧九票owner不作为新任务活跃句柄，具体范围由本机主会话分配。
+
+## 上一轮集成阶段说明（2026-10-07）
 
 当前任务为 `tasks/ceres2-local-cloud-integration.md` 的九票集成；本轮用户已授权选择性集成、前端适配与主会话通过授权工具发布独立集成/WIP分支。下节“仅16票”“新Git无remote”描述先前重建时点，仅这两项范围/状态已由本轮规格替代；其原文保留用于历史溯源。此说明不授权worker shell push、main合并、部署或覆盖原工程，也不改变Tester独占执行、Python业务权威、隔离和唯一文件所有权规则。
 

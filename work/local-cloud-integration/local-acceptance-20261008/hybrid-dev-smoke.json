@@ -1,0 +1,335 @@
+{
+  "model_revision": "7999e1d3359715c523056ef9478215996d62a620",
+  "cases": [
+    {
+      "namespace": "recipe",
+      "query": "番茄炒蛋",
+      "manifest_revision": "fb981e66e2cd272a9a32a6da9db49512dd7a55142e3ccf59afbdc43ee1bb2c01",
+      "dense_top3": [
+        {
+          "id": "dish-fanqie-chao-dan",
+          "score": 0.8098695278167725
+        },
+        {
+          "id": "dish-jiajiao-chaodan",
+          "score": 0.6397520899772644
+        },
+        {
+          "id": "dish-dan-chao-fan",
+          "score": 0.5936989784240723
+        }
+      ],
+      "bm25_top3": [
+        {
+          "id": "dish-fanqie-chao-dan",
+          "score": -32.54900933527074
+        },
+        {
+          "id": "dish-jiajiao-chaodan",
+          "score": -10.142655088361392
+        },
+        {
+          "id": "dish-dan-chao-fan",
+          "score": -5.338064903319306
+        }
+      ],
+      "rrf_top3": [
+        {
+          "id": "dish-fanqie-chao-dan",
+          "rrf_score": 0.03278688524590164,
+          "ranks": {
+            "sparse": 1,
+            "dense": 1
+          },
+          "scores": {
+            "sparse": -32.54900933527074,
+            "dense": 0.8098695278167725
+          }
+        },
+        {
+          "id": "dish-jiajiao-chaodan",
+          "rrf_score": 0.03225806451612903,
+          "ranks": {
+            "sparse": 2,
+            "dense": 2
+          },
+          "scores": {
+            "sparse": -10.142655088361392,
+            "dense": 0.6397520899772644
+          }
+        },
+        {
+          "id": "dish-dan-chao-fan",
+          "rrf_score": 0.031746031746031744,
+          "ranks": {
+            "sparse": 3,
+            "dense": 3
+          },
+          "scores": {
+            "sparse": -5.338064903319306,
+            "dense": 0.5936989784240723
+          }
+        }
+      ],
+      "relevance_floor": 0.54,
+      "hits_top3": [
+        {
+          "id": "dish-fanqie-chao-dan",
+          "rrf_score": 0.03278688524590164,
+          "ranks": {
+            "sparse": 1,
+            "dense": 1
+          },
+          "scores": {
+            "sparse": -32.54900933527074,
+            "dense": 0.8098695278167725
+          }
+        },
+        {
+          "id": "dish-jiajiao-chaodan",
+          "rrf_score": 0.03225806451612903,
+          "ranks": {
+            "sparse": 2,
+            "dense": 2
+          },
+          "scores": {
+            "sparse": -10.142655088361392,
+            "dense": 0.6397520899772644
+          }
+        },
+        {
+          "id": "dish-dan-chao-fan",
+          "rrf_score": 0.031746031746031744,
+          "ranks": {
+            "sparse": 3,
+            "dense": 3
+          },
+          "scores": {
+            "sparse": -5.338064903319306,
+            "dense": 0.5936989784240723
+          }
+        }
+      ]
+    },
+    {
+      "namespace": "product",
+      "query": "可口可乐",
+      "manifest_revision": "fb981e66e2cd272a9a32a6da9db49512dd7a55142e3ccf59afbdc43ee1bb2c01",
+      "dense_top3": [
+        {
+          "id": "demo:cn-coke-zero-500ml-bottle",
+          "score": 0.7326096296310425
+        },
+        {
+          "id": "demo:cn-coke-original-330ml-can",
+          "score": 0.7326002717018127
+        },
+        {
+          "id": "demo:cn-coke-original-500ml-bottle",
+          "score": 0.7205185890197754
+        }
+      ],
+      "bm25_top3": [
+        {
+          "id": "demo:cn-coke-original-330ml-can",
+          "score": -27.300103735280967
+        },
+        {
+          "id": "demo:cn-coke-original-500ml-bottle",
+          "score": -27.300103735280967
+        },
+        {
+          "id": "demo:cn-coke-zero-500ml-bottle",
+          "score": -27.25554195906658
+        }
+      ],
+      "rrf_top3": [
+        {
+          "id": "demo:cn-coke-original-330ml-can",
+          "rrf_score": 0.03252247488101534,
+          "ranks": {
+            "sparse": 1,
+            "dense": 2
+          },
+          "scores": {
+            "sparse": -27.300103735280967,
+            "dense": 0.7326002717018127
+          }
+        },
+        {
+          "id": "demo:cn-coke-zero-500ml-bottle",
+          "rrf_score": 0.032266458495966696,
+          "ranks": {
+            "sparse": 3,
+            "dense": 1
+          },
+          "scores": {
+            "sparse": -27.25554195906658,
+            "dense": 0.7326096296310425
+          }
+        },
+        {
+          "id": "demo:cn-coke-original-500ml-bottle",
+          "rrf_score": 0.03200204813108039,
+          "ranks": {
+            "sparse": 2,
+            "dense": 3
+          },
+          "scores": {
+            "sparse": -27.300103735280967,
+            "dense": 0.7205185890197754
+          }
+        }
+      ],
+      "relevance_floor": 0.56,
+      "hits_top3": [
+        {
+          "id": "demo:cn-coke-original-330ml-can",
+          "rrf_score": 0.03252247488101534,
+          "ranks": {
+            "sparse": 1,
+            "dense": 2
+          },
+          "scores": {
+            "sparse": -27.300103735280967,
+            "dense": 0.7326002717018127
+          }
+        },
+        {
+          "id": "demo:cn-coke-zero-500ml-bottle",
+          "rrf_score": 0.032266458495966696,
+          "ranks": {
+            "sparse": 3,
+            "dense": 1
+          },
+          "scores": {
+            "sparse": -27.25554195906658,
+            "dense": 0.7326096296310425
+          }
+        },
+        {
+          "id": "demo:cn-coke-original-500ml-bottle",
+          "rrf_score": 0.03200204813108039,
+          "ranks": {
+            "sparse": 2,
+            "dense": 3
+          },
+          "scores": {
+            "sparse": -27.300103735280967,
+            "dense": 0.7205185890197754
+          }
+        }
+      ]
+    },
+    {
+      "namespace": "policy",
+      "query": "未发货取消订单",
+      "manifest_revision": "fb981e66e2cd272a9a32a6da9db49512dd7a55142e3ccf59afbdc43ee1bb2c01",
+      "dense_top3": [
+        {
+          "id": "P-REF-01",
+          "score": 0.7524361610412598
+        },
+        {
+          "id": "P-ORD-01",
+          "score": 0.6430987119674683
+        },
+        {
+          "id": "P-RET-02",
+          "score": 0.6203026175498962
+        }
+      ],
+      "bm25_top3": [
+        {
+          "id": "P-REF-01",
+          "score": -37.20243648803238
+        },
+        {
+          "id": "P-ORD-01",
+          "score": -30.34475088548634
+        },
+        {
+          "id": "P-PRI-01",
+          "score": -7.281983229386686
+        }
+      ],
+      "rrf_top3": [
+        {
+          "id": "P-REF-01",
+          "rrf_score": 0.03278688524590164,
+          "ranks": {
+            "sparse": 1,
+            "dense": 1
+          },
+          "scores": {
+            "sparse": -37.20243648803238,
+            "dense": 0.7524361610412598
+          }
+        },
+        {
+          "id": "P-ORD-01",
+          "rrf_score": 0.03225806451612903,
+          "ranks": {
+            "sparse": 2,
+            "dense": 2
+          },
+          "scores": {
+            "sparse": -30.34475088548634,
+            "dense": 0.6430987119674683
+          }
+        },
+        {
+          "id": "P-DEL-01",
+          "rrf_score": 0.030776515151515152,
+          "ranks": {
+            "sparse": 4,
+            "dense": 6
+          },
+          "scores": {
+            "sparse": -7.032291649721106,
+            "dense": 0.5314828753471375
+          }
+        }
+      ],
+      "relevance_floor": 0.5,
+      "hits_top3": [
+        {
+          "id": "P-REF-01",
+          "rrf_score": 0.03278688524590164,
+          "ranks": {
+            "sparse": 1,
+            "dense": 1
+          },
+          "scores": {
+            "sparse": -37.20243648803238,
+            "dense": 0.7524361610412598
+          }
+        },
+        {
+          "id": "P-ORD-01",
+          "rrf_score": 0.03225806451612903,
+          "ranks": {
+            "sparse": 2,
+            "dense": 2
+          },
+          "scores": {
+            "sparse": -30.34475088548634,
+            "dense": 0.6430987119674683
+          }
+        },
+        {
+          "id": "P-DEL-01",
+          "rrf_score": 0.030776515151515152,
+          "ranks": {
+            "sparse": 4,
+            "dense": 6
+          },
+          "scores": {
+            "sparse": -7.032291649721106,
+            "dense": 0.5314828753471375
+          }
+        }
+      ]
+    }
+  ]
+}

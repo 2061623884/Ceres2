@@ -1,4 +1,10 @@
-# Ceres2：九票本地能力与云端入口集成（当前）
+# Ceres2：本机后续开发（当前）
+
+更新：2026-10-08。当前入口为[本机后续 TASK](tasks/ceres2-local-followup.md)与[方案](docs/plans/ceres2-local-followup-spec.md)，分支 `codex/ceres2-local-followup-20261008`，起点 `170fac0bc75fcc855897b073337ba218abeb5b7d`。评测工具与40公开用例/20独立维护验收已冻结，26项共同验证通过；100任务只生成计划，0真实调用。产品非evaluation源码未改，基线完整回归原始752/4，4环境失败后针对补验通过；适用版本与局限见[本地交接](docs/LOCAL-CHANGES-HANDOFF.md)。下一步两轴审查/用户审阅，配置就绪后真实pilot，再围绕可可对话/时延、检索/菜谱和反馈闭环实施有依据的优化。订单后端以维持闭环为范围。
+
+用户最新要求按implement-spec完成测试/评测，参考Ceres1固定72bb1b9，完成后不合并先审阅；此前合并约定撤销。五票任务图及唯一状态在本轮TASK。真实模型、完整图质量、Memory/Dream和本人验收仍待独立证据，配置缺项已由Tester确认；先推进可离线实施与完整回归，不覆盖原现场。后续本地开发统一在新工作树，旧优化分支保留快照。
+
+## 九票集成发布时记录
 
 更新：2026-10-07。当前执行入口为[九票总 TASK](tasks/ceres2-local-cloud-integration.md)与[本轮规格](docs/plans/ceres2-local-cloud-integration-spec.md)。九票技术实现、前端适配、受控验证及两轴修复闭环完成；整体仍为待验收：实际浏览器 BLOCKED，真实 provider／真实图 LLM 质量与用户本人验收 NOT RUN。下一步按[本地交接](docs/LOCAL-CLOUD-INTEGRATION-HANDOFF.md)在独立 worktree 补齐这些门槛，不动原 main、53 项 dirty 或旧运行数据，不部署。
 

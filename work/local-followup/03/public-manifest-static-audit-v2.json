@@ -1,0 +1,56 @@
+{
+  "case_count": 40,
+  "categories": {
+    "mixed_purchase_policy": 1,
+    "policy": 6,
+    "product_selection": 13,
+    "purchase_planning": 8,
+    "recipe_facts": 7,
+    "routing": 5
+  },
+  "check_path_counts": {
+    "after.cart.items": 1,
+    "after.cart.items.0.quantity": 1,
+    "after.guide.conditions.budget_fen": 2,
+    "after.guide.conditions.quantity": 2,
+    "after.guide.pending_clarifications": 3,
+    "after.guide.plan": 24,
+    "after.guide.plan.items": 10,
+    "after.guide.plan.items.0.quantity": 6,
+    "after.guide.plan.items.0.sku_id": 8,
+    "after.guide.plan.selected_total_fen": 2,
+    "after.guide.task_id": 2,
+    "after.opening.role": 4,
+    "capture.status": 36,
+    "navigation.status": 4,
+    "outcome": 4,
+    "steps.0.after.cart.items": 1,
+    "steps.1.confirmation_receipt.items_added.0.quantity": 1,
+    "steps.1.confirmation_receipt.status": 1,
+    "steps.2.confirmation_receipt.status": 1
+  },
+  "core_count": 20,
+  "errors": [],
+  "fact_pointer_count": 115,
+  "operator_counts": {
+    "eq": 96,
+    "length": 2,
+    "max": 2,
+    "min_length": 13
+  },
+  "scenario_family_count": 40,
+  "schema_version": "ceres-local-followup-dev-cases-v1",
+  "status_expectation_counts": {
+    "capture.status=completed": 21,
+    "capture.status=waiting_clarification": 3,
+    "capture.status=waiting_confirmation": 12,
+    "navigation.status=switch": 4,
+    "outcome=role_choice_required": 4
+  },
+  "step_operation_counts": {
+    "confirm_plan": 1,
+    "repeat_confirmation": 1
+  },
+  "unresolved_fact_pointer_count": 0,
+  "version": "ceres2-local-followup-dev-2026-10-08-v2"
+}
