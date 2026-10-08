@@ -1,11 +1,10 @@
 """Start production API on an isolated demo database for the browser smoke."""
 from __future__ import annotations
 
-import os
 import json
 from pathlib import Path
 
-from provider_job import BACKEND, RUNTIME, _configure
+from provider_job import BACKEND, RUNTIME, _apply_server_environment, _configure
 
 DB_PATH = RUNTIME / "browser-smoke-final.sqlite3"
 CHECKPOINT_PATH = RUNTIME / "browser-smoke-final-checkpoints.sqlite3"
@@ -18,7 +17,7 @@ def main() -> int:
     env = _configure()
     env["DATABASE_URL"] = f"sqlite:///{DB_PATH}"
     env["MERCURY_CHECKPOINT_PATH"] = str(CHECKPOINT_PATH)
-    os.environ.update(env)
+    _apply_server_environment(env)
     import sys
     sys.path.insert(0, str(BACKEND))
     from app.core.config import get_settings

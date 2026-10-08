@@ -9,9 +9,12 @@ import sys
 import time
 from urllib.parse import urlsplit
 
+from harness_config import (
+    FIELDS, SOURCE_ENV, apply_harness_environment, missing_fields, read_source_values,
+)
+
 ROOT = Path(__file__).resolve().parents[4]
 BACKEND = ROOT / 'backend'
-SOURCE_ENV = Path('/data/amax/Documents/projects/Agent/Agent产品/Ceres2/.env')
 EVIDENCE = ROOT / 'work/local-followup/04/real-model-20261008'
 TMP = EVIDENCE / 'tmp'
 BOOTSTRAP = EVIDENCE / 'runtime_bootstrap'
@@ -19,10 +22,8 @@ RUNTIME = ROOT / 'data/runtime/real-model-20261008'
 
 
 def _configure() -> dict:
-    from dotenv import dotenv_values
-    values = dotenv_values(SOURCE_ENV, interpolate=False)
-    required = ('OPENAI_BASE_URL', 'OPENAI_API_KEY', 'LLM_MODEL', 'LLM_MODE')
-    if any(not str(values.get(k) or '').strip() for k in required):
+    values = read_source_values(SOURCE_ENV)
+    if missing_fields(values, FIELDS['main_provider']):
         raise RuntimeError('approved main-provider fields incomplete')
     RUNTIME.mkdir(parents=True, exist_ok=True)
     TMP.mkdir(parents=True, exist_ok=True)
@@ -65,19 +66,38 @@ def _configure() -> dict:
     return env
 
 
+def _apply_server_environment(env: dict[str, str]) -> None:
+    apply_harness_environment(env)
+    from app.core.config import get_settings
+    get_settings.cache_clear()
+
+
 def _host(base: str) -> str:
     return urlsplit(base).hostname or '<invalid-host>'
 
 
 def _call_summary(calls) -> dict:
     from collections import Counter
-    rows = list(calls or [])
+    if calls is None:
+        return {
+            'count': None,
+            'kind_status': None,
+            'provider_total_tokens_by_model': None,
+        }
+    rows = list(calls)
     kinds = Counter((row.get('kind'), row.get('status')) for row in rows)
-    tokens = Counter()
+    tokens = {}
+    unknown_usage_models = set()
     for row in rows:
-        usage = row.get('usage') or {}
         if row.get('usage_source') == 'provider':
-            tokens[row.get('model') or '<unknown>'] += usage.get('total_tokens') or 0
+            model = row.get('model') or '<unknown>'
+            usage = row.get('usage')
+            if usage is None or usage.get('total_tokens') is None:
+                unknown_usage_models.add(model)
+            else:
+                tokens[model] = tokens.get(model, 0) + usage['total_tokens']
+    for model in unknown_usage_models:
+        tokens[model] = None
     return {
         'count': len(rows),
         'kind_status': {f'{kind}:{status}': count for (kind, status), count in sorted(kinds.items())},
@@ -189,7 +209,7 @@ def main() -> int:
     if mode == 'graph-global':
         return graph_action(env, 'graph', query='这批家常菜共有哪几类食材，哪些菜用鸡蛋', method='global', timeout=180)
     if mode == 'serve':
-        os.environ.update(env)
+        _apply_server_environment(env)
         return serve(env)
     raise SystemExit('unsupported harness action')
 

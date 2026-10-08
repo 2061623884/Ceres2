@@ -863,6 +863,72 @@ def test_baseline_cli_runs_declared_followup_confirm_and_idempotent_replay(tmp_p
                for method, path, *_ in fixture.requests)
 
 
+def test_baseline_cli_records_missing_plan_before_confirm_without_http_side_effects(tmp_path):
+    cases = {
+        'schema_version': 'ceres-local-followup-dev-cases-v1',
+        'version': 'synthetic-confirm-requires-current-plan-v1',
+        'cases': [
+            {'case_id': 'missing-plan-confirm', 'category': 'purchase_planning', 'core': False,
+             'message': '请帮我列一个简单的采购计划。',
+             'steps': [{'op': 'confirm_plan'}]},
+            {'case_id': 'no-plan-general-answer', 'category': 'general', 'core': False,
+             'message': '介绍一下挑选草莓的方法。'},
+        ],
+    }
+    cases_path = tmp_path / 'cases.json'
+    cases_path.write_text(json.dumps(cases, ensure_ascii=False), encoding='utf-8')
+    output = tmp_path / 'batch.json'
+    fixture = PublicGuideFixture()
+    server = ThreadingHTTPServer(('127.0.0.1', 0), fixture.handler())
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        command = [sys.executable, '-m', 'app.evaluation.run_baseline',
+            '--api-base', f'http://127.0.0.1:{server.server_port}',
+            '--cases', str(cases_path), '--output', str(output)]
+        process = subprocess.run(command, cwd=Path(__file__).resolve().parents[1], env=os.environ.copy(),
+                                 capture_output=True, text=True, timeout=20)
+    finally:
+        server.shutdown()
+        server.server_close()
+        thread.join(timeout=2)
+
+    assert process.returncode == 0, process.stderr
+    batch = json.loads(output.read_text(encoding='utf-8'))
+    failed, ordinary = batch['cases']
+
+    assert failed['outcome'] == 'runner_failed'
+    assert failed['error'] == {
+        'type': 'ValueError',
+        'reason': 'confirm_plan requires a current plan',
+    }
+    assert failed['before']['guide']['plan'] is None
+    assert failed['after']['guide']['plan'] is None
+    assert failed['before']['cart'] == failed['after']['cart']
+    assert failed['before']['cart']['items'] == []
+    assert failed['before']['orders'] == failed['after']['orders']
+    assert len(failed['captures']) == 1
+    assert failed['capture'] == failed['captures'][0]
+    assert failed['capture']['status'] == 'completed'
+    assert len(failed['steps']) == 1
+    assert failed['steps'][0]['op'] == 'turn'
+    assert failed['steps'][0]['before']['guide']['plan'] is None
+    assert failed['steps'][0]['after']['guide']['plan'] is None
+    assert failed['steps'][0]['capture'] == failed['capture']
+
+    assert ordinary['outcome'] == 'guide_run'
+    assert ordinary['error'] is None
+    assert ordinary['capture']['status'] == 'completed'
+    assert ordinary['before']['guide']['plan'] is None
+    assert ordinary['after']['guide']['plan'] is None
+    assert len(ordinary['captures']) == 1
+    assert [row[1] for row in fixture.confirm_calls] == []
+    assert not any(method == 'POST' and path.endswith('/confirm')
+                   for method, path, *_ in fixture.requests)
+    assert not any(method == 'POST' and path.startswith('/api/v1/cart')
+                   for method, path, *_ in fixture.requests)
+
+
 def test_baseline_cli_filters_public_session_history_to_each_capture_request(tmp_path):
     initial_message = '首轮消息只属于首轮capture。'
     followup_message = '续问消息只属于续问capture。'

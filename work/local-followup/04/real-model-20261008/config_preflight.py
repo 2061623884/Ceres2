@@ -6,19 +6,9 @@ from __future__ import annotations
 
 import hashlib
 import json
-from pathlib import Path
 from urllib.parse import urlsplit
 
-from dotenv import dotenv_values
-
-
-SOURCE = Path('/data/amax/Documents/projects/Agent/Agent产品/Ceres2/.env')
-FIELDS = {
-    'main_provider': ('OPENAI_BASE_URL', 'OPENAI_API_KEY', 'LLM_MODEL', 'LLM_MODE'),
-    'memory_extraction': ('MEMORY_EXTRACTION_MODEL',),
-    'memory_dream': ('MEMORY_DREAM_MODEL',),
-    'kev': ('KEV_BASE_URL',),
-}
+from harness_config import FIELDS, SOURCE_ENV as SOURCE, is_nonempty, read_source_values
 
 
 def _safe_origin(value: object) -> str | None:
@@ -36,9 +26,9 @@ def _safe_origin(value: object) -> str | None:
 
 
 def main() -> None:
-    values = dotenv_values(SOURCE, interpolate=False) if SOURCE.is_file() else {}
+    values = read_source_values(SOURCE)
     nonempty = {
-        key: values.get(key) is not None and bool(str(values.get(key)).strip())
+        key: is_nonempty(values, key)
         for fields in FIELDS.values()
         for key in fields
     }

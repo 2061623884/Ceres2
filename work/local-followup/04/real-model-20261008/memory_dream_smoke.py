@@ -2,41 +2,37 @@
 from __future__ import annotations
 
 import json
-import os
 import sqlite3
 import time
 from pathlib import Path
 
-from dotenv import dotenv_values
-
-
-WORKTREE = Path(__file__).resolve().parents[4]
-SOURCE_ENV = Path("/data/amax/Documents/projects/Agent/Agent产品/Ceres2/.env")
-DB_PATH = WORKTREE / "data/runtime/real-model-20261008/memory-dream-smoke.sqlite3"
-CHECKPOINT_PATH = WORKTREE / "data/runtime/real-model-20261008/memory-dream-smoke-checkpoints.sqlite3"
-MODEL_KEYS = (
-    "OPENAI_BASE_URL",
-    "OPENAI_API_KEY",
-    "LLM_MODEL",
-    "LLM_MODE",
-    "MEMORY_EXTRACTION_MODEL",
-    "MEMORY_DREAM_MODEL",
+from harness_config import (
+    MEMORY_DREAM_REQUIRED_FIELDS, SOURCE_ENV, apply_harness_environment,
+    missing_fields, read_source_values,
 )
 
 
+WORKTREE = Path(__file__).resolve().parents[4]
+DB_PATH = WORKTREE / "data/runtime/real-model-20261008/memory-dream-smoke.sqlite3"
+CHECKPOINT_PATH = WORKTREE / "data/runtime/real-model-20261008/memory-dream-smoke-checkpoints.sqlite3"
+MODEL_KEYS = MEMORY_DREAM_REQUIRED_FIELDS
+
+
 def main() -> int:
-    values = dotenv_values(SOURCE_ENV, interpolate=False)
-    missing = [key for key in MODEL_KEYS if not values.get(key)]
+    values = read_source_values(SOURCE_ENV)
+    missing = missing_fields(values, MODEL_KEYS)
     if missing:
         print(json.dumps({"status": "not_run", "missing_fields": missing}, sort_keys=True))
         return 2
 
     # Only the current Settings model fields cross into this process; never emit them.
-    for key in MODEL_KEYS:
-        os.environ[key] = str(values[key])
-    os.environ["DATABASE_URL"] = f"sqlite:///{DB_PATH}"
-    os.environ["MERCURY_CHECKPOINT_PATH"] = str(CHECKPOINT_PATH)
-    os.environ["PYTHON_DOTENV_DISABLED"] = "1"
+    selected_environment = {key: str(values[key]).strip() for key in MODEL_KEYS}
+    selected_environment.update({
+        "DATABASE_URL": f"sqlite:///{DB_PATH}",
+        "MERCURY_CHECKPOINT_PATH": str(CHECKPOINT_PATH),
+        "PYTHON_DOTENV_DISABLED": "1",
+    })
+    apply_harness_environment(selected_environment)
 
     # The application settings object must not consult a worktree .env in this harness.
     from app.core import config

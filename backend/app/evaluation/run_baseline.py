@@ -303,6 +303,8 @@ def _execute_case(api_base, case, plan_row):
                 if op == 'confirm_plan':
                     guide = step_before['guide']
                     plan = guide['plan']
+                    if plan is None:
+                        raise ValueError('confirm_plan requires a current plan')
                     confirmation_body = {
                         'plan_id': plan['plan_id'],
                         'plan_version': plan['plan_version'],
