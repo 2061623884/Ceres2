@@ -10,7 +10,7 @@ GRAPH_RESULT = ROOT / 'work/local-followup/04/real-model-20261008/tmp/graph-glob
 GRAPH_MANIFEST = ROOT / 'data/indexes/graphrag/manifest.json'
 
 
-def audit_graph_result(result, dishes, ingredient_records, manifest_sha256=None):
+def audit_graph_result(result, dishes, ingredient_records, manifest_sha256):
     expected_pairs = {}
     for dish in dishes:
         for item in dish['required_items']:

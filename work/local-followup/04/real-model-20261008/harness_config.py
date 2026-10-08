@@ -28,7 +28,7 @@ APP_SETTINGS_ENV_FIELDS = (
 )
 
 
-def read_source_values(source: Path | str = SOURCE_ENV) -> dict[str, str | None]:
+def read_source_values(source: Path | str) -> dict[str, str | None]:
     source_path = Path(source)
     return dotenv_values(source_path, interpolate=False) if source_path.is_file() else {}
 
