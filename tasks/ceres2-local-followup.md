@@ -10,7 +10,7 @@
 
 ## 当前状态与下一步
 
-2026-10-09 用户已确认[04下一轮实施方案](ceres2-local-followup-04-real-evaluation-feedback.md#2026-10-09-下一轮设计讨论)：接其amax GPU1既有Kev服务、建立新环境基线，再按人工确认的公开失败修复商品/Plan/澄清，开展Pi图对照与综合体验验收。原基线及已发布记录保留。当前执行进度以04为准；本轮不合并、不推送、不改原工程。
+2026-10-09 用户已按to-spec/to-tickets明确认可[新规格](../docs/plans/ceres2-kev-quality-followup-spec.md)、三个测试入口和[10票依赖](../docs/plans/ceres2-kev-quality-followup-tickets.md)。正式票据已逐票发布，[04](ceres2-local-followup-04-real-evaluation-feedback.md#已确认纵切票据)开始按implement-spec执行01，并保留各后继前置。GPU1 Kev探针和隔离入口仅候选，不继承为验收。原基线及已发布记录保留；本轮不合并、不推送、不改原工程。
 
 前次真实评测交付的授权覆盖原工程`.env`中模型配置只读复用以及当时交付分支的常规推送：基础设施Tester限定字段注入隔离进程，使用新库和固定新索引，独立验收Tester20核心pilot后同版续100计划。原配置/旧运行状态不修改或迁入，凭据不进入工具输出/Git。实际证据写`work/local-followup/04/real-model-20261008/`，原0次计划及离线v1-v4记录保留。100次正式尝试结束：机器business 66 pass/30 fail/4 unknown，core60试次44/13/3、三次均business pass11/20；每轮15秒100/100。真实Guide终态另为66 completed/24 waiting_confirmation/9 failed/1 protected，不能和业务判分互相替代。唯一公开dev-01 trial3模型未给plan，声明确认步骤组装触发TypeError并保留为runner_failed；不删除/重跑来改善成绩。该报告/审查交付已普通push核实；当前新一轮按上段不推送。
 

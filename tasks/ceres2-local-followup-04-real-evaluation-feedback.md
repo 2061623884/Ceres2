@@ -1,6 +1,6 @@
 # 04 真实模型评测与失败反馈
 
-- 状态：进行中；原模型真实100、报告/独立审查及发布已完成，最终交付8c136ee；本轮共同理解已获实施确认，真实Kev有限协议pilot9次已完成，独立新基线入口准备中，真实Ceres路由/完整新基线、售前修复/图对照/人工反馈及综合体验验收未执行。
+- 状态：进行中；to-spec、三个测试入口与10票粒度/依赖均获用户明确确认，正式逐票发布并进入implement-spec。当前执行01技术接入；已有探针/5b24候选不继承验收，真实Ceres路由/完整新基线、售前修复/图对照/人工反馈及综合体验验收未完成。
 - 负责人：主会话协调，Tester 运行与维护隔离验收；产品缺陷另指定唯一 owner。
 - 所属：[总 TASK](ceres2-local-followup.md)；[规格](../docs/plans/ceres2-local-followup-spec.md)。
 - 前置：01/02 场景/脚本/评分冻结；按用户最新授权复用原模型配置，其余原运行数据禁止迁入。配置可用性以本次Tester真实预检为准。
@@ -9,7 +9,9 @@
 
 ## 2026-10-09 下一轮设计讨论
 
-后续仍在当前工作树/分支，候选起点`8c136eecf98cc4b37a2ffe7924c6f245a02315a1`。用户确定的顺序是先补真实Kev、重测角色路由，再修商品匹配/购买方案/澄清；随后验证Pi中的实际图调用与时延，完成一次人工反馈闭环，最后综合验收多消息、页面、当前LangGraph售后及Memory/Dream。三项决策与整体方案均已确认，Tester开始有限真实Kev协议pilot，followup_experience准备新隔离基线服务入口。当前产品源码未改；不合并、不推送或改原项目。
+后续仍在当前工作树/分支，旧交付起点`8c136eecf98cc4b37a2ffe7924c6f245a02315a1`，已做探索候选为`5b24c4b1c0fde053e46c916e8b4e935fb54eb7c9`。用户确定的业务顺序和三项设计决策保持，且已按其要求完成to-spec与to-tickets审阅：[已确认规格](../docs/plans/ceres2-kev-quality-followup-spec.md)、[已确认任务图](../docs/plans/ceres2-kev-quality-followup-tickets.md)。当前售前产品源码未改；只按已获批票据执行，不合并、不推送或改原项目。
+
+用户后续要求“按照to-spec→to-tickets→implement-spec执行”，并对完整呈现的scope/接缝/10票图回复“认可规格、测试入口及10票依赖”。Tester此前只读核对草案链接、编号与依赖无环；Root随后正式发布逐票文件。审批不代替执行/评测或人工标签本身。
 
 Kev同时影响角色入口与政策预取，因此接通后的新基线与旧缺配批次条件不同；旧66/30/4保留为原环境结果，不离线改成新成绩。Graph当前仅用于显式菜谱关系探索，正式100调用0不等于该工具接入失败；已有Local/Global组件查询约18秒，不能替代15秒Pi集成测量。实施方案沿[原规格中的下一轮讨论](../docs/plans/ceres2-local-followup-spec.md#下一轮真实问题改进设计讨论)细化。用户已确认：主会话整理8–12条公开样本与草稿，由用户确认人工标签；图只有质量和15秒均达标才进核心；受影响场景各三次达标、完整候选与新环境基线检查无回退，剩余失败保留。标签本身尚未确认，未执行新基线或产品修复。
 
@@ -17,7 +19,20 @@ Kev同时影响角色入口与政策预取，因此接通后的新基线与旧�
 
 真实协议pilot见[9次记录](../work/local-followup/04/kev-followup-20261009/KEV-PROTOCOL-PILOT.md)：7次角色judge、2次policy judge；9/9有效schema且模型标签kev-latest，226.988–361.898ms、错误/超时0、不重试。8条预设类别全部一致，单消息歧义例uncertain只作观测；不是独立分类准确率或跨轮上下文验收。模型卡片schema是models[].name，已确认torch/float32/Qwen3.5-4B-Base，实际进程在GPU index1。当前尚未通过Ceres公共导航接口或运行新100基线。
 
-当前责任：test_optimization独占模型/协议/服务验证；followup_experience唯一维护新评测launcher/driver；graph_plan_facts是商品匹配/Plan/澄清产品owner，现仅准备只读定位，等新基线与用户确认公开标签后才能改具体业务。Root维护TASK/规格/词汇/Git；私有20仍由独立Tester维护。共享入口/Prompt/schema未转交并发修改。
+当前责任：Root维护TASK/规格/Git；followup_experience唯一维护01/02所需评测入口，test_optimization独占01服务/协议/浏览器验证，acceptance_final_tester独占02私有20与正式100批次。03–10在前置未满足时不得实施；具体owner届时指定。共享入口/Prompt/schema未转交并发修改。
+
+## 已确认纵切票据
+
+- [01真实Kev交接与政策预取](ceres2-kev-quality-01-real-kev-routing.md)：当前可执行。
+- [02新基线与人工标签](ceres2-kev-quality-02-baseline-labels.md)：依赖01技术门槛。
+- [03商品/澄清](ceres2-kev-quality-03-product-clarification.md)：依赖02。
+- [04Plan/混合政策/确认](ceres2-kev-quality-04-plan-confirmation.md)：依赖03。
+- [05真实Pi图对照](ceres2-kev-quality-05-pi-graph-evaluation.md)：依赖04。
+- [06售后生命周期](ceres2-kev-quality-06-aftersales-lifecycle.md)：依赖02。
+- [07显式记忆](ceres2-kev-quality-07-explicit-memory.md)：依赖02。
+- [08提取与Dream](ceres2-kev-quality-08-extraction-dream.md)：依赖07。
+- [09页面/多消息](ceres2-kev-quality-09-browser-experience.md)：依赖05/06/08技术门槛。
+- [10最终验证交接](ceres2-kev-quality-10-final-verification.md)：依赖09技术门槛。
 
 ## 范围与验收
 
