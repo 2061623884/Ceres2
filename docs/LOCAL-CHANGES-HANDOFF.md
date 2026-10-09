@@ -2,6 +2,20 @@
 
 当前任务入口：[TASK](../tasks/ceres2-local-followup.md)，行为方案：[规格](plans/ceres2-local-followup-spec.md)，工具步骤：[评测使用说明](LOCAL-FOLLOWUP-EVALUATION.md)。本文件不代替任务状态或本人验收。
 
+## 2026-10-09 Kev质量改进轮（当前）
+
+用户已认可[新规格](plans/ceres2-kev-quality-followup-spec.md)、三个测试入口及[十票依赖](plans/ceres2-kev-quality-followup-tickets.md)。仍在同一工作树/分支；本轮不合并、不推送、不部署或修改原工程/GPU1既有Kev。下面前次发布及缺配结论保留其适用版本，不扩大本轮授权。
+
+01技术门槛通过：[真实导航/政策/浏览器交接](../work/local-followup/04/kev-followup-20261009/KEV-NAVIGATION-POLICY-RESULTS.md)与[正式受控回归1项](../work/local-followup/04/kev-followup-20261009/LAUNCHER-CONTROLLED-REGRESSION.md)分别留证。浏览器采集器在旅程结束后exit1，汇总离线核对，没有重发请求；全局Kev计数归因、Momo使用量及本人UI验收仍有限或未知。角色判断、政策预取、检索复用与Thinking关闭沿用已集成能力，本轮新增的是隔离Kev启动接线、正式验证及新环境基线；政策reuse本批实际为0。没有与另一路云端新修改作比对，不宣称兼容。
+
+02新100基线已执行：[最终报告](../work/local-followup/04/kev-followup-20261009/02-RESULTS.md)、[冻结](../work/local-followup/04/kev-followup-20261009/02-BASELINE-FREEZE.md)、[环境pins](../work/local-followup/04/kev-followup-20261009/02-ENVIRONMENT-PINS.md)。采样Git提交`f9d7b44870e447c1f592a12163ad443b17782980`，实际source/build/prompt标签另见报告，已加载源码等价性unknown。业务71/26/3，97 Guide/3角色等待，97/97 Guide满足15秒；核心三次全业务通过11/20。与旧66/30/4同时存在Kev环境和执行器版本差异，不单独归因为产品改善。
+
+隔离API8017只读使用此前获准的主/Memory配置，连接既有8009 Kev；数据库/checkpoint/TMP在本树`data/runtime/kev-followup-20261009/baseline/`，不迁入旧运行状态，不需新业务schema迁移。其启动器见[serve_baseline.py](../work/local-followup/04/kev-followup-20261009/serve_baseline.py)，本轮未改商品/Pi/Prompt、语料或索引。raw、模型日志、本地配置/凭据、业务库、checkpoint、缓存与索引均留Git外。
+
+人工标签、商品/澄清/Plan修复、真实Pi图对照、售后、Memory/Dream、完整页面/多消息及本人验收未完成；[11条公开逐次标签草稿](../work/local-followup/04/kev-followup-20261009/02-HUMAN-LABEL-DRAFT.md)已交用户。按[04总TASK](../tasks/ceres2-local-followup-04-real-evaluation-feedback.md)及各票前置推进，Agent审阅不代替人工标签。当前本地交接提交不作为已推送版本，最终SHA/未提交清单由主会话核对。
+
+## 前次真实评测与发布（保留原记录）
+
 本次用户进一步授权只读调用原amax模型配置、真实测评后常规推送。本次真实报告见[100次任务评测](../work/local-followup/04/real-model-20261008/REAL-TASK-EVALUATION.md)和[组件/Memory/Firefox](../work/local-followup/04/real-model-20261008/REAL-COMPONENT-VERIFICATION.md)：100次实际尝试，机器business66通过/30失败/4未知；不宣称整体通过。原0次离线计划是工具阶段历史，保留原版，不覆盖本次结果。
 
 ## 分支与来源

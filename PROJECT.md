@@ -2,7 +2,7 @@
 
 更新：2026-10-09。用户已认可[Kev质量改进规格](docs/plans/ceres2-kev-quality-followup-spec.md)、公共API/SSE、评测CLI、实际浏览器三个测试入口，以及[十票依赖](docs/plans/ceres2-kev-quality-followup-tickets.md)。当前按to-spec → to-tickets → implement-spec执行，唯一进度入口为[04总TASK](tasks/ceres2-local-followup-04-real-evaluation-feedback.md)。保持工作树`Ceres2-integration-20261008`和分支`codex/ceres2-local-followup-20261008`；本轮不合并、不推送、不部署、不改原工程或GPU1既有Kev服务。
 
-01已留下真实Kev导航、政策预取/Pi回复及浏览器建议切换后原文交接的[分层证据](work/local-followup/04/kev-followup-20261009/KEV-NAVIGATION-POLICY-RESULTS.md)。技术门槛和后继释放以TASK记录为准；浏览器采集器失败、全局计数归因限制和未测项均保留。新100基线、用户人工标签、产品修复、图质量/15秒对照、综合体验及本人验收仍待实施。原缺Kev的66/30/4仅属于下面前次版本，不作为补齐环境的新结论。
+01已留下真实Kev导航、政策预取/Pi回复及浏览器建议切换后原文交接的[分层证据](work/local-followup/04/kev-followup-20261009/KEV-NAVIGATION-POLICY-RESULTS.md)。技术门槛和后继释放以TASK记录为准；浏览器采集器失败、全局计数归因限制和未测项均保留。[新100基线](work/local-followup/04/kev-followup-20261009/02-RESULTS.md)已实际执行；用户人工标签、产品修复、图质量/15秒对照、综合体验及本人验收仍未完成。原缺Kev的66/30/4仅属于下面前次版本，不作为补齐环境的新结论。
 
 ## 前次真实评测与发布记录
 

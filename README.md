@@ -6,6 +6,10 @@ Ceres2 是商超购物 AI 原型：将购买目标与约束转成可检查、可
 
 ## 当前状态
 
+2026-10-09，用户已确认[to-spec规格](docs/plans/ceres2-kev-quality-followup-spec.md)、三个测试入口与[to-tickets十票图](docs/plans/ceres2-kev-quality-followup-tickets.md)，现按implement-spec执行；当前唯一状态入口为[04总TASK](tasks/ceres2-local-followup-04-real-evaluation-feedback.md)。本轮不合并、不推送、不改原工程或GPU1既有Kev。01真实导航/政策/浏览器技术门槛已通过；[补齐Kev的新100基线](work/local-followup/04/kev-followup-20261009/02-RESULTS.md)已完成，人工标签、产品修复与整体验收尚未完成。当前评测API为8017，隔离启动/配置边界见[冻结记录](work/local-followup/04/kev-followup-20261009/02-BASELINE-FREEZE.md)；不将下面前次8015/8446或缺Kev结论当作本轮环境。
+
+### 前次真实评测与发布记录
+
 2026-10-09，本机后续入口为[本轮 TASK](tasks/ceres2-local-followup.md)与[方案](docs/plans/ceres2-local-followup-spec.md)。工作树 `Ceres2-integration-20261008`、分支 `codex/ceres2-local-followup-20261008`、起点 `170fac0`。评测工具29项通过后，按用户授权复用amax原模型配置完成100次真实尝试：机器业务66通过/30失败/4未知，核心三次全通过11/20，运行15秒100/100；详见[真实任务报告](work/local-followup/04/real-model-20261008/REAL-TASK-EVALUATION.md)。真实官方Graph、90次提取、合成Dream与独立Firefox商品订单旅程见[组件报告](work/local-followup/04/real-model-20261008/REAL-COMPONENT-VERIFICATION.md)。产品非evaluation源码仍未改；旧全量752通过/4环境失败及补验保留原版本。交接见[本地文档](docs/LOCAL-CHANGES-HANDOFF.md)。
 
 本轮按implement-spec参考Ceres1固定72bb1b9；真实执行HEAD为00b397、使用739评测源码。实测后driver/harness窄修最终源码cbca，4008组合35项与最终签名5项按版本分别留证，两轴复审已完成；没有重新采样/评分原100，不能合并测试计数。最新用户授权真实执行后常规推送该交付分支，不合并、不过写原工程。后续按[04剩余任务](tasks/ceres2-local-followup-04-real-evaluation-feedback.md#后续实施顺序与可观察交付)处理商品漏匹配、澄清/plan、Kev缺配及真实Guide图任务；自然度、完整Guide浏览器及本人验收未完成。原配置通过隔离进程限定注入的实际启动方式见[工具说明](docs/LOCAL-FOLLOWUP-EVALUATION.md#按本次授权复用amax配置)，仍使用8015/8446且保留原listener。先前本机BGE/受控Firefox证据在[原准备报告](work/local-cloud-integration/local-acceptance-20261008/LOCAL-ACCEPTANCE-RESULTS.md)，不和新实测混为一版。
@@ -42,7 +46,7 @@ Ceres2 是商超购物 AI 原型：将购买目标与约束转成可检查、可
 
 从最终发布回执核对完整SHA/tree，在新的独立worktree使用根目录`.venv`和`.venv-graphrag`、两份Python锁与两份npm锁。必须重新构建Pi/frontend和配套索引；原`.env`、数据库、checkpoint、索引及53项dirty全部留原处，不覆盖main。
 
-发布时的通用安装步骤见[Ubuntu交接](docs/LOCAL-CLOUD-INTEGRATION-HANDOFF.md#5-独立依赖模型与索引)；当前本机依赖/索引已准备，启动使用上面的本机 `8015/8446` 入口，保留现有服务。启动后端会启动MemoryWorker；页面与图构建可能调用真实模型，按本轮方案落实配置和执行范围。
+发布时的通用安装步骤见[Ubuntu交接](docs/LOCAL-CLOUD-INTEGRATION-HANDOFF.md#5-独立依赖模型与索引)；当前本机依赖/索引已准备。Kev轮使用已运行的隔离API`8017`及[启动器](work/local-followup/04/kev-followup-20261009/serve_baseline.py)；`8015/8446`是前次入口记录，既有服务保留。启动后端会启动MemoryWorker；页面与图构建可能调用真实模型，按本轮方案落实配置和执行范围。
 
 Guide预算从基线30秒改为本次处理15秒、最多5轮；直接请求包含同步授权。独立导航预检和用户确认等待不是同一个跨请求预算。独立build-graph使用显式有限正数`--timeout-seconds`，不承诺该时长够用。
 

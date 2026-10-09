@@ -1,30 +1,30 @@
 # 04 真实模型评测与失败反馈
 
-- 状态：进行中；规格/三个入口/10票图已获明确确认。01真实Kev导航/政策/浏览器及正式受控回归达到技术门槛，主会话释放02新100基线冻结；01待验收，完整基线、人工标签、售前修复/图对照及综合体验未完成。本轮不合并、不推送。
+- 状态：进行中；01技术门槛已释放，02新100基线实际完成，机器business71/26/3，11条公开样本及标签草稿已交用户，实际标签尚未确认。02待验收，03/06/07仍未释放，产品修复、图对照、反馈闭环及综合体验未完成。本轮不合并、不推送。
 - 负责人：主会话协调，Tester 运行与维护隔离验收；产品缺陷另指定唯一 owner。
 - 所属：[总 TASK](ceres2-local-followup.md)；[规格](../docs/plans/ceres2-local-followup-spec.md)。
 - 前置：01/02 场景/脚本/评分冻结；按用户最新授权复用原模型配置，其余原运行数据禁止迁入。配置可用性以本次Tester真实预检为准。
 
 本次起点`00b397443bd7258d2166c6445ac4ac066cefd21d`（工具源码739）。test_optimization唯一负责限定模型配置只读复用、独立新状态与真实API/Graph/Memory/必要浏览器；acceptance_final_tester唯一负责原60组合包/100计划的真实新批次及隔离20题。原离线计划及v1-v4不覆盖；pilot/真实报告写`work/local-followup/04/real-model-20261008/`，真实capture/模型日志保持Git外，失败和未知如实报告。
 
-## 2026-10-09 下一轮设计讨论
+## 2026-10-09 已确认设计与当前责任
 
 后续仍在当前工作树/分支，旧交付起点`8c136eecf98cc4b37a2ffe7924c6f245a02315a1`，已做探索候选为`5b24c4b1c0fde053e46c916e8b4e935fb54eb7c9`。用户确定的业务顺序和三项设计决策保持，且已按其要求完成to-spec与to-tickets审阅：[已确认规格](../docs/plans/ceres2-kev-quality-followup-spec.md)、[已确认任务图](../docs/plans/ceres2-kev-quality-followup-tickets.md)。当前售前产品源码未改；只按已获批票据执行，不合并、不推送或改原项目。
 
 用户后续要求“按照to-spec→to-tickets→implement-spec执行”，并对完整呈现的scope/接缝/10票图回复“认可规格、测试入口及10票依赖”。Tester此前只读核对草案链接、编号与依赖无环；Root随后正式发布逐票文件。审批不代替执行/评测或人工标签本身。
 
-Kev同时影响角色入口与政策预取，因此接通后的新基线与旧缺配批次条件不同；旧66/30/4保留为原环境结果，不离线改成新成绩。Graph当前仅用于显式菜谱关系探索，正式100调用0不等于该工具接入失败；已有Local/Global组件查询约18秒，不能替代15秒Pi集成测量。实施方案沿[原规格中的下一轮讨论](../docs/plans/ceres2-local-followup-spec.md#下一轮真实问题改进设计讨论)细化。用户已确认：主会话整理8–12条公开样本与草稿，由用户确认人工标签；图只有质量和15秒均达标才进核心；受影响场景各三次达标、完整候选与新环境基线检查无回退，剩余失败保留。标签本身尚未确认，未执行新基线或产品修复。
+Kev同时影响角色入口与政策预取，因此接通后的新基线与旧缺配批次条件不同；旧66/30/4保留为原环境结果，不离线改成新成绩。Graph当前仅用于显式菜谱关系探索，正式100调用0不等于该工具接入失败；已有Local/Global组件查询约18秒，不能替代15秒Pi集成测量。实施方案沿[原规格中的下一轮讨论](../docs/plans/ceres2-local-followup-spec.md#下一轮真实问题改进设计讨论)细化。用户已确认：主会话整理8–12条公开样本与草稿，由用户确认人工标签；图只有质量和15秒均达标才进核心；受影响场景各三次达标、完整候选与新环境基线检查无回退，剩余失败保留。标签本身尚未确认；新基线已执行，产品修复未实施，详见02票及其完整报告。
 
-用户明确Kev是其在amax GPU1的本地部署；Tester此前只读确认8009 loopback候选进程、`amax-direct-download`中的完整base权重缓存元数据和GET models HTTP200，原.env缺KEV_BASE_URL。现态不是模型协议/中文分类/3秒通过证据，实际pilot另留`work/local-followup/04/kev-followup-20261009/`。仅连接现有服务，不重启/改原配置；服务事实和实际推理证据分开留存。
+用户明确Kev是其在amax GPU1的本地部署；Tester此前只读确认8009 loopback候选进程、`amax-direct-download`中的完整base权重缓存元数据和GET models HTTP200，原.env缺KEV_BASE_URL。这些当时的元数据不证明模型协议/分类通过；后续实际pilot及01公共路径证据另留`work/local-followup/04/kev-followup-20261009/`。仅连接现有服务，不重启/改原配置；服务事实和实际推理证据分开留存。
 
-真实协议pilot见[9次记录](../work/local-followup/04/kev-followup-20261009/KEV-PROTOCOL-PILOT.md)：7次角色judge、2次policy judge；9/9有效schema且模型标签kev-latest，226.988–361.898ms、错误/超时0、不重试。8条预设类别全部一致，单消息歧义例uncertain只作观测；不是独立分类准确率或跨轮上下文验收。模型卡片schema是models[].name，已确认torch/float32/Qwen3.5-4B-Base，实际进程在GPU index1。当前尚未通过Ceres公共导航接口或运行新100基线。
+真实协议pilot见[9次记录](../work/local-followup/04/kev-followup-20261009/KEV-PROTOCOL-PILOT.md)：7次角色judge、2次policy judge；9/9有效schema且模型标签kev-latest，226.988–361.898ms、错误/超时0、不重试。8条预设类别全部一致，单消息歧义例uncertain只作观测；不是独立分类准确率或跨轮上下文验收。模型卡片schema是models[].name，已确认torch/float32/Qwen3.5-4B-Base，实际进程在GPU index1。早期pilot不含公共导航/100基线；随后已分别完成01技术门槛及02采样，不混用分母。
 
 当前责任：Root维护TASK/规格/Git；followup_experience唯一维护01/02所需评测入口，test_optimization独占01服务/协议/浏览器验证，acceptance_final_tester独占02私有20与正式100批次。03–10在前置未满足时不得实施；具体owner届时指定。共享入口/Prompt/schema未转交并发修改。
 
 ## 已确认纵切票据
 
 - [01真实Kev交接与政策预取](ceres2-kev-quality-01-real-kev-routing.md)：待验收，技术门槛已通过并释放02。
-- [02新基线与人工标签](ceres2-kev-quality-02-baseline-labels.md)：进行中，准备冻结及20pilot→同版续100；用户实际标签仍待确认。
+- [02新基线与人工标签](ceres2-kev-quality-02-baseline-labels.md)：待验收，20pilot及同版续100已执行并判分；[完整结果](../work/local-followup/04/kev-followup-20261009/02-RESULTS.md)与旧66/30/4分开，[11条逐次标签草稿](../work/local-followup/04/kev-followup-20261009/02-HUMAN-LABEL-DRAFT.md)等待用户实际确认。
 - [03商品/澄清](ceres2-kev-quality-03-product-clarification.md)：依赖02。
 - [04Plan/混合政策/确认](ceres2-kev-quality-04-plan-confirmation.md)：依赖03。
 - [05真实Pi图对照](ceres2-kev-quality-05-pi-graph-evaluation.md)：依赖04。
@@ -34,7 +34,7 @@ Kev同时影响角色入口与政策预取，因此接通后的新基线与旧�
 - [09页面/多消息](ceres2-kev-quality-09-browser-experience.md)：依赖05/06/08技术门槛。
 - [10最终验证交接](ceres2-kev-quality-10-final-verification.md)：依赖09技术门槛。
 
-## 范围与验收
+## 前次真实评测范围与验收（00b397，保留原记录）
 
 - [x] 40 公开回归、20 新隔离验收、20 核心各三次，共 100 计划执行；先核对 pilot，再同版继续，失败/未执行均保留。本次100 attempted，不表示100业务通过。
 - [ ] 实际功能、关键违规、等待/拒绝、逐轮时延、首个有用结果、usage 覆盖与核心稳定性分别报告。
