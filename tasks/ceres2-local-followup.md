@@ -10,7 +10,9 @@
 
 ## 当前状态与下一步
 
-最新授权覆盖原工程`.env`中的模型配置只读复用以及本分支常规推送：基础设施Tester限定字段注入隔离进程，使用新库和固定新索引，独立验收Tester20核心pilot后同版续100计划。原配置/旧运行状态不修改或迁入，凭据不进入工具输出/Git。实际证据写`work/local-followup/04/real-model-20261008/`，原0次计划及离线v1-v4记录保留。100次正式尝试结束：机器business 66 pass/30 fail/4 unknown，core60试次44/13/3、三次均business pass11/20；每轮15秒100/100。真实Guide终态另为66 completed/24 waiting_confirmation/9 failed/1 protected，不能和业务判分互相替代。唯一公开dev-01 trial3模型未给plan，声明确认步骤组装触发TypeError并保留为runner_failed；不删除/重跑来改善成绩。报告/审查完成后主会话提交、常规push并读回远端SHA，不合并。
+2026-10-09 用户已确认[04下一轮实施方案](ceres2-local-followup-04-real-evaluation-feedback.md#2026-10-09-下一轮设计讨论)：接其amax GPU1既有Kev服务、建立新环境基线，再按人工确认的公开失败修复商品/Plan/澄清，开展Pi图对照与综合体验验收。原基线及已发布记录保留。当前执行进度以04为准；本轮不合并、不推送、不改原工程。
+
+前次真实评测交付的授权覆盖原工程`.env`中模型配置只读复用以及当时交付分支的常规推送：基础设施Tester限定字段注入隔离进程，使用新库和固定新索引，独立验收Tester20核心pilot后同版续100计划。原配置/旧运行状态不修改或迁入，凭据不进入工具输出/Git。实际证据写`work/local-followup/04/real-model-20261008/`，原0次计划及离线v1-v4记录保留。100次正式尝试结束：机器business 66 pass/30 fail/4 unknown，core60试次44/13/3、三次均business pass11/20；每轮15秒100/100。真实Guide终态另为66 completed/24 waiting_confirmation/9 failed/1 protected，不能和业务判分互相替代。唯一公开dev-01 trial3模型未给plan，声明确认步骤组装触发TypeError并保留为runner_failed；不删除/重跑来改善成绩。该报告/审查交付已普通push核实；当前新一轮按上段不推送。
 
 本机准备已完成，来源和实际验证见[冻结结果](../work/local-cloud-integration/local-acceptance-20261008/LOCAL-ACCEPTANCE-RESULTS.md)。该结果属于仍无新产品修改的 `170fac0`：真实 BGE/新 hybrid smoke、静态新库、受控 provider 的 Firefox HTTPS 旅程通过；并非真实模型质量或整体验收。
 

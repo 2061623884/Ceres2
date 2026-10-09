@@ -1,11 +1,23 @@
 # 04 真实模型评测与失败反馈
 
-- 状态：进行中；按授权原模型完成真实100尝试，报告/独立审查/常规推送待完成；更多driver、反馈闭环及本人验收仍开放。
+- 状态：进行中；原模型真实100、报告/独立审查及发布已完成，最终交付8c136ee；本轮共同理解已获实施确认，真实Kev有限协议pilot9次已完成，独立新基线入口准备中，真实Ceres路由/完整新基线、售前修复/图对照/人工反馈及综合体验验收未执行。
 - 负责人：主会话协调，Tester 运行与维护隔离验收；产品缺陷另指定唯一 owner。
 - 所属：[总 TASK](ceres2-local-followup.md)；[规格](../docs/plans/ceres2-local-followup-spec.md)。
 - 前置：01/02 场景/脚本/评分冻结；按用户最新授权复用原模型配置，其余原运行数据禁止迁入。配置可用性以本次Tester真实预检为准。
 
 本次起点`00b397443bd7258d2166c6445ac4ac066cefd21d`（工具源码739）。test_optimization唯一负责限定模型配置只读复用、独立新状态与真实API/Graph/Memory/必要浏览器；acceptance_final_tester唯一负责原60组合包/100计划的真实新批次及隔离20题。原离线计划及v1-v4不覆盖；pilot/真实报告写`work/local-followup/04/real-model-20261008/`，真实capture/模型日志保持Git外，失败和未知如实报告。
+
+## 2026-10-09 下一轮设计讨论
+
+后续仍在当前工作树/分支，候选起点`8c136eecf98cc4b37a2ffe7924c6f245a02315a1`。用户确定的顺序是先补真实Kev、重测角色路由，再修商品匹配/购买方案/澄清；随后验证Pi中的实际图调用与时延，完成一次人工反馈闭环，最后综合验收多消息、页面、当前LangGraph售后及Memory/Dream。三项决策与整体方案均已确认，Tester开始有限真实Kev协议pilot，followup_experience准备新隔离基线服务入口。当前产品源码未改；不合并、不推送或改原项目。
+
+Kev同时影响角色入口与政策预取，因此接通后的新基线与旧缺配批次条件不同；旧66/30/4保留为原环境结果，不离线改成新成绩。Graph当前仅用于显式菜谱关系探索，正式100调用0不等于该工具接入失败；已有Local/Global组件查询约18秒，不能替代15秒Pi集成测量。实施方案沿[原规格中的下一轮讨论](../docs/plans/ceres2-local-followup-spec.md#下一轮真实问题改进设计讨论)细化。用户已确认：主会话整理8–12条公开样本与草稿，由用户确认人工标签；图只有质量和15秒均达标才进核心；受影响场景各三次达标、完整候选与新环境基线检查无回退，剩余失败保留。标签本身尚未确认，未执行新基线或产品修复。
+
+用户明确Kev是其在amax GPU1的本地部署；Tester此前只读确认8009 loopback候选进程、`amax-direct-download`中的完整base权重缓存元数据和GET models HTTP200，原.env缺KEV_BASE_URL。现态不是模型协议/中文分类/3秒通过证据，实际pilot另留`work/local-followup/04/kev-followup-20261009/`。仅连接现有服务，不重启/改原配置；服务事实和实际推理证据分开留存。
+
+真实协议pilot见[9次记录](../work/local-followup/04/kev-followup-20261009/KEV-PROTOCOL-PILOT.md)：7次角色judge、2次policy judge；9/9有效schema且模型标签kev-latest，226.988–361.898ms、错误/超时0、不重试。8条预设类别全部一致，单消息歧义例uncertain只作观测；不是独立分类准确率或跨轮上下文验收。模型卡片schema是models[].name，已确认torch/float32/Qwen3.5-4B-Base，实际进程在GPU index1。当前尚未通过Ceres公共导航接口或运行新100基线。
+
+当前责任：test_optimization独占模型/协议/服务验证；followup_experience唯一维护新评测launcher/driver；graph_plan_facts是商品匹配/Plan/澄清产品owner，现仅准备只读定位，等新基线与用户确认公开标签后才能改具体业务。Root维护TASK/规格/词汇/Git；私有20仍由独立Tester维护。共享入口/Prompt/schema未转交并发修改。
 
 ## 范围与验收
 
