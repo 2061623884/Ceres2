@@ -97,5 +97,5 @@
 - 工作流校正：共同理解不代替to-spec审阅及to-tickets确认。用户随后对已呈现的规格、三类接缝和10票粒度/依赖明确回复“认可规格、测试入口及10票依赖”；已分别记录并正式逐票发布，之后进入implement-spec。
 - 已做探索如实保留：9次真实Kev provider小探针有效，8个预设类别一致，歧义例只作观测；不能继承为正式路由或分类验收。
 - 共同理解后提前准备的隔离启动器和一条受控HTTP测试位于本地提交`5b24c4b1c0fde053e46c916e8b4e935fb54eb7c9`，尚未推送。它们是待后续任务审查的候选，不代表新基线、业务修复或反馈闭环已经完成。
-- 当前没有启动8017真实基线服务或新100次采样；没有修改售前产品源码。旧基线来源为`8c136eecf98cc4b37a2ffe7924c6f245a02315a1`。
+- 规格确认时（提交`9e9be1da8ef7dd7ba630a2025e63835612e4795e`）尚未启动8017真实基线服务或新100次采样；没有修改售前产品源码。后续执行状态只在所属TASK维护，不用这条确认时快照推断当前状态。旧基线来源为`8c136eecf98cc4b37a2ffe7924c6f245a02315a1`。
 - 证据入口：[Kev探针](../../work/local-followup/04/kev-followup-20261009/KEV-PROTOCOL-PILOT.md)、[隔离入口受控验证](../../work/local-followup/04/kev-followup-20261009/LAUNCHER-GREEN-MEMORY-DELTA.md)、[旧真实任务报告](../../work/local-followup/04/real-model-20261008/REAL-TASK-EVALUATION.md)。

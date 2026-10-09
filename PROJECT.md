@@ -1,5 +1,11 @@
 # Ceres2：本机后续开发（当前）
 
+更新：2026-10-09。用户已认可[Kev质量改进规格](docs/plans/ceres2-kev-quality-followup-spec.md)、公共API/SSE、评测CLI、实际浏览器三个测试入口，以及[十票依赖](docs/plans/ceres2-kev-quality-followup-tickets.md)。当前按to-spec → to-tickets → implement-spec执行，唯一进度入口为[04总TASK](tasks/ceres2-local-followup-04-real-evaluation-feedback.md)。保持工作树`Ceres2-integration-20261008`和分支`codex/ceres2-local-followup-20261008`；本轮不合并、不推送、不部署、不改原工程或GPU1既有Kev服务。
+
+01已留下真实Kev导航、政策预取/Pi回复及浏览器建议切换后原文交接的[分层证据](work/local-followup/04/kev-followup-20261009/KEV-NAVIGATION-POLICY-RESULTS.md)。技术门槛和后继释放以TASK记录为准；浏览器采集器失败、全局计数归因限制和未测项均保留。新100基线、用户人工标签、产品修复、图质量/15秒对照、综合体验及本人验收仍待实施。原缺Kev的66/30/4仅属于下面前次版本，不作为补齐环境的新结论。
+
+## 前次真实评测与发布记录
+
 更新：2026-10-09。入口为[本机 TASK](tasks/ceres2-local-followup.md)与[方案](docs/plans/ceres2-local-followup-spec.md)，分支`codex/ceres2-local-followup-20261008`、起点`170fac0bc75fcc855897b073337ba218abeb5b7d`。739评测工具29项及原双轴完成后，在00b397使用用户授权的原amax DeepSeek Flash配置实际尝试100次；business66/30/4、core三次全通过11/20、15秒100/100。[真实任务报告](work/local-followup/04/real-model-20261008/REAL-TASK-EVALUATION.md)和[组件/Memory/Firefox报告](work/local-followup/04/real-model-20261008/REAL-COMPONENT-VERIFICATION.md)分层留证。产品源码未改，旧全量752/4与环境补验保留原pin。实测后driver/harness窄修最终源码cbca，4008组合35项与最后签名5项分别留证、不加总，最终两轴复审完成；旧100未重跑或重评分。当前收尾交接及常规发布，之后用户审阅；商品漏匹配、澄清/plan、Kev及真实Guide图任务按[04](tasks/ceres2-local-followup-04-real-evaluation-feedback.md#后续实施顺序与可观察交付)推进，订单后端维持模拟闭环。
 
 用户最新明确要求复用原amax `.env`模型配置真实执行、补报告并推送本分支；不合并约定继续。五票任务图与唯一状态在TASK。主模型/官方图/提取与合成Dream已实测；Kev仍缺、100正式任务Graph调用0，完整Guide浏览器、自然度/有用性人工标注及本人验收未完成。不得以零critical观察或组件180秒预算通过宣称整体验收。原配置/运行数据不修改，后续本地开发仍在新工作树，旧优化分支保留快照。

@@ -10,7 +10,7 @@
 
 ## 当前状态与下一步
 
-2026-10-09 用户已按to-spec/to-tickets明确认可[新规格](../docs/plans/ceres2-kev-quality-followup-spec.md)、三个测试入口和[10票依赖](../docs/plans/ceres2-kev-quality-followup-tickets.md)。正式票据已逐票发布，[04](ceres2-local-followup-04-real-evaluation-feedback.md#已确认纵切票据)开始按implement-spec执行01，并保留各后继前置。GPU1 Kev探针和隔离入口仅候选，不继承为验收。原基线及已发布记录保留；本轮不合并、不推送、不改原工程。
+2026-10-09 用户已按to-spec/to-tickets明确认可[新规格](../docs/plans/ceres2-kev-quality-followup-spec.md)、三个测试入口和[10票依赖](../docs/plans/ceres2-kev-quality-followup-tickets.md)。正式票据已逐票发布，[04](ceres2-local-followup-04-real-evaluation-feedback.md#已确认纵切票据)按implement-spec执行，具体技术门槛与后继释放只在对应票据及04维护。[真实Kev导航/政策/浏览器证据](../work/local-followup/04/kev-followup-20261009/KEV-NAVIGATION-POLICY-RESULTS.md)与早期provider探针分开；采集器失败及未知项保留，不继承旧验收。原基线及已发布记录保留；本轮不合并、不推送、不改原工程。
 
 前次真实评测交付的授权覆盖原工程`.env`中模型配置只读复用以及当时交付分支的常规推送：基础设施Tester限定字段注入隔离进程，使用新库和固定新索引，独立验收Tester20核心pilot后同版续100计划。原配置/旧运行状态不修改或迁入，凭据不进入工具输出/Git。实际证据写`work/local-followup/04/real-model-20261008/`，原0次计划及离线v1-v4记录保留。100次正式尝试结束：机器business 66 pass/30 fail/4 unknown，core60试次44/13/3、三次均business pass11/20；每轮15秒100/100。真实Guide终态另为66 completed/24 waiting_confirmation/9 failed/1 protected，不能和业务判分互相替代。唯一公开dev-01 trial3模型未给plan，声明确认步骤组装触发TypeError并保留为runner_failed；不删除/重跑来改善成绩。该报告/审查交付已普通push核实；当前新一轮按上段不推送。
 
@@ -46,4 +46,4 @@
 
 主会话维护方案、TASK、分支与参考适配。followup_eval/followup_experience为初次实现owner；review_fixes完成原739审查修复。real_runner_fix是本次真实结果之后driver/harness窄修的唯一owner，当前源码冻结于cbca；原模型任务/源码清单不覆盖为新版本。test_optimization独占执行验证/组件，独立验收Tester维护隔离样本与实际批次。[35项组合](../work/local-followup/01/tool-combined-after-real-harness-casefold-fix.md)属于4008；[最终5项](../work/local-followup/05/real-harness-final-signature-cleanup-green.md)仅验证后来提交到cbca的两处必填签名，不加总。[Standards](../work/local-followup/05/REAL-STANDARDS-FINAL-REVIEW.md)/[Spec](../work/local-followup/05/REAL-SPEC-FINAL-REVIEW.md)最终复审已完成，未重新采样/评分原100。共享schema/DB/migration/fixture/Pi/Prompt/前端未转交，无问题证据不得改动；新增实际缺陷先明确唯一owner。
 
-新业务库、索引、模型缓存与凭据不入Git；所有交易/履约仍模拟。上一轮源码/受控证据保持版本，不继承为本轮验收。按用户最新授权仅只读复用原模型配置、发布本交付分支；不修改原工程、不合并、不部署、不执行rebase/cherry-pick/force push。主会话唯一协调本地提交与常规推送，worker禁止自行发布。
+新业务库、索引、模型缓存与凭据不入Git；所有交易/履约仍模拟。上一轮源码/受控证据保持版本，不继承为本轮验收。本轮按已确认规格仅只读复用原模型配置；不修改原工程、不合并、不推送、不部署、不执行rebase/cherry-pick/force push。主会话唯一协调本地提交，前次发布授权不扩大本轮范围，worker禁止自行发布。

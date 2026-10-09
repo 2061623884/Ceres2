@@ -1,9 +1,9 @@
 # 02 新环境100次基线与公开失败人工标注
 
-- 状态：待开始。
+- 状态：进行中；01技术门槛已释放，独立Tester准备冻结新100基线；采样须绑定主会话随后提供的完整提交与实际源码/数据hash。
 - 负责人：独立验收Tester维护原输入和私有20；主会话整理公开标注包，用户确认。
 - 所属：[04总TASK](ceres2-local-followup-04-real-evaluation-feedback.md)；[规格](../docs/plans/ceres2-kev-quality-followup-spec.md)。
-- 阻塞：[01真实Kev接入](ceres2-kev-quality-01-real-kev-routing.md)技术门槛。
+- 阻塞：[01真实Kev接入](ceres2-kev-quality-01-real-kev-routing.md)技术门槛已满足；03/06/07仍等待本票基线及用户实际标签确认。
 
 ## 交付
 
@@ -19,4 +19,8 @@
 
 ## 证据与下一步
 
-新批次与旧批次分目录、分版本留存。基线完成及用户标签确认后释放03/06/07；没有用户确认的样本不进入调参/失败归档。
+新批次与旧批次分目录、分版本留存。计划在既有隔离API8017执行，raw仅独立Tester可读，写`work/local-followup/tmp/independent-acceptance/kev-20261009/`，安全报告写本票work目录。原输入、评分规则及100计划保持；01已存在的独立owner/Memoryjobs不合入正式100，02各case/trial使用fresh owner。
+
+当前执行器实际SHA`0e0aa5e24708d53ce0e1354fb48c6e0f3776e3462b294120e6a0709677da8530`；旧缺配100使用过更早的执行器，后来的已发布窄修未重跑旧66/30/4。本轮固定当前执行器，不能宣称与旧批次只有Kev一个变化；后续产品候选与本轮B0保持同执行器比较。冻结报告必须列实际源码hash、服务启动pin与采样时Git提交，纯文档提交不等于重启加载新源码。
+
+基线完成及用户标签确认后释放03/06/07；没有用户确认的样本不进入调参/失败归档。

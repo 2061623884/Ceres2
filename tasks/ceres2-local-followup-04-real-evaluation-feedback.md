@@ -1,6 +1,6 @@
 # 04 真实模型评测与失败反馈
 
-- 状态：进行中；to-spec、三个测试入口与10票粒度/依赖均获用户明确确认，正式逐票发布并进入implement-spec。当前执行01技术接入；已有探针/5b24候选不继承验收，真实Ceres路由/完整新基线、售前修复/图对照/人工反馈及综合体验验收未完成。
+- 状态：进行中；规格/三个入口/10票图已获明确确认。01真实Kev导航/政策/浏览器及正式受控回归达到技术门槛，主会话释放02新100基线冻结；01待验收，完整基线、人工标签、售前修复/图对照及综合体验未完成。本轮不合并、不推送。
 - 负责人：主会话协调，Tester 运行与维护隔离验收；产品缺陷另指定唯一 owner。
 - 所属：[总 TASK](ceres2-local-followup.md)；[规格](../docs/plans/ceres2-local-followup-spec.md)。
 - 前置：01/02 场景/脚本/评分冻结；按用户最新授权复用原模型配置，其余原运行数据禁止迁入。配置可用性以本次Tester真实预检为准。
@@ -23,8 +23,8 @@ Kev同时影响角色入口与政策预取，因此接通后的新基线与旧�
 
 ## 已确认纵切票据
 
-- [01真实Kev交接与政策预取](ceres2-kev-quality-01-real-kev-routing.md)：当前可执行。
-- [02新基线与人工标签](ceres2-kev-quality-02-baseline-labels.md)：依赖01技术门槛。
+- [01真实Kev交接与政策预取](ceres2-kev-quality-01-real-kev-routing.md)：待验收，技术门槛已通过并释放02。
+- [02新基线与人工标签](ceres2-kev-quality-02-baseline-labels.md)：进行中，准备冻结及20pilot→同版续100；用户实际标签仍待确认。
 - [03商品/澄清](ceres2-kev-quality-03-product-clarification.md)：依赖02。
 - [04Plan/混合政策/确认](ceres2-kev-quality-04-plan-confirmation.md)：依赖03。
 - [05真实Pi图对照](ceres2-kev-quality-05-pi-graph-evaluation.md)：依赖04。
