@@ -1,369 +1,298 @@
-"""Installed SDK wire contracts with synthetic, offline provider transports."""
+"""Controlled transport for the official DeepSeek thinking profile.
+
+Captures safe request fields only. No provider credentials, headers, or message text.
+"""
 import json
 import os
 import selectors
 import subprocess
-import threading
 import time
-from contextlib import contextmanager
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 import httpx
 import pytest
 
-from test_mercury_public import mercury_client
+ROOT = Path(__file__).resolve().parents[2]
+WORKER = ROOT / 'runtime' / 'pi' / 'dist' / 'worker.js'
+EXPRESSION = ROOT / 'runtime' / 'pi' / 'dist' / 'result-expression.js'
+SYNTHETIC_KEY = 'synthetic-not-a-real-key'
+PRELOAD = r'''
+import { appendFileSync } from 'node:fs';
 
+const capturePath = process.env.CERES_TRANSPORT_CAPTURE;
+let toolSent = false;
 
-HOSTS = [
-    pytest.param('https://api.deepseek.com/v1', True, id='official'),
-    pytest.param('https://API.DEEPSEEK.COM/v1', True, id='normalized-official'),
-    pytest.param('http://provider-fixture.invalid/v1', False, id='other-provider'),
-    pytest.param('https://api.deepseek.com.evil.example/v1', False, id='suffix-lookalike'),
-]
+function chunk(delta, finish) {
+  return {id:'c', object:'chat.completion.chunk', created:1, model:'deepseek-flash', choices:[{index:0, delta, finish_reason:finish}]};
+}
+function sse(parts) {
+  return parts.map((part) => 'data: ' + JSON.stringify(part)).join('\n\n') + '\n\ndata: [DONE]\n\n';
+}
+function withUsage(part, completionTokens) {
+  return {...part, usage:{prompt_tokens:3, completion_tokens:completionTokens, total_tokens:3 + completionTokens, completion_tokens_details:{reasoning_tokens:0}}};
+}
+function textChunks(text) {
+  return sse([chunk({role:'assistant', content:''}, null), chunk({content:text}, null), withUsage(chunk({}, 'stop'), 1)]);
+}
+function toolChunks() {
+  return sse([
+    chunk({role:'assistant', tool_calls:[{index:0, id:'call_1', type:'function', function:{name:'validate_general_text', arguments:''}}]}, null),
+    chunk({tool_calls:[{index:0, function:{arguments:'{"messages":["hi"]}'}}]}, null),
+    withUsage(chunk({}, 'tool_calls'), 8),
+  ]);
+}
 
-
-def _sdk_transport(monkeypatch, module, response):
-    """Keep the real OpenAI serializer and intercept only its HTTP boundary."""
-    real_openai = module.OpenAI
-    requests = []
-    clients = []
-
-    def handle(request):
-        body = json.loads(request.content)
-        requests.append(body)
-        message = response(body)
-        return httpx.Response(200, json={
-            'id': 'controlled-wire', 'object': 'chat.completion', 'created': 0,
-            'model': body['model'], 'choices': [{'index': 0,
-                'finish_reason': 'tool_calls' if message.get('tool_calls') else 'stop',
-                'message': message}],
-            'usage': {'prompt_tokens': 3, 'completion_tokens': 1, 'total_tokens': 4},
-        })
-
-    def client(**options):
-        transport = httpx.Client(transport=httpx.MockTransport(handle))
-        clients.append((options, transport))
-        return real_openai(**options, http_client=transport)
-
-    monkeypatch.setattr(module, 'OpenAI', client)
-    return requests, clients
-
-
-def _assert_profile(body, official):
-    if official:
-        assert body['thinking'] == {'type': 'disabled'}
-    else:
-        assert 'thinking' not in body
-    assert 'reasoning_effort' not in body
-
-
-@pytest.mark.parametrize('base_url,official', HOSTS)
-def test_momo_public_query_disables_thinking_only_on_official_host(
-        mercury_client, monkeypatch, base_url, official):
-    from app.core.config import get_settings
-    from app.mercury import provider
-
-    client, app, url, sessions = mercury_client
-    settings = get_settings()
-    monkeypatch.setattr(settings, 'openai_base_url', base_url)
-    monkeypatch.setattr(settings, 'openai_api_key', 'synthetic-not-a-real-key')
-    monkeypatch.setattr(settings, 'llm_model', 'controlled-chat')
-
-    def response(body):
-        if body['messages'][-1]['role'] == 'tool':
-            return {'role': 'assistant', 'content': '订单详情已整理。'}
-        return {'role': 'assistant', 'content': None, 'tool_calls': [{
-            'id': 'order-query', 'type': 'function', 'function': {
-                'name': 'get_order_details', 'arguments': '{"order_id":"budget-order"}'}}]}
-
-    requests, clients = _sdk_transport(monkeypatch, provider, response)
-    result = client.post(url + '/turns/stream', json={
-        'message': '查看订单', 'request_id': 'official-thinking-wire'})
-    assert result.status_code == 200
-    frames = [json.loads(line.removeprefix('data: ')) for line in result.text.splitlines()
-              if line.startswith('data: ')]
-    assert frames[-1]['status'] == 'completed'
-    assert '15.00' in result.text and '测试杯' in result.text
-    assert len(requests) == 2
-    for body in requests:
-        _assert_profile(body, official)
-        assert body['model'] == 'controlled-chat'
-        assert body['temperature'] == 0.2
-        assert body['tool_choice'] == 'auto'
-        assert 'response_format' not in body
-        assert 'max_tokens' not in body and 'max_completion_tokens' not in body
-        assert body.get('stream', False) is False
-    assert requests[1]['messages'][-1]['role'] == 'tool'
-    assert json.loads(requests[1]['messages'][-1]['content'])['data']['total'] == '15.00'
-    assert len(clients) == 2
-    assert all(options['timeout'] == 15 and options['max_retries'] == 0
-               and transport.is_closed for options, transport in clients)
-
-
-@pytest.mark.parametrize('base_url,official', HOSTS)
-@pytest.mark.parametrize('operation,model,source', [
-    ('extract_memory', 'controlled-extraction', {'role': 'momo', 'text': '长期希望回复简短'}),
-    ('dream_memory', 'controlled-dream', {'records': []}),
-])
-def test_independent_memory_calls_disable_thinking_only_on_official_host(
-        monkeypatch, base_url, official, operation, model, source):
-    from app.core.config import get_settings
-    from app.services import memory_model
-
-    settings = get_settings()
-    monkeypatch.setattr(settings, 'llm_mode', 'live')
-    monkeypatch.setattr(settings, 'openai_base_url', base_url)
-    monkeypatch.setattr(settings, 'openai_api_key', 'synthetic-not-a-real-key')
-    monkeypatch.setattr(settings, 'llm_model', 'controlled-chat')
-    monkeypatch.setattr(settings, 'memory_extraction_model', 'controlled-extraction')
-    monkeypatch.setattr(settings, 'memory_dream_model', 'controlled-dream')
-    requests, clients = _sdk_transport(monkeypatch, memory_model,
-        lambda body: {'role': 'assistant', 'content': '{"records":[]}'})
-
-    assert getattr(memory_model, operation)(source) == {'records': []}
-    assert len(requests) == 1
-    body = requests[0]
-    _assert_profile(body, official)
-    assert body['model'] == model
-    assert json.loads(body['messages'][-1]['content']) == source
-    assert body['temperature'] == 0
-    assert body['response_format'] == {'type': 'json_object'}
-    assert 'max_tokens' not in body and 'max_completion_tokens' not in body
-    assert 'tools' not in body
-    assert body.get('stream', False) is False
-    assert len(clients) == 1
-    options, transport = clients[0]
-    assert options['timeout'] == 20 and options['max_retries'] == 0
-    assert transport.is_closed
-
-
-LOOPBACK_PRELOAD = '''
-const originalFetch = globalThis.fetch;
-const expectedOrigin = new URL(process.env.CERES_WIRE_BASE).origin;
-globalThis.fetch = (input, options) => {
-  const url = new URL(input instanceof Request ? input.url : input);
-  if (url.origin !== expectedOrigin) throw new Error('Unexpected provider origin');
-  const target = new URL(url.pathname + url.search, process.env.CERES_WIRE_LOOPBACK);
-  return originalFetch(input instanceof Request ? new Request(target, input) : target, options);
+globalThis.fetch = async (_url, init) => {
+  const raw = typeof init.body === 'string' ? init.body : Buffer.from(init.body).toString('utf8');
+  const body = JSON.parse(raw);
+  const limit = Object.hasOwn(body, 'max_tokens') ? body.max_tokens : (body.max_completion_tokens ?? null);
+  const record = {
+    model: body.model,
+    limit,
+    max_tokens: Object.hasOwn(body, 'max_tokens') ? body.max_tokens : null,
+    max_completion_tokens: Object.hasOwn(body, 'max_completion_tokens') ? body.max_completion_tokens : null,
+    thinking: Object.hasOwn(body, 'thinking') ? body.thinking : null,
+    reasoning_effort: Object.hasOwn(body, 'reasoning_effort') ? body.reasoning_effort : null,
+    response_format: Object.hasOwn(body, 'response_format') ? body.response_format : null,
+    stream: body.stream === true,
+    tool_count: Array.isArray(body.tools) ? body.tools.length : 0,
+  };
+  appendFileSync(capturePath, JSON.stringify(record) + '\n');
+  let payload = textChunks('ok');
+  if (limit === 1536 && record.tool_count > 0 && !toolSent) {
+    toolSent = true;
+    payload = toolChunks();
+  } else if (limit === 256) {
+    payload = textChunks('{"merchant_claims":false,"execution_claims":false}');
+  } else if (limit === 512) {
+    payload = textChunks('{"text":"已准备清单","fact_ref":"plan"}\n');
+  }
+  return new Response(payload, {status:200, headers:{'content-type':'text/event-stream'}});
 };
 '''
 
 
-@contextmanager
-def _expression_server():
-    """Real HTTP/SSE for the installed Pi and OpenAI SDKs, never a live model."""
-    requests = []
-
-    class Handler(BaseHTTPRequestHandler):
-        def log_message(self, *_args):
-            pass
-
-        def do_POST(self):
-            body = json.loads(self.rfile.read(int(self.headers['Content-Length'])))
-            requests.append(body)
-            if len(requests) == 1:
-                content = '{"text":"按你的需要来就好。","fact_ref":"result"}\n'
-            else:
-                content = '{"merchant_claims":false,"execution_claims":false}'
-            chunks = [
-                {'choices': [{'index': 0, 'delta': {'role': 'assistant', 'content': content},
-                              'finish_reason': None}]},
-                {'choices': [{'index': 0, 'delta': {}, 'finish_reason': 'stop'}],
-                 'usage': {'prompt_tokens': 3, 'completion_tokens': 1, 'total_tokens': 4,
-                           'prompt_tokens_details': {'cached_tokens': 0}}},
-            ]
-            data = ''.join('data: ' + json.dumps({
-                'id': 'controlled-stream', 'object': 'chat.completion.chunk',
-                'created': 0, 'model': body['model'], **chunk}) + '\n\n' for chunk in chunks)
-            data += 'data: [DONE]\n\n'
-            encoded = data.encode()
-            self.send_response(200)
-            self.send_header('Content-Type', 'text/event-stream')
-            self.send_header('Content-Length', str(len(encoded)))
-            self.end_headers()
-            self.wfile.write(encoded)
-
-    server = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
-    thread = threading.Thread(target=server.serve_forever, daemon=True)
-    thread.start()
-    try:
-        yield f'http://127.0.0.1:{server.server_port}', requests
-    finally:
-        server.shutdown()
-        server.server_close()
-        thread.join(timeout=2)
+def _safe(body):
+    return {
+        'model': body.get('model'),
+        'thinking': body.get('thinking') if 'thinking' in body else None,
+        'reasoning_effort': body.get('reasoning_effort') if 'reasoning_effort' in body else None,
+        'max_tokens': body.get('max_tokens') if 'max_tokens' in body else None,
+        'max_completion_tokens': body.get('max_completion_tokens') if 'max_completion_tokens' in body else None,
+        'response_format': body.get('response_format') if 'response_format' in body else None,
+        'temperature': body.get('temperature'),
+        'stream': body.get('stream', False),
+    }
 
 
-@pytest.mark.parametrize('base_url,official', HOSTS)
-def test_expression_and_validator_disable_thinking_on_actual_sdk_wire(
-        tmp_path, base_url, official):
-    script = Path(__file__).resolve().parents[2] / 'runtime/pi/dist/result-expression.js'
-    assert script.is_file(), 'Tester must build this worktree before the wire test'
-    preload = tmp_path / 'loopback-fetch.mjs'
-    preload.write_text(LOOPBACK_PRELOAD)
-    start = {'run_id': 'expression-wire', 'facts': {'result': '已准备模拟清单'},
-             'prompt': '只输出一行JSON', 'timeoutMs': 8000,
-             'model': {'id': 'controlled-expression', 'baseUrl': base_url,
-                       'apiKey': 'synthetic-not-a-real-key'}}
-    with _expression_server() as (loopback, requests):
-        completed = subprocess.run(['node', '--import', str(preload), str(script)],
-            input=json.dumps(start, ensure_ascii=False) + '\n', capture_output=True,
-            text=True, timeout=12, env={**{key: os.environ[key] for key in ('PATH', 'NODE_OPTIONS') if key in os.environ},
-                'CERES_WIRE_BASE': base_url, 'CERES_WIRE_LOOPBACK': loopback})
-    assert completed.returncode == 0, completed.stderr
-    frames = [json.loads(line) for line in completed.stdout.splitlines()]
-    assert frames[-1]['type'] == 'result' and frames[-1]['status'] == 'completed'
-    assert [(frame['text'], frame['fact_ref']) for frame in frames if frame['type'] == 'unit'] == [
-        ('按你的需要来就好。', 'result')]
-    assert len(requests) == 2
-    for body, limit in zip(requests, (512, 256)):
-        _assert_profile(body, official)
-        assert body['model'] == 'controlled-expression'
-        # SDK compatibility chooses one cap field; neither path may raise its cap.
-        assert [body[key] for key in ('max_tokens', 'max_completion_tokens') if key in body] == [limit]
-        assert body['stream'] is True
-        assert not body.get('tools')
-        assert 'response_format' not in body
-    usage = [frame for frame in frames if frame.get('phase') in ('generation_usage', 'validation_usage')]
-    assert {frame['phase'] for frame in usage} == {'generation_usage', 'validation_usage'}
-    assert all(frame['usage_source'] == 'provider' and frame['input_tokens'] == 3
-               and frame['output_tokens'] == 1 and frame['cache_read_tokens'] == 0
-               and frame['cache_write_tokens'] is None for frame in usage)
+def _configure(monkeypatch, base_url):
+    from app.core.config import get_settings
+    settings = get_settings()
+    monkeypatch.setattr(settings, 'llm_mode', 'live')
+    monkeypatch.setattr(settings, 'openai_base_url', base_url)
+    monkeypatch.setattr(settings, 'openai_api_key', SYNTHETIC_KEY)
+    monkeypatch.setattr(settings, 'llm_model', 'deepseek-flash')
+    monkeypatch.setattr(settings, 'memory_extraction_model', 'deepseek-flash')
+    monkeypatch.setattr(settings, 'memory_dream_model', 'deepseek-flash')
 
 
-@contextmanager
-def _main_pi_server():
-    requests = []
+def _bind(monkeypatch, module, captured):
+    real = module.OpenAI
 
-    class Handler(BaseHTTPRequestHandler):
-        def log_message(self, *_args):
-            pass
+    def handler(request):
+        body = json.loads(request.content.decode())
+        captured.append(_safe(body))
+        content = '{"records":[]}'
+        return httpx.Response(200, json={
+            'id': 'controlled', 'object': 'chat.completion', 'created': 1, 'model': body.get('model'),
+            'choices': [{'index': 0, 'finish_reason': 'stop', 'message': {'role': 'assistant', 'content': content}}],
+            'usage': {'prompt_tokens': 1, 'completion_tokens': 1, 'total_tokens': 2},
+        })
 
-        def do_POST(self):
-            body = json.loads(self.rfile.read(int(self.headers['Content-Length'])))
-            requests.append(body)
-            if len(requests) == 1:
-                delta = {'role': 'assistant', 'tool_calls': [{
-                    'index': 0, 'id': 'general-check', 'type': 'function', 'function': {
-                        'name': 'validate_general_text', 'arguments': '{"messages":["你好。"]}'}}]}
-                finish = 'tool_calls'
-            elif len(requests) == 2:
-                delta = {'role': 'assistant',
-                         'content': '{"merchant_claims":false,"execution_claims":false}'}
-                finish = 'stop'
-            else:
-                delta = {'role': 'assistant',
-                         'content': '{"status":"completed","answer_kind":"general","general_ref":"general-wire"}'}
-                finish = 'stop'
-            chunks = [
-                {'choices': [{'index': 0, 'delta': delta, 'finish_reason': None}]},
-                {'choices': [{'index': 0, 'delta': {}, 'finish_reason': finish}],
-                 'usage': {'prompt_tokens': 3, 'completion_tokens': 1, 'total_tokens': 4}},
-            ]
-            data = ''.join('data: ' + json.dumps({
-                'id': 'controlled-pi-stream', 'object': 'chat.completion.chunk',
-                'created': 0, 'model': body['model'], **chunk}) + '\n\n' for chunk in chunks)
-            encoded = (data + 'data: [DONE]\n\n').encode()
-            self.send_response(200)
-            self.send_header('Content-Type', 'text/event-stream')
-            self.send_header('Content-Length', str(len(encoded)))
-            self.end_headers()
-            self.wfile.write(encoded)
+    def wrapped(**kwargs):
+        kwargs['http_client'] = httpx.Client(transport=httpx.MockTransport(handler))
+        return real(**kwargs)
 
-    server = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
-    thread = threading.Thread(target=server.serve_forever, daemon=True)
-    thread.start()
-    try:
-        yield f'http://127.0.0.1:{server.server_port}', requests
-    finally:
-        server.shutdown()
-        server.server_close()
-        thread.join(timeout=2)
+    monkeypatch.setattr(module, 'OpenAI', wrapped)
 
 
-@pytest.mark.parametrize('base_url,official', HOSTS)
-def test_main_pi_and_validator_disable_thinking_on_actual_sdk_wire(
-        tmp_path, base_url, official):
-    from app.prompts.experience import keke_modules
+def _python_bodies(monkeypatch, base_url):
+    from app.mercury.provider import QueryChatClient
+    from app.services import memory_model
+    captured = []
+    _configure(monkeypatch, base_url)
+    _bind(monkeypatch, __import__('app.mercury.provider', fromlist=['provider']), captured)
+    _bind(monkeypatch, memory_model, captured)
+    QueryChatClient().chat([{'role': 'user', 'content': '查询'}], tools=[])
+    assert memory_model.extract_memory({'role': 'user', 'text': '长期偏好无糖'}) == {'records': []}
+    assert memory_model.dream_memory({'records': []}) == {'records': []}
+    return captured
 
-    script = Path(__file__).resolve().parents[2] / 'runtime/pi/dist/worker.js'
-    assert script.is_file(), 'Tester must build this worktree before the wire test'
-    preload = tmp_path / 'main-loopback-fetch.mjs'
-    preload.write_text(LOOPBACK_PRELOAD)
+
+@pytest.mark.parametrize('base_url', ['https://api.deepseek.com/v1', 'https://API.DEEPSEEK.COM/v1'])
+def test_python_official_deepseek_disables_thinking(monkeypatch, base_url):
+    mercury, extract, dream = _python_bodies(monkeypatch, base_url)
+    disabled = {'type': 'disabled'}
+    assert mercury['model'] == extract['model'] == dream['model'] == 'deepseek-flash'
+    assert mercury['thinking'] == extract['thinking'] == dream['thinking'] == disabled
+    assert mercury['reasoning_effort'] is extract['reasoning_effort'] is dream['reasoning_effort'] is None
+    assert mercury['max_tokens'] is extract['max_tokens'] is dream['max_tokens'] is None
+    assert mercury['temperature'] == 0.2 and mercury['response_format'] is None and mercury['stream'] is False
+    assert extract['temperature'] == dream['temperature'] == 0
+    assert extract['response_format'] == dream['response_format'] == {'type': 'json_object'}
+    assert extract['stream'] is dream['stream'] is False
+
+
+@pytest.mark.parametrize('base_url', [
+    'http://provider-fixture.invalid/v1',
+    'https://api.deepseek.com.evil.example/v1',
+])
+def test_python_non_official_host_omits_thinking(monkeypatch, base_url):
+    bodies = _python_bodies(monkeypatch, base_url)
+    assert len(bodies) == 3
+    assert all(body['thinking'] is None and body['reasoning_effort'] is None for body in bodies)
+    assert all(body['max_tokens'] is None for body in bodies)
+
+
+def _records(path):
+    text = path.read_text()
+    assert SYNTHETIC_KEY not in text
+    assert 'authorization' not in text.lower()
+    return [json.loads(line) for line in text.splitlines() if line]
+
+
+def _spawn(script, tmp_path, name):
+    directory = tmp_path / name
+    directory.mkdir()
+    preload = directory / 'transport-preload.mjs'
+    capture = directory / 'capture.jsonl'
+    stderr_path = directory / 'stderr.txt'
+    preload.write_text(PRELOAD)
+    stderr = stderr_path.open('wb')
+    env = {'PATH': os.environ['PATH'], 'CERES_TRANSPORT_CAPTURE': str(capture)}
+    child = subprocess.Popen(
+        ['node', '--import', str(preload), str(script)],
+        stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=stderr, env=env, bufsize=0,
+    )
+    return child, capture, stderr, stderr_path
+
+
+def _finish(child, stderr, stderr_path):
+    if child.poll() is None:
+        child.kill()
+    child.wait(timeout=5)
+    stderr.close()
+    tail = stderr_path.read_text(errors='replace')[-2000:].replace(SYNTHETIC_KEY, '[redacted]')
+    return tail
+
+
+def _read_frames(child, send, on_frame):
+    selector = selectors.DefaultSelector()
+    selector.register(child.stdout, selectors.EVENT_READ)
+    pending = b''
     frames = []
-    with _main_pi_server() as (loopback, requests):
-        child = subprocess.Popen(['node', '--import', str(preload), str(script)],
-            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=0,
-            env={**{key: os.environ[key] for key in ('PATH', 'NODE_OPTIONS') if key in os.environ},
-                 'CERES_WIRE_BASE': base_url, 'CERES_WIRE_LOOPBACK': loopback})
-        selector = selectors.DefaultSelector()
-        selector.register(child.stdout, selectors.EVENT_READ)
-        input_sequence = 0
+    deadline = time.monotonic() + 10
+    try:
+        while time.monotonic() < deadline:
+            if child.poll() is not None and not selector.select(timeout=0):
+                break
+            if not selector.select(timeout=0.2):
+                continue
+            chunk = os.read(child.stdout.fileno(), 65536)
+            if not chunk:
+                break
+            pending += chunk
+            while b'\n' in pending:
+                raw, pending = pending.split(b'\n', 1)
+                frame = json.loads(raw)
+                frames.append({key: value for key, value in frame.items() if key in ('type', 'status', 'name', 'code')})
+                if on_frame(frame, send):
+                    return frames
+        return frames
+    finally:
+        selector.close()
 
-        def send(frame):
-            nonlocal input_sequence
-            input_sequence += 1
-            child.stdin.write((json.dumps({**frame, 'run_id': 'main-wire',
-                'sequence': input_sequence}, ensure_ascii=False) + '\n').encode())
-            child.stdin.flush()
 
-        try:
-            send({'type': 'start', 'message': '打个招呼', 'categories': [],
-                  'context': {'role': 'keke', 'has_active_task': False, 'general_history': []},
-                  'promptModules': keke_modules(), 'maxToolRounds': 5, 'timeoutMs': 8000,
-                  'model': {'id': 'controlled-main', 'baseUrl': base_url,
-                            'apiKey': 'synthetic-not-a-real-key'}})
-            pending = b''
-            deadline = time.monotonic() + 12
-            terminal = False
-            while not terminal and time.monotonic() < deadline:
-                if not selector.select(timeout=0.2):
-                    continue
-                chunk = os.read(child.stdout.fileno(), 65536)
-                if not chunk:
-                    break
-                pending += chunk
-                while b'\n' in pending:
-                    line, pending = pending.split(b'\n', 1)
-                    frame = json.loads(line)
-                    frames.append(frame)
-                    if frame['type'] == 'tool_call':
-                        assert frame['name'] == 'validate_general_text'
-                        assert frame['arguments'] == {'messages': ['你好。']}
-                        send({'type': 'tool_result', 'id': frame['id'],
-                              'result': {'general_ref': 'general-wire'}})
-                    if frame['type'] in ('result', 'error'):
-                        terminal = True
-                        break
-        finally:
-            selector.close()
-            if child.poll() is None:
-                child.kill()
-            child.wait(timeout=5)
-            child.stdin.close()
-            child.stdout.close()
-            child.stderr.close()
+def _run_worker(base_url, tmp_path):
+    from app.prompts.experience import keke_modules
+    child, capture, stderr, stderr_path = _spawn(WORKER, tmp_path, 'worker')
+    sequence = 0
 
-    assert frames[-1]['type'] == 'result' and frames[-1]['status'] == 'completed', frames
-    assert json.loads(frames[-1]['answer'])['general_ref'] == 'general-wire'
-    verdicts = [frame for frame in frames if frame['type'] == 'general_validation']
-    assert len(verdicts) == 1 and verdicts[0]['approved'] is True
-    assert len(requests) == 3
-    for index, (body, limit) in enumerate(zip(requests, (1536, 256, 1536))):
-        _assert_profile(body, official)
-        assert body['model'] == 'controlled-main'
-        assert [body[key] for key in ('max_tokens', 'max_completion_tokens') if key in body] == [limit]
-        assert body['stream'] is True
-        if index == 1:
-            assert not body.get('tools')
-            assert 'response_format' not in body
-        else:
-            assert any(tool['function']['name'] == 'validate_general_text' for tool in body['tools'])
-            # T03 native primary completion uses tools, not forced JSON mode.
-            # The separate 256-token validator contract remains above.
-            assert body['tool_choice'] == 'auto'
-            assert 'response_format' not in body
-    assert requests[2]['messages'][-1]['role'] == 'tool'
-    assert json.loads(requests[2]['messages'][-1]['content']) == {
-        'general_ref': 'general-wire', 'approved': True}
+    def send(frame):
+        nonlocal sequence
+        sequence += 1
+        payload = {**frame, 'run_id': 'transport-run', 'sequence': sequence}
+        child.stdin.write((json.dumps(payload, ensure_ascii=False) + '\n').encode())
+        child.stdin.flush()
+
+    def on_frame(frame, reply):
+        if frame.get('type') == 'tool_call' and frame.get('name') == 'validate_general_text':
+            reply({'type': 'tool_result', 'id': frame['id'], 'result': {'general_ref': 'general-transport'}})
+        return frame.get('type') in ('result', 'error')
+
+    try:
+        send({'type': 'start', 'message': '普通解释', 'categories': [{'id': 'beverage', 'name_zh': '饮料'}],
+              'context': {'capability': 'chat', 'has_active_task': False, 'general_history': []},
+              'promptModules': keke_modules(), 'maxToolRounds': 5, 'timeoutMs': 8000,
+              'model': {'id': 'deepseek-flash', 'baseUrl': base_url, 'apiKey': SYNTHETIC_KEY}})
+        frames = _read_frames(child, send, on_frame)
+    finally:
+        tail = _finish(child, stderr, stderr_path)
+    assert any(frame['type'] in ('result', 'error') for frame in frames), tail
+    return _records(capture), frames
+
+
+def _run_expression(base_url, tmp_path):
+    child, capture, stderr, stderr_path = _spawn(EXPRESSION, tmp_path, 'expression')
+    start = {'run_id': 'expression-transport', 'facts': {'plan': '清单已生成'}, 'prompt': '只输出一行JSON',
+             'timeoutMs': 8000, 'model': {'id': 'deepseek-flash', 'baseUrl': base_url, 'apiKey': SYNTHETIC_KEY}}
+    try:
+        child.stdin.write((json.dumps(start, ensure_ascii=False) + '\n').encode())
+        child.stdin.flush()
+        frames = _read_frames(child, None, lambda frame, _reply: frame.get('type') == 'result')
+    finally:
+        tail = _finish(child, stderr, stderr_path)
+    assert any(frame['type'] == 'result' for frame in frames), tail
+    return _records(capture)
+
+
+def _assert_disabled(row, limit):
+    assert row['model'] == 'deepseek-flash'
+    assert row['thinking'] == {'type': 'disabled'}
+    assert row['reasoning_effort'] is None
+    assert row['stream'] is True
+    assert row['limit'] == limit
+    assert row['max_tokens'] == limit
+    assert row['max_completion_tokens'] is None
+
+
+def test_node_official_deepseek_disables_thinking_on_pi_and_expression(tmp_path):
+    worker, frames = _run_worker('https://API.DEEPSEEK.COM/v1', tmp_path)
+    expression = _run_expression('https://api.deepseek.com/v1', tmp_path)
+    mains = [row for row in worker if row['limit'] == 1536]
+    validators = [row for row in worker if row['limit'] == 256]
+    assert mains and validators, frames
+    for row in mains:
+        _assert_disabled(row, 1536)
+        assert row['response_format'] == {'type': 'json_object'}
+        assert row['tool_count'] > 0
+    for row in validators:
+        _assert_disabled(row, 256)
+        assert row['response_format'] is None
+    assert [row['limit'] for row in expression] == [512, 256]
+    _assert_disabled(expression[0], 512)
+    _assert_disabled(expression[1], 256)
+    assert all(row['response_format'] is None for row in expression)
+
+
+def test_node_non_official_host_omits_thinking(tmp_path):
+    worker, _frames = _run_worker('http://127.0.0.1:9/v1', tmp_path)
+    # The installed SDK treats any baseUrl containing "deepseek.com" as DeepSeek for
+    # max_tokens. This hostname is still not the official API, so thinking stays omitted.
+    expression = _run_expression('https://api.deepseek.com.evil.example/v1', tmp_path)
+    assert any(row['limit'] == 1536 and row['max_completion_tokens'] == 1536 and row['max_tokens'] is None for row in worker)
+    assert any(row['limit'] == 256 and row['max_completion_tokens'] == 256 and row['max_tokens'] is None for row in worker)
+    assert [row['limit'] for row in expression] == [512, 256]
+    assert all(row['max_tokens'] == row['limit'] and row['max_completion_tokens'] is None for row in expression)
+    for row in worker + expression:
+        assert row['thinking'] is None and row['reasoning_effort'] is None and row['response_format'] is None

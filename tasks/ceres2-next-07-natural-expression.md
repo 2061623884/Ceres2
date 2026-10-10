@@ -4,6 +4,8 @@
 
 阶段：受控指令交付完成；真实语言效果待验证
 
+本地真实样本更新（2026-10-06）：`4bed9c8` 的公开双卡候选经独立中文审阅为 3.8/5，低于冻结的 4.0 门槛；生成连接语复述 host 的确认步骤。当前 dirty `experience.json` 仅新增禁止连接语复述 host 下一步／确认要求／状态限定，保留 host 事实、校验器及 CTA 提示；等待实际同模型新样本和受影响验证，不宣称语言或用量已改善。原首次 Pi 主调用用量缺失，须记为未报告。证据：[公开样本与来源](../work/next-experience/live-acceptance/primary-path-language-review.md)；总体范围：[本地真实验收](../work/next-experience/live-acceptance/README.md)。
+
 技术放行：已放行
 
 放行范围：仅受控技术依赖。主会话条件批准，Tester确认候选1349186的238文件与2角色＋37公开测试精确一致；不等于自然语言改善或外部验收。

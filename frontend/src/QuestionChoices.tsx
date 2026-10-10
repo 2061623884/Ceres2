@@ -1,4 +1,4 @@
-import {useRef, useState} from 'react'
+import {useState} from 'react'
 import type {GuideQuestion} from './lib/productQuestions'
 
 interface Props {
@@ -11,17 +11,14 @@ interface Props {
 export default function QuestionChoices({question, disabled, onAnswer}: Props) {
   const [selected, setSelected] = useState<string[]>(question.kind === 'quantity' ? question.options.map(option=>option.option_id) : [])
   const [quantities, setQuantities] = useState<Record<string,string>>(Object.fromEntries(Object.entries(question.known_quantities ?? {}).map(([id,quantity])=>[id,String(quantity)])))
-  const submission = useRef(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const inactive = disabled || submitting || question.status !== 'active'
   async function submit(ids: string[], counts: Record<string,number>) {
-    if (submission.current || disabled || question.status !== 'active') return
-    submission.current = true
     setSubmitting(true);setError(null)
     try {await onAnswer(ids, counts)}
     catch (reason) {setError(reason instanceof Error ? reason.message : '选择未完成，请查看当前问题后重试。')}
-    finally {submission.current = false;setSubmitting(false)}
+    finally {setSubmitting(false)}
   }
   const selectedNow = question.status === 'answered' ? question.selected_option_ids : selected
   // A task total is unambiguous for one selected SKU only. Explicit edits,

@@ -4,6 +4,8 @@
 
 阶段：最终修正候选受控验证通过；外部验收待完成
 
+本地真实修复候选（2026-10-07）：返回购物的新饮水请求在 `guide_request` 后连续四次成功 `search_products`，达到 5 轮保护、无候选或写入。原工具参数未持久化，不推断具体 query。当前 `experience.json` 仅消除事实搜索与候选探索指引歧义，保留类型问题／商品数量问题／明确选定／品类比较的既有分工、其他明确请求及复合政策路径；没有更改工具、schema、5 轮／30 秒上限或无额外模型收口。两轴静态复审无剩余阻断，新 Prompt 的实际语义与行为仍待 Tester 同版回归，不继承下方历史等价数字。证据入口：[本地真实验收](../work/next-experience/live-acceptance/README.md)。
+
 技术放行：已放行
 
 最终恢复放行（2026-10-06 12:03 UTC）：独立Standards／Spec及fixture窄复核均闭合；同一不可变候选`0c752a2`完整backend426/426、37受控DOM/client、runtime/frontend build/strict checks及OS restart1/1通过。Tester比对238backend源／280build-UI源与integration无差异。受影响受控技术门槛恢复，真实provider／浏览器／语言品质／holdout／V3比较／本人验收仍开放。以下旧审查记录保留历史，不覆盖本段当前状态。详见[最终验证](../work/next-experience/10/final-controlled-verification.md)。

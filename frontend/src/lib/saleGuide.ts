@@ -1,4 +1,3 @@
-import type {RoleSwitchAction} from './chatNavigation';
 import type {GuideQuestion} from './productQuestions';
 const API_BASE = '';
 
@@ -133,9 +132,6 @@ export interface Product {
   sellable?: boolean;
   source?: string;
   spec_unit?: string | null;
-  spec_quantity: number | null;
-  brand: string | null;
-  available_qty: number | null;
 }
 
 export interface Category {
@@ -426,7 +422,6 @@ export interface DisplayedPlanRef {
 }
 
 export interface TurnResponse {
-  navigation_action?: RoleSwitchAction | null;
   active_question?: GuideQuestion | null;
   question_history?: GuideQuestion[];
   history_sources?: HistorySource[];
@@ -582,11 +577,9 @@ export async function getGuideSession(sessionId: string, includeMessages = true)
 
 export interface TurnStreamEvent {
   protocol_version: number;
-  run_id: string | null;
+  run_id: string;
   sequence: number;
   type: string;
-  recorded_at_ms: number | null;
-  elapsed_ms: number | null;
   session_id: string;
   target_task_id?: string | null;
   message_id?: string | null;
@@ -597,7 +590,6 @@ export interface TurnStreamCallbacks {
   onAccepted?: (event: TurnStreamEvent) => void;
   onProgress?: (event: TurnStreamEvent) => void;
   onAnswerDelta?: (event: TurnStreamEvent) => void;
-  onInterimMessage?: (event: TurnStreamEvent) => void;
   onPlanReady?: (event: TurnStreamEvent) => void;
   onClarification?: (event: TurnStreamEvent) => void;
   onTurnCompleted?: (event: TurnStreamEvent) => void;
@@ -650,9 +642,6 @@ function dispatchStreamEvent(event: TurnStreamEvent, callbacks?: TurnStreamCallb
       return null;
     case 'answer.delta':
       callbacks?.onAnswerDelta?.(event);
-      return null;
-    case 'message.interim':
-      callbacks?.onInterimMessage?.(event);
       return null;
     case 'plan.ready':
       callbacks?.onPlanReady?.(event);
@@ -737,15 +726,6 @@ async function consumeTurnStream(res: Response, callbacks?: TurnStreamCallbacks)
   const decoder = new TextDecoder();
   let buffer = '';
   let turnResult: TurnResponse | null = null;
-  const sequences = new Map<string | null, number>();
-  function receive(event: TurnStreamEvent) {
-    callbacks?.signal?.throwIfAborted();
-    // SSE recovery replays a run; a repeated frame must never append text twice.
-    if (event.sequence <= (sequences.get(event.run_id) ?? 0)) return;
-    sequences.set(event.run_id, event.sequence);
-    const completed = dispatchStreamEvent(event, callbacks);
-    if (completed) turnResult = completed;
-  }
 
   try {
     while (true) {
@@ -755,18 +735,20 @@ async function consumeTurnStream(res: Response, callbacks?: TurnStreamCallbacks)
       const parsed = parseSseTurnEvents(buffer);
       buffer = parsed.remainder;
       for (const event of parsed.events) {
-        receive(event);
+        const completed = dispatchStreamEvent(event, callbacks);
+        if (completed) turnResult = completed;
       }
     }
 
     if (buffer.trim()) {
       const parsed = parseSseTurnEvents(`${buffer}\n\n`);
       for (const event of parsed.events) {
-        receive(event);
+        const completed = dispatchStreamEvent(event, callbacks);
+        if (completed) turnResult = completed;
       }
     }
-  } finally {
-    reader.releaseLock();
+  } catch (err) {
+    throw err;
   }
 
   if (!turnResult) {

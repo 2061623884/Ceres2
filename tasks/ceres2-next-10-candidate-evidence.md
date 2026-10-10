@@ -4,6 +4,16 @@
 
 阶段：同一最终候选受控验证通过；外部与本人验收开放
 
+交接更新（2026-10-07）：用户要求写接管文档，由 Cursor 继续执行。[Cursor 接管文档](../docs/CURSOR-HANDOFF-20261007.md)是停止时的快照。官方 `api.deepseek.com` 现已在受控传输中发送 `thinking: {type: disabled}`：Pi 主循环与普通知识校验、结果介绍生成与校验走 sampling；墨墨、自动提取和 Dream 走 `extra_body`。非官方 hostname 不发送该字段。模型 ID 仍是 `deepseek-flash`，1536／512／256 额度未改。Tester 已构建 `runtime/pi`，`test_official_deepseek_thinking.py` 与相关 wire 测试通过，并在空闲后重载 8013／8014／8012，保留各自数据库。冻结见 [thinking-disable-source-freeze.json](../work/next-experience/live-acceptance/thinking-disable-source-freeze.json)。这不是验收通过，也不能把此前失败都归因于 thinking。
+
+有界原句回归（未改写句子）：稳定偏好首句由 `PI_ANSWER_INVALID`（output 1536）变为 `PI_UNGROUNDED_BUSINESS_TEXT`，本次 output 为 37 与 135，没有工具、没有提交 Guide message。无糖茶原句由 `PI_ROUTE_INVALID` 变为已完成的商品问题，工具顺序 `guide_request` → `explore_products`，选项 0；任务条件是 query `无糖茶`、dietary `无糖`，目录里名称含茶的只有「绿茶饮料 500毫升」。饮水原句先因 Kev 未配置停在 navigation `unavailable`，随后用角色按钮手动续接同一原请求；工具顺序同样是 `guide_request` → `explore_products`，不再是 5 轮 `search_products`。结果仍是 0 个选项。任务条件为 `budget_fen=10000`、`product_type=饮用水`、`packaging=箱`；目录类型值是 `water`，包装是 `bottle`，12 瓶装的 `pack_count` 是 12，没有 `packaging=箱`。购物车仍为 0，订单仍为 1。ownerB 现有 1 条 automatic 记忆，未满 10 条，首次 Dream 和 24 小时冷却仍未开始。`finish_reason` 与 reasoning token 在冻结观测器里没有字段，记 unknown。
+
+本地真实验收更新（2026-10-06／07）：用户授权跳过 Kev，使用 `deepseek-flash` 完成真实浏览器购物／售后／返回购物、独立用例及准确 V3 `df2930d` 对比，并观察真实记忆／Dream 24 小时。当前基线 `4bed9c8` 加四处生产 dirty：`App.tsx`、`QuestionChoices.tsx`、`MercuryChat.tsx`、`experience.json`。新增两个 UI 修复及 Prompt 指引消歧经两轴静态复审无剩余阻断，原 RED 和中间 Prompt 草案问题保留；修正候选不能继承下方历史受控验证结论。
+
+真实 Chromium 续接旅程已选品、独立确认加购及模拟结算，得到 6 袋 ¥35.40 的同一新订单；修复后的同角色售后续接生成整单提案，Tester 明确点击提交，申请状态 `requested`、回执 1 条，未审批／未到账。恢复及返回可可没有重放旧步骤。随后新的饮水目标连续四次商品搜索达到 5 轮保护，未产生候选，因此完整往返购物目标仍未通过。已澄清候选选购的供给探索与一般事实搜索指引，最新 `experience.json` SHA256 为 `b539cf35dd7fe98b58ae832a1c4e0ca5ad0afadab68146a1a5c60758a8ad5fa6`，等待实际公开回归及同版新旅程。
+
+独立新用例、V3 实跑、受影响检查及用户本人确认尚未完成。24 小时记忆环境已独立准备，须自然达到自动记忆阈值和首次 Dream 成功后才计冷却窗口；目前尚无冷却通过结论。范围、逐阶段评分、失败与去敏证据入口：[本地真实验收](../work/next-experience/live-acceptance/README.md)。
+
 技术放行：已放行
 
 当前受测冻结：`0c752a2b252d797297b4b073883571884ff6855a`，detached `Ceres-workspace/worktrees/next-final-fixture`。最终完整backend426 passed（pytest645.95秒，runner662.357秒）、37受控DOM/client、runtime/frontend build/strict TypeScript、同一OS restart1/1（pytest5.66秒）全部通过，四次capture源无变化。238backend源与280build-UI源对integration完全一致；generated integration dist不在源等价内，运行前需正常重建。
@@ -45,5 +55,7 @@
 ## 下一步与证据
 
 01–09受控交付及本票最终受控验证已完成；仅补外部门槛和用户体验验收。若产品／Prompt／数据再次变化，按影响范围新freeze与复验，不混成绩。
+
+当前下一步：按证据处理空候选，而不是改写原句重试。饮水空结果来自条件 `product_type=饮用水`、`packaging=箱` 与目录值 `water`／`bottle`／`pack_count` 不一致；无糖茶空结果来自 query `无糖茶` 对不上唯一茶饮名称。稳定偏好首句仍无提交消息。automatic 记忆只有 1 条，不能启动 Dream 或 24 小时观察。整体仍待验收。
 
 执行证据目录：`work/next-experience/10/`。受控测试、真实模型、真实 UI、自然语言审阅与本人验收分别记账；当前受控层已通过，外部层保持未验证。完成实现只能记待验收，不能代替本人验收。

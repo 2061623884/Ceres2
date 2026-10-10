@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react'
 import { actOnHumanTicket, listOperatorTickets, type HumanTicket } from './lib/humanCases'
 import { humanStatus } from './HumanCasePanel'
-import HumanPhotos from './HumanPhotos'
 
 export function HumanOperatorPage() {
   const [token, setToken] = useState('')
@@ -54,8 +53,6 @@ export function HumanOperatorPage() {
         <h2 className="font-semibold">{selected.summary}</h2>
         <p className="break-all text-xs">工单 {selected.ticket_id}<br />事项 {selected.case_id}<br />用户 {selected.owner_id}<br />订单 {selected.order_id || '尚未选择'}</p>
         <p>{humanStatus[selected.status]}</p>
-        {selected.applications.map(application=><div key={application.receipt_id} className="rounded-2xl bg-[#fcfbf8] p-3"><p>模拟申请：{{quality:'质量问题登记',fulfillment:'履约异常登记',refund:'整单退款',return:'无理由退货'}[application.kind]}</p>{application.items.map(item=><p key={item.item_id}>{item.name} · {application.kind==='quality' || application.kind==='fulfillment'?'问题销售包装数':'申请包装数'} {item.quantity}</p>)}<p>{application.reason}</p><p className="text-xs text-black/50">{application.message}</p></div>)}
-        <HumanPhotos ticket={selected} token={token} />
         {selected.order_summary && <div className="rounded-lg bg-black/5 p-2"><p>模拟订单 · {selected.order_summary.status} · ¥{(selected.order_summary.total_fen / 100).toFixed(2)}</p>{selected.order_summary.items.map((item, index) => <p key={index}>{item.name} × {item.quantity}</p>)}</div>}
         <h3 className="font-semibold">必要对话历史</h3>
         {selected.history.map((message, index) => <p key={index}>{message.role === 'user' ? '用户' : '墨墨'}：{message.content}</p>)}

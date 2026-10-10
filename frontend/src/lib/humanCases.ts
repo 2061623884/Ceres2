@@ -18,8 +18,6 @@ export interface HumanTicket {
   version: number
   history: { role: string; content: string }[]
   messages: HumanMessage[]
-  photos: {photo_id:string;content_type:string}[]
-  applications: AfterSalesReceipt[]
 }
 const root = '/api/v1/mercury'
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
@@ -42,4 +40,3 @@ export const actOnHumanTicket = (token: string, ticket: HumanTicket, action: 're
   method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Internal-Token': token },
   body: JSON.stringify({ action, content, version: ticket.version }),
 })
-import type { AfterSalesReceipt } from './aftersales'

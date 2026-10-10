@@ -51,4 +51,3 @@ export const previewCheckout = (version: number) => request<CheckoutPreview>('/c
 export const confirmCheckout = (previewId: string, key: string) => request<CheckoutReceipt>('/checkout/confirm', { preview_id: previewId, idempotency_key: key, confirmed: true })
 export const listOrders = () => request<{ items: SimulatedOrder[] }>('/orders')
 export const getOrder = (orderId: string) => request<SimulatedOrder>(`/orders/${encodeURIComponent(orderId)}`)
-export const advanceDemoOrder = (order: SimulatedOrder, status: 'shipped' | 'delivered') => request<SimulatedOrder>(`/orders/${encodeURIComponent(order.order_id)}/demo-state`, { expected_version: order.version, status })

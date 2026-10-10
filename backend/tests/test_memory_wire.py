@@ -51,4 +51,5 @@ def test_actual_provider_wire_memory_tool_commits_truthful_receipt(mercury_clien
     assert tool['function']['parameters']['additionalProperties'] is False
     assert 'owner_id' not in tool['function']['parameters']['properties']
     assert observed[0]['model']=='qwen3.8-27b'
+    assert 'thinking' not in observed[0] and 'reasoning_effort' not in observed[0]
     assert '已记住' in client.get(url).json()['messages'][-1]['content']
