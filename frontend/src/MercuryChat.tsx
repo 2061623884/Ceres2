@@ -1,12 +1,10 @@
 import type { BeforeText, Handoff } from './lib/chatNavigation'
-/**
- * 墨墨售后 — 与 ChatScreen 同结构的奶油色 Grok 面板
- */
-
-import { useState, useEffect, useRef, useCallback } from 'react'
-import { MomoAvatar, MomoToastHero } from './components/MomoToast'
+import { useState, useEffect, useRef, useCallback, type ReactNode } from 'react'
+import { MomoAvatar } from './components/MomoToast'
 import { AfterSalesPanel } from './AfterSalesPanel'
 import { HumanCasePanel } from './HumanCasePanel'
+import { KekeAvatar } from './components/KekeAvatar'
+import { RoleChatFrame, composerKekeGuideChipClass, composerToolChipClass, type ComposerPlusAction, type RoleChatNavigationProps } from './RoleChatFrame'
 import { createMercurySession, sendMercuryTurn, readMercurySession, listMercuryOrders, selectMercuryOrder } from './lib/mercury'
 import type { MercuryOrder } from './lib/mercury'
 
@@ -21,10 +19,9 @@ const WELCOME_MSG: MercuryMsg = {
   id: 'welcome',
   role: 'ai',
   text: '您好！我是墨墨 🍞\n一般政策无需选择订单。我也可以帮您查询模拟订单、物流和售后资格。查询不会提交申请；退款或退货会先展示具体提案，确认后才提交模拟申请。',
-  suggestions: ['我想查看我的订单', '帮我查询物流信息', '我想查询退款资格', '我想查询退货资格'],
 }
 
-const QUICK_LABELS = ['📦 查订单', '🚚 查物流', '💰 退款', '🔄 退货']
+type MercurySheet = 'order' | 'aftersales' | 'human' | null
 
 function formatText(text: string) {
   return text.split('\n').map((line, i, arr) => (
@@ -35,6 +32,26 @@ function formatText(text: string) {
   ))
 }
 
+function MercuryFloatingSheet({ children, onClose }: { children: ReactNode; onClose: () => void }) {
+  return (
+    <div className="guide-sheet-enter absolute inset-x-0 bottom-full z-10 mb-2">
+      <div className="relative flex max-h-[min(52vh,420px)] flex-col overflow-hidden rounded-[24px] bg-[#fcfbf8] shadow-lg">
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="关闭"
+          className="absolute right-3 top-3 z-10 grid h-[22px] w-[22px] place-items-center rounded-full bg-black/[0.06] text-black/40"
+        >
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+        <div className="guide-sheet-scroll overflow-y-auto p-4 pt-10">{children}</div>
+      </div>
+    </div>
+  )
+}
+
 interface MercuryChatProps {
   beforeText?: BeforeText
   handoff?: Handoff | null
@@ -43,9 +60,19 @@ interface MercuryChatProps {
   entrySequence?: number
   onOrderEntryConsumed?: (entrySequence: number) => void
   visible?: boolean
+  navigation?: RoleChatNavigationProps
 }
 
-export function MercuryChat({ initialOrderId, entrySequence = 0, onOrderEntryConsumed, visible = true, beforeText, handoff, onHandoffDone }: MercuryChatProps) {
+export function MercuryChat({
+  initialOrderId,
+  entrySequence = 0,
+  onOrderEntryConsumed,
+  visible = true,
+  beforeText,
+  handoff,
+  onHandoffDone,
+  navigation,
+}: MercuryChatProps) {
   const [sessionId, setSessionId] = useState<string | null>(null)
   const [msgs, setMsgs] = useState<MercuryMsg[]>([WELCOME_MSG])
   const [orders, setOrders] = useState<MercuryOrder[]>([])
@@ -53,6 +80,7 @@ export function MercuryChat({ initialOrderId, entrySequence = 0, onOrderEntryCon
   const [selectionVersion, setSelectionVersion] = useState(0)
   const [selecting, setSelecting] = useState(false)
   const [caseRefresh, setCaseRefresh] = useState(0)
+  const [openSheet, setOpenSheet] = useState<MercurySheet>(null)
   const generationRef = useRef(0)
   const readyGenerationRef = useRef<number | null>(null)
   const [interactionVersion, setInteractionVersion] = useState(0)
@@ -62,7 +90,6 @@ export function MercuryChat({ initialOrderId, entrySequence = 0, onOrderEntryCon
   const [error, setError] = useState<string | null>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
   const appliedEntryRef = useRef<string | null>(null)
-  // Consuming an order entry clears the prop, not the initialized case.
   const requestedEntry = initialOrderId ? `${entrySequence}:${initialOrderId}` : null
   const initializationEntry = requestedEntry ?? appliedEntryRef.current
 
@@ -96,9 +123,15 @@ export function MercuryChat({ initialOrderId, entrySequence = 0, onOrderEntryCon
       setSessionId(sid)
       setSelectedOrder(restored?.order_id ?? '')
       setSelectionVersion(restored?.selection_version ?? 0)
-      setMsgs(restored?.messages.length ? restored.messages.map((message, index) => ({
-        id: `restored-${index}`, role: message.role === 'assistant' ? 'ai' : 'user', text: message.content,
-      })) : [WELCOME_MSG])
+      setMsgs(
+        restored?.messages.length
+          ? restored.messages.map((message, index) => ({
+              id: `restored-${index}`,
+              role: message.role === 'assistant' ? 'ai' : 'user',
+              text: message.content,
+            }))
+          : [WELCOME_MSG],
+      )
       setOrders(availableOrders)
       if (orderEntry) appliedEntryRef.current = orderEntry
       readyGenerationRef.current = generation
@@ -120,8 +153,10 @@ export function MercuryChat({ initialOrderId, entrySequence = 0, onOrderEntryCon
     void initSession(false, target, requestedEntry ?? undefined).then(restored => {
       if (restored && target) onOrderEntryConsumed?.(entrySequence)
     })
-    return () => { generationRef.current += 1 }
-  }, [initSession, initializationEntry, onOrderEntryConsumed, visible])
+    return () => {
+      generationRef.current += 1
+    }
+  }, [initSession, initializationEntry, initialOrderId, entrySequence, onOrderEntryConsumed, requestedEntry, visible])
 
   const send = useCallback(
     async (text: string, routedRequestId?: string) => {
@@ -130,62 +165,54 @@ export function MercuryChat({ initialOrderId, entrySequence = 0, onOrderEntryCon
       const generation = generationRef.current
       const trimmed = text.trim()
       const requestId = routedRequestId ?? crypto.randomUUID()
-      const routeId = routedRequestId ?? (beforeText ? await beforeText('momo', trimmed, requestId, selectedOrder, sessionId) : requestId)
+      const routeId =
+        routedRequestId ?? (beforeText ? await beforeText('momo', trimmed, requestId, selectedOrder, sessionId) : requestId)
       if (!routeId || generation !== generationRef.current) return
-      setMsgs((p) => [...p, { id: `u-${Date.now()}`, role: 'user', text: trimmed }])
+      setMsgs(p => [...p, { id: `u-${Date.now()}`, role: 'user', text: trimmed }])
       setInput('')
       setTyping(true)
       setError(null)
 
       const assistantId = `a-${Date.now()}`
       let assistantText = ''
-      setMsgs((p) => [...p, { id: assistantId, role: 'ai', text: '' }])
+      setMsgs(p => [...p, { id: assistantId, role: 'ai', text: '' }])
 
       try {
-        await sendMercuryTurn(sessionId, trimmed, {
-          onAnswerDelta: (chunk) => {
-            if (generation !== generationRef.current) return
-            assistantText += chunk
-            setMsgs((p) => p.map((m) => (m.id === assistantId ? { ...m, text: assistantText } : m)))
+        await sendMercuryTurn(
+          sessionId,
+          trimmed,
+          {
+            onAnswerDelta: chunk => {
+              if (generation !== generationRef.current) return
+              assistantText += chunk
+              setMsgs(p => p.map(m => (m.id === assistantId ? { ...m, text: assistantText } : m)))
+            },
+            onCompleted: finalText => {
+              if (generation !== generationRef.current) return
+              setCaseRefresh(value => value + 1)
+              setMsgs(p => p.map(m => (m.id === assistantId ? { ...m, text: finalText || assistantText } : m)))
+            },
+            onError: err => {
+              if (generation !== generationRef.current) return
+              setError(err)
+              setMsgs(p =>
+                p.map(m =>
+                  m.id === assistantId
+                    ? { ...m, text: m.text.trim() ? m.text : '抱歉，没有收到回复，请稍后再试。' }
+                    : m,
+                ),
+              )
+            },
           },
-          onCompleted: (finalText) => {
-            if (generation !== generationRef.current) return
-            setCaseRefresh(value => value + 1)
-            setMsgs((p) =>
-              p.map((m) => (m.id === assistantId ? { ...m, text: finalText || assistantText } : m)),
-            )
-          },
-          onError: (err) => {
-            if (generation !== generationRef.current) return
-            setError(err)
-            setMsgs((p) =>
-              p.map((m) =>
-                m.id === assistantId
-                  ? {
-                      ...m,
-                      text: m.text.trim()
-                        ? m.text
-                        : '抱歉，没有收到回复，请稍后再试。',
-                    }
-                  : m,
-              ),
-            )
-          },
-        }, routeId)
+          routeId,
+        )
       } catch (e) {
         if (generation !== generationRef.current) return
         const message = e instanceof Error ? e.message : '发送失败'
         setError(message)
-        setMsgs((p) =>
-          p.map((m) =>
-            m.id === assistantId
-              ? {
-                  ...m,
-                  text: m.text.trim()
-                    ? m.text
-                    : '抱歉，没有收到回复，请稍后再试。',
-                }
-              : m,
+        setMsgs(p =>
+          p.map(m =>
+            m.id === assistantId ? { ...m, text: m.text.trim() ? m.text : '抱歉，没有收到回复，请稍后再试。' } : m,
           ),
         )
       } finally {
@@ -197,8 +224,19 @@ export function MercuryChat({ initialOrderId, entrySequence = 0, onOrderEntryCon
 
   const resumedHandoff = useRef<string | null>(null)
   useEffect(() => {
-    if (!handoff) { resumedHandoff.current = null; return }
-    if (!visible || restoring || !sessionId || selecting || readyGenerationRef.current !== generationRef.current || resumedHandoff.current === handoff.routing_request_id) return
+    if (!handoff) {
+      resumedHandoff.current = null
+      return
+    }
+    if (
+      !visible ||
+      restoring ||
+      !sessionId ||
+      selecting ||
+      readyGenerationRef.current !== generationRef.current ||
+      resumedHandoff.current === handoff.routing_request_id
+    )
+      return
     resumedHandoff.current = handoff.routing_request_id
     void send(handoff.original_message, handoff.routing_request_id).finally(() => onHandoffDone?.())
   }, [handoff, visible, restoring, sessionId, selecting, send, onHandoffDone])
@@ -207,11 +245,12 @@ export function MercuryChat({ initialOrderId, entrySequence = 0, onOrderEntryCon
     setInteractionVersion(value => value + 1)
     setMsgs([WELCOME_MSG])
     setSessionId(null)
+    setOpenSheet(null)
     await initSession(true)
   }
 
   async function chooseOrder(orderId: string) {
-    if (!sessionId || !orderId || selecting || typing || restoring) return
+    if (!sessionId || selecting || typing || restoring) return
     setInteractionVersion(value => value + 1)
     const generation = generationRef.current
     setSelecting(true)
@@ -233,140 +272,155 @@ export function MercuryChat({ initialOrderId, entrySequence = 0, onOrderEntryCon
   if (!visible) return null
 
   const activeOrder = orders.find(order => order.order_id === selectedOrder)
-  const showWelcomeHero = msgs.length === 1 && msgs[0].id === 'welcome'
+
+  const momoPlusActions: ComposerPlusAction[] = [
+    {
+      label: '发起新对话',
+      onClick: () => void handleNewChat(),
+      ariaLabel: '发起新对话',
+    },
+  ]
 
   return (
-    <section
-      className="guide-chat-panel chat-panel-enter relative flex h-[min(65vh,600px)] min-h-[min(420px,60vh)] flex-col overflow-hidden rounded-t-[38px] font-sans"
-    >
-      <div className="flex justify-center bg-[#f7f5f0] pt-3 pb-1.5" aria-hidden="true">
-        <span className="h-1 w-10 rounded-full bg-black/[.12]" />
-      </div>
-      <div className="guide-glass-header-pill mx-4 mt-2 flex flex-shrink-0 items-center gap-3 rounded-full px-4 py-2">
-        <MomoAvatar size={40} animated />
-        <div>
-          <p className="text-[15px] font-semibold tracking-[-0.04em] text-[#191817]">墨墨</p>
-          {typing && <p className="text-[10px] text-black/40">墨墨正在输入…</p>}
-        </div>
-        <button
-          type="button"
-          onClick={handleNewChat}
-          className="ml-auto grid h-9 w-9 place-items-center rounded-full bg-white/70 text-black/48 transition hover:bg-white active:scale-95"
-          aria-label="发起新对话"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-            <path d="M12 5v14M5 12h14" />
-          </svg>
-        </button>
-      </div>
-
-      <div className="bg-[#f7f5f0] px-6 pb-3">
-        <label className="text-xs text-black/50" htmlFor="mercury-order">模拟订单 · 查询与售后</label>
-        <select id="mercury-order" aria-label="选择模拟订单" value={selectedOrder}
-          disabled={restoring || typing || selecting} onChange={(event) => chooseOrder(event.target.value)}
-          className="mt-1 block w-full rounded-xl bg-white px-3 py-2 text-xs">
-          <option value="">{orders.length ? '请选择要查询的模拟订单' : '当前身份暂无模拟订单'}</option>
-          {orders.map((order) => <option key={order.order_id} value={order.order_id}>
-            {order.order_id} · {order.status_text} · ¥{order.total}
-          </option>)}
-        </select>
-        {activeOrder && <p data-selected-order-id={activeOrder.order_id} className="mt-2 break-all text-xs text-black/50">
-          {activeOrder.products.join(' · ')} · {activeOrder.store_id ?? '门店未知'} · 订单版本 {activeOrder.version}
-        </p>}
-      </div>
-
-      <div className="scrollbar-hide flex-1 space-y-5 overflow-y-auto px-6 py-5">
-        {restoring && <p className="text-center text-sm text-black/40">正在连接墨墨…</p>}
-        {error && <p className="text-center text-xs text-red-600">{error}</p>}
-
-        {sessionId && !restoring && <AfterSalesPanel caseId={sessionId} orderId={selectedOrder} selectionVersion={selectionVersion} refreshKey={caseRefresh} disabled={typing || selecting} interactionVersion={interactionVersion} />}
-
-        {sessionId && !restoring && <HumanCasePanel key={sessionId} caseId={sessionId} refreshKey={caseRefresh} />}
-
-        {showWelcomeHero && (
-          <div className="flex flex-col items-center gap-3 pb-2">
-            <MomoToastHero size={120} mood="happy" animated />
-          </div>
-        )}
-
-        {msgs.map((msg) => (
-          <div key={msg.id} className={`flex items-end gap-2.5 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-            {msg.role === 'ai' && <MomoAvatar size={26} />}
-            <div className={`flex max-w-[82%] flex-col gap-2.5 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
-              {msg.text ? (
-                <div
-                  className="px-4 py-3 text-[13px] font-medium leading-[1.7] tracking-[-0.015em]"
-                  style={{
-                    borderRadius: msg.role === 'user' ? '24px 24px 8px 24px' : '24px 24px 24px 8px',
-                    background: msg.role === 'user' ? '#171716' : '#f2f1ed',
-                    color: msg.role === 'user' ? '#fff' : '#292825',
-                  }}
-                >
-                  {formatText(msg.text)}
-                </div>
-              ) : msg.role === 'ai' && typing ? (
-                <div
-                  className="ai-loading-bubble px-4 py-3 text-[13px] font-medium leading-[1.7] tracking-[-0.015em]"
-                  style={{
-                    borderRadius: '24px 24px 24px 8px',
-                    background: '#f2f1ed',
-                    color: '#292825',
-                  }}
-                >
-                  <span className="ai-loading-ellipsis" aria-label="墨墨正在输入">
-                    <span className="ai-loading-ellipsis__dot" aria-hidden="true">.</span>
-                    <span className="ai-loading-ellipsis__dot" aria-hidden="true">.</span>
-                    <span className="ai-loading-ellipsis__dot" aria-hidden="true">.</span>
-                  </span>
-                </div>
-              ) : null}
-              {msg.suggestions && msg.role === 'ai' && !typing && (
-                <div className="flex w-full flex-col gap-1.5">
-                  {msg.suggestions.map((s, i) => (
-                    <button
-                      key={i}
-                      type="button"
-                      onClick={() => send(s)}
-                      className="rounded-full bg-[#f5f4f0] px-4 py-2.5 text-left text-[12px] font-medium text-black/55 transition hover:bg-[#eceae4] active:scale-[.98]"
-                    >
-                      <span className="mr-2 text-[10px] font-semibold text-[#d79b58]">✦</span>
-                      {QUICK_LABELS[i] ?? s}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        ))}
-        <div ref={bottomRef} />
-      </div>
-
-      <div className="relative flex-shrink-0 bg-[#f7f5f0]/75 px-5 pb-4 pt-2">
-        <div className="flex items-center gap-2 rounded-[28px] bg-white/85 px-4 py-2.5 backdrop-blur-sm">
-          <input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') send(input)
-            }}
-            placeholder="问问墨墨吧…"
-            disabled={restoring || selecting}
-            className="min-w-0 flex-1 bg-transparent text-[13px] font-medium text-[#1d1c1a] outline-none placeholder:text-black/30"
-          />
-          <button
-            type="button"
-            onClick={() => send(input)}
-            disabled={!input.trim() || !sessionId || typing || restoring || selecting}
-            className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full transition-all active:scale-90 ${
-              input.trim() && !typing && !restoring ? 'bg-[#171716]' : 'bg-[#eeece7]'
-            }`}
-          >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="white">
-              <path d="M2 21L23 12 2 3v7l15 2-15 2z" />
-            </svg>
+    <RoleChatFrame
+      activeRole="momo"
+      agentAvatar={<MomoAvatar size={40} animated />}
+      agentName="墨墨"
+      statusLine={typing ? <p>墨墨正在输入…</p> : undefined}
+      navigation={navigation}
+      bottomRef={bottomRef}
+      composerPlusActions={momoPlusActions}
+      toolRow={
+        <div className="scrollbar-hide mb-2 flex gap-2 overflow-x-auto pb-0.5">
+          <button type="button" onClick={() => setOpenSheet(prev => (prev === 'order' ? null : 'order'))} className={composerToolChipClass(openSheet === 'order')}>
+            当前订单
           </button>
+          <button type="button" onClick={() => setOpenSheet(prev => (prev === 'aftersales' ? null : 'aftersales'))} className={composerToolChipClass(openSheet === 'aftersales')}>
+            售后申请
+          </button>
+          <button type="button" onClick={() => setOpenSheet(prev => (prev === 'human' ? null : 'human'))} className={composerToolChipClass(openSheet === 'human')}>
+            人工工单
+          </button>
+          {navigation && (
+            <button
+              type="button"
+              aria-label="继续选购，联系可可"
+              disabled={navigation.navigationBusy || !navigation.navigationReady}
+              onClick={() => navigation.onSwitchRole('keke')}
+              className={composerKekeGuideChipClass()}
+            >
+              <KekeAvatar size={20} />
+              继续选购
+            </button>
+          )}
         </div>
-      </div>
-    </section>
+      }
+      sheetSlot={
+        openSheet ? (
+          <MercuryFloatingSheet onClose={() => setOpenSheet(null)}>
+            {openSheet === 'order' && (
+              <div>
+                <h3 className="mb-2 text-sm font-semibold text-[#191817]">模拟订单 · 查询与售后</h3>
+                <label className="text-xs text-black/50" htmlFor="mercury-order">选择订单</label>
+                <select
+                  id="mercury-order"
+                  aria-label="选择模拟订单"
+                  value={selectedOrder}
+                  disabled={restoring || typing || selecting}
+                  onChange={event => void chooseOrder(event.target.value)}
+                  className="mt-1 block w-full rounded-xl bg-white px-3 py-2 text-xs"
+                >
+                  <option value="">{orders.length ? '请选择要查询的模拟订单' : '当前身份暂无模拟订单'}</option>
+                  {orders.map(order => (
+                    <option key={order.order_id} value={order.order_id}>
+                      {order.order_id} · {order.status_text} · ¥{order.total}
+                    </option>
+                  ))}
+                </select>
+                {activeOrder && (
+                  <p data-selected-order-id={activeOrder.order_id} className="mt-2 break-all text-xs text-black/50">
+                    {activeOrder.products.join(' · ')} · {activeOrder.store_id ?? '门店未知'} · 订单版本 {activeOrder.version}
+                  </p>
+                )}
+              </div>
+            )}
+            {openSheet === 'aftersales' && sessionId && !restoring && (
+              <AfterSalesPanel
+                caseId={sessionId}
+                orderId={selectedOrder}
+                selectionVersion={selectionVersion}
+                refreshKey={caseRefresh}
+                disabled={typing || selecting}
+                interactionVersion={interactionVersion}
+              />
+            )}
+            {openSheet === 'human' && sessionId && !restoring && (
+              <HumanCasePanel key={sessionId} caseId={sessionId} refreshKey={caseRefresh} variant="sheet" />
+            )}
+          </MercuryFloatingSheet>
+        ) : null
+      }
+      composer={{
+        value: input,
+        onChange: setInput,
+        onSend: () => void send(input),
+        placeholder: '问问墨墨吧…',
+        disabled: restoring || selecting,
+        sendDisabled: !input.trim() || !sessionId || typing || restoring || selecting,
+      }}
+    >
+      {restoring && <p className="text-center text-sm text-black/40">正在连接墨墨…</p>}
+      {error && <p className="text-center text-xs text-red-600">{error}</p>}
+
+      {msgs.map(msg => (
+        <div key={msg.id} className={`flex items-end gap-2.5 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
+          {msg.role === 'ai' && <MomoAvatar size={26} />}
+          <div className={`flex max-w-[82%] flex-col gap-2.5 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
+            {msg.text ? (
+              <div
+                className="px-4 py-3 text-[13px] font-medium leading-[1.7] tracking-[-0.015em]"
+                style={{
+                  borderRadius: msg.role === 'user' ? '24px 24px 8px 24px' : '24px 24px 24px 8px',
+                  background: msg.role === 'user' ? '#171716' : '#f2f1ed',
+                  color: msg.role === 'user' ? '#fff' : '#292825',
+                }}
+              >
+                {formatText(msg.text)}
+              </div>
+            ) : msg.role === 'ai' && typing ? (
+              <div
+                className="ai-loading-bubble px-4 py-3 text-[13px] font-medium leading-[1.7] tracking-[-0.015em]"
+                style={{
+                  borderRadius: '24px 24px 24px 8px',
+                  background: '#f2f1ed',
+                  color: '#292825',
+                }}
+              >
+                <span className="ai-loading-ellipsis" aria-label="墨墨正在输入">
+                  <span className="ai-loading-ellipsis__dot" aria-hidden="true">.</span>
+                  <span className="ai-loading-ellipsis__dot" aria-hidden="true">.</span>
+                  <span className="ai-loading-ellipsis__dot" aria-hidden="true">.</span>
+                </span>
+              </div>
+            ) : null}
+            {msg.suggestions && msg.role === 'ai' && !typing && (
+              <div className="flex w-full flex-col gap-1.5">
+                {msg.suggestions.map((s, i) => (
+                  <button
+                    key={`${msg.id}-${i}`}
+                    type="button"
+                    onClick={() => void send(s)}
+                    className="rounded-full bg-[#f5f4f0] px-4 py-2.5 text-left text-[12px] font-medium text-black/55 transition hover:bg-[#eceae4] active:scale-[.98]"
+                  >
+                    <span className="mr-2 text-[10px] font-semibold text-[#d79b58]">✦</span>
+                    {s}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      ))}
+    </RoleChatFrame>
   )
 }

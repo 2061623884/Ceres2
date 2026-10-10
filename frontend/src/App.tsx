@@ -7,6 +7,8 @@ import { openNavigation, closeOpening, routeText, ackPrompt, chooseRole, type Be
 import ComparisonCards from './ComparisonCards'
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { MercuryChat } from './MercuryChat'
+import { KekeAvatar } from './components/KekeAvatar'
+import { RoleChatFrame, composerToolChipClass, type ComposerPlusAction, type RoleChatNavigationProps } from './RoleChatFrame'
 import { HumanOperatorPage } from './HumanOperatorPage'
 import { SimulatedCheckout, SimulatedOrdersScreen } from './SimulatedOrders'
 import { MomoAvatar } from './components/MomoToast'
@@ -97,27 +99,6 @@ function ToastMascot({ mood, animated = false }: { mood: CeresMood; animated?: b
         {face}
       </svg>
     </div>
-  )
-}
-
-// ── Keke Avatar ───────────────────────────────────────────────
-function KekeAvatar({ size = 28, animated = false }: { size?: number; animated?: boolean }) {
-  return (
-    <svg className={animated ? 'keke-breathe' : undefined} width={size} height={size} viewBox="0 0 40 40" fill="none" aria-label="可可，四叶草导购助手">
-      <ellipse cx="24.5" cy="27.5" rx="13" ry="10.5" fill="#B9DF75" opacity="0.8" />
-      <path d="M24 27.6C24.8 31.1 23.8 34.4 21.6 36.2" stroke="#3AA763" strokeWidth="4.2" strokeLinecap="round" />
-      <circle cx="20" cy="10.3" r="9.4" fill="#42B46C" />
-      <circle cx="10.8" cy="19.4" r="9.5" fill="#42B46C" />
-      <circle cx="29.1" cy="19.4" r="9.5" fill="#42B46C" />
-      <circle cx="20" cy="28.3" r="9.35" fill="#42B46C" />
-      <ellipse cx="20" cy="12.4" rx="5" ry="2.5" fill="#75CB8B" opacity="0.72" />
-      <ellipse cx="15.3" cy="23.6" rx="2.6" ry="1.55" fill="#8ED196" opacity="0.85" />
-      <ellipse cx="25.8" cy="23.6" rx="2.65" ry="1.55" fill="#8ED196" opacity="0.85" />
-      <path d="M15 19.4C16.8 17.7 19.1 17.7 20.7 19.4" stroke="#173A2A" strokeWidth="2" strokeLinecap="round" />
-      <ellipse cx="25.7" cy="19.1" rx="2.05" ry="2.55" fill="#173A2A" />
-      <circle cx="26.4" cy="18.25" r="0.7" fill="white" />
-      <path d="M16.9 24.1C19.3 27.2 22.9 27.3 25.2 24.1" stroke="#173A2A" strokeWidth="2.05" strokeLinecap="round" />
-    </svg>
   )
 }
 
@@ -279,7 +260,6 @@ const WELCOME_MSG: Msg = {
   id: 'welcome',
   role: 'ai',
   text: '嗨！我是可可 🌿\n你的专属导购小助手！告诉我今天想吃什么，我来帮你搞定～',
-  suggestions: ['今晚做红烧肉', '减脂餐计划', '家里有小孩', '来点零食'],
 }
 
 function newRequestId() {
@@ -759,17 +739,14 @@ function ChatGuideCapsules({
   onToggle,
   planCount,
   cartCount,
+  navigation,
 }: {
   openSheet: GuideSheet | null
   onToggle: (sheet: GuideSheet) => void
   planCount: number
   cartCount: number
+  navigation?: RoleChatNavigationProps
 }) {
-  const capsuleClass = (active: boolean) =>
-    `inline-flex shrink-0 items-center gap-1.5 rounded-full px-4 py-2.5 text-[13px] font-medium tracking-[-0.01em] transition-colors ${
-      active ? 'bg-white/92 text-[#1d1c1a]' : 'bg-white/45 text-black/42'
-    }`
-
   const countBadge = (count: number) =>
     count > 0 ? (
       <span className="grid h-[18px] min-w-[18px] place-items-center rounded-full bg-[#e23b3b] px-1 text-[10px] font-semibold leading-none text-white">
@@ -778,18 +755,30 @@ function ChatGuideCapsules({
     ) : null
 
   return (
-    <div className="scrollbar-hide mb-2.5 flex gap-2.5 overflow-x-auto">
-      <button type="button" onClick={() => onToggle('activity')} className={capsuleClass(openSheet === 'activity')}>
+    <div className="scrollbar-hide mb-2 flex gap-2 overflow-x-auto pb-0.5">
+      <button type="button" onClick={() => onToggle('activity')} className={composerToolChipClass(openSheet === 'activity')}>
         今日活动
       </button>
-      <button type="button" onClick={() => onToggle('plan')} className={capsuleClass(openSheet === 'plan')} aria-label={planCount > 0 ? `采购清单 ${planCount} 件` : '采购清单'}>
+      <button type="button" onClick={() => onToggle('plan')} className={composerToolChipClass(openSheet === 'plan')} aria-label={planCount > 0 ? `采购清单 ${planCount} 件` : '采购清单'}>
         采购清单
         {countBadge(planCount)}
       </button>
-      <button type="button" onClick={() => onToggle('cart')} className={capsuleClass(openSheet === 'cart')} aria-label={cartCount > 0 ? `购物车 ${cartCount} 件` : '购物车'}>
+      <button type="button" onClick={() => onToggle('cart')} className={composerToolChipClass(openSheet === 'cart')} aria-label={cartCount > 0 ? `购物车 ${cartCount} 件` : '购物车'}>
         购物车
         {countBadge(cartCount)}
       </button>
+      {navigation && (
+        <button
+          type="button"
+          aria-label="售后问题，联系墨墨"
+          disabled={navigation.navigationBusy || !navigation.navigationReady}
+          onClick={() => navigation.onSwitchRole('momo')}
+          className={composerToolChipClass(false)}
+        >
+          <MomoAvatar size={20} />
+          售后问题
+        </button>
+      )}
     </div>
   )
 }
@@ -1055,6 +1044,7 @@ function ChatScreen({
   interactionEpoch,
   interactionVersion,
   onInteraction,
+  navigation,
 }: {
   active: boolean
   interactionEpoch: {current: number}
@@ -1068,6 +1058,7 @@ function ChatScreen({
   cart: Cart | null
   onCartChange: (cart: Cart) => void
   onViewOrders: () => void
+  navigation?: RoleChatNavigationProps
 }) {
   const [msgs, setMsgs] = useState<Msg[]>([WELCOME_MSG])
   const [input, setInput] = useState('')
@@ -1639,86 +1630,67 @@ function ChatScreen({
   const cartCount = cartItemCount(cart)
   const planItemCount = hasPlan ? plan.items.length : 0
 
+  const introductionBanner = (
+    <>
+      {introductionStatus === 'running' && (
+        <p role="status" aria-label="结果介绍进度" className="border-b border-black/[0.05] px-6 py-2 text-xs text-black/50">
+          正在补充介绍，已有结果可以继续操作。{' '}
+          <button type="button" aria-label="停止结果介绍" onClick={stopIntroduction}>停止介绍</button>
+        </p>
+      )}
+      {introductionStatus && ['failed', 'deadline'].includes(introductionStatus) && (
+        <p role="status" className="border-b border-black/[0.05] px-6 py-2 text-xs text-black/50">介绍未完成，已有结果仍保留。</p>
+      )}
+      {introductionStatus === 'stopped' && (
+        <p role="status" className="border-b border-black/[0.05] px-6 py-2 text-xs text-black/50">介绍已停止，已有结果仍保留。</p>
+      )}
+    </>
+  )
+
+  const kekePlusActions: ComposerPlusAction[] = [
+    {
+      label: '历史方案',
+      onClick: handleHistoryList,
+      disabled: restoring || typing || confirming,
+    },
+    ...(activeRequests.length > 0
+      ? [{ label: '停止处理', onClick: handleStop, ariaLabel: '停止本次处理' }]
+      : []),
+    {
+      label: '放弃购买任务',
+      onClick: handleAbandonTask,
+      disabled: !taskId,
+      ariaLabel: '放弃购买任务',
+    },
+  ]
+
   return (
-    <section className="guide-chat-panel chat-panel-enter relative flex h-[min(65vh,600px)] min-h-[min(420px,60vh)] flex-col overflow-hidden rounded-t-[38px] font-sans">
-      <div className="flex justify-center bg-[#f7f5f0] pt-3 pb-1.5" aria-hidden="true"><span className="h-1 w-10 rounded-full bg-black/[.12]" /></div>
-      <div className="guide-glass-header-pill mx-4 mt-2 flex flex-shrink-0 items-center gap-3 rounded-full px-4 py-2">
-        <KekeAvatar size={40} animated />
-        <div>
-          <p className="text-[15px] font-semibold tracking-[-0.04em] text-[#191817]">可可</p>
-          {progressText && <div data-guide-action-line className="h-4 overflow-hidden text-[10px] text-black/40" aria-live="polite"><p key={progressText} className="guide-action-roll">{progressText}</p></div>}
-        </div>
-        <button type="button" onClick={handleHistoryList} disabled={restoring || typing || confirming} className="ml-auto rounded-full px-3 py-1 text-[11px] text-black/50">历史方案</button>
-        {activeRequests.length > 0 && <button onClick={handleStop} aria-label="停止本次处理" className="ml-auto rounded-full px-3 py-1 text-[11px] text-black/50">停止处理</button>}
-        <button
-          onClick={handleAbandonTask}
-          className="ml-auto grid h-9 w-9 place-items-center rounded-full bg-white/70 text-black/48 transition hover:bg-white active:scale-95"
-          disabled={!taskId} aria-label="放弃购买任务">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M12 5v14M5 12h14" /></svg>
-        </button>
-      </div>
-
-      {introductionStatus === 'running' && <p role="status" aria-label="结果介绍进度" className="px-6 py-2 text-xs text-black/50">正在补充介绍，已有结果可以继续操作。 <button type="button" aria-label="停止结果介绍" onClick={stopIntroduction}>停止介绍</button></p>}
-      {introductionStatus && ['failed', 'deadline'].includes(introductionStatus) && <p role="status" className="px-6 py-2 text-xs text-black/50">介绍未完成，已有结果仍保留。</p>}
-      {introductionStatus === 'stopped' && <p role="status" className="px-6 py-2 text-xs text-black/50">介绍已停止，已有结果仍保留。</p>}
-      <div className="scrollbar-hide flex-1 space-y-5 overflow-y-auto px-6 py-5">
-        {historyReminder && <div className="rounded-2xl bg-amber-50 p-3 text-[12px]" aria-label="历史采购提醒"><p>{historyReminder.message}</p><div className="mt-2 flex gap-3"><button disabled={typing || confirming} onClick={() => void handleHistorySelect(historyReminder.source_task_id)}>按当前条件重新准备</button><button disabled={typing || confirming} onClick={handleHistoryDismiss}>不再提醒</button></div></div>}
-        {historySources && <div className="rounded-2xl bg-black/[0.03] p-3 text-[12px]" aria-label="历史方案来源"><p>{historySources.length ? '请选择历史来源，选择后仍需核对新清单并单独确认加购。' : '目前没有历史方案。'}</p>{historySources.map(source => <button key={source.task_id} disabled={typing || confirming} aria-label={`重新采购 ${source.task_id}`} onClick={() => void handleHistorySelect(source.task_id)} className="mt-2 block rounded-xl bg-white px-3 py-2 text-left">{source.goal || '历史采购'} · {source.task_id.slice(-8)}</button>)}</div>}
-        {restoring && <p className="text-center text-sm text-black/40">正在连接可可…</p>}
-        {error && <p className="text-center text-xs text-red-600">{error}</p>}
-        {msgs.map(msg => (
-          <div key={msg.id} className={`flex items-end gap-2.5 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-            {msg.role === 'ai' && <KekeAvatar size={26} />}
-            <div className={`flex max-w-[82%] flex-col gap-2.5 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
-              {msg.text ? (
-                <div className="px-4 py-3 text-[13px] font-medium leading-[1.7] tracking-[-0.015em]"
-                  style={{
-                    borderRadius: msg.role === 'user' ? '24px 24px 8px 24px' : '24px 24px 24px 8px',
-                    background: msg.role === 'user' ? '#171716' : '#f2f1ed',
-                    color: msg.role === 'user' ? '#fff' : '#292825',
-                  }}>
-                  {msg.generalExplanation && <p className="mb-1 text-[10px] font-normal text-black/45" title="通用知识解释，不是门店事实或商业操作回执">通用解释</p>}
-                  {formatText(stripDuplicateClarificationOptions(msg.text, msg.suggestions))}
-                </div>
-              ) : msg.role === 'ai' && typing && !progressText ? (
-                <div
-                  className="ai-loading-bubble px-4 py-3 text-[13px] font-medium leading-[1.7] tracking-[-0.015em]"
-                  style={{
-                    borderRadius: '24px 24px 24px 8px',
-                    background: '#f2f1ed',
-                    color: '#292825',
-                  }}>
-                  <span className="ai-loading-ellipsis" aria-label="可可正在输入">
-                    <span className="ai-loading-ellipsis__dot" aria-hidden="true">.</span>
-                    <span className="ai-loading-ellipsis__dot" aria-hidden="true">.</span>
-                    <span className="ai-loading-ellipsis__dot" aria-hidden="true">.</span>
-                  </span>
-                </div>
-              ) : null}
-              {msg.question && <QuestionChoices
-                question={msg.question}
-                disabled={typing || confirming || restoring || questionBusy}
-                onAnswer={(optionIds, quantities) => handleQuestionAnswer(msg.question!, optionIds, quantities)}
-              />}
-              <ComparisonCards cards={msg.productCards ?? []} disabled={typing || confirming || restoring} onSelect={text => { void send(text) }} />
-              {msg.suggestions && !msg.question && msg.role === 'ai' && !typing && !confirming && (
-                <div className="flex w-full flex-col gap-1.5">
-                  {msg.suggestions.map((s, i) => (
-                    <button key={i} onClick={() => send(s)} className="rounded-full bg-[#f5f4f0] px-4 py-2.5 text-left text-[12px] font-medium text-black/55 transition hover:bg-[#eceae4] active:scale-[.98]">
-                      <span className="mr-2 text-[10px] font-semibold text-[#d79b58]">✦</span>
-                      {s}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
+    <RoleChatFrame
+      activeRole="keke"
+      agentAvatar={<KekeAvatar size={40} animated />}
+      agentName="可可"
+      statusLine={
+        progressText ? (
+          <div data-guide-action-line className="h-4 overflow-hidden" aria-live="polite">
+            <p key={progressText} className="guide-action-roll">{progressText}</p>
           </div>
-        ))}
-        <div ref={bottomRef} />
-      </div>
-
-      <div className="relative flex-shrink-0 bg-[#f7f5f0]/75 px-5 pb-4 pt-2">
-        {openSheet && !checkoutPhase && (
+        ) : undefined
+      }
+      navigation={navigation}
+      threadBanner={introductionBanner}
+      bottomRef={bottomRef}
+      toolRow={
+        <ChatGuideCapsules
+          openSheet={openSheet}
+          onToggle={sheet => setOpenSheet(prev => (prev === sheet ? null : sheet))}
+          planCount={planItemCount}
+          cartCount={cartCount}
+          navigation={navigation}
+        />
+      }
+      composerPlusActions={kekePlusActions}
+      sheetSlot={
+        openSheet && !checkoutPhase ? (
           <ChatFloatingSheet onClose={() => setOpenSheet(null)}>
             {openSheet === 'activity' && <ActivitySheetContent />}
             {openSheet === 'plan' && (
@@ -1726,8 +1698,12 @@ function ChatScreen({
                 ? (
                   <PlanSheetContent
                     plan={plan}
-                    onChangeDish={handleChangeDish} onChoosePartial={handleChoosePartial} onChooseAlternative={handleChooseAlternative}
-                    onToggleItem={skuId => handleRevisePlanItem(skuId)} onChangeQuantity={handleRevisePlanItem} onAcceptQuote={handleAcceptQuote}
+                    onChangeDish={handleChangeDish}
+                    onChoosePartial={handleChoosePartial}
+                    onChooseAlternative={handleChooseAlternative}
+                    onToggleItem={skuId => handleRevisePlanItem(skuId)}
+                    onChangeQuantity={handleRevisePlanItem}
+                    onAcceptQuote={handleAcceptQuote}
                     onAddItem={handleAddPlanItem}
                     confirming={confirming}
                     canConfirm={canConfirm}
@@ -1771,37 +1747,117 @@ function ChatScreen({
                 : <CartEmptySheetContent />
             )}
           </ChatFloatingSheet>
-        )}
-        <ChatGuideCapsules
-          openSheet={openSheet}
-          onToggle={(sheet) => setOpenSheet(prev => (prev === sheet ? null : sheet))}
-          planCount={planItemCount}
-          cartCount={cartCount}
-        />
-        <div className="flex items-center gap-2 rounded-[28px] bg-white/85 px-4 py-2.5 backdrop-blur-sm">
-          <input
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            onKeyDown={e => { if (e.key === 'Enter') send(input) }}
-            placeholder="问问可可吧…"
-            disabled={restoring}
-            className="min-w-0 flex-1 bg-transparent text-[13px] font-medium text-[#1d1c1a] outline-none placeholder:text-black/30"
+        ) : null
+      }
+      composer={{
+        value: input,
+        onChange: setInput,
+        onSend: () => void send(input),
+        placeholder: '问问可可吧…',
+        disabled: restoring,
+        sendDisabled: !input.trim() || !sessionId || confirming || restoring,
+      }}
+      overlay={
+        checkoutPhase === 'checkout' ? (
+          <SimulatedCheckout
+            onCartChange={onCartChange}
+            onClose={() => setCheckoutPhase(null)}
+            onViewOrders={() => {
+              setCheckoutPhase(null)
+              onViewOrders()
+            }}
           />
-          <button onClick={() => send(input)} disabled={!input.trim() || !sessionId || confirming || restoring}
-            className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full transition-all active:scale-90 ${input.trim() && !confirming && !restoring ? 'bg-[#171716]' : 'bg-[#eeece7]'}`}>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="white"><path d="M2 21L23 12 2 3v7l15 2-15 2z" /></svg>
-          </button>
+        ) : undefined
+      }
+    >
+      {historyReminder && (
+        <div className="rounded-2xl bg-amber-50 p-3 text-[12px]" aria-label="历史采购提醒">
+          <p>{historyReminder.message}</p>
+          <div className="mt-2 flex gap-3">
+            <button disabled={typing || confirming} onClick={() => void handleHistorySelect(historyReminder.source_task_id)}>按当前条件重新准备</button>
+            <button disabled={typing || confirming} onClick={handleHistoryDismiss}>不再提醒</button>
+          </div>
         </div>
-      </div>
-
-      {checkoutPhase === 'checkout' && (
-        <SimulatedCheckout
-          onCartChange={onCartChange}
-          onClose={() => setCheckoutPhase(null)}
-          onViewOrders={() => { setCheckoutPhase(null); onViewOrders() }}
-        />
       )}
-    </section>
+      {historySources && (
+        <div className="rounded-2xl bg-black/[0.03] p-3 text-[12px]" aria-label="历史方案来源">
+          <p>{historySources.length ? '请选择历史来源，选择后仍需核对新清单并单独确认加购。' : '目前没有历史方案。'}</p>
+          {historySources.map(source => (
+            <button
+              key={source.task_id}
+              disabled={typing || confirming}
+              aria-label={`重新采购 ${source.task_id}`}
+              onClick={() => void handleHistorySelect(source.task_id)}
+              className="mt-2 block rounded-xl bg-white px-3 py-2 text-left"
+            >
+              {source.goal || '历史采购'} · {source.task_id.slice(-8)}
+            </button>
+          ))}
+        </div>
+      )}
+      {restoring && <p className="text-center text-sm text-black/40">正在连接可可…</p>}
+      {error && <p className="text-center text-xs text-red-600">{error}</p>}
+      {msgs.map(msg => (
+        <div key={msg.id} className={`flex items-end gap-2.5 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
+          {msg.role === 'ai' && <KekeAvatar size={26} />}
+          <div className={`flex max-w-[82%] flex-col gap-2.5 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
+            {msg.text ? (
+              <div
+                className="px-4 py-3 text-[13px] font-medium leading-[1.7] tracking-[-0.015em]"
+                style={{
+                  borderRadius: msg.role === 'user' ? '24px 24px 8px 24px' : '24px 24px 24px 8px',
+                  background: msg.role === 'user' ? '#171716' : '#f2f1ed',
+                  color: msg.role === 'user' ? '#fff' : '#292825',
+                }}
+              >
+                {msg.generalExplanation && (
+                  <p className="mb-1 text-[10px] font-normal text-black/45" title="通用知识解释，不是门店事实或商业操作回执">通用解释</p>
+                )}
+                {formatText(stripDuplicateClarificationOptions(msg.text, msg.suggestions))}
+              </div>
+            ) : msg.role === 'ai' && typing && !progressText ? (
+              <div
+                className="ai-loading-bubble px-4 py-3 text-[13px] font-medium leading-[1.7] tracking-[-0.015em]"
+                style={{
+                  borderRadius: '24px 24px 24px 8px',
+                  background: '#f2f1ed',
+                  color: '#292825',
+                }}
+              >
+                <span className="ai-loading-ellipsis" aria-label="可可正在输入">
+                  <span className="ai-loading-ellipsis__dot" aria-hidden="true">.</span>
+                  <span className="ai-loading-ellipsis__dot" aria-hidden="true">.</span>
+                  <span className="ai-loading-ellipsis__dot" aria-hidden="true">.</span>
+                </span>
+              </div>
+            ) : null}
+            {msg.question && (
+              <QuestionChoices
+                question={msg.question}
+                disabled={typing || confirming || restoring || questionBusy}
+                onAnswer={(optionIds, quantities) => handleQuestionAnswer(msg.question!, optionIds, quantities)}
+              />
+            )}
+            <ComparisonCards cards={msg.productCards ?? []} disabled={typing || confirming || restoring} onSelect={text => { void send(text) }} />
+            {msg.suggestions && !msg.question && msg.role === 'ai' && !typing && !confirming && (
+              <div className="flex w-full flex-col gap-1.5">
+                {msg.suggestions.map((s, i) => (
+                  <button
+                    key={`${msg.id}-${i}`}
+                    type="button"
+                    onClick={() => void send(s)}
+                    className="rounded-full bg-[#f5f4f0] px-4 py-2.5 text-left text-[12px] font-medium text-black/55 transition hover:bg-[#eceae4] active:scale-[.98]"
+                  >
+                    <span className="mr-2 text-[10px] font-semibold text-[#d79b58]">✦</span>
+                    {s}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      ))}
+    </RoleChatFrame>
   )
 }
 
@@ -2101,10 +2157,37 @@ function ShoppingApp() {
     }
   }
 
+  const chatNavigation: RoleChatNavigationProps | undefined = chatOpen && navigation
+    ? {
+        view: view === 'momo' ? 'momo' : 'keke',
+        navigationBusy,
+        navigationReady: true,
+        navigationError,
+        routePrompt,
+        onSwitchRole: role => void switchChatRole(role),
+        onClose: () => void leaveChat(view === 'momo' ? 'orders' : 'shelf'),
+        onRouteAccept: () => {
+          if (routePrompt) void switchChatRole(routePrompt.target_role, true, routePrompt.routing_request_id)
+        },
+        onRouteDecline: () => {
+          if (routePrompt) void switchChatRole(routePrompt.target_role, false, routePrompt.routing_request_id)
+        },
+        onRetryAck: () => {
+          if (!navigation || !routePrompt) return
+          void ackPrompt(navigation.sessionId, navigation.opening.opening_id, routePrompt.routing_request_id)
+            .then(opening => {
+              setNavigation({ ...navigation, opening })
+              setNavigationError(null)
+            })
+            .catch(error => setNavigationError(`提示确认失败：${error.message}`))
+        },
+      }
+    : undefined
+
   return (
     <main onClickCapture={trackInteraction} onKeyDownCapture={trackInteraction} onChangeCapture={trackInteraction} className="box-border min-h-dvh bg-[#eaf1ed] p-0 sm:p-8" style={{ fontFamily: "'Noto Sans SC', 'Manrope', system-ui, sans-serif" }}>
       <div className="relative mx-auto flex h-dvh w-full max-w-[430px] flex-col overflow-hidden bg-[#F5F5F7] sm:h-[min(860px,calc(100dvh-4rem))] sm:rounded-[32px] sm:shadow-[0_24px_70px_rgba(38,64,51,0.16)]">
-        <div className="flex-1 overflow-hidden flex flex-col">
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
           {view === 'home' && (
             <LandingScreen
               onGoShelf={() => { activityNavigationEpoch.current += 1; setGuideFromHome(false); setView('shelf') }}
@@ -2122,37 +2205,48 @@ function ShoppingApp() {
               onSearchChange={setShelfSearch}
             />
           )}
-          {(view === 'orders' || view === 'momo') && <SimulatedOrdersScreen onContactOrder={(orderId) => { setMercuryEntry(current => ({orderId,sequence:current.sequence + 1})); setView('momo') }} />}
+          {(view === 'orders' || view === 'momo') && (
+            <SimulatedOrdersScreen
+              onContactOrder={orderId => {
+                setMercuryEntry(current => ({ orderId, sequence: current.sequence + 1 }))
+                setView('momo')
+              }}
+            />
+          )}
           {view === 'profile' && <ProfileScreen />}
         </div>
 
         <BottomNav view={view} onTap={handleNavTap} />
-        {chatOpen && (
+        {chatOpen && navigation && (
           <div className="absolute inset-x-0 bottom-[82px] top-0 z-10 flex flex-col justify-end bg-[#18261b]/20 backdrop-blur-[1px]">
-            <div className="guide-glass-surface mx-4 mb-2 rounded-[24px] p-3 shadow-lg" aria-label="角色导航">
-              <div className="flex items-center gap-2">
-                <button type="button" aria-pressed={view === 'keke'} disabled={navigationBusy || !navigation} onClick={() => void switchChatRole('keke')} className="rounded-full bg-[#e0ecdd] px-4 py-2 text-xs">可可 · 选购</button>
-                <button type="button" aria-pressed={view === 'momo'} disabled={navigationBusy || !navigation} onClick={() => void switchChatRole('momo')} className="rounded-full bg-[#fff0c2] px-4 py-2 text-xs">墨墨 · 订单售后</button>
-                <button type="button" aria-label="关闭聊天" disabled={navigationBusy} onClick={() => void leaveChat(view === 'momo' ? 'orders' : 'shelf')} className="ml-auto rounded-full px-3 py-2">×</button>
-              </div>
-              {navigationBusy && <p className="mt-2 text-xs" role="status">正在连接角色…</p>}
-              {navigationError && <p className="mt-2 text-xs text-red-700" role="alert">{navigationError}</p>}
-              {routePrompt && <div className="mt-2 text-sm" role="status"><p>{routePrompt.message}</p><div className="mt-2 flex gap-3">
-                <button disabled={navigationBusy} onClick={() => void switchChatRole(routePrompt.target_role, true, routePrompt.routing_request_id)}>切换并继续原请求</button>
-                <button disabled={navigationBusy} onClick={() => void switchChatRole(routePrompt.target_role, false, routePrompt.routing_request_id)}>留在这里</button>
-                {navigationError?.startsWith('提示确认失败') && <button onClick={() => { if (navigation) void ackPrompt(navigation.sessionId, navigation.opening.opening_id, routePrompt.routing_request_id).then(opening => {setNavigation({...navigation,opening});setNavigationError(null)}).catch(error => setNavigationError(`提示确认失败：${error.message}`)) }}>重试确认</button>}
-              </div></div>}
-            </div>
             <div className={view === 'keke' ? '' : 'hidden'}>
-              {navigation && <ChatScreen active={view === 'keke'} interactionEpoch={interactionEpoch} interactionVersion={interactionVersion} onInteraction={trackInteraction}
-                viewContext={guideViewContext} onCartRefresh={refreshCart}
-                cart={cart} onCartChange={setCart} onViewOrders={() => void leaveChat('orders')}
-                beforeText={beforeText} handoff={handoff?.role === 'keke' ? handoff : null} onHandoffDone={clearHandoff}
-              />}
+              <ChatScreen
+                active={view === 'keke'}
+                interactionEpoch={interactionEpoch}
+                interactionVersion={interactionVersion}
+                onInteraction={trackInteraction}
+                viewContext={guideViewContext}
+                onCartRefresh={refreshCart}
+                cart={cart}
+                onCartChange={setCart}
+                onViewOrders={() => void leaveChat('orders')}
+                beforeText={beforeText}
+                handoff={handoff?.role === 'keke' ? handoff : null}
+                onHandoffDone={clearHandoff}
+                navigation={chatNavigation}
+              />
             </div>
             <div className={view === 'momo' ? '' : 'hidden'}>
-              {navigation && <MercuryChat visible={view === 'momo'} initialOrderId={mercuryEntry.orderId} entrySequence={mercuryEntry.sequence} onOrderEntryConsumed={consumeMercuryEntry}
-                beforeText={beforeText} handoff={handoff?.role === 'momo' ? handoff : null} onHandoffDone={clearHandoff} />}
+              <MercuryChat
+                visible={view === 'momo'}
+                initialOrderId={mercuryEntry.orderId}
+                entrySequence={mercuryEntry.sequence}
+                onOrderEntryConsumed={consumeMercuryEntry}
+                beforeText={beforeText}
+                handoff={handoff?.role === 'momo' ? handoff : null}
+                onHandoffDone={clearHandoff}
+                navigation={chatNavigation}
+              />
             </div>
           </div>
         )}
