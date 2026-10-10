@@ -75,7 +75,7 @@ def pi_client(tmp_path, monkeypatch):
                 delta = {'role': 'assistant', 'content': '[]'}
                 reason = 'stop'
             elif any('帮我选可乐包装' in json.dumps(m.get('content'), ensure_ascii=False) for m in body['messages'] if m['role'] == 'user'):
-                delta = {'role': 'assistant', 'content': json.dumps({'status': 'waiting', 'product_refs': [], 'clarification_slot': 'packaging', 'question': '你想看罐装还是瓶装可乐？'})}
+                delta = {'role': 'assistant', 'content': json.dumps({'status': 'waiting', 'clarification_slot': 'packaging', 'question': '你想看罐装还是瓶装可乐？'})}
                 reason = 'stop'
             elif any('一直查可乐' in json.dumps(m.get('content'), ensure_ascii=False) for m in body['messages'] if m['role'] == 'user'):
                 delta = {'role': 'assistant', 'tool_calls': [{'index': 0, 'id': f'search-{len(tool_messages)}', 'type': 'function', 'function': {'name': 'search_products', 'arguments': json.dumps({'query': '可乐'})}}]}
@@ -295,7 +295,7 @@ def test_explicit_stop_kills_inflight_pi_query_without_a_late_product_reply(pi_c
     assert client.get('/api/v1/guide/sessions/pi-session-a').status_code == 200
 
 
-def test_pi_deadline_closes_inflight_provider_at_thirty_seconds_without_retry(pi_client):
+def test_pi_deadline_closes_inflight_provider_at_fifteen_seconds_without_retry(pi_client):
     client, requests = pi_client
     started_at = time.monotonic()
     response = client.post('/api/v1/guide/sessions/pi-session-a/turns/stream', json={'request_id': 'pi-deadline-1', 'message': '受控慢查询可乐', 'expected_state_version': 0, 'expected_session_version': 0})
@@ -306,8 +306,8 @@ def test_pi_deadline_closes_inflight_provider_at_thirty_seconds_without_retry(pi
     assert result['runtime_status'] == 'deadline'
     assert result['tool_rounds'] == 0
     assert result['answer_status'] == 'failed'
-    assert '30 秒' in result['message']
-    assert 29.5 <= elapsed < 33
+    assert '15 秒' in result['message']
+    assert 14.5 <= elapsed < 18
     assert len(requests) == 1
     requests.release.set()
 
@@ -391,9 +391,9 @@ def test_empty_model_selection_is_not_misreported_as_empty_catalog_evidence(pi_c
 def test_spent_http_admission_budget_cannot_start_a_fresh_pi_exploration(pi_client, tmp_path):
     client, requests = pi_client
     # External infrastructure fault: hold the actual isolated SQLite write lock,
-    # so receipt admission takes longer than the accepted request's 30s budget.
+    # so receipt admission takes longer than the accepted request's 15s budget.
     # Extend this fixture connection's SQLite wait beyond the product deadline,
-    # otherwise SQLite's independent 30s busy timeout wins first.
+    # otherwise SQLite's independent busy timeout wins first.
     from sqlalchemy import event
     def allow_long_test_lock(dbapi_connection, *_args):
         cursor = dbapi_connection.cursor()
@@ -402,7 +402,7 @@ def test_spent_http_admission_budget_cannot_start_a_fresh_pi_exploration(pi_clie
     event.listen(requests.engine, 'checkout', allow_long_test_lock)
     blocker = sqlite3.connect(tmp_path / 'runtime.sqlite3', check_same_thread=False)
     blocker.execute('BEGIN IMMEDIATE')
-    release = threading.Timer(31, blocker.commit)
+    release = threading.Timer(16, blocker.commit)
     release.start()
     started_at = time.monotonic()
     try:
@@ -416,9 +416,9 @@ def test_spent_http_admission_budget_cannot_start_a_fresh_pi_exploration(pi_clie
     assert events[-1]['type'] == 'turn.completed', events
     assert events[-1]['payload']['runtime_status'] == 'deadline'
     assert len(requests) == 0
-    # The blocked DB itself needs 31s to return; there is no fresh exploration
-    # after it releases and no promise that a blocked DB response ends at 30s.
-    assert elapsed < 34
+    # The blocked DB itself needs 16s to return; there is no fresh exploration
+    # after it releases and no promise that a blocked DB response ends at 15s.
+    assert elapsed < 19
 
 
 def test_changed_session_revision_fences_a_slow_pi_reply(pi_client):
@@ -503,7 +503,7 @@ def test_actual_pi_stdio_contract_emits_sdk_events_and_scoped_tool_requests(pi_c
         child.stdin.write((json.dumps({**frame, 'run_id': 'ipc-proof-run', 'sequence': input_sequence}) + '\n').encode())
 
     try:
-        send({'type': 'start', 'message': '协议查可乐', 'categories': [{'id': 'beverage', 'name_zh': '饮料'}], 'context': {'capability': 'factual_qa', 'has_active_task': False, 'general_history': []}, 'promptModules': keke_modules(), 'model': {'id': settings.llm_model, 'baseUrl': settings.openai_base_url, 'apiKey': settings.openai_api_key}, 'maxToolRounds': 5, 'timeoutMs': 30000})
+        send({'type': 'start', 'message': '协议查可乐', 'categories': [{'id': 'beverage', 'name_zh': '饮料'}], 'context': {'role': 'keke', 'has_active_task': False, 'general_history': []}, 'promptModules': keke_modules(), 'model': {'id': settings.llm_model, 'baseUrl': settings.openai_base_url, 'apiKey': settings.openai_api_key}, 'maxToolRounds': 5, 'timeoutMs': 30000})
         until = time.monotonic() + 10
         while time.monotonic() < until:
             if not selector.select(timeout=0.2):
@@ -533,8 +533,17 @@ def test_actual_pi_stdio_contract_emits_sdk_events_and_scoped_tool_requests(pi_c
         assert terminal['status'] == 'completed'
         assert json.loads(terminal['answer'])['product_refs'] == [product['ref']]
         events = [frame['event']['type'] for frame in frames if frame['type'] == 'event']
-        assert events[0] == 'agent_start'
-        assert events[-1] == 'agent_end'
+        assert events[0] == 'runtime_version'
+        version = frames[0]['event']
+        assert set(version) == {'type', 'build_revision', 'build_scope', 'prompt_revision'}
+        assert version['build_scope'] == 'worker_disk_at_start'
+        assert all(len(version[key]) == 64 and all(character in '0123456789abcdef' for character in version[key])
+                   for key in ('build_revision', 'prompt_revision'))
+        sdk_events = [event for event in events if event not in ('runtime_version', 'provider_call_start', 'provider_call_end')]
+        assert sdk_events[0] == 'agent_start'
+        assert sdk_events[-1] == 'agent_end'
+        assert sdk_events.index('agent_start') < sdk_events.index('turn_start') < sdk_events.index('tool_execution_start')
+        assert sdk_events.index('tool_execution_start') < sdk_events.index('tool_execution_end') < sdk_events.index('agent_end')
         assert events.count('tool_execution_end') == 2
         assert len(requests) == 3
         assert settings.openai_api_key not in json.dumps(frames)

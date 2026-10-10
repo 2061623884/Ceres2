@@ -52,7 +52,7 @@ async function run(start:Start) {
   const seen=new Set<string>();
   const generationUsage=observeUsage();
   const agent=new Agent({initialState:{model,thinkingLevel:'off',tools:[],systemPrompt:start.prompt},streamFn:(_model,context,options)=>{
-    const samplingParams=officialDeepSeekSampling(start.model.baseUrl, options?.samplingParams);
+    const samplingParams=officialDeepSeekSampling(start.model.baseUrl,options?.samplingParams);
     return streamSimple(model,context,{...options,apiKey:start.model.apiKey,maxTokens:512,onProviderStreamEvent:generationUsage.onEvent,...(samplingParams?{samplingParams}:{})});
   }});
   const stop=(error:unknown, fallback='generation_provider')=>{
@@ -71,7 +71,7 @@ async function run(start:Start) {
     if(failed) return;
     const validationUsage=observeUsage();
     validator=new Agent({initialState:{model,thinkingLevel:'off',tools:[],systemPrompt:GENERAL_CLAIM_PROMPT},streamFn:(_model,context,options)=>{
-      const samplingParams=officialDeepSeekSampling(start.model.baseUrl, options?.samplingParams);
+      const samplingParams=officialDeepSeekSampling(start.model.baseUrl,options?.samplingParams);
       return streamSimple(model,context,{...options,apiKey:start.model.apiKey,maxTokens:256,onProviderStreamEvent:validationUsage.onEvent,...(samplingParams?{samplingParams}:{})});
     }});
     validator.subscribe(event=>{

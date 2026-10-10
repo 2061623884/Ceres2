@@ -17,7 +17,7 @@ def test_typed_choice_replay_and_cross_owner_are_bound_to_original_question(pi_c
     client, requests = pi_client
     q = open_question(client, requests)
     choice = q['options'][0]['option_id']
-    calls = len(controlled_kev_transport['calls'])
+    calls = len(controlled_kev_transport['entry_calls'])
     client.cookies.set('sg_owner_id', 'pi-owner-b')
     assert answer_question(client, q, [choice], 'foreign').status_code == 403
     client.cookies.set('sg_owner_id', 'pi-owner-a')
@@ -25,7 +25,7 @@ def test_typed_choice_replay_and_cross_owner_are_bound_to_original_question(pi_c
     replay = answer_question(client, q, [choice], 'same-choice')
     assert first.status_code == replay.status_code == 200
     assert first.json() == replay.json()
-    assert len(controlled_kev_transport['calls']) == calls, 'Typed choices never route through Kev'
+    assert len(controlled_kev_transport['entry_calls']) == calls, 'Typed choices never route through Kev'
     assert len(client.get(BASE).json()['question_history']) == 2
     assert answer_question(client, q, [q['options'][1]['option_id']], 'same-choice').status_code == 409
     assert client.get('/api/v1/cart').json()['items'] == []

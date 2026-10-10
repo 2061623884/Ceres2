@@ -1,0 +1,21 @@
+{
+  "source_commit": "8e6be367986d35afe6211642cb81172347844d0f",
+  "previous_source_commit": "ce90cc8c19e2e0c616a6a738759e17bb97eba239",
+  "source_purpose": "Tester-controlled synthetic browser/API fixture support",
+  "files_sha256": {
+    "launch_browser_fixture.py": "ea03056cff56b1841a6361cd64b4ee8ceacbfe72fc8479ad1e491c7a912ed032",
+    "fixture_backend.py": "bfc3428c9a3360c276d888b56df63b74ca05a868fdfaed4cc83392ada99fa49e",
+    "api_smoke.py": "67de61fdd6ce00b9c59cf65975177445ea7f3e9ee2e70e81cffbe18a6f3a9888",
+    "cua_http_contract.py": "238970c893b077d60f6610fac894ffa1dae879c983df5a0aec633bd5c89367ca",
+    "test_launcher_contract.py": "8d437174b0931419b5a0721cfee66a72e4b93c06a982bb43dc02ee9034d60338",
+    "README.md": "85296c00bbe385446a06f9d813a50df56fc32db7f090630cafdcf69330046a84"
+  },
+  "inclusion": "Exact frozen source only; no nested repository, generated state, DB, logs or dependencies",
+  "relocation_verification": {
+    "pin": "4cb670b0eb7847b8337e3a86cae7a3398e3f1715",
+    "label": "t09-packaged-helper-final-contracts",
+    "result": "4 passed /8.92s, stable source/harness; includes cleanup regression"
+  },
+  "cleanup_review": "Both axes close exact-owned-process-group cleanup P2",
+  "browser_acceptance": "blocked externally; never inferred from HTTP or DOM"
+}

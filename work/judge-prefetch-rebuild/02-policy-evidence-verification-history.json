@@ -1,0 +1,1355 @@
+{
+  "note": "Raw failures, early passes and superseded candidates are retained. Only final_repaired_gate entries establish the repaired02 verdict. Installation/harness-probe failures are distinct from product failures. The earlier191-case checkpoint completed normally before the freshness repair, not interrupted.",
+  "runs": [
+    {
+      "label": "02-independent-install",
+      "head": "4b576321317d6755cb2ef5845ceca6f89ba3e2b5",
+      "commands": [
+        [
+          "uv",
+          "venv",
+          "--python",
+          "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+          "backend/.venv"
+        ],
+        [
+          "uv",
+          "pip",
+          "install",
+          "--python",
+          "backend/.venv/bin/python",
+          "--index-url",
+          "https://pypi.org/simple",
+          "-r",
+          "backend/requirements.lock"
+        ]
+      ],
+      "exit_code": 2,
+      "elapsed_seconds": 4.119,
+      "pytest_summary": "error: Request failed after 3 retries in 4.0s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": null,
+      "source_manifest_sha256": "05e4e9ca1d0cabdd7169ad3d56a83003f8edc3ea4daa330f9a30738c8c01e09f",
+      "harness_sha256": null,
+      "record_sha256": "e1c346893002c4d481c5e2b082219cc2fc4fa484805acb38c79f78cb20ff2d40",
+      "output_sha256": "1e42a4e9c54797372eeddde1574abbcd656c6f5ba8ab1e0bfca9aab35ca89264",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-independent-offline-install",
+      "head": "4b576321317d6755cb2ef5845ceca6f89ba3e2b5",
+      "commands": [
+        [
+          "uv",
+          "pip",
+          "install",
+          "--offline",
+          "--link-mode",
+          "copy",
+          "--python",
+          "backend/.venv/bin/python",
+          "--index-url",
+          "https://pypi.org/simple",
+          "-r",
+          "backend/requirements.lock"
+        ],
+        [
+          "npm",
+          "ci",
+          "--offline",
+          "--registry=https://registry.npmjs.org",
+          "--no-audit",
+          "--no-fund"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 3.608,
+      "pytest_summary": null,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": null,
+      "source_manifest_sha256": "05e4e9ca1d0cabdd7169ad3d56a83003f8edc3ea4daa330f9a30738c8c01e09f",
+      "harness_sha256": null,
+      "record_sha256": "8601b0ee95fbbd1c9ef7bfe081c4ef2d036b272ac1af9eed85549ff84a952979",
+      "output_sha256": "7370c103fb32bcccd4b891c94a89996d1bf85e0e466953f87a2483596e6d392b",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-initial-dependencies",
+      "head": "4b576321317d6755cb2ef5845ceca6f89ba3e2b5",
+      "commands": [
+        [
+          "bash",
+          "-c",
+          "uv pip check --python backend/.venv/bin/python && backend/.venv/bin/python -c 'from importlib.metadata import version; from pathlib import Path; pairs=[line.split(\"==\") for line in Path(\"backend/requirements.lock\").read_text().splitlines() if line and not line.startswith(\"#\")]; mismatches=[(name,expected,version(name)) for name,expected in pairs if version(name)!=expected]; assert not mismatches,mismatches; print(f\"All {len(pairs)} locked Python package versions match\")' && cd runtime/pi && npm ls --depth=0"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.446,
+      "pytest_summary": null,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": null,
+      "source_manifest_sha256": "05e4e9ca1d0cabdd7169ad3d56a83003f8edc3ea4daa330f9a30738c8c01e09f",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "e38e2088dd0d6d2a53c6ae3cf3f556bfc5b08d3e36da9486fb9353c0c292ae80",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "3876b30037466298b8ad2ff73e8c3f7dab2c3f63d54d06e7a6fcf4feb7321e63"
+      },
+      "record_sha256": "a84c5b7e00e15809c7c4bbab8912c786e4627408c7de6a1e2ec43c8168b95613",
+      "output_sha256": "25a35ce73c4b54d9590f9925d7208777b2f2efc9528fedb9405cd8dc522ad1f9",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-initial-pi-build",
+      "head": "4b576321317d6755cb2ef5845ceca6f89ba3e2b5",
+      "commands": [
+        [
+          "bash",
+          "-c",
+          "npm run typecheck && npm run build"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 7.215,
+      "pytest_summary": null,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": null,
+      "source_manifest_sha256": "05e4e9ca1d0cabdd7169ad3d56a83003f8edc3ea4daa330f9a30738c8c01e09f",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "e38e2088dd0d6d2a53c6ae3cf3f556bfc5b08d3e36da9486fb9353c0c292ae80",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "3876b30037466298b8ad2ff73e8c3f7dab2c3f63d54d06e7a6fcf4feb7321e63"
+      },
+      "record_sha256": "833417aa5f4af3e309bdaaabfd33fa5763294628a5b6e006d141f76bbfce5472",
+      "output_sha256": "e2df98651515bc2bdf7ded57bfdb21a18a37cf1c97b5b8b2ffc76b2efce266d0",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-initial-isolation-smoke",
+      "head": "4b576321317d6755cb2ef5845ceca6f89ba3e2b5",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "tests/test_controlled_test_isolation.py",
+          "tests/test_runtime_pi_product_query.py::test_product_query_uses_pi_search_then_details_and_persists_grounded_reply",
+          "tests/test_mercury_wire.py::test_public_query_uses_installed_sdk_http_tool_contract"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 6.603,
+      "pytest_summary": "3 passed in 5.09s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": null,
+      "source_manifest_sha256": "05e4e9ca1d0cabdd7169ad3d56a83003f8edc3ea4daa330f9a30738c8c01e09f",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "e38e2088dd0d6d2a53c6ae3cf3f556bfc5b08d3e36da9486fb9353c0c292ae80",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "3876b30037466298b8ad2ff73e8c3f7dab2c3f63d54d06e7a6fcf4feb7321e63"
+      },
+      "record_sha256": "4c7f83e59ebffd8bb72616c4b520b4349115a055d914e0a3252ca0f043a64171",
+      "output_sha256": "9c06b15c7b9e8db2783710cb3d7e3bb0292b87425929e040e4c555d702c93f83",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-policy-evidence-red-01",
+      "head": "4b576321317d6755cb2ef5845ceca6f89ba3e2b5",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "tests/test_judge_policy_prefetch_public.py::test_yes_prefetch_is_actual_low_trust_input_and_registered_policy_evidence"
+        ]
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 3.352,
+      "pytest_summary": "1 failed in 2.27s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": null,
+      "source_manifest_sha256": "6baa886d32ddb1be4c59a58b6c0eabf7eabd7dcac03b18d822d1be9b8b9da906",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "e38e2088dd0d6d2a53c6ae3cf3f556bfc5b08d3e36da9486fb9353c0c292ae80",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "3876b30037466298b8ad2ff73e8c3f7dab2c3f63d54d06e7a6fcf4feb7321e63"
+      },
+      "record_sha256": "d8bac45720bd96b1b4ce909134e69025b0b2800f16d77fc8219b4e8c9e7d6f64",
+      "output_sha256": "603a8807df6e41f1032c5afe1da99be0abab95210d53f61a6390aa78b44dc35a",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-policy-evidence-build-01",
+      "head": "4b576321317d6755cb2ef5845ceca6f89ba3e2b5",
+      "commands": [
+        [
+          "bash",
+          "-c",
+          "npm run typecheck && npm run build"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 7.131,
+      "pytest_summary": null,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": null,
+      "source_manifest_sha256": "5758fe6b40cac279a77225ad70dfd1100a6ef1380c73e79e89014a4bf2cb04b1",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "e38e2088dd0d6d2a53c6ae3cf3f556bfc5b08d3e36da9486fb9353c0c292ae80",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "3876b30037466298b8ad2ff73e8c3f7dab2c3f63d54d06e7a6fcf4feb7321e63"
+      },
+      "record_sha256": "86f932bf438b8ed1d72d61e7fd06b90f4f08ab6f79e3da6507120d9271b187cf",
+      "output_sha256": "e2df98651515bc2bdf7ded57bfdb21a18a37cf1c97b5b8b2ffc76b2efce266d0",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-policy-evidence-green-01",
+      "head": "4b576321317d6755cb2ef5845ceca6f89ba3e2b5",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "tests/test_judge_policy_prefetch_public.py::test_yes_prefetch_is_actual_low_trust_input_and_registered_policy_evidence"
+        ]
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 3.159,
+      "pytest_summary": "1 failed in 2.08s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": null,
+      "source_manifest_sha256": "5758fe6b40cac279a77225ad70dfd1100a6ef1380c73e79e89014a4bf2cb04b1",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "e38e2088dd0d6d2a53c6ae3cf3f556bfc5b08d3e36da9486fb9353c0c292ae80",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "3876b30037466298b8ad2ff73e8c3f7dab2c3f63d54d06e7a6fcf4feb7321e63"
+      },
+      "record_sha256": "9e84d4088e560602de1838233ad3f0543e348dcd7a3f00c39ce0fa9e230b9b06",
+      "output_sha256": "a86cf0290f0dd71a7c3111f7c5f22b1396afb5fdde3a5dd547c6d37b53baa24f",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-policy-evidence-green-01-diagnostic",
+      "head": "4b576321317d6755cb2ef5845ceca6f89ba3e2b5",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-vv",
+          "--showlocals",
+          "tests/test_judge_policy_prefetch_public.py::test_yes_prefetch_is_actual_low_trust_input_and_registered_policy_evidence"
+        ]
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 3.214,
+      "pytest_summary": "============================== 1 failed in 2.12s ===============================",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": null,
+      "source_manifest_sha256": "5758fe6b40cac279a77225ad70dfd1100a6ef1380c73e79e89014a4bf2cb04b1",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "e38e2088dd0d6d2a53c6ae3cf3f556bfc5b08d3e36da9486fb9353c0c292ae80",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "3876b30037466298b8ad2ff73e8c3f7dab2c3f63d54d06e7a6fcf4feb7321e63"
+      },
+      "record_sha256": "6a31f351e74b323afeda7045d13bf7a4bd0e8816c6f800c3fe57217a1e9cf12d",
+      "output_sha256": "d627c33d1874eb424bf7bbd9b5ddaae1d1f2e7df30ba11bbcb731b611c698cfe",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-policy-evidence-green-01b",
+      "head": "4b576321317d6755cb2ef5845ceca6f89ba3e2b5",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "tests/test_judge_policy_prefetch_public.py::test_yes_prefetch_is_actual_low_trust_input_and_registered_policy_evidence"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 3.259,
+      "pytest_summary": "1 passed in 2.15s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": null,
+      "source_manifest_sha256": "feacd45159ac1098c616bd5a472cb1d246b57acbd3433868ff72877c4092c7cf",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "e38e2088dd0d6d2a53c6ae3cf3f556bfc5b08d3e36da9486fb9353c0c292ae80",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "3876b30037466298b8ad2ff73e8c3f7dab2c3f63d54d06e7a6fcf4feb7321e63"
+      },
+      "record_sha256": "a0881d0797d605319169f64913b596b82c660967ed97019bed48e2930ac66d1f",
+      "output_sha256": "484714eb4f0e6308d329b77c2b018b4f0c941a20f98722f0157d2c404dbbc11a",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-policy-evidence-red-02",
+      "head": "4b576321317d6755cb2ef5845ceca6f89ba3e2b5",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "tests/test_judge_policy_prefetch_public.py::test_policy_judgment_fallback_keeps_ordinary_pi_policy_tools"
+        ]
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 5.187,
+      "pytest_summary": "2 failed, 2 passed in 4.01s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": null,
+      "source_manifest_sha256": "73bade4660f5c5d70dfefb11ce008d084db955a141f83f43fc6ab0f4e9546b8f",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "e38e2088dd0d6d2a53c6ae3cf3f556bfc5b08d3e36da9486fb9353c0c292ae80",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "3876b30037466298b8ad2ff73e8c3f7dab2c3f63d54d06e7a6fcf4feb7321e63"
+      },
+      "record_sha256": "854ba5ccbae5f6e87d37f3481f0f10f629b7790227607ddc5ec8ee6c1d663cc1",
+      "output_sha256": "632f6bc098937bbd99d12eb500a60a4c7ea261815838f68fe490ea5840c5bd8d",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-policy-evidence-green-02",
+      "head": "4b576321317d6755cb2ef5845ceca6f89ba3e2b5",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "tests/test_judge_policy_prefetch_public.py",
+          "tests/test_judge_role_entry_public.py",
+          "tests/test_next_shared_policy_public.py",
+          "tests/test_final_review_compound_public.py"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 23.581,
+      "pytest_summary": "34 passed in 21.73s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": null,
+      "source_manifest_sha256": "b96f4559909a0b7027437d0c092c21791eb4a67ea4b5580e379bbbabfe74a414",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "e38e2088dd0d6d2a53c6ae3cf3f556bfc5b08d3e36da9486fb9353c0c292ae80",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "3876b30037466298b8ad2ff73e8c3f7dab2c3f63d54d06e7a6fcf4feb7321e63"
+      },
+      "record_sha256": "d527209eeba2392d91bf1d505f266d9239efabf1b93ca3aa439eb7a0fbdbcdb7",
+      "output_sha256": "2a97adb3cd6c5fa0db1a0465e2a4744bb45a9a4503650dcdfebbdc8ee9dafe71",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-policy-evidence-red-03",
+      "head": "4b3533cc7abdf4f4d3d776dfbce923fa2e3faf7b",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "tests/test_judge_policy_prefetch_public.py::test_prefetch_lookup_failure_is_observable_and_the_same_pi_can_recover"
+        ]
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 2.405,
+      "pytest_summary": "1 failed in 1.40s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": null,
+      "source_manifest_sha256": "4371f99519fbc318c56742f1ce3da5380b723659ab9b2705c208e524b1b408ad",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "e38e2088dd0d6d2a53c6ae3cf3f556bfc5b08d3e36da9486fb9353c0c292ae80",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "3876b30037466298b8ad2ff73e8c3f7dab2c3f63d54d06e7a6fcf4feb7321e63"
+      },
+      "record_sha256": "46210e54251190f156c1ba5e3fdec0cb51bb4428e6c3aa85fb2c892cb3f4867c",
+      "output_sha256": "5f4eec60bf907185cf9c7dc0ffedd491640a0fdddb6a607896cfba47501adc12",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-policy-evidence-green-03",
+      "head": "4b3533cc7abdf4f4d3d776dfbce923fa2e3faf7b",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "tests/test_judge_policy_prefetch_public.py"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 8.05,
+      "pytest_summary": "6 passed in 6.78s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": null,
+      "source_manifest_sha256": "07bfbb5c869bd68af1fe76d408aaa03b1bb4cb81782b961ba1002b84e295b865",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "e38e2088dd0d6d2a53c6ae3cf3f556bfc5b08d3e36da9486fb9353c0c292ae80",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "3876b30037466298b8ad2ff73e8c3f7dab2c3f63d54d06e7a6fcf4feb7321e63"
+      },
+      "record_sha256": "7a7b171586f3fd96ec6ba87a88b2278aa351c65a5415b2f25c45d1f0f918f28c",
+      "output_sha256": "6d04503e4a6e160ffe58bd95ede5ba2ae1c8cb700088cd0d10f49cb62d7c7177",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-node-guard-probe",
+      "head": "4b3533cc7abdf4f4d3d776dfbce923fa2e3faf7b",
+      "commands": [
+        [
+          "backend/.venv/bin/python",
+          "-c",
+          "import os,subprocess; code=\"const net=require(\\\"node:net\\\"),fs=require(\\\"node:fs\\\"); let blocked=0; try{new net.Socket().connect({host:\\\"guard-probe.invalid\\\",port:443})}catch(e){if(e.message===\\\"Controlled verification forbids non-loopback Node sockets\\\") blocked++} try{fs.readFileSync(\\\"guard-probe/.env\\\")}catch(e){if(e.message===\\\"Controlled verification forbids dotenv reads\\\") blocked++} if(blocked!==2) process.exit(1); console.log(\\\"Node child without NODE_OPTIONS: network and dotenv guards enforced\\\");\"; env={key:os.environ[key] for key in (\"PATH\",\"HOME\",\"NO_PROXY\")}; assert \"NODE_OPTIONS\" not in env; subprocess.run([\"node\",\"-e\",code],env=env,check=True)"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.057,
+      "pytest_summary": null,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": null,
+      "source_manifest_sha256": "d2942f83a35e95ad7cc18f51f5aa3ca609886b257220ee406fce736ee6525a28",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "82c3494f9bc9e67e42bbae098edfb4aee65fe59c57cdb3a0bacc376e6dafd172",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "3876b30037466298b8ad2ff73e8c3f7dab2c3f63d54d06e7a6fcf4feb7321e63"
+      },
+      "record_sha256": "b63c45676e3b038b6ddb00e71938f67742833383ea3e3b19ae81cd2868b1c0bd",
+      "output_sha256": "815bbc75a5842e90db64af0639f6d77bbb7c8ef47bab3f247119ceced747f049",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-node-guard-regression",
+      "head": "4b3533cc7abdf4f4d3d776dfbce923fa2e3faf7b",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "../work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py",
+          "tests/test_judge_policy_prefetch_public.py::test_yes_prefetch_is_actual_low_trust_input_and_registered_policy_evidence",
+          "tests/test_runtime_pi_product_query.py::test_product_query_uses_pi_search_then_details_and_persists_grounded_reply"
+        ]
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 4.949,
+      "pytest_summary": "1 failed, 3 passed in 3.84s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": null,
+      "source_manifest_sha256": "d2942f83a35e95ad7cc18f51f5aa3ca609886b257220ee406fce736ee6525a28",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "595d2998ddf890e43597986591bc62453383eab7f089fd0cafaf8d2426c5b41b",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "81360bf2d28558f26b6361e33262cdde6fb2c40be033306d2eb9d030eedaeadd"
+      },
+      "record_sha256": "99d4e7b46d75a21b187dc66d4b3504c48ecd3bd8f38b806a3901d99a44512d9c",
+      "output_sha256": "6192a693aaf0047b83a4d8a9fa3f63b9fb0eaa87c6e9e6c1cf4d5f9b9424689e",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-node-guard-regression-02",
+      "head": "4b3533cc7abdf4f4d3d776dfbce923fa2e3faf7b",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "../work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py",
+          "tests/test_judge_policy_prefetch_public.py::test_yes_prefetch_is_actual_low_trust_input_and_registered_policy_evidence",
+          "tests/test_runtime_pi_product_query.py::test_product_query_uses_pi_search_then_details_and_persists_grounded_reply"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 5.174,
+      "pytest_summary": "4 passed in 4.01s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": null,
+      "source_manifest_sha256": "d2942f83a35e95ad7cc18f51f5aa3ca609886b257220ee406fce736ee6525a28",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "3c56cb5192996c5dde31cffa4b5ddec37e56c1966cb4d267a877f99af078c6d7",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "81360bf2d28558f26b6361e33262cdde6fb2c40be033306d2eb9d030eedaeadd",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "dd4e796e955150c02b33ea6fee67b505220375c3b1f1c69a695d431e1a4c5e1f"
+      },
+      "record_sha256": "85c7c3d87081a2110366500618235afd9418a10cddef2d5b8a9b500b56baa98a",
+      "output_sha256": "2c4b4fd0db3b0b8aa4bcf8c8947b35f81e2867beddce83921384a636fc10d0d5",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-policy-evidence-red-04",
+      "head": "4b3533cc7abdf4f4d3d776dfbce923fa2e3faf7b",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "tests/test_judge_policy_prefetch_public.py"
+        ]
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 9.36,
+      "pytest_summary": "1 failed, 6 passed in 7.93s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": null,
+      "source_manifest_sha256": "d2942f83a35e95ad7cc18f51f5aa3ca609886b257220ee406fce736ee6525a28",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "3c56cb5192996c5dde31cffa4b5ddec37e56c1966cb4d267a877f99af078c6d7",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "81360bf2d28558f26b6361e33262cdde6fb2c40be033306d2eb9d030eedaeadd",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "dd4e796e955150c02b33ea6fee67b505220375c3b1f1c69a695d431e1a4c5e1f"
+      },
+      "record_sha256": "b0273f8fc6dc33a26aa5623179909843b758eba76e5a08f67f9918dbce711a16",
+      "output_sha256": "f76d4406c035ac1ef70279e2c35af117c4b2426cb6df20c0c4243e0f7c1643da",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-policy-evidence-green-04",
+      "head": "db99fc21dcad4bf1f5545b16c5e5e879ca0293a6",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "tests/test_judge_policy_prefetch_public.py",
+          "tests/test_judge_role_entry_public.py::test_mixed_fallback_retains_shopping_and_explicit_order_boundary",
+          "tests/test_judge_role_entry_public.py::test_specific_order_fallback_explains_boundary_with_explicit_typed_entry",
+          "tests/test_judge_role_entry_public.py::test_role_boundary_marker_requires_an_actual_boolean"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 14.967,
+      "pytest_summary": "13 passed in 13.48s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": null,
+      "source_manifest_sha256": "5f05efe5dc412a9d139b571daf08210566c8ff13a540864c66292663b952bebb",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "3c56cb5192996c5dde31cffa4b5ddec37e56c1966cb4d267a877f99af078c6d7",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "81360bf2d28558f26b6361e33262cdde6fb2c40be033306d2eb9d030eedaeadd",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "dd4e796e955150c02b33ea6fee67b505220375c3b1f1c69a695d431e1a4c5e1f"
+      },
+      "record_sha256": "7db561905bfd69a0548273b68c92114623c0e31a4ef6d68fcfb6e53c68db06ee",
+      "output_sha256": "4ae1925b166eef44578c1a46485b7de5901c4c32e04bb23d6739ab342e3c7264",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-policy-evidence-red-05",
+      "head": "db99fc21dcad4bf1f5545b16c5e5e879ca0293a6",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "tests/test_judge_policy_prefetch_public.py::test_general_units_keep_their_provenance_when_policy_and_boundary_are_appended"
+        ]
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 3.151,
+      "pytest_summary": "1 failed in 2.16s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": null,
+      "source_manifest_sha256": "88ff94a3ba54e2e06beb3d24659609a1bdfe11d338877c3d0a9ddbdb8ee09e99",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "3c56cb5192996c5dde31cffa4b5ddec37e56c1966cb4d267a877f99af078c6d7",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "81360bf2d28558f26b6361e33262cdde6fb2c40be033306d2eb9d030eedaeadd",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "dd4e796e955150c02b33ea6fee67b505220375c3b1f1c69a695d431e1a4c5e1f"
+      },
+      "record_sha256": "fe9bbe6de92dbda2f61abd287baead28e79a6e0f6add9c3bcd24ac326f0b08ba",
+      "output_sha256": "ab7ad69ebc21060fe1a5a191e44a70aed1633741ec7b7f6113a03eb9ae7f0f26",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-node-lookalike-guard-red",
+      "head": "db99fc21dcad4bf1f5545b16c5e5e879ca0293a6",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "../work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py::test_node_launcher_guards_child_without_node_options"
+        ]
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 0.799,
+      "pytest_summary": "1 failed in 0.47s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": null,
+      "source_manifest_sha256": "d540b533c4b2e36b4cd07e42ea39fbec018d3f4b0eb4caaffe8389df2f2fb384",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "3c56cb5192996c5dde31cffa4b5ddec37e56c1966cb4d267a877f99af078c6d7",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "81360bf2d28558f26b6361e33262cdde6fb2c40be033306d2eb9d030eedaeadd",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "a7e33a89812673f9042aa58203915cbb05fa562adcf90a796fd0d5171452c5d4",
+      "output_sha256": "b4ad590eca0ac5f104dc3b17d9e77380e237a0d700ad9de87f595826a07f4c8f",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-policy-evidence-green-05",
+      "head": "db99fc21dcad4bf1f5545b16c5e5e879ca0293a6",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "tests/test_judge_policy_prefetch_public.py",
+          "tests/test_guide_semantics.py",
+          "../work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 47.725,
+      "pytest_summary": "17 passed in 46.36s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": null,
+      "source_manifest_sha256": "d540b533c4b2e36b4cd07e42ea39fbec018d3f4b0eb4caaffe8389df2f2fb384",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "3c56cb5192996c5dde31cffa4b5ddec37e56c1966cb4d267a877f99af078c6d7",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "27458a0ac2d6d3c9621bef647ea9fadd791d5e68b569fbc78c660fd648bb0ff2",
+      "output_sha256": "e70dc3ee8f32cba5dee68b067a775a024336ff1da477be57fd623f453cc0ba29",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-node-guard-final-proof",
+      "head": "db99fc21dcad4bf1f5545b16c5e5e879ca0293a6",
+      "commands": [
+        [
+          "bash",
+          "-c",
+          ".venv/bin/python -c 'import sitecustomize; assert sitecustomize.local(\"127.0.0.1\"); assert sitecustomize.local(\"::1\"); assert not sitecustomize.local(\"127.guard-probe.invalid\"); assert not sitecustomize.local(\"192.0.2.1\"); print(\"Python strict-loopback predicate verified without any socket request\")' && .venv/bin/python -m pytest -p pytest_asyncio.plugin -q ../work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py tests/test_judge_policy_prefetch_public.py::test_yes_prefetch_is_actual_low_trust_input_and_registered_policy_evidence tests/test_runtime_pi_product_query.py::test_product_query_uses_pi_search_then_details_and_persists_grounded_reply"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 5.224,
+      "pytest_summary": "4 passed in 4.00s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "source_manifest_sha256": "2d17f1692c9d45e0666a62d16b65913258e4bf34a321c952ebd9251c2ee28451",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "27f7f2952ee7b68c68e656133145b3e4d6f1177e771f3fe69e2d6cd4345df2cb",
+      "output_sha256": "96dd8e68d75e8221bbdd6db985102c6f68beffedfe12ff0a309f006d5d135a9a",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-policy-evidence-red-06",
+      "head": "b3a6e6ae54eab6ac2b5d6245f34cc033ad142fd6",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "tests/test_judge_policy_prefetch_public.py::test_empty_and_partial_policy_facts_never_claim_complete_coverage"
+        ]
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 4.28,
+      "pytest_summary": "2 failed in 3.20s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "source_manifest_sha256": "2d17f1692c9d45e0666a62d16b65913258e4bf34a321c952ebd9251c2ee28451",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "8c3449824ccff8c1752631688e84f42b13f155f55f1723a98310404d55a0b008",
+      "output_sha256": "75f8537180e263b373b0b963276e2a01f54bef24e6a1d87eb1267d252c3664e0",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-policy-evidence-green-06",
+      "head": "b3a6e6ae54eab6ac2b5d6245f34cc033ad142fd6",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "tests/test_judge_policy_prefetch_public.py",
+          "tests/test_next_shared_policy_public.py",
+          "tests/test_final_review_compound_public.py"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 16.609,
+      "pytest_summary": "18 passed in 15.16s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "source_manifest_sha256": "845902bcbbf00d41aab4271a23d8edce4db44eb03f5092c11a927923fca6fbc2",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "55a2c622267a01c410b45cefa4ea271f04ee44d7cc2a0dcef9d8e41f2282b619",
+      "output_sha256": "ec3878adde1b0cc63b1b161e9861bff09d07f06c6490e2d55e14695767bece04",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-policy-evidence-red-07",
+      "head": "b3a6e6ae54eab6ac2b5d6245f34cc033ad142fd6",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "tests/test_judge_policy_prefetch_public.py::test_deadline_after_blocking_progress_prevents_the_next_policy_read"
+        ]
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 3.942,
+      "pytest_summary": "2 failed in 2.86s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "source_manifest_sha256": "889ffa0a18952831979c6ad46af9e3e0e5c312a614e1e31783137e81457b9870",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "a8de2ea6cdbc3196bc7a5ebe10c38e922d987db5e1309062baf3f90701fdea8d",
+      "output_sha256": "8cedc8719679ea564578b66584bd9cd8b3695fec8ff03420931e51ccf53e0db4",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-policy-evidence-green-07",
+      "head": "b3a6e6ae54eab6ac2b5d6245f34cc033ad142fd6",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "tests/test_judge_policy_prefetch_public.py",
+          "tests/test_runtime_pi_product_query.py::test_explicit_stop_kills_inflight_pi_query_without_a_late_product_reply",
+          "tests/test_runtime_pi_product_query.py::test_pi_deadline_closes_inflight_provider_at_thirty_seconds_without_retry",
+          "tests/test_runtime_pi_product_query.py::test_spent_http_admission_budget_cannot_start_a_fresh_pi_exploration",
+          "tests/test_runtime_pi_product_query.py::test_changed_session_revision_fences_a_slow_pi_reply",
+          "tests/test_runtime_pi_product_query.py::test_competing_revision_at_first_history_write_cannot_commit_stale_pi_answer"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 78.746,
+      "pytest_summary": "17 passed in 77.18s (0:01:17)",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "source_manifest_sha256": "f6e23f72dc4ea3aa0204b704c759994c95ebb51a1bd0d45c1d9336f287ee7c3d",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "d0aa383db3816063c81bc530773b59745d76c4b9af9deb0ea706065afc962fe5",
+      "output_sha256": "ff7eb8da0db9c17515161b749d27f99ce2e42388d1d51732d25f069eea996896",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-policy-evidence-red-08",
+      "head": "b3a6e6ae54eab6ac2b5d6245f34cc033ad142fd6",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "tests/test_judge_policy_prefetch_public.py::test_policy_facts_cannot_publish_after_a_blocking_final_transaction"
+        ]
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 4.628,
+      "pytest_summary": "2 failed in 3.50s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "source_manifest_sha256": "bd483e5c176a840e9f99fd537c23f689162432f6dce60d9446890f71b12bedcc",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "e00eb72efaa2ef7825df6fa02c62a830eb26f65df520e25246724cc2f45518bb",
+      "output_sha256": "90db4004be7acfe72f18f6b903a12a49bf9d64cf06eb726c5d76271168443527",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-policy-evidence-red-08b",
+      "head": "b3a6e6ae54eab6ac2b5d6245f34cc033ad142fd6",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "tests/test_judge_policy_prefetch_public.py::test_late_final_transaction_rolls_back_staged_business_writes"
+        ]
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 4.331,
+      "pytest_summary": "2 failed in 3.17s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "source_manifest_sha256": "d647c0c8707b2352bb8fc5e55f61af6ae76b251d83d81cf1ccd9f82641542298",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "deca4ec1193eefb841d52105d06d9a846a95b51462db656047f5c591cfa62138",
+      "output_sha256": "1b2c788ef013c3f8c3f989930c9bf6df574e56b0fab06a432e8495b6c91a2ec2",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-policy-evidence-green-08",
+      "head": "b3a6e6ae54eab6ac2b5d6245f34cc033ad142fd6",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "tests/test_judge_policy_prefetch_public.py",
+          "tests/test_purchase_public.py",
+          "tests/test_memory_atomic.py"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 25.726,
+      "pytest_summary": "19 passed in 24.14s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "source_manifest_sha256": "b16cfe1e8180e38e67823da2407dfb9a149ce3d4ce387a2d1b6881268cc87041",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "6b318128d88adca0e6f0a06db53ff6b7e0561807a986cca9eeffc1a92482a0fb",
+      "output_sha256": "2cdd5a5e81b53d5b7b8d30e67889a743061ce814876bc48f26a722e34463b919",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-policy-evidence-red-09",
+      "head": "79d34be1037a5fd910fd49bdb735afbea99b17b0",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "tests/test_judge_policy_prefetch_public.py::test_deterministic_fresh_text_runs_both_judges_once_without_a_pi_call",
+          "tests/test_judge_policy_prefetch_public.py::test_expired_policy_preparation_cannot_commit_literal_confirmation"
+        ]
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 5.039,
+      "pytest_summary": "3 failed in 3.81s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "source_manifest_sha256": "e217a63cfc662660d803c4597e537ee99c135714e2722a2a393ecd98c9bc7884",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "6e6d3d8a939bb66ba4070d15628531d3b0808f084342eb7273a6c1464bc6cd27",
+      "output_sha256": "38a63f65f56022696219796bd5f96aa4d4695953c499b6868bb9c927f51493a9",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-policy-evidence-green-09",
+      "head": "79d34be1037a5fd910fd49bdb735afbea99b17b0",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "tests/test_judge_policy_prefetch_public.py",
+          "tests/test_purchase_public.py",
+          "tests/test_memory_atomic.py"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 28.556,
+      "pytest_summary": "22 passed in 26.84s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "source_manifest_sha256": "c0e35f6b7fa9f6784753c168a54e79c2ab6106586cadeeb22aba39fea396c8ad",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "68b6ba806372d89cde5cca1deb3baa4801bade3c3e31101502a4f5bd388cd82b",
+      "output_sha256": "225db4127961e3eb964622f0cebc7a4c95456f44a5ffe8240e223c3ac2d7a689",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-policy-evidence-red-10",
+      "head": "79d34be1037a5fd910fd49bdb735afbea99b17b0",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "tests/test_judge_policy_prefetch_public.py::test_persistent_policy_failure_has_scoped_host_status_and_preserves_other_work"
+        ]
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 4.263,
+      "pytest_summary": "2 failed in 3.18s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "source_manifest_sha256": "3e703699aeebd0f2e8e5761301e2d055ef0866950cf7b7334e5a6347f3107528",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "66d08dd808232bf16782ff08bb0b595b32a3c42a5f0b26705274310786423957",
+      "output_sha256": "0125fc87f3995c3b1ce90a279ff63d3cc8bd07390700f1ad2b5d646f6c250503",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-policy-evidence-build-10",
+      "head": "79d34be1037a5fd910fd49bdb735afbea99b17b0",
+      "commands": [
+        [
+          "bash",
+          "-c",
+          "npm run typecheck && npm run build"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 7.749,
+      "pytest_summary": null,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "source_manifest_sha256": "9e9fa18a7e0c0024357128b24c3bac4181586817ac6fd605731959aa4f970770",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "7316cb0297b5ad4edfc73025b39adceb6d6edf6906babcf24706d34b5de0e3f5",
+      "output_sha256": "e2df98651515bc2bdf7ded57bfdb21a18a37cf1c97b5b8b2ffc76b2efce266d0",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-policy-evidence-green-10",
+      "head": "79d34be1037a5fd910fd49bdb735afbea99b17b0",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "tests/test_judge_policy_prefetch_public.py"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 23.027,
+      "pytest_summary": "21 passed in 21.39s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "source_manifest_sha256": "9e9fa18a7e0c0024357128b24c3bac4181586817ac6fd605731959aa4f970770",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "d2f8bce42871f91f07f5c02bb95205114681c36ee33c72558b80c6b94148bc1c",
+      "output_sha256": "43d2d2e91a31140c4df087f5df1bc894770a12292da37cb823567f922f7e6721",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-policy-evidence-acceptance-candidate",
+      "head": "79d34be1037a5fd910fd49bdb735afbea99b17b0",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "tests/test_judge_policy_prefetch_public.py",
+          "tests/test_judge_policy_safety_public.py"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 42.051,
+      "pytest_summary": "40 passed in 39.71s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "source_manifest_sha256": "59d88c396ac92c38f002fad67acf43ff39c8b336344ac12586cc2fd9623b974e",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "5916a1ff85f0e858403f1fbd817f9b6b5a24b517c71e3c3b61d0fe4ea4e9f4f6",
+      "output_sha256": "96b941af4cc3af664c5fd3d814af069d54e0da69e2d2c26c79442389888ebc0a",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-final-dependencies",
+      "head": "79d34be1037a5fd910fd49bdb735afbea99b17b0",
+      "commands": [
+        [
+          "bash",
+          "-c",
+          "uv pip check --python backend/.venv/bin/python && backend/.venv/bin/python -c 'from importlib.metadata import version; from pathlib import Path; pairs=[line.split(\"==\") for line in Path(\"backend/requirements.lock\").read_text().splitlines() if line and not line.startswith(\"#\")]; mismatches=[(name,expected,version(name)) for name,expected in pairs if version(name)!=expected]; assert not mismatches,mismatches; print(f\"All {len(pairs)} locked Python package versions match\")' && cd runtime/pi && npm ls --depth=0"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.633,
+      "pytest_summary": null,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "source_manifest_sha256": "59d88c396ac92c38f002fad67acf43ff39c8b336344ac12586cc2fd9623b974e",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "b75116a8e321826330a1e9a41f9cad49b10d26c7ccb96e02a6166fc18dc69a0e",
+      "output_sha256": "a06ee85b342401484de37cbc175335649358ccc5e2355c684e58cc7aa0bf24e4",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-final-pi-build",
+      "head": "79d34be1037a5fd910fd49bdb735afbea99b17b0",
+      "commands": [
+        [
+          "bash",
+          "-c",
+          "npm run typecheck && npm run build"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 8.56,
+      "pytest_summary": null,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "source_manifest_sha256": "59d88c396ac92c38f002fad67acf43ff39c8b336344ac12586cc2fd9623b974e",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "fbf4687a1a742390ae2667b2e5657ab1a3274eb68bde49a490671130cf94af07",
+      "output_sha256": "e2df98651515bc2bdf7ded57bfdb21a18a37cf1c97b5b8b2ffc76b2efce266d0",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-final-focused",
+      "head": "79d34be1037a5fd910fd49bdb735afbea99b17b0",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "tests/test_judge_policy_prefetch_public.py",
+          "tests/test_judge_policy_safety_public.py",
+          "tests/test_judge_role_entry_public.py",
+          "tests/test_judge_legacy_navigation_public.py",
+          "tests/test_next_navigation_public.py",
+          "tests/test_next_context_public.py",
+          "tests/test_next_explicit_return_public.py",
+          "tests/test_next_shopping_return_public.py",
+          "tests/test_next_guide_gate_public.py",
+          "tests/test_next_kev_wire.py",
+          "tests/test_next_snack_public.py",
+          "tests/test_next_snack_safety_public.py",
+          "tests/test_next_drinks_public.py",
+          "tests/test_comparison_public.py",
+          "tests/test_comparison_safety.py",
+          "tests/test_guide_clarification_context.py",
+          "tests/test_purchase_confirmations.py",
+          "tests/test_official_deepseek_thinking.py",
+          "../work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 185.308,
+      "pytest_summary": "191 passed in 178.80s (0:02:58)",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "source_manifest_sha256": "59d88c396ac92c38f002fad67acf43ff39c8b336344ac12586cc2fd9623b974e",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "accfee924c10204be2ec4c59af8accde81557de64f83cfb74d698cdc8d2d0a1a",
+      "output_sha256": "06ea1292268a223fd37f08fd0c7402da31a0acecf197ac6558c37aa4d3fb884d",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-policy-evidence-red-11",
+      "head": "79d34be1037a5fd910fd49bdb735afbea99b17b0",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "tests/test_judge_policy_safety_public.py::test_request_changed_during_lookup_cannot_read_categories_or_resume_pi"
+        ]
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 5.846,
+      "pytest_summary": "4 failed in 4.61s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "source_manifest_sha256": "15e273f04ea336e4cbb0e8cc5d8991e7994dcaee2b2f8f7a7e2a43c02b083a4d",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "34b3166595fdba078764fbaeaec83340575d7f5bb84a5d0cfea065864143e42a",
+      "output_sha256": "b28d6a029023315ca5d23c15348bf5cce7938457227f135b1171a3914effe721",
+      "final_repaired_gate": false
+    },
+    {
+      "label": "02-policy-evidence-green-11",
+      "head": "79d34be1037a5fd910fd49bdb735afbea99b17b0",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q",
+          "tests/test_judge_policy_prefetch_public.py",
+          "tests/test_judge_policy_safety_public.py"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 45.954,
+      "pytest_summary": "44 passed in 43.41s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "source_manifest_sha256": "9120143c73ce84afad44d338691394ce10c0805f1d6dba197eff871b463f0e47",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "bc5d3e104fee9e38fbfda2fec47b73e51a8e105dfc22571e3a925d59d688ac9f",
+      "output_sha256": "2600ff65c2803ff7976e4dc497ef9484b1932bc1b8bcea8c81cdd5fdb6384e72",
+      "final_repaired_gate": true
+    },
+    {
+      "label": "02-final-dependencies-repaired",
+      "head": "79d34be1037a5fd910fd49bdb735afbea99b17b0",
+      "commands": [
+        [
+          "bash",
+          "-c",
+          "uv pip check --python backend/.venv/bin/python && backend/.venv/bin/python -c 'from importlib.metadata import version; from pathlib import Path; pairs=[line.split(\"==\") for line in Path(\"backend/requirements.lock\").read_text().splitlines() if line and not line.startswith(\"#\")]; mismatches=[(name,expected,version(name)) for name,expected in pairs if version(name)!=expected]; assert not mismatches,mismatches; print(f\"All {len(pairs)} locked Python package versions match\")' && cd runtime/pi && npm ls --depth=0"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.437,
+      "pytest_summary": null,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "source_manifest_sha256": "9120143c73ce84afad44d338691394ce10c0805f1d6dba197eff871b463f0e47",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "49982f5e7681dd5b63b349a103ab89d0a8fa4937d2b785610fb2f0229cbba588",
+      "output_sha256": "e24bba58b682fe1a3a1a3701bf1c181bbc8061f412dfed00dfee6a0829317837",
+      "final_repaired_gate": true
+    },
+    {
+      "label": "02-final-pi-build-repaired",
+      "head": "79d34be1037a5fd910fd49bdb735afbea99b17b0",
+      "commands": [
+        [
+          "bash",
+          "-c",
+          "npm run typecheck && npm run build"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 8.14,
+      "pytest_summary": null,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "source_manifest_sha256": "9120143c73ce84afad44d338691394ce10c0805f1d6dba197eff871b463f0e47",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "f4e8d0ac0c01275a2aca2784bcb91dab0af6e5cc61d4b7caf21c174935eab0b6",
+      "output_sha256": "e2df98651515bc2bdf7ded57bfdb21a18a37cf1c97b5b8b2ffc76b2efce266d0",
+      "final_repaired_gate": true
+    },
+    {
+      "label": "02-final-guard-proof",
+      "head": "79d34be1037a5fd910fd49bdb735afbea99b17b0",
+      "commands": [
+        [
+          "bash",
+          "-c",
+          ".venv/bin/python -c 'import sitecustomize; assert sitecustomize.local(\"127.0.0.1\"); assert sitecustomize.local(\"::1\"); assert not sitecustomize.local(\"127.guard-probe.invalid\"); assert not sitecustomize.local(\"192.0.2.1\"); print(\"Python strict-loopback predicate verified without any socket request\")' && .venv/bin/python -m pytest -p pytest_asyncio.plugin -q ../work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 3.231,
+      "pytest_summary": "2 passed in 1.99s",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "source_manifest_sha256": "9120143c73ce84afad44d338691394ce10c0805f1d6dba197eff871b463f0e47",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "9020ddd9df45a7adc331141f6b81a0ff39ad80fe5193b5de61176b8703d7fce3",
+      "output_sha256": "0f4fe31c2b98370895e04fde500b3c614c6556ce63afca2328356b79d8c9d12f",
+      "final_repaired_gate": true
+    },
+    {
+      "label": "02-final-backend-full",
+      "head": "79d34be1037a5fd910fd49bdb735afbea99b17b0",
+      "commands": [
+        [
+          ".venv/bin/python",
+          "-m",
+          "pytest",
+          "-p",
+          "pytest_asyncio.plugin",
+          "-q"
+        ]
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 718.574,
+      "pytest_summary": "524 passed in 701.71s (0:11:41)",
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "source_manifest_sha256": "9120143c73ce84afad44d338691394ce10c0805f1d6dba197eff871b463f0e47",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "record_sha256": "f29e6a6b2c9492e1a63cf3249ef237e1a702eecc8717ac4cc536f1fc3dcb200b",
+      "output_sha256": "e63229c94f331060c917868eea973075c1a866c652d7a7738fc8f46765e66e94",
+      "final_repaired_gate": true
+    }
+  ]
+}

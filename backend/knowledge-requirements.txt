@@ -1,0 +1,9 @@
+# Direct dependencies from incoming 6734c7fe; isolated from business Python.
+# Frozen resolved stack: knowledge-requirements.lock (includes T06 GraphRAG).
+# torch CPU wheels use the official https://download.pytorch.org/whl/cpu index.
+numpy==2.4.6
+torch==2.14.1+cpu
+transformers==5.19.0
+huggingface-hub==1.33.0
+# GraphRAG is consumed only when the separately authorized graph slice lands.
+graphrag==3.2.0

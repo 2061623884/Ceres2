@@ -1,0 +1,14 @@
+{
+  "remote_commit": "f323d15751c141e0ded4763a3881bbda6355eae3",
+  "local_commit": "ec625a27db5418f0851a5da946c384531534309c",
+  "tree": "b9a6d62a8c51e3299a76c35359dc6132d8931587",
+  "branch": "ceres2/judge-prefetch-role-entry-wip-20261007",
+  "verified": true,
+  "phase": "WIP review repairs pending; not accepted",
+  "repository": "https://github.com/2061623884/Ceres2",
+  "remote_commit_url": "https://github.com/2061623884/Ceres2/commit/f323d15751c141e0ded4763a3881bbda6355eae3",
+  "verification_date_utc": "2026-10-07",
+  "verification_owner": "Main integration coordinator",
+  "evidence": "Authorized GitHub connector read back remote branch HEAD and commit tree; remote tree exactly matches the locally frozen WIP tree.",
+  "scope": "Ticket 01 source backup only. Independent Standards and Spec review repairs, final controlled validation and dependency release remain pending. This branch is separate from the integration branch."
+}

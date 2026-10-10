@@ -1,0 +1,918 @@
+{
+  "note": "All support REDs, fixture failures and superseded passes retained. Support scope is separate from core558. Only final22 tests and actual-app smoke certify final runner/test bytes. Builds/dependencies apply to the unchanged committed core and are separately pinned; helper test bytes changed afterward.",
+  "runs": [
+    {
+      "label": "04-compare-preview-red-01",
+      "head": "0559d9ed17e65cb4f6f8dfab80b83152e6fe280e",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "../work/judge-prefetch-rebuild/verification_tests/test_live_compare.py::test_default_cli_is_inert_without_settings_or_network"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2/backend",
+      "exit_code": 1,
+      "elapsed_seconds": 0.274,
+      "pytest_summary": "1 failed in 0.04s",
+      "core_source_manifest_sha256": "9120143c73ce84afad44d338691394ce10c0805f1d6dba197eff871b463f0e47",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "707f0de4c7866536fc1cabdb29e39486f4efedb47d1bb3b174cb438c300ecf1d",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "runner_source_sha256": {
+        "work/judge-prefetch-rebuild/live_compare.py": null,
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "707f0de4c7866536fc1cabdb29e39486f4efedb47d1bb3b174cb438c300ecf1d"
+      },
+      "runner_source_equal_before_after": true,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "record_sha256": "2f1584930da5c364b5b0b6bb725a537cea955e3c8ca7ba7db3137d7cb661f7e5",
+      "output_sha256": "9472e95b7aa85a781c423ba42eff61104263f7345a0daf916f12e4df986a9cea"
+    },
+    {
+      "label": "04-compare-preview-green-01",
+      "head": "0559d9ed17e65cb4f6f8dfab80b83152e6fe280e",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "../work/judge-prefetch-rebuild/verification_tests/test_live_compare.py::test_default_cli_is_inert_without_settings_or_network"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2/backend",
+      "exit_code": 0,
+      "elapsed_seconds": 0.294,
+      "pytest_summary": "1 passed in 0.04s",
+      "core_source_manifest_sha256": "9120143c73ce84afad44d338691394ce10c0805f1d6dba197eff871b463f0e47",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "16a4e3ad5fde1f001e367b0814c8ef32c33623dc179b4ecc0d8ad8c04a1f9c69",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "runner_source_sha256": {
+        "work/judge-prefetch-rebuild/live_compare.py": "e62bbfd8c4a34b750b1c837a40791d2ab390256ed784146f77903596b8f8cda3",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "16a4e3ad5fde1f001e367b0814c8ef32c33623dc179b4ecc0d8ad8c04a1f9c69"
+      },
+      "runner_source_equal_before_after": true,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "record_sha256": "ff7f076cc061491de7aba4bd5e5e8983ecc7ee4ac2067ec0fa89c3b1b3b80ce6",
+      "output_sha256": "f4c77b58e2280613a49ba18da1c4a02d440e862c49a6c8fe5daaf277333ff99d"
+    },
+    {
+      "label": "04-compare-plan-red-01",
+      "head": "eb96c89da1ae70211630cab96055e6fce1c7dd70",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "../work/judge-prefetch-rebuild/verification_tests/test_live_compare.py::test_execution_rejects_unbounded_or_incomplete_plan_before_settings"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2/backend",
+      "exit_code": 1,
+      "elapsed_seconds": 0.45,
+      "pytest_summary": "10 failed in 0.25s",
+      "core_source_manifest_sha256": "9120143c73ce84afad44d338691394ce10c0805f1d6dba197eff871b463f0e47",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "8b0067f5bea19ee6ded887d01742c1c9584d67d66a5d14e94411fc52563436af",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "runner_source_sha256": {
+        "work/judge-prefetch-rebuild/live_compare.py": "e62bbfd8c4a34b750b1c837a40791d2ab390256ed784146f77903596b8f8cda3",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "8b0067f5bea19ee6ded887d01742c1c9584d67d66a5d14e94411fc52563436af"
+      },
+      "runner_source_equal_before_after": true,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "record_sha256": "2952d86436a23c0c445fa0bcbe523b5d0b8de4fa7881d32876985b13f79cb18b",
+      "output_sha256": "b570d36b9134c4f06663c03a63b31d6726727354713d5becf402b251216b3b84"
+    },
+    {
+      "label": "04-compare-plan-green-01",
+      "head": "eb96c89da1ae70211630cab96055e6fce1c7dd70",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "../work/judge-prefetch-rebuild/verification_tests/test_live_compare.py"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2/backend",
+      "exit_code": 0,
+      "elapsed_seconds": 0.6,
+      "pytest_summary": "11 passed in 0.38s",
+      "core_source_manifest_sha256": "9120143c73ce84afad44d338691394ce10c0805f1d6dba197eff871b463f0e47",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "8b0067f5bea19ee6ded887d01742c1c9584d67d66a5d14e94411fc52563436af",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "runner_source_sha256": {
+        "work/judge-prefetch-rebuild/live_compare.py": "3c731e9efdd60eda2fc5c81e551ce519ec1b2efe6eceee0a5ee946769b8e91da",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "8b0067f5bea19ee6ded887d01742c1c9584d67d66a5d14e94411fc52563436af"
+      },
+      "runner_source_equal_before_after": true,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "record_sha256": "cb2617c2fb0e801d6313ec2c3cffc2e9888a1ea407b2c5ca6b6bf0e2574868be",
+      "output_sha256": "d961e7f6b6dd24fa6b039248ba68eed4f270639c065c53eff985693f09cbfab4"
+    },
+    {
+      "label": "04-compare-source-red-01",
+      "head": "eb96c89da1ae70211630cab96055e6fce1c7dd70",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "../work/judge-prefetch-rebuild/verification_tests/test_live_compare.py::test_source_description_is_read_only_and_rejects_dirty_product_source"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2/backend",
+      "exit_code": 1,
+      "elapsed_seconds": 0.275,
+      "pytest_summary": "1 failed in 0.07s",
+      "core_source_manifest_sha256": "9120143c73ce84afad44d338691394ce10c0805f1d6dba197eff871b463f0e47",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "4bdb8d8dbb0d2783e73ad34a237371966d86cbc7fc83c25dd04911577590a0ab",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "runner_source_sha256": {
+        "work/judge-prefetch-rebuild/live_compare.py": "3c731e9efdd60eda2fc5c81e551ce519ec1b2efe6eceee0a5ee946769b8e91da",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "4bdb8d8dbb0d2783e73ad34a237371966d86cbc7fc83c25dd04911577590a0ab"
+      },
+      "runner_source_equal_before_after": true,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "record_sha256": "51a76ee56d360fb9e32ec61dc85a42e573f49dfb7354465f5844e24f9ed75e63",
+      "output_sha256": "7c912f28ed5f6cb343f1ccf55374ba26e213f812e1c84eea807128a6ce1518bc"
+    },
+    {
+      "label": "04-compare-source-green-01",
+      "head": "121780506ffe1a34e838545e7dd39300ddfc9cea",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "../work/judge-prefetch-rebuild/verification_tests/test_live_compare.py"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2/backend",
+      "exit_code": 0,
+      "elapsed_seconds": 0.739,
+      "pytest_summary": "12 passed in 0.51s",
+      "core_source_manifest_sha256": "9120143c73ce84afad44d338691394ce10c0805f1d6dba197eff871b463f0e47",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "4bdb8d8dbb0d2783e73ad34a237371966d86cbc7fc83c25dd04911577590a0ab",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "runner_source_sha256": {
+        "work/judge-prefetch-rebuild/live_compare.py": "f1f5ce22d0bc874252dd261295eeb8f0d2241e2cd6a7d96fc39712c3831f10cd",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "4bdb8d8dbb0d2783e73ad34a237371966d86cbc7fc83c25dd04911577590a0ab"
+      },
+      "runner_source_equal_before_after": true,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "record_sha256": "342e838c209604b223a540c1fa1cfc072e31e2be62683f08137af4c7fe2434f2",
+      "output_sha256": "53be7140f900ef6e183370cb444be05ef41f3eae4a7fb98efb93ba1d06e4e405"
+    },
+    {
+      "label": "04-compare-provenance-red-01",
+      "head": "121780506ffe1a34e838545e7dd39300ddfc9cea",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "../work/judge-prefetch-rebuild/verification_tests/test_live_compare.py::test_frozen_plan_preview_checks_provenance_and_never_overwrites_output"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2/backend",
+      "exit_code": 1,
+      "elapsed_seconds": 0.438,
+      "pytest_summary": "1 failed in 0.22s",
+      "core_source_manifest_sha256": "9120143c73ce84afad44d338691394ce10c0805f1d6dba197eff871b463f0e47",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "7d34be575050be44dd3f50e0a17d287378b15213e74e4bfda57bfe21566645df",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "runner_source_sha256": {
+        "work/judge-prefetch-rebuild/live_compare.py": "f1f5ce22d0bc874252dd261295eeb8f0d2241e2cd6a7d96fc39712c3831f10cd",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "7d34be575050be44dd3f50e0a17d287378b15213e74e4bfda57bfe21566645df"
+      },
+      "runner_source_equal_before_after": true,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "record_sha256": "fb8b72a09849534a9f21803888410bb37982aa39cbc0889f409428b2e4b7aff1",
+      "output_sha256": "d6e2e61aa355c69e7d8bccd950ed1dc28b2d799ae50dd7b00e5e07abde2c4e6a"
+    },
+    {
+      "label": "04-compare-provenance-green-01",
+      "head": "121780506ffe1a34e838545e7dd39300ddfc9cea",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "../work/judge-prefetch-rebuild/verification_tests/test_live_compare.py"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2/backend",
+      "exit_code": 0,
+      "elapsed_seconds": 1.014,
+      "pytest_summary": "13 passed in 0.81s",
+      "core_source_manifest_sha256": "9120143c73ce84afad44d338691394ce10c0805f1d6dba197eff871b463f0e47",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "7d34be575050be44dd3f50e0a17d287378b15213e74e4bfda57bfe21566645df",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "runner_source_sha256": {
+        "work/judge-prefetch-rebuild/live_compare.py": "5156868a2689aa46b37e50157ea06bbd537478fff35c6958a9ce870aa054ee54",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "7d34be575050be44dd3f50e0a17d287378b15213e74e4bfda57bfe21566645df"
+      },
+      "runner_source_equal_before_after": true,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "record_sha256": "22bdc3679335ae464c1920136a829d266ce11716fb6993482a272a04a1b6eb28",
+      "output_sha256": "7689adda663427991212831d92a603f8312a5b1a33b065e5f9b7b8e3b00dd9ef"
+    },
+    {
+      "label": "04-compare-policy-facts-red-01",
+      "head": "121780506ffe1a34e838545e7dd39300ddfc9cea",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "../work/judge-prefetch-rebuild/verification_tests/test_live_compare.py::test_policy_fact_freeze_accepts_literal_extraction_but_rejects_changed_facts"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2/backend",
+      "exit_code": 1,
+      "elapsed_seconds": 0.498,
+      "pytest_summary": "1 failed in 0.27s",
+      "core_source_manifest_sha256": "9120143c73ce84afad44d338691394ce10c0805f1d6dba197eff871b463f0e47",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "c2e22b8cd0dc28bb0e628fbdf40da238f86df60695d719e008dceda36cd15d45",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "runner_source_sha256": {
+        "work/judge-prefetch-rebuild/live_compare.py": "5156868a2689aa46b37e50157ea06bbd537478fff35c6958a9ce870aa054ee54",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "c2e22b8cd0dc28bb0e628fbdf40da238f86df60695d719e008dceda36cd15d45"
+      },
+      "runner_source_equal_before_after": true,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "record_sha256": "5748ee44b58379b067c4abe63ab6a082bfd38f9d883788b3ad0d66acfb9fb9bc",
+      "output_sha256": "f3c086e24e7394ce440a809fd5e9ce65534a9ea92a95b2c47e2f524e4cfc4e59"
+    },
+    {
+      "label": "04-compare-policy-facts-green-01",
+      "head": "121780506ffe1a34e838545e7dd39300ddfc9cea",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "../work/judge-prefetch-rebuild/verification_tests/test_live_compare.py"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2/backend",
+      "exit_code": 0,
+      "elapsed_seconds": 1.46,
+      "pytest_summary": "14 passed in 1.23s",
+      "core_source_manifest_sha256": "9120143c73ce84afad44d338691394ce10c0805f1d6dba197eff871b463f0e47",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "c2e22b8cd0dc28bb0e628fbdf40da238f86df60695d719e008dceda36cd15d45",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "runner_source_sha256": {
+        "work/judge-prefetch-rebuild/live_compare.py": "b18043c5fd00050eae34f88b73672831bfae8d060d7554f5276f399d14396572",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "c2e22b8cd0dc28bb0e628fbdf40da238f86df60695d719e008dceda36cd15d45"
+      },
+      "runner_source_equal_before_after": true,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "record_sha256": "a5902c4f476c3f16a4e71dbecbb1354267901108f435c89930d95f419ad96268",
+      "output_sha256": "c2682b548e75989f5ccc94242c9bd8c8538c0b15b976161754c4df0c73a47826"
+    },
+    {
+      "label": "04-compare-real-policy-literals",
+      "head": "121780506ffe1a34e838545e7dd39300ddfc9cea",
+      "command": [
+        "backend/.venv/bin/python",
+        "work/judge-prefetch-rebuild/evidence/04-compare-real-policy-literals/probe.py"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2",
+      "exit_code": 0,
+      "elapsed_seconds": 0.272,
+      "pytest_summary": null,
+      "core_source_manifest_sha256": "9120143c73ce84afad44d338691394ce10c0805f1d6dba197eff871b463f0e47",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "c2e22b8cd0dc28bb0e628fbdf40da238f86df60695d719e008dceda36cd15d45",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "runner_source_sha256": {
+        "work/judge-prefetch-rebuild/live_compare.py": "b18043c5fd00050eae34f88b73672831bfae8d060d7554f5276f399d14396572",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "c2e22b8cd0dc28bb0e628fbdf40da238f86df60695d719e008dceda36cd15d45",
+        "work/judge-prefetch-rebuild/evidence/04-compare-real-policy-literals/probe.py": "aaf93fa6945b7846fba63a1f231f197f5cfef0d9619963e496e75507e2bf2a0d"
+      },
+      "runner_source_equal_before_after": true,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "record_sha256": "fd563cf942ac76ee0dbde678d40885f54bc2d7327fbbc44e67f6ccb60d7c2336",
+      "output_sha256": "1c9f7c71e8da762d8972337bee6ddbd49b3409cad7f7d37322b3f36c705d21d7"
+    },
+    {
+      "label": "04-compare-lifecycle-red-01",
+      "head": "121780506ffe1a34e838545e7dd39300ddfc9cea",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "../work/judge-prefetch-rebuild/verification_tests/test_live_compare.py::test_bounded_public_execution_isolates_samples_and_stops_owned_descendants"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2/backend",
+      "exit_code": 1,
+      "elapsed_seconds": 1.36,
+      "pytest_summary": "3 failed in 1.07s",
+      "core_source_manifest_sha256": "9120143c73ce84afad44d338691394ce10c0805f1d6dba197eff871b463f0e47",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "7f73c5faca8634e79f157561a5b2dc41264668d94e597651148d1f3ba2d02461",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "runner_source_sha256": {
+        "work/judge-prefetch-rebuild/live_compare.py": "b18043c5fd00050eae34f88b73672831bfae8d060d7554f5276f399d14396572",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "7f73c5faca8634e79f157561a5b2dc41264668d94e597651148d1f3ba2d02461"
+      },
+      "runner_source_equal_before_after": true,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "record_sha256": "fe5aad339a190aaad43c754784fc1493a8b917994455481319b35cb85abd1795",
+      "output_sha256": "aeaa1a76345016408027a878958243174c320ef1ae81ba6a9c7f4e3d7480db7a"
+    },
+    {
+      "label": "04-compare-lifecycle-green-01",
+      "head": "35cf7cd73fbc86a30ba0a03ee11064e259974f60",
+      "command": [
+        "backend/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py::test_bounded_public_execution_isolates_samples_and_stops_owned_descendants"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2",
+      "exit_code": 1,
+      "elapsed_seconds": 1.707,
+      "pytest_summary": "3 failed in 1.49s",
+      "core_source_manifest_sha256": "7c86cf268f5f4d7055626d6db1e3970d23735bd313ed148f638ede0a02c4368f",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "7f73c5faca8634e79f157561a5b2dc41264668d94e597651148d1f3ba2d02461",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "runner_source_sha256": {
+        "work/judge-prefetch-rebuild/live_compare.py": "f4a735e1eb3f0ebb733625f87460094f46df849728f997bf14f4c307ea054a11",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "7f73c5faca8634e79f157561a5b2dc41264668d94e597651148d1f3ba2d02461",
+        "work/judge-prefetch-rebuild/LIVE-COMPARE.md": "db7959514629a1bc1654bd5af622c14ea7b6050dca0d0c0ed52a46ae7f471d3b"
+      },
+      "runner_source_equal_before_after": true,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "record_sha256": "248391242329a425f27de994a11098cef733fac874da3f4f5f70763988eb1caf",
+      "output_sha256": "026ac21e2f14d6317c581ecde00a8bc50d258754c9a51dbc0f7d5799db2dc295"
+    },
+    {
+      "label": "04-compare-lifecycle-green-02",
+      "head": "a1ef364813c327585716ba2628914ee53b2f7895",
+      "command": [
+        "backend/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py::test_bounded_public_execution_isolates_samples_and_stops_owned_descendants"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2",
+      "exit_code": 0,
+      "elapsed_seconds": 7.95,
+      "pytest_summary": "3 passed in 7.74s",
+      "core_source_manifest_sha256": "7c86cf268f5f4d7055626d6db1e3970d23735bd313ed148f638ede0a02c4368f",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "94b3fc0f2cd164bfddcf7395e0c6bb17e84f5163f09b3553102941cf67c30cdb",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "runner_source_sha256": {
+        "work/judge-prefetch-rebuild/live_compare.py": "f4a735e1eb3f0ebb733625f87460094f46df849728f997bf14f4c307ea054a11",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "94b3fc0f2cd164bfddcf7395e0c6bb17e84f5163f09b3553102941cf67c30cdb",
+        "work/judge-prefetch-rebuild/LIVE-COMPARE.md": "db7959514629a1bc1654bd5af622c14ea7b6050dca0d0c0ed52a46ae7f471d3b"
+      },
+      "runner_source_equal_before_after": true,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "record_sha256": "6048495732a6763b8c682d107ba02aa398fb52496f852f73a2464bdebc4865ca",
+      "output_sha256": "f9a17049e5544cbab7f9996e8b436077ca1b40e0deea550b7607522bfdac9856"
+    },
+    {
+      "label": "04-compare-metadata-deadline-red-01",
+      "head": "a1ef364813c327585716ba2628914ee53b2f7895",
+      "command": [
+        "backend/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py::test_total_limit_and_cancel_cover_source_metadata_waits"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2",
+      "exit_code": 1,
+      "elapsed_seconds": 2.896,
+      "pytest_summary": "2 failed in 2.67s",
+      "core_source_manifest_sha256": "7c86cf268f5f4d7055626d6db1e3970d23735bd313ed148f638ede0a02c4368f",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "94b3fc0f2cd164bfddcf7395e0c6bb17e84f5163f09b3553102941cf67c30cdb",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "runner_source_sha256": {
+        "work/judge-prefetch-rebuild/live_compare.py": "f4a735e1eb3f0ebb733625f87460094f46df849728f997bf14f4c307ea054a11",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "94b3fc0f2cd164bfddcf7395e0c6bb17e84f5163f09b3553102941cf67c30cdb",
+        "work/judge-prefetch-rebuild/LIVE-COMPARE.md": "db7959514629a1bc1654bd5af622c14ea7b6050dca0d0c0ed52a46ae7f471d3b"
+      },
+      "runner_source_equal_before_after": true,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "record_sha256": "557a5b8915dfda4d3943957e36d53847339b0293549feebe8a82cb20f577ee2c",
+      "output_sha256": "38846a0d5a4ab3051df4052604268a56b49a5dd2c12b160e85bc0e33714f42b9"
+    },
+    {
+      "label": "04-compare-metadata-deadline-green-01",
+      "head": "56f0e6f1d4e1e42d4e574f09df55fde0dce8615f",
+      "command": [
+        "backend/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2",
+      "exit_code": 0,
+      "elapsed_seconds": 10.434,
+      "pytest_summary": "19 passed in 10.20s",
+      "core_source_manifest_sha256": "7c86cf268f5f4d7055626d6db1e3970d23735bd313ed148f638ede0a02c4368f",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "94b3fc0f2cd164bfddcf7395e0c6bb17e84f5163f09b3553102941cf67c30cdb",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "runner_source_sha256": {
+        "work/judge-prefetch-rebuild/live_compare.py": "86d8e53efc982f7f936af9630cf275c529daf52e7ee6e0eb96c15d731c93fef3",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "94b3fc0f2cd164bfddcf7395e0c6bb17e84f5163f09b3553102941cf67c30cdb",
+        "work/judge-prefetch-rebuild/LIVE-COMPARE.md": "db7959514629a1bc1654bd5af622c14ea7b6050dca0d0c0ed52a46ae7f471d3b"
+      },
+      "runner_source_equal_before_after": true,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "record_sha256": "a6f83770306952e9454ed73c5e0d9e6e3394e9da0428a99a5ea94ae164704f92",
+      "output_sha256": "fbfc41afb0e378ff917c257de370409f16b51f33e47b6099599170f3b021bd34"
+    },
+    {
+      "label": "04-compare-actual-app-dependencies",
+      "head": "56f0e6f1d4e1e42d4e574f09df55fde0dce8615f",
+      "command": [
+        "bash",
+        "-c",
+        "uv pip check --python backend/.venv/bin/python && backend/.venv/bin/python -c 'from importlib.metadata import version; from pathlib import Path; pairs=[line.split(\"==\") for line in Path(\"backend/requirements.lock\").read_text().splitlines() if line and not line.startswith(\"#\")]; assert all(version(name)==expected for name,expected in pairs); print(f\"All {len(pairs)} locked Python versions match\")' && cd runtime/pi && npm ls --depth=0"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2",
+      "exit_code": 0,
+      "elapsed_seconds": 0.498,
+      "pytest_summary": null,
+      "core_source_manifest_sha256": "7c86cf268f5f4d7055626d6db1e3970d23735bd313ed148f638ede0a02c4368f",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "c73e9fa59b24e0f7ba4fa0928bd5a6a8d7410f22809f47dbc602366df709c3ae",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "runner_source_sha256": {
+        "live_compare.py": "86d8e53efc982f7f936af9630cf275c529daf52e7ee6e0eb96c15d731c93fef3",
+        "verification_tests/test_live_compare.py": "c73e9fa59b24e0f7ba4fa0928bd5a6a8d7410f22809f47dbc602366df709c3ae",
+        "LIVE-COMPARE.md": "db7959514629a1bc1654bd5af622c14ea7b6050dca0d0c0ed52a46ae7f471d3b"
+      },
+      "runner_source_equal_before_after": true,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "record_sha256": "8e8ef1da2a816438665141c165735d5aa290922dc4f2bcdbb8e43ada0e34d6dc",
+      "output_sha256": "a9d59784db123cb2b253546ccacdc496e10647d905697a44aaae0badd006260b"
+    },
+    {
+      "label": "04-compare-actual-app-pi-build",
+      "head": "56f0e6f1d4e1e42d4e574f09df55fde0dce8615f",
+      "command": [
+        "bash",
+        "-c",
+        "npm run typecheck && npm run build"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2/runtime/pi",
+      "exit_code": 0,
+      "elapsed_seconds": 8.696,
+      "pytest_summary": null,
+      "core_source_manifest_sha256": "7c86cf268f5f4d7055626d6db1e3970d23735bd313ed148f638ede0a02c4368f",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "c73e9fa59b24e0f7ba4fa0928bd5a6a8d7410f22809f47dbc602366df709c3ae",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "runner_source_sha256": {
+        "live_compare.py": "86d8e53efc982f7f936af9630cf275c529daf52e7ee6e0eb96c15d731c93fef3",
+        "verification_tests/test_live_compare.py": "c73e9fa59b24e0f7ba4fa0928bd5a6a8d7410f22809f47dbc602366df709c3ae",
+        "LIVE-COMPARE.md": "db7959514629a1bc1654bd5af622c14ea7b6050dca0d0c0ed52a46ae7f471d3b"
+      },
+      "runner_source_equal_before_after": true,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "record_sha256": "92dd7ccf3b87168a9b497d7f825b524b064f44ccc5bd01f45f491868d6eb8906",
+      "output_sha256": "e2df98651515bc2bdf7ded57bfdb21a18a37cf1c97b5b8b2ffc76b2efce266d0"
+    },
+    {
+      "label": "04-compare-actual-app-red-01",
+      "head": "56f0e6f1d4e1e42d4e574f09df55fde0dce8615f",
+      "command": [
+        "backend/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py::test_current_application_and_actual_pi_sdk_use_only_loopback_fixture"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2",
+      "exit_code": 1,
+      "elapsed_seconds": 0.344,
+      "pytest_summary": "1 failed in 0.12s",
+      "core_source_manifest_sha256": "7c86cf268f5f4d7055626d6db1e3970d23735bd313ed148f638ede0a02c4368f",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "c73e9fa59b24e0f7ba4fa0928bd5a6a8d7410f22809f47dbc602366df709c3ae",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "runner_source_sha256": {
+        "work/judge-prefetch-rebuild/live_compare.py": "86d8e53efc982f7f936af9630cf275c529daf52e7ee6e0eb96c15d731c93fef3",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "c73e9fa59b24e0f7ba4fa0928bd5a6a8d7410f22809f47dbc602366df709c3ae",
+        "work/judge-prefetch-rebuild/LIVE-COMPARE.md": "db7959514629a1bc1654bd5af622c14ea7b6050dca0d0c0ed52a46ae7f471d3b"
+      },
+      "runner_source_equal_before_after": true,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "record_sha256": "ab77988951dcfe8ebd624ca69ea315735e58e7948ad90932668251852e0f2ce1",
+      "output_sha256": "e39792f656d2624cc5918ec85efef195f87e98414ae0e2c13613e620e3eb581e"
+    },
+    {
+      "label": "04-compare-actual-app-green-01",
+      "head": "56f0e6f1d4e1e42d4e574f09df55fde0dce8615f",
+      "command": [
+        "backend/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py::test_current_application_and_actual_pi_sdk_use_only_loopback_fixture"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2",
+      "exit_code": 1,
+      "elapsed_seconds": 2.307,
+      "pytest_summary": "1 failed in 1.90s",
+      "core_source_manifest_sha256": "7c86cf268f5f4d7055626d6db1e3970d23735bd313ed148f638ede0a02c4368f",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "b8a98d0f3e6aca41050c57fe1587058ea56fdb6bf20c8baab5b19500a691f596",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "runner_source_sha256": {
+        "work/judge-prefetch-rebuild/live_compare.py": "020080e4fb19094abed8bc1421a2cc00e13d6b0e0fbfd9d709b1f57949efd6d9",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "b8a98d0f3e6aca41050c57fe1587058ea56fdb6bf20c8baab5b19500a691f596",
+        "work/judge-prefetch-rebuild/LIVE-COMPARE.md": "db7959514629a1bc1654bd5af622c14ea7b6050dca0d0c0ed52a46ae7f471d3b"
+      },
+      "runner_source_equal_before_after": true,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "record_sha256": "1b09c3607c46b985b96a79b139dadf3685a04fc93d09319111c6b93be64c06e5",
+      "output_sha256": "4aea96f749dfceaf13c8ea7e430341dfb83849cdf704496b013babe86d161d42"
+    },
+    {
+      "label": "04-compare-budget-literal-green-01",
+      "head": "56f0e6f1d4e1e42d4e574f09df55fde0dce8615f",
+      "command": [
+        "backend/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py::test_kev_timeout_literal_extraction_matches_but_a_changed_budget_does_not"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2",
+      "exit_code": 0,
+      "elapsed_seconds": 0.689,
+      "pytest_summary": "1 passed in 0.47s",
+      "core_source_manifest_sha256": "7c86cf268f5f4d7055626d6db1e3970d23735bd313ed148f638ede0a02c4368f",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "b8a98d0f3e6aca41050c57fe1587058ea56fdb6bf20c8baab5b19500a691f596",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "runner_source_sha256": {
+        "work/judge-prefetch-rebuild/live_compare.py": "020080e4fb19094abed8bc1421a2cc00e13d6b0e0fbfd9d709b1f57949efd6d9",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "b8a98d0f3e6aca41050c57fe1587058ea56fdb6bf20c8baab5b19500a691f596",
+        "work/judge-prefetch-rebuild/LIVE-COMPARE.md": "db7959514629a1bc1654bd5af622c14ea7b6050dca0d0c0ed52a46ae7f471d3b"
+      },
+      "runner_source_equal_before_after": true,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "record_sha256": "2351405e09da0f1542452cf2d3e182dba81455c855cd1f525e34d3e22ca45a8c",
+      "output_sha256": "71cecd4a03d26fc192e472bf26020cdc2172e564ac64a719b16960d8dffd73a1"
+    },
+    {
+      "label": "04-compare-actual-app-interpreter-proof",
+      "head": "56f0e6f1d4e1e42d4e574f09df55fde0dce8615f",
+      "command": [
+        "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2/work/judge-prefetch-rebuild/tmp/04-compare-actual-app-green-01/pytest-of-agent/pytest-0/test_current_application_and_a0/baseline/backend/.venv/bin/python",
+        "-c",
+        "import sys,importlib.util,json; print(json.dumps(dict(prefix=sys.prefix,executable=sys.executable,sqlalchemy=bool(importlib.util.find_spec(\"sqlalchemy\")),fastapi=bool(importlib.util.find_spec(\"fastapi\")))))"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2",
+      "exit_code": 0,
+      "elapsed_seconds": 0.022,
+      "pytest_summary": null,
+      "core_source_manifest_sha256": "7c86cf268f5f4d7055626d6db1e3970d23735bd313ed148f638ede0a02c4368f",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "b8a98d0f3e6aca41050c57fe1587058ea56fdb6bf20c8baab5b19500a691f596",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "runner_source_sha256": null,
+      "runner_source_equal_before_after": true,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "record_sha256": "0f7e2be99ecf76fe71a060d89c9b518e2f671337f1a017d4c12231ae468c59ac",
+      "output_sha256": "fcc780d1ff051e57dbb888ea1310eed6b3bf742ff5ce3b25d1de8c2a01fece98"
+    },
+    {
+      "label": "04-compare-actual-app-green-02",
+      "head": "56f0e6f1d4e1e42d4e574f09df55fde0dce8615f",
+      "command": [
+        "backend/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py::test_current_application_and_actual_pi_sdk_use_only_loopback_fixture"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2",
+      "exit_code": 0,
+      "elapsed_seconds": 5.988,
+      "pytest_summary": "1 passed in 5.60s",
+      "core_source_manifest_sha256": "7c86cf268f5f4d7055626d6db1e3970d23735bd313ed148f638ede0a02c4368f",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "eff9c0778532c3961534ad03d8a1a697c83ff184c5c231c98b217036c51540f8",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "runner_source_sha256": {
+        "work/judge-prefetch-rebuild/live_compare.py": "020080e4fb19094abed8bc1421a2cc00e13d6b0e0fbfd9d709b1f57949efd6d9",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "eff9c0778532c3961534ad03d8a1a697c83ff184c5c231c98b217036c51540f8",
+        "work/judge-prefetch-rebuild/LIVE-COMPARE.md": "db7959514629a1bc1654bd5af622c14ea7b6050dca0d0c0ed52a46ae7f471d3b"
+      },
+      "runner_source_equal_before_after": true,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "record_sha256": "a759c068a070e7c04263db5cdd8dec89a66ef655a31813df1c3c76cff0675fe8",
+      "output_sha256": "b7c5c4d6554e0df3408e372dbb624f8f6d2a648afc3cc426f4cf2b00a5d3a3a4"
+    },
+    {
+      "label": "04-compare-final-full-01",
+      "head": "56f0e6f1d4e1e42d4e574f09df55fde0dce8615f",
+      "command": [
+        "backend/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2",
+      "exit_code": 0,
+      "elapsed_seconds": 16.598,
+      "pytest_summary": "21 passed in 16.19s",
+      "core_source_manifest_sha256": "7c86cf268f5f4d7055626d6db1e3970d23735bd313ed148f638ede0a02c4368f",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "eff9c0778532c3961534ad03d8a1a697c83ff184c5c231c98b217036c51540f8",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "runner_source_sha256": {
+        "work/judge-prefetch-rebuild/live_compare.py": "020080e4fb19094abed8bc1421a2cc00e13d6b0e0fbfd9d709b1f57949efd6d9",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "eff9c0778532c3961534ad03d8a1a697c83ff184c5c231c98b217036c51540f8",
+        "work/judge-prefetch-rebuild/LIVE-COMPARE.md": "db7959514629a1bc1654bd5af622c14ea7b6050dca0d0c0ed52a46ae7f471d3b"
+      },
+      "runner_source_equal_before_after": true,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "record_sha256": "3e9b127ed5d1e08aa1e085c664356642f53d5049ee72c0cc350bbaff5be5ceb9",
+      "output_sha256": "ca7f4f241f1afb93996f61d0d7a46f0fd6818c70e04228ee5d06153cb024fdc1"
+    },
+    {
+      "label": "04-compare-lowercase-red-01",
+      "head": "56f0e6f1d4e1e42d4e574f09df55fde0dce8615f",
+      "command": [
+        "backend/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py::test_current_application_and_actual_pi_sdk_use_only_loopback_fixture[lower]"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2",
+      "exit_code": 1,
+      "elapsed_seconds": 1.744,
+      "pytest_summary": "1 failed in 1.27s",
+      "core_source_manifest_sha256": "7c86cf268f5f4d7055626d6db1e3970d23735bd313ed148f638ede0a02c4368f",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "runner_source_sha256": {
+        "work/judge-prefetch-rebuild/live_compare.py": "020080e4fb19094abed8bc1421a2cc00e13d6b0e0fbfd9d709b1f57949efd6d9",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "work/judge-prefetch-rebuild/LIVE-COMPARE.md": "db7959514629a1bc1654bd5af622c14ea7b6050dca0d0c0ed52a46ae7f471d3b"
+      },
+      "runner_source_equal_before_after": true,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "record_sha256": "0bb5de61c31a8302d1cb287f64f30bf787b1e3df7701ce39b7db5c8fa1465af4",
+      "output_sha256": "422b6903a6f318edac4a22f0c24cac9da01af7527d1753129a8f10758c697208"
+    },
+    {
+      "label": "04-compare-alias-green-01",
+      "head": "56f0e6f1d4e1e42d4e574f09df55fde0dce8615f",
+      "command": [
+        "backend/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py::test_current_application_and_actual_pi_sdk_use_only_loopback_fixture"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2",
+      "exit_code": 0,
+      "elapsed_seconds": 10.658,
+      "pytest_summary": "2 passed in 10.32s",
+      "core_source_manifest_sha256": "7c86cf268f5f4d7055626d6db1e3970d23735bd313ed148f638ede0a02c4368f",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "runner_source_sha256": {
+        "work/judge-prefetch-rebuild/live_compare.py": "ec4deeba2a98c2f028f7316b733d42507cc449466b5517688291465fd15cd8e5",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "work/judge-prefetch-rebuild/LIVE-COMPARE.md": "db7959514629a1bc1654bd5af622c14ea7b6050dca0d0c0ed52a46ae7f471d3b"
+      },
+      "runner_source_equal_before_after": true,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "record_sha256": "13cf838a650a8a76a6e8c100f001ec90a75323f8cb983cfb521597e6739aac8e",
+      "output_sha256": "b2dddd16a199997dd4f19c3a4bdc0bbac50d09b059ab3d8873d9a15167354a28"
+    },
+    {
+      "label": "04-compare-final-full-02",
+      "head": "56f0e6f1d4e1e42d4e574f09df55fde0dce8615f",
+      "command": [
+        "backend/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "pytest_asyncio.plugin",
+        "-q",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py"
+      ],
+      "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2",
+      "exit_code": 0,
+      "elapsed_seconds": 20.506,
+      "pytest_summary": "22 passed in 20.18s",
+      "core_source_manifest_sha256": "7c86cf268f5f4d7055626d6db1e3970d23735bd313ed148f638ede0a02c4368f",
+      "harness_sha256": {
+        "work/judge-prefetch-rebuild/run_check.py": "a593e1ab8088d14e38a2920fdbcbf63ecb0091c7cdce0cf0b0c7829e09d4ad6f",
+        "work/judge-prefetch-rebuild/guards/sitecustomize.py": "e1512527a231b6ab2524861f25b5109c1b0d3ea48ecf7fba34e42d89567bbb82",
+        "work/judge-prefetch-rebuild/guards/node-local-only.cjs": "907331323bd0855f2768b0388a0bd4fbd21f25d4f06ff52106341d4926ffe887",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "work/judge-prefetch-rebuild/verification_tests/test_node_worker_guard.py": "c8f5459415ff5ca406bebf7b07e573912cd4388955f9f06ddc74d0568b66920f"
+      },
+      "runner_source_sha256": {
+        "work/judge-prefetch-rebuild/live_compare.py": "ec4deeba2a98c2f028f7316b733d42507cc449466b5517688291465fd15cd8e5",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "work/judge-prefetch-rebuild/LIVE-COMPARE.md": "db7959514629a1bc1654bd5af622c14ea7b6050dca0d0c0ed52a46ae7f471d3b"
+      },
+      "runner_source_equal_before_after": true,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": [],
+      "record_sha256": "eca165c7b36a7ea8f50fd6fbf8d59d48d54a249061b35c0c83b079fee07ad18a",
+      "output_sha256": "cba309e68dda34de02f362ebb15c81821a96162ada61fa0f4947dd3a3d47f7c2"
+    }
+  ]
+}

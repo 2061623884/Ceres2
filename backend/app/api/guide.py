@@ -68,7 +68,9 @@ def messages(db, session_id, owner_id, after_sequence=0, limit=None):
     return [{**{key: getattr(row, key) for key in ('message_id', 'session_id', 'task_id', 'sequence', 'role', 'kind', 'content', 'request_id')}, 'content':json.loads(row.content)['question'] if row.kind == 'question' else row.content} for row in rows]
 
 
-def projection(db, session, include_messages=False, view_context=None):
+def projection(db, session, include_messages=False, view_context=None, *, deadline=None, should_stop=None):
+    if deadline is None:
+        deadline = time.monotonic() + 15.0
     anchor = session_anchor(db, session)
     task = db.get(GuideTask, anchor[1]) if anchor[1] else None
     result = {'session_id': session.session_id, 'task_id': anchor[1], 'state_version': anchor[2], 'session_version': anchor[0], 'entry_context': json.loads(session.entry_context_json), 'current_step': task.current_step if task else 'understanding', 'task_status': task.status if task else None, 'plan': json.loads(task.plan_json) if task and task.plan_json else None, 'product_cards': [], 'available_actions': ['send_message'], 'pending_clarifications': []}
@@ -77,13 +79,13 @@ def projection(db, session, include_messages=False, view_context=None):
     result['pending_clarifications'] = [pending] if pending else []
     result.update(task_projection(db, session))
     from app.services.comparison_service import ComparisonService
-    result['product_cards'] = ComparisonService(db, session.owner_id).current(session.session_id, view_context)
+    result['product_cards'] = ComparisonService(db, session.owner_id, deadline=deadline, should_stop=should_stop).current(session.session_id, view_context)
     if result['plan']:
         from app.services.purchase_service import plan_actions
         result['available_actions'] = plan_actions(result['plan'])
         result['confirmation_result'] = result['plan'].get('confirmation_result')
     from app.services.product_question_service import ProductQuestionService
-    result.update(ProductQuestionService(db, session.owner_id).projection(session.session_id))
+    result.update(ProductQuestionService(db, session.owner_id, deadline=deadline, should_stop=should_stop).projection(session.session_id))
     if include_messages:
         result['messages'] = messages(db, session.session_id, session.owner_id)
     return result
@@ -162,7 +164,8 @@ def launch_run(factory, owner_id, session_id, body, run_id, deadline):
                         log_host_failure(run_id, exc)
                     error = exc.detail['error'] if isinstance(exc, AppError) else {'code': 'PI_QUERY_FAILED', 'message': 'Pi 查询失败', 'retryable': False}
                     receipt.status = 'failed'
-                    receipt.result_json = json.dumps(error)
+                    from app.services.runtime_observation import retained_observation
+                    receipt.result_json = json.dumps({**retained_observation(receipt.result_json), **error})
                     append_event(worker_db, receipt, 'error', error)
                     worker_db.commit()
     start_worker(factory.kw['bind'], run_id, deadline, work)
@@ -188,6 +191,8 @@ def event_stream(factory, owner_id, session_id, run_id, after_sequence=0):
 def accept_run(db, owner_id, session_id, body, deadline):
     from app.services.navigation_service import authorize_text, consume_handoff
     route = authorize_text(db, owner_id, session_id, 'keke', body)
+    # Retained only in the admission digest so completed legacy runs replay.
+    # New entry decisions never use this field to select Pi context or tools.
     body['_route_capability'] = route['capability']
     factory = sessionmaker(bind=db.get_bind(), autoflush=False, expire_on_commit=False)
     receipt, is_new = admit(db, owner_id, session_id, body)
@@ -201,7 +206,7 @@ def accept_run(db, owner_id, session_id, body, deadline):
 
 @router.post('/sessions/{session_id}/runs', status_code=202)
 def start_run(session_id: str, body: TurnRequest, request: Request, response: Response, db: Session = Depends(get_db)):
-    deadline = time.monotonic() + 30.0
+    deadline = time.monotonic() + 15.0
     owner_id = get_or_create_owner(request, response, db)
     run_id, _factory = accept_run(db, owner_id, session_id, body.model_dump(), deadline)
     return {'run_id': run_id, 'request_id': body.request_id}
@@ -209,7 +214,7 @@ def start_run(session_id: str, body: TurnRequest, request: Request, response: Re
 
 @router.post('/sessions/{session_id}/turns/stream')
 def stream_turn(session_id: str, body: TurnRequest, request: Request, response: Response, db: Session = Depends(get_db)):
-    deadline = time.monotonic() + 30.0
+    deadline = time.monotonic() + 15.0
     owner_id = get_or_create_owner(request, response, db)
     owned_session(db, owner_id, session_id)
     try:
@@ -408,10 +413,11 @@ class QuestionAnswer(BaseModel):
 
 @router.post('/sessions/{session_id}/questions/{question_id}/answers')
 def answer_question(session_id: str, question_id: str, body: QuestionAnswer, request: Request, response: Response, db: Session = Depends(get_db)):
+    deadline = time.monotonic() + 15.0
     from app.services.product_question_service import ProductQuestionService
     owner_id = get_or_create_owner(request, response, db)
     try:
-        result = ProductQuestionService(db, owner_id).answer(session_id, question_id, body.model_dump())
+        result = ProductQuestionService(db, owner_id, deadline=deadline).answer(session_id, question_id, body.model_dump())
         db.commit()
         return result
     except Exception:

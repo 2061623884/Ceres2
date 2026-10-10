@@ -1,4 +1,4 @@
-/** Official api.deepseek.com enables thinking unless the request disables it. */
+/** Request fields for the explicitly selected official DeepSeek profile. */
 export function officialDeepSeekSampling(
   baseUrl: string,
   samplingParams?: Record<string, unknown>,

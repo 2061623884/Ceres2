@@ -1,0 +1,12 @@
+{
+  "repository": "2061623884/Ceres2",
+  "branch": "ceres2/local-cloud-integration-20261007",
+  "remote_commit": "f268d48cbdeea512f866404be6413a77a1ae9c7b",
+  "local_commit": "4e728c7fa9ede8d3ddaec593b4f2f5c01a4811a5",
+  "tree": "388b6dbe136748d20f0c8b5051e3c7d10c94489c",
+  "frozen_product_commit": "81b02f956298361cf9044ee289c0821a8275fab8",
+  "status": "CANDIDATE CHECKPOINT, NOT ACCEPTED: T05/T08-B stage gates passed, frozen product81b02f9 T09 full tests and whole-branch reviews RUNNING. Actual browser BLOCKED, real provider/user acceptance NOT RUN. Packaged helper process-group cleanup P2 remains open and will be corrected separately. No main merge/deployment.",
+  "previous_remote": "7eaeda0cc1e27b96baaf235a1fede1ad47261a79",
+  "verified": "remote branch SHA read back; created tree matches full local tree",
+  "url": "https://github.com/2061623884/Ceres2/commit/f268d48cbdeea512f866404be6413a77a1ae9c7b"
+}

@@ -1,0 +1,167 @@
+{
+  "schema_version": "ceres-local-followup-retrieval-metrics-v1",
+  "purpose": "Public development set diagnostics only; not independent quality acceptance.",
+  "evaluation": {
+    "path": "evals/ceres2-optimization-retrieval-dev.json",
+    "sha256": "eb47a57f89fc65d56d3e74a9b68947d096ba485d5c08051f29dc9a97aa12652e",
+    "version": "optimization-retrieval-dev-v1",
+    "case_count": 18
+  },
+  "report": {
+    "path": "work/local-followup/tmp/real-bge-public-dev-report.json",
+    "sha256": "8cc721432f7a48a8370d073a53edb490addc0eba8d1e16299063126206f19c22"
+  },
+  "index": {
+    "path": "data/indexes/hybrid.sqlite3",
+    "sha256": "0139b71c9bc4a114c6a2763521fbf6e9381fa74b58e64151b94020b8ea567d23",
+    "embedding_revision": "7999e1d3359715c523056ef9478215996d62a620",
+    "dimensions": 512
+  },
+  "metrics_definition": {
+    "recall_at_5": "relevant target IDs found in lane top 5 divided by all target-ID occurrences in answerable cases",
+    "mrr_at_5": "mean reciprocal rank of the first target ID per answerable query; misses score 0 and remain in the denominator",
+    "unanswerable_candidate_top5_case_count": "no-answer queries with any raw lane candidate in top 5; raw BM25/dense candidates are not final relevance decisions",
+    "unanswerable_final_hit_case_count": "no-answer queries with any final relevance-filtered RRF hit; this is the false-positive count",
+    "canonical_ids": "returned IDs checked against the current same-namespace IDs in the verified local index",
+    "timing": "the stored retrieval report has no elapsed/latency fields, so timing remains unknown"
+  },
+  "overall_public_dev_passed_cases": 18,
+  "overall_public_dev_case_count": 18,
+  "namespaces": {
+    "policy": {
+      "case_count": 8,
+      "answerable_case_count": 6,
+      "gold_id_count": 11,
+      "unanswerable_case_count": 2,
+      "timing": {
+        "known_case_count": 0,
+        "unknown_case_count": 8
+      },
+      "lanes": {
+        "bm25": {
+          "recall_at_5": 1.0,
+          "gold_ids_retrieved_at_5": 11,
+          "answerable_miss_case_count_at_5": 0,
+          "mrr_at_5": 1.0,
+          "unanswerable_candidate_top5_case_count": 2,
+          "unanswerable_final_hit_case_count": null,
+          "returned_id_count_all_ranks": 64,
+          "unique_canonical_ids_all_ranks": 11,
+          "noncanonical_id_count_all_ranks": 0
+        },
+        "dense": {
+          "recall_at_5": 1.0,
+          "gold_ids_retrieved_at_5": 11,
+          "answerable_miss_case_count_at_5": 0,
+          "mrr_at_5": 0.916667,
+          "unanswerable_candidate_top5_case_count": 2,
+          "unanswerable_final_hit_case_count": null,
+          "returned_id_count_all_ranks": 88,
+          "unique_canonical_ids_all_ranks": 11,
+          "noncanonical_id_count_all_ranks": 0
+        },
+        "rrf": {
+          "recall_at_5": 1.0,
+          "gold_ids_retrieved_at_5": 11,
+          "answerable_miss_case_count_at_5": 0,
+          "mrr_at_5": 0.916667,
+          "unanswerable_candidate_top5_case_count": 0,
+          "unanswerable_final_hit_case_count": 0,
+          "returned_id_count_all_ranks": 30,
+          "unique_canonical_ids_all_ranks": 10,
+          "noncanonical_id_count_all_ranks": 0
+        }
+      }
+    },
+    "product": {
+      "case_count": 6,
+      "answerable_case_count": 4,
+      "gold_id_count": 6,
+      "unanswerable_case_count": 2,
+      "timing": {
+        "known_case_count": 0,
+        "unknown_case_count": 6
+      },
+      "lanes": {
+        "bm25": {
+          "recall_at_5": 0.833333,
+          "gold_ids_retrieved_at_5": 5,
+          "answerable_miss_case_count_at_5": 1,
+          "mrr_at_5": 0.75,
+          "unanswerable_candidate_top5_case_count": 1,
+          "unanswerable_final_hit_case_count": null,
+          "returned_id_count_all_ranks": 224,
+          "unique_canonical_ids_all_ranks": 73,
+          "noncanonical_id_count_all_ranks": 0
+        },
+        "dense": {
+          "recall_at_5": 1.0,
+          "gold_ids_retrieved_at_5": 6,
+          "answerable_miss_case_count_at_5": 0,
+          "mrr_at_5": 1.0,
+          "unanswerable_candidate_top5_case_count": 2,
+          "unanswerable_final_hit_case_count": null,
+          "returned_id_count_all_ranks": 438,
+          "unique_canonical_ids_all_ranks": 73,
+          "noncanonical_id_count_all_ranks": 0
+        },
+        "rrf": {
+          "recall_at_5": 1.0,
+          "gold_ids_retrieved_at_5": 6,
+          "answerable_miss_case_count_at_5": 0,
+          "mrr_at_5": 1.0,
+          "unanswerable_candidate_top5_case_count": 0,
+          "unanswerable_final_hit_case_count": 0,
+          "returned_id_count_all_ranks": 18,
+          "unique_canonical_ids_all_ranks": 18,
+          "noncanonical_id_count_all_ranks": 0
+        }
+      }
+    },
+    "recipe": {
+      "case_count": 4,
+      "answerable_case_count": 3,
+      "gold_id_count": 3,
+      "unanswerable_case_count": 1,
+      "timing": {
+        "known_case_count": 0,
+        "unknown_case_count": 4
+      },
+      "lanes": {
+        "bm25": {
+          "recall_at_5": 1.0,
+          "gold_ids_retrieved_at_5": 3,
+          "answerable_miss_case_count_at_5": 0,
+          "mrr_at_5": 1.0,
+          "unanswerable_candidate_top5_case_count": 0,
+          "unanswerable_final_hit_case_count": null,
+          "returned_id_count_all_ranks": 16,
+          "unique_canonical_ids_all_ranks": 8,
+          "noncanonical_id_count_all_ranks": 0
+        },
+        "dense": {
+          "recall_at_5": 1.0,
+          "gold_ids_retrieved_at_5": 3,
+          "answerable_miss_case_count_at_5": 0,
+          "mrr_at_5": 1.0,
+          "unanswerable_candidate_top5_case_count": 1,
+          "unanswerable_final_hit_case_count": null,
+          "returned_id_count_all_ranks": 32,
+          "unique_canonical_ids_all_ranks": 8,
+          "noncanonical_id_count_all_ranks": 0
+        },
+        "rrf": {
+          "recall_at_5": 1.0,
+          "gold_ids_retrieved_at_5": 3,
+          "answerable_miss_case_count_at_5": 0,
+          "mrr_at_5": 1.0,
+          "unanswerable_candidate_top5_case_count": 0,
+          "unanswerable_final_hit_case_count": 0,
+          "returned_id_count_all_ranks": 10,
+          "unique_canonical_ids_all_ranks": 6,
+          "noncanonical_id_count_all_ranks": 0
+        }
+      }
+    }
+  }
+}

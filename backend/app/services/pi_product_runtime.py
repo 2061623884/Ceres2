@@ -17,15 +17,19 @@ from app.core.config import get_settings
 from app.core.errors import AppError
 from app.services.catalog_service import CatalogService
 from app.prompts.experience import keke_modules
+from app.services.runtime_observation import retrieval_summary, record_retrieval
 
 MAX_TOOL_ROUNDS = 5
-EXPLORATION_SECONDS = 30.0
+EXPLORATION_SECONDS = 15.0
 LOGGER = logging.getLogger(__name__)
 WORKER = Path(__file__).resolve().parents[3] / 'runtime' / 'pi' / 'dist' / 'worker.js'
+ROLE_BOUNDARY_MESSAGE = '具体订单、退款或退货事项由墨墨处理。这里尚未查询订单资格，也未提交申请；你可以点击角色按钮前往墨墨。'
 
 
 class PiProductRuntime:
-    def __init__(self, catalog: CatalogService, assert_current: Callable[[], None], *, run_id: str, route_request: Callable[[dict], dict], context: dict, memory_command: Callable[[dict], dict], product_search: Callable[[dict], tuple], comparison_search: Callable[[dict], tuple], candidate_resolve: Callable[[str], dict], history_command: Callable[[dict], dict], explore_products: Callable[[dict], dict], select_question_products: Callable[[dict], dict], activity_active: Callable[[], bool]):
+    def __init__(self, catalog: CatalogService, assert_current: Callable[[], None], *, run_id: str, policy_scope: dict, route_request: Callable[[dict], dict], context: dict, memory_command: Callable[[dict], dict], product_search: Callable[[dict], tuple], comparison_search: Callable[[dict], tuple], candidate_resolve: Callable[[str], dict], history_command: Callable[[dict], dict], explore_products: Callable[[dict], dict], select_question_products: Callable[[dict], dict], activity_active: Callable[[], bool], publish_interim: Callable[[str, str], bool]):
+        self.publish_interim = publish_interim
+        self.interim_messages = {}
         self.activity_active = activity_active
         self.select_question_products = select_question_products
         self.question_selections = {}
@@ -34,6 +38,9 @@ class PiProductRuntime:
         self.history_command = history_command
         self.history_results = {}
         self.policy_results = {}
+        self.policy_attempts = []
+        self.policy_scope = policy_scope
+        self.policy_prefetch = None
         self.run_id = run_id
         self.route_request = route_request
         self.memory_command = memory_command
@@ -53,14 +60,123 @@ class PiProductRuntime:
         self.products: dict[str, dict[str, Any]] = {}
         self.proposals = {}
         self.dishes = {}
+        self.dish_graph_refs = {}
+        self.graph_results = {}
         self.dishes_searched = False
         self.events: list[dict[str, Any]] = []
+        self.runtime_version = None
+        self._provider_calls = {}
+        self.runtime_summary = {
+            'policy_lookups': 0, 'policy_tool_lookups': 0,
+            'policy_lookup_outcomes': {'success': 0, 'empty': 0, 'error': 0},
+            'policy_reuses': 0, 'tool_starts': 0, 'primary_pi_turns': 0,
+            'policy_judgment': None, 'events_truncated': False,
+            'policy_sources': [],
+            'graph_tool_attempts': 0, 'graph_official_calls': 0, 'graph_provider_calls': 0,
+            'graph_embedding_calls': 0, 'graph_queries': [],
+            'interim_audit_attempts': 0, 'interim_messages': 0, 'interim_audits': [],
+            'general_audit_attempts': 0,
+            'provider_calls': {stage: {'started': 0, 'completed': 0, 'usage_observed': 0,
+                'usage_missing': 0, 'observed_usage': None, 'usage_complete': True, 'cost': None}
+                for stage in ('primary_pi', 'general_audit', 'interim_audit')},
+            'provider_call_records': [], 'provider_records_truncated': False,
+            'provider_calls_complete': False,
+            **retrieval_summary(),
+        }
         self.tool_rounds = 0
         self.searched = False
         self.diagnostic_id = f"pi-{uuid4().hex[:16]}"
 
+    def _record_event(self, event):
+        # Fixed observed counts survive the bounded diagnostic tail. SDK turns
+        # are primary Pi turns, not provider HTTP calls, tokens or cost.
+        if event['type'] in ('retrieval_start', 'retrieval_end'):
+            record_retrieval(self.runtime_summary, event)
+        elif event['type'] == 'runtime_version':
+            if self.runtime_version is not None:
+                self.runtime_version.update({key: event[key] for key in ('build_revision', 'build_scope', 'prompt_revision')})
+        elif event['type'] in ('provider_call_start', 'provider_call_end'):
+            self._record_provider(event)
+        elif event['type'] == 'general_validation_start':
+            self.runtime_summary['general_audit_attempts'] += 1
+        elif event['type'] == 'graph_query_start':
+            self.runtime_summary['graph_tool_attempts'] += 1
+            self.runtime_summary['graph_queries'].append({**event, 'outcome': None,
+                'official_graph_calls': None, 'provider_calls': None, 'embedding_calls': None})
+            for field in ('graph_official_calls', 'graph_provider_calls', 'graph_embedding_calls'):
+                self.runtime_summary[field] = None
+        elif event['type'] == 'graph_query_end':
+            query = next(row for row in self.runtime_summary['graph_queries'] if row['attempt_id'] == event['attempt_id'])
+            query.update(event)
+            for total, field in (('graph_official_calls', 'official_graph_calls'),
+                                 ('graph_provider_calls', 'provider_calls'), ('graph_embedding_calls', 'embedding_calls')):
+                values = [row[field] for row in self.runtime_summary['graph_queries']]
+                self.runtime_summary[total] = sum(values) if all(value is not None for value in values) else None
+        elif event['type'] == 'interim_audit_start':
+            self.runtime_summary['interim_audit_attempts'] += 1
+            self.runtime_summary['interim_audits'].append({**event, 'approved': None, 'outcome': None, 'diagnostic': None, 'duration_ms': None, 'usage': None, 'cost': None})
+        elif event['type'] == 'interim_audit_end':
+            audit = next(row for row in self.runtime_summary['interim_audits'] if row['audit_id'] == event['audit_id'])
+            audit.update(event)
+        elif event['type'] == 'policy_lookup':
+            self.runtime_summary['policy_lookups'] += 1
+            self.runtime_summary['policy_tool_lookups'] += int(event['origin'] == 'tool')
+            self.runtime_summary['policy_lookup_outcomes'][event['outcome']] += 1
+            source = {key: event.get(key) for key in ('source_name', 'source_version', 'source_revision', 'index_revision')}
+            if source not in self.runtime_summary['policy_sources']:
+                self.runtime_summary['policy_sources'].append(source)
+        elif event['type'] == 'policy_reuse':
+            self.runtime_summary['policy_reuses'] += 1
+        elif event['type'] == 'policy_judgment':
+            self.runtime_summary['policy_judgment'] = dict(event)
+        elif event['type'] == 'tool_execution_start':
+            self.runtime_summary['tool_starts'] += 1
+        elif event['type'] == 'turn_start':
+            self.runtime_summary['primary_pi_turns'] += 1
+        self.events.append(event)
+        if len(self.events) > 256:
+            self.runtime_summary['events_truncated'] = True
+            # Final projections can emit reads after result takes this list.
+            # Preserve that reference while keeping the diagnostic tail bounded.
+            del self.events[:-256]
+
+    def _record_provider(self, event):
+        identity = event['call_id']
+        if event['type'] == 'provider_call_start':
+            if identity in self._provider_calls:
+                return
+            row = {**event, 'status': 'started', 'duration_ms': None, 'usage': None, 'cost': None}
+            self._provider_calls[identity] = row
+            records = self.runtime_summary['provider_call_records']
+            records.append(row)
+            if len(records) > 64:
+                del records[0]
+                self.runtime_summary['provider_records_truncated'] = True
+            counts = self.runtime_summary['provider_calls'][event['stage']]
+            counts['started'] += 1
+            counts['usage_missing'] += 1
+            counts['usage_complete'] = False
+        else:
+            row = self._provider_calls[identity]
+            if row['status'] != 'started':
+                return
+            row.update(event)
+            counts = self.runtime_summary['provider_calls'][event['stage']]
+            counts['completed'] += 1
+            usage = event['usage']
+            if usage is not None:
+                counts['usage_observed'] += 1
+                counts['usage_missing'] -= 1
+                if counts['observed_usage'] is None:
+                    counts['observed_usage'] = dict(usage)
+                else:
+                    for key, value in usage.items():
+                        previous = counts['observed_usage'][key]
+                        counts['observed_usage'][key] = previous + value if previous is not None and value is not None else None
+            counts['usage_complete'] = (counts['usage_missing'] == 0 and counts['observed_usage'] is not None
+                                       and all(value is not None for value in counts['observed_usage'].values()))
+
     def _tool(self, name: str, arguments: dict[str, Any]) -> dict[str, Any]:
-        self.assert_current()
         if name == 'select_question_products':
             if not self.route_result or self.route_result['kind'] not in ('new_goal', 'continue', 'amend'):
                 raise AppError(422, 'PI_ROUTE_INVALID', '请先明确当前购买目标')
@@ -76,11 +192,7 @@ class PiProductRuntime:
             self.explorations[ref] = result
             return {**result, 'exploration_ref':ref}
         if name == 'search_after_sales_policy':
-            from app.mercury.policy import search_policies
-            result = search_policies(arguments['query'], arguments.get('category'))
-            ref = f'policy-{uuid4().hex}'
-            self.policy_results[ref] = result
-            return {**result, 'policy_ref':ref}
+            return self._query_policy(arguments['query'], arguments.get('category'), origin='tool')
         if name == 'history_command':
             result = self.history_command(arguments)
             self.history_results[result['history_ref']] = result
@@ -122,19 +234,35 @@ class PiProductRuntime:
                 self.products[ref] = {**product, 'ref':ref}
             self.comparison_refs = set(self.products)
             return {'products':list(self.products.values()), 'total':total, 'is_demo':True}
-        if name == 'search_dishes':
+        if name in ('search_dishes', 'search_recipe_relations'):
             if self.activity_active():
                 raise AppError(422, 'ACTIVITY_SCOPE_CONFLICT', '当前活动只选购成品；如需菜谱食材，请明确开始新的购买目标。')
-            self.dishes_searched = True
             from app.services.dish_service import DishService
             service = DishService(self.catalog)
+            graph = None
+            if name == 'search_recipe_relations':
+                matches, graph, error = self._graph_lookup(service, arguments)
+                if error is not None:
+                    self.dishes_searched = self.searched = True
+                    return {'outcome': 'error', 'error': error, 'dishes': [], 'is_demo': True,
+                            'message': '图查询未能完成，图关系状态未知；不能据此判断不存在相关菜谱或关系。'}
+            else:
+                matches = service.search(arguments['query'])
+            self.dishes_searched = True
             rows = []
-            for dish in service.search(arguments['query'])[:5]:
+            for dish in matches[:5]:
                 ref = f'dish-{uuid4().hex}'
                 self.dishes[ref] = dish
+                if graph is not None:
+                    self.dish_graph_refs[ref] = graph['graph_query_id']
                 rows.append({**dish, 'ref':ref, 'candidates':service.candidates(dish)})
             self.searched = True
-            return {'dishes':rows, 'is_demo':True}
+            if graph is None:
+                return {'dishes':rows, 'is_demo':True}
+            return {'dishes': rows, 'is_demo': True, 'outcome': 'success' if rows else 'empty',
+                    'graph_evidence': {key: graph[key] for key in ('graph_query_id', 'method', 'selection',
+                        'model_selected_entity_ids', 'canonical_scope', 'canonical_facts', 'ingredient_recipes',
+                        'graph_index_revision', 'query_revision')}}
         if name == 'propose_dish':
             if self.activity_active():
                 raise AppError(422, 'ACTIVITY_SCOPE_CONFLICT', '当前活动只选购成品；如需菜谱食材，请明确开始新的购买目标。')
@@ -175,6 +303,171 @@ class PiProductRuntime:
             return {'product': self.products[ref], 'is_demo': True}
         raise AppError(422, 'PI_TOOL_FORBIDDEN', '本次运行仅允许查询商品')
 
+    def _graph_lookup(self, service, arguments):
+        from app.services.knowledge_service import check_budget
+        from app.services.guide_run_service import safe_failure_diagnostic
+        query, method = arguments['query'], arguments.get('method', 'local')
+        attempt_id, started = f'graph-attempt-{uuid4().hex}', time.monotonic()
+        self._record_event({'type': 'graph_query_start', 'run_id': self.run_id,
+                            'attempt_id': attempt_id, 'query': query, 'method': method})
+        error, graph, matches = None, {}, []
+        try:
+            matches, graph = service.graph_search(query, method=method)
+            self.assert_current()
+            check_budget(self.catalog.deadline, self.catalog.should_stop)
+        except AppError as exc:
+            # Graph errors can coexist with other successful facts; expiry/stop is
+            # still checked by the owning Pi loop before sending a tool result.
+            if exc.detail['error']['code'] not in ('GRAPH_INDEX_MISSING', 'GRAPH_UNAVAILABLE',
+                    'KNOWLEDGE_UNAVAILABLE', 'KNOWLEDGE_STALE', 'KNOWLEDGE_TIMEOUT', 'KNOWLEDGE_CANCELLED'):
+                raise
+            LOGGER.warning('Graph lookup failed run_id=%s attempt_id=%s causes=%s',
+                           self.run_id, attempt_id, safe_failure_diagnostic(exc))
+            graph = exc.detail.get('graph_observation', {})
+            error = exc.detail['error']['code']
+        counts = graph.get('call_counts')
+        outcome = 'error' if error else 'success' if matches else 'empty'
+        self._record_event({'type': 'graph_query_end', 'run_id': self.run_id,
+            'attempt_id': attempt_id, 'query': query, 'method': method, 'outcome': outcome, 'error': error,
+            'graph_query_id': graph.get('graph_query_id'), 'graph_status': graph.get('graph_status', 'unobserved'),
+            'official_graph_calls': graph.get('official_graph_calls'),
+            'provider_calls': counts['completion'] if counts is not None else None,
+            'embedding_calls': counts['embedding'] if counts is not None else None,
+            'calls': graph.get('calls'), 'calls_truncated': graph.get('calls_truncated'),
+            'manifest': graph.get('manifest'), 'graph_index_revision': graph.get('graph_index_revision'),
+            'graph_revision': (graph.get('manifest') or {}).get('graph_revision'),
+            'corpus_revision': (graph.get('manifest') or {}).get('corpus_revision'),
+            'query_revision': graph.get('query_revision'), 'selection': graph.get('selection'),
+            'model_selected_entity_ids': graph.get('model_selected_entity_ids'),
+            'canonical_scope': graph.get('canonical_scope'),
+            'canonical_entity_ids': [row['id'] for row in graph['canonical_facts']] if not error else None,
+            'recipe_ids': [dish['dish_id'] for dish in matches] if not error else None,
+            'duration_ms': graph.get('duration_ms'), 'elapsed_ms': (time.monotonic()-started)*1000})
+        if not error:
+            self.graph_results[graph['graph_query_id']] = graph
+        return matches, graph, error
+
+    def _graph_message(self, answer):
+        latest = {}
+        for query in self.runtime_summary['graph_queries']:
+            latest[(query['query'], query['method'])] = query
+        lines = []
+        for query in latest.values():
+            if query['outcome'] == 'error':
+                lines.append('图查询未能完成，图关系状态未知；不能据此判断不存在相关菜谱或食材关系。')
+            elif query['outcome'] == 'empty':
+                lines.append('图查询未取得可核对的相关菜谱；不能据此判断不存在相关菜谱或食材关系。')
+        identities = dict.fromkeys(self.dish_graph_refs[ref] for ref in answer.get('dish_refs', []) if ref in self.dish_graph_refs)
+        for identity in identities:
+            graph = self.graph_results[identity]
+            scope = '检索社区规范事实视图' if graph['canonical_scope'] == 'retrieved_communities' else '模型选择对应的规范事实视图'
+            lines.append(f"图查询来源：{graph['method'].title()}；模型选中 {len(graph['selection']['entity_numbers'])} 个实体，"
+                         f"宿主提供{scope}（{len(graph['canonical_facts'])} 个实体），二者分别记录。"
+                         f"图版本 {graph['manifest']['graph_revision']}；展示用量来自当前规范菜谱，商品价格和库存另从当前 Offer 核对。"
+                         '图关系不证明过敏安全、营养或替代，也不授权采购。')
+        return '\n'.join(dict.fromkeys(lines))
+
+    def _query_policy(self, query, category, *, origin):
+        from app.mercury.policy import search_policies, source_snapshot
+        from app.services.knowledge_service import check_budget
+        started = time.monotonic()
+        evidence = {'request_id': self.policy_scope['request_id'], 'query': query,
+                    'category': category, 'source_name': None, 'source_version': None,
+                    'source_revision': None, 'index_revision': None}
+        try:
+            check_budget(self.policy_deadline, self.policy_should_stop)
+            snapshot = source_snapshot()
+            evidence.update(snapshot)
+            # Exact text/category/request and the complete current index identity.
+            for existing in self.policy_results.values():
+                if (existing['scope'] == self.policy_scope and existing['query'] == query
+                        and existing['category'] == category
+                        and all(existing[key] == value for key, value in snapshot.items())):
+                    self.assert_current()
+                    check_budget(self.policy_deadline, self.policy_should_stop)
+                    self._record_event({'type': 'policy_reuse', 'origin': origin, 'outcome': existing['outcome'],
+                                        'elapsed_ms': (time.monotonic() - started) * 1000,
+                                        **snapshot, 'policy_ref': existing['policy_ref']})
+                    return {key: value for key, value in existing.items() if key not in ('scope', 'retrieval')}
+            result = search_policies(query, category, snapshot=snapshot,
+                                     deadline=self.policy_deadline, should_stop=self.policy_should_stop)
+            self.assert_current()
+            check_budget(self.policy_deadline, self.policy_should_stop)
+        except Exception as exc:
+            from app.services.guide_run_service import safe_failure_diagnostic
+            LOGGER.warning('Policy fallback phase=policy_lookup run_id=%s request_id=%s causes=%s',
+                           self.run_id, self.policy_scope['request_id'], safe_failure_diagnostic(exc))
+            evidence.update(outcome='error', coverage='unknown', data=None, reason='lookup_failed')
+            self.policy_attempts.append({**evidence, 'scope': dict(self.policy_scope)})
+            self._record_event({'type': 'policy_lookup', 'origin': origin, 'outcome': 'error',
+                                'elapsed_ms': (time.monotonic() - started) * 1000,
+                                'source_version': evidence['source_version'],
+                                'source_revision': evidence['source_revision'],
+                                'index_revision': evidence['index_revision'], 'reason': 'lookup_failed'})
+            return evidence
+        # Only a still-current, in-budget read reaches reference minting.
+        ref = f'policy-{uuid4().hex}'
+        evidence.update(**{key: value for key, value in result.items() if key != 'retrieval'},
+                        policy_ref=ref, outcome='success' if result['data'] else 'empty',
+                        coverage='partial' if result['data'] else 'none')
+        # Full raw retrieval stays host-side, not duplicated in every model turn.
+        self.policy_results[ref] = {**evidence, 'scope': dict(self.policy_scope),
+                                    'retrieval': result['retrieval']}
+        self.policy_attempts.append(self.policy_results[ref])
+        self._record_event({'type': 'policy_lookup', 'origin': origin, 'outcome': evidence['outcome'],
+                            'elapsed_ms': (time.monotonic() - started) * 1000,
+                            **snapshot, 'policy_ref': ref, 'reason': None})
+        return evidence
+
+    def prepare_policy(self, message: str, *, should_stop, on_phase, deadline):
+        self.policy_deadline = deadline
+        self.policy_should_stop = should_stop
+        if should_stop():
+            return self._close('stopped')
+        if time.monotonic() >= deadline:
+            return self._close('deadline')
+        self.assert_current()
+        if should_stop():
+            return self._close('stopped')
+        if time.monotonic() >= deadline:
+            return self._close('deadline')
+        from app.services.kev_provider import judge_policy, KevUnavailable, POLICY_CRITERIA_VERSION
+        started = time.monotonic()
+        reason = None
+        try:
+            decision, _raw = judge_policy({'message': message}, remaining_seconds=deadline - started)
+        except KevUnavailable as exc:
+            from app.services.guide_run_service import safe_failure_diagnostic
+            decision, reason = exc.outcome, exc.reason
+            LOGGER.warning('Policy fallback phase=policy_judgment run_id=%s request_id=%s causes=%s',
+                           self.run_id, self.policy_scope['request_id'], safe_failure_diagnostic(exc))
+        self._record_event({'type': 'policy_judgment', 'outcome': decision,
+                            'elapsed_ms': (time.monotonic() - started) * 1000,
+                            'reason': reason, 'rules_version': POLICY_CRITERIA_VERSION, 'usage': None})
+        if should_stop():
+            return self._close('stopped')
+        if time.monotonic() >= deadline:
+            return self._close('deadline')
+        self.assert_current()
+        if should_stop():
+            return self._close('stopped')
+        if time.monotonic() >= deadline:
+            return self._close('deadline')
+        if decision == 'yes':
+            on_phase('retrieve')
+            self.assert_current()
+            if should_stop():
+                return self._close('stopped')
+            if time.monotonic() >= deadline:
+                return self._close('deadline')
+            self.policy_prefetch = self._query_policy(message, None, origin='prefetch')
+            self.assert_current()
+        if should_stop():
+            return self._close('stopped')
+        if time.monotonic() >= deadline:
+            return self._close('deadline')
+        return None
+
     def run(self, message: str, *, should_stop: Callable[[], bool], on_phase: Callable[[str], None], deadline: float) -> dict[str, Any]:
         if should_stop():
             return self._close('stopped')
@@ -185,7 +478,13 @@ class PiProductRuntime:
             raise AppError(503, 'PI_PROVIDER_UNCONFIGURED', 'Pi 模型配置不完整')
         if not WORKER.is_file():
             raise AppError(503, 'PI_WORKER_UNBUILT', 'Pi runtime 尚未构建')
+        prepared = self.prepare_policy(message, should_stop=should_stop, on_phase=on_phase, deadline=deadline)
+        if prepared is not None:
+            return prepared
         categories = self.catalog.get_categories()
+        self.assert_current()
+        if should_stop():
+            return self._close('stopped')
         if time.monotonic() >= deadline:
             return self._close('deadline')
         # The child gets no inherited API keys or database configuration.
@@ -208,17 +507,22 @@ class PiProductRuntime:
             child.stdin.write((json.dumps(frame, ensure_ascii=False) + '\n').encode())
             child.stdin.flush()
         try:
+            self.assert_current()
             if should_stop():
                 return self._close('stopped')
             if time.monotonic() >= deadline:
                 return self._close('deadline')
-            send({'type': 'start', 'message': message, 'categories': categories, 'context': self.context, 'promptModules': keke_modules(), 'model': {'baseUrl': settings.openai_base_url, 'apiKey': settings.openai_api_key, 'id': settings.llm_model}, 'maxToolRounds': MAX_TOOL_ROUNDS, 'timeoutMs': max(1, int((deadline - time.monotonic()) * 1000))})
+            send({'type': 'start', 'message': message, 'categories': categories, 'context': self.context, 'policyEvidence': self.policy_prefetch, 'promptModules': keke_modules(), 'model': {'baseUrl': settings.openai_base_url, 'apiKey': settings.openai_api_key, 'id': settings.llm_model}, 'maxToolRounds': MAX_TOOL_ROUNDS, 'timeoutMs': max(1, int((deadline - time.monotonic()) * 1000))})
             while True:
                 if should_stop():
                     return self._close('stopped')
                 if time.monotonic() >= deadline:
                     return self._close('deadline')
                 self.assert_current()
+                if should_stop():
+                    return self._close('stopped')
+                if time.monotonic() >= deadline:
+                    return self._close('deadline')
                 ready = selector.select(timeout=min(0.05, max(0, deadline - time.monotonic())))
                 if not ready:
                     if child.poll() is not None:
@@ -246,8 +550,22 @@ class PiProductRuntime:
                     if not isinstance(frame, dict) or frame.get('run_id') != self.run_id or frame.get('sequence') != output_sequence:
                         raise AppError(502, 'PI_PROTOCOL_INVALID', 'Pi runtime 运行关联或帧序号错误')
                     if frame['type'] == 'event':
-                        self.events.append(frame['event'])
-                        self.events = self.events[-256:]
+                        self._record_event(frame['event'])
+                    elif frame['type'] == 'interim_message':
+                        identity, text = frame['message_id'], frame['text']
+                        if (frame['approved'] is not True or not isinstance(identity, str)
+                                or not identity.startswith(self.run_id + ':interim:')
+                                or not isinstance(text, str) or not text.strip()):
+                            raise AppError(502, 'PI_PROTOCOL_INVALID', '过程消息合同错误')
+                        if identity in self.interim_messages:
+                            if self.interim_messages[identity] != text:
+                                raise AppError(502, 'PI_PROTOCOL_INVALID', '过程消息身份对应不同内容')
+                            continue
+                        if not should_stop() and time.monotonic() < deadline:
+                            self.assert_current()
+                            if self.publish_interim(identity, text):
+                                self.interim_messages[identity] = text
+                                self.runtime_summary['interim_messages'] += 1
                     elif frame['type'] == 'tool_call':
                         if should_stop():
                             return self._close('stopped')
@@ -257,7 +575,15 @@ class PiProductRuntime:
                             return self._close('tool_budget')
                         self.tool_rounds = max(self.tool_rounds, frame['round'])
                         on_phase('speaking' if frame['name'] == 'validate_general_text' else 'understanding' if frame['name'] == 'guide_request' else 'retrieve')
+                        # Both progress persistence and freshness reads can block.
+                        # Recheck after them, before any ordinary tool/read starts.
+                        self.assert_current()
+                        if should_stop():
+                            return self._close('stopped')
+                        if time.monotonic() >= deadline:
+                            return self._close('deadline')
                         result = self._tool(frame['name'], frame['arguments'])
+                        self.assert_current()
                         if should_stop():
                             return self._close('stopped')
                         if time.monotonic() >= deadline:
@@ -272,10 +598,17 @@ class PiProductRuntime:
                             raise AppError(422, code, '这段解释未通过事实边界核对，本次未展示。商家信息需要通过业务查询确认。')
                         self.approved_general.add(ref)
                     elif frame['type'] == 'result':
+                        self.runtime_summary['provider_calls_complete'] = True
+                        self.assert_current()
+                        if should_stop():
+                            return self._close('stopped')
+                        if time.monotonic() >= deadline:
+                            return self._close('deadline')
                         if frame['status'] in ('tool_budget', 'deadline', 'stopped'):
                             return self._close(frame['status'])
                         return self._answer(frame['answer'])
                     elif frame['type'] == 'error':
+                        self.runtime_summary['provider_calls_complete'] = True
                         self._fail(frame['code'], frame['diagnostic'])
                     else:
                         raise AppError(502, 'PI_PROTOCOL_INVALID', 'Pi runtime 协议错误')
@@ -327,21 +660,92 @@ class PiProductRuntime:
             raise AppError(502, 'PI_ANSWER_INVALID', 'Pi 回复不符合事实引用契约') from exc
         if not isinstance(answer, dict):
             raise AppError(502, 'PI_ANSWER_INVALID', 'Pi 回复必须为结构化对象')
+        if 'role_boundary' in answer and type(answer['role_boundary']) is not bool:
+            raise AppError(502, 'PI_ANSWER_INVALID', '售后职责标记必须为布尔值')
+        # One primary result is rendered. Policy and role-boundary additions
+        # compose with it; unrelated reference fields must not be ignored.
+        primary_references = {
+            'products': {'product_refs'}, 'comparison': {'product_refs'},
+            'dish_candidates': {'dish_refs'}, 'recipe_facts': {'dish_refs', 'ingredient_ids'},
+            'purchase_plan': {'proposal_ref'}, 'exploration': {'exploration_ref'},
+            'question_selection': {'selection_ref'}, 'history_result': {'history_ref'},
+            'memory_result': {'memory_ref'}, 'general_explanation': {'general_ref'},
+        }
+        reference_fields = set().union(*primary_references.values())
+        applicable = set() if answer.get('status') == 'waiting' else primary_references.get(answer.get('answer_kind', 'products'), set())
+        if (set(answer) & reference_fields) - applicable:
+            raise AppError(422, 'PI_UNKNOWN_REFERENCE', '回复含有不适用于当前主结果的引用字段')
         outcome = self._answer_value(answer)
-        # A shopping result may carry one independently queried policy. Each
-        # reference is validated before the host publishes either result.
-        if answer.get('answer_kind') in ('exploration', 'question_selection', 'products', 'comparison', 'purchase_plan') and 'policy_ref' in answer:
-            outcome['policy_message'] = self._policy_message(answer['policy_ref'])
+        graph_message = self._graph_message(answer)
+        if graph_message:
+            outcome['graph_message'] = graph_message
+        # Every successful primary result may carry independently acquired
+        # policy facts, including a clarification or an explicit memory result.
+        has_policy_refs = 'policy_ref' in answer or 'policy_refs' in answer
+        if outcome['status'] in ('completed', 'waiting') and answer.get('answer_kind') != 'policy_result' and has_policy_refs:
+            outcome['policy_message'] = self._policy_messages(answer)
+        unavailable = self._policy_unavailable_message()
+        if unavailable and not (answer.get('answer_kind') == 'policy_result' and not has_policy_refs):
+            outcome['policy_message'] = '\n'.join(filter(None, (outcome.get('policy_message'), unavailable)))
+        if answer.get('role_boundary') is True and answer.get('answer_kind') != 'role_boundary':
+            outcome['role_boundary'] = True
+            outcome['role_boundary_message'] = ROLE_BOUNDARY_MESSAGE
         return outcome
 
-    def _policy_message(self, ref):
-        from app.mercury.policy import policy_summary
-        if not isinstance(ref, str) or not self.policy_results or ref != next(reversed(self.policy_results)):
+    def _policy_unavailable_message(self):
+        # Only actual attempts affect unavailable projection. A later
+        # success/empty resolves failure only for that exact real scope.
+        latest = {}
+        for attempt in self.policy_attempts:
+            if attempt['outcome'] in ('success', 'empty'):
+                # A failed acquisition knew no source identity. Actual later
+                # evidence resolves it only for this same exact query/category.
+                latest.pop((attempt['query'], attempt['category'], None, None, None), None)
+            latest[(attempt['query'], attempt['category'], attempt['source_version'], attempt['source_revision'], attempt['index_revision'])] = attempt
+        failures = [attempt for attempt in latest.values() if attempt['outcome'] == 'error']
+        return '\n'.join(
+            f"政策查询暂时失败，规则未知。查询范围：{json.dumps(attempt['query'], ensure_ascii=False)}；"
+            f"类别：{attempt['category'] or '未指定'}；来源：{attempt['source_name'] or '未知'}（版本 {attempt['source_version'] or '未知'}）。"
+            '具体订单资格尚未核实；未提交任何申请。'
+            for attempt in failures)
+
+    def _policy_messages(self, answer):
+        refs = [answer['policy_ref']] if 'policy_ref' in answer else []
+        if 'policy_refs' in answer:
+            if not isinstance(answer['policy_refs'], list) or not answer['policy_refs']:
+                raise AppError(422, 'PI_UNKNOWN_REFERENCE', '政策引用列表必须包含本次实际查询的规则')
+            refs.extend(answer['policy_refs'])
+        if not refs:
             raise AppError(422, 'PI_UNKNOWN_REFERENCE', '政策必须引用本次实际查询的规则')
-        return policy_summary(self.policy_results[ref]['data'])
+        # Validate every explicitly supplied value, including both wire forms.
+        messages = [self._policy_message(ref) for ref in refs]
+        return '\n\n'.join(dict.fromkeys(messages))
+
+    def _policy_message(self, ref):
+        from app.mercury.policy import policy_summary, source_snapshot
+        if not isinstance(ref, str) or ref not in self.policy_results:
+            raise AppError(422, 'PI_UNKNOWN_REFERENCE', '政策必须引用本次实际查询的规则')
+        evidence = self.policy_results[ref]
+        try:
+            snapshot = source_snapshot()
+        except Exception as exc:
+            raise AppError(422, 'PI_UNKNOWN_REFERENCE', '政策来源当前无法核实，请重新查询') from exc
+        if evidence['scope'] != self.policy_scope or any(evidence[key] != value for key, value in snapshot.items()):
+            raise AppError(422, 'PI_UNKNOWN_REFERENCE', '政策引用的请求或来源版本已失效，请重新查询')
+        text = (f"查询范围：{json.dumps(evidence['query'], ensure_ascii=False)}；"
+                f"类别：{evidence['category'] or '未指定'}。\n" + policy_summary(evidence['data']))
+        if evidence['outcome'] == 'empty':
+            return f"{text} 来源：{evidence['source_name']}（版本 {evidence['source_version']}）。"
+        return text + ' 本次仅展示检索命中的一般规则；未覆盖的条款或条件仍未知，不能视为完整问题已全部核实。'
 
     def _answer_value(self, answer):
         kind = answer.get('answer_kind')
+        if kind == 'role_boundary':
+            if not self.route_result or self.route_result['kind'] != 'question':
+                raise AppError(422, 'PI_ROUTE_INVALID', '具体售后说明不能修改购买任务')
+            return {'status': 'completed', 'answer_kind': 'role_boundary',
+                    'message': ROLE_BOUNDARY_MESSAGE, 'role_boundary': True,
+                    'products': []}
         if kind == 'question_selection':
             ref = answer.get('selection_ref')
             if not isinstance(ref, str) or ref not in self.question_selections:
@@ -357,7 +761,9 @@ class PiProductRuntime:
             result = self.explorations[ref]
             return {'status':'completed', 'message':result['question'], 'products':[], 'exploration':result}
         if kind == 'policy_result':
-            return {'status':'completed', 'message':self._policy_message(answer.get('policy_ref')), 'products':[]}
+            if 'policy_ref' not in answer and 'policy_refs' not in answer and (unavailable := self._policy_unavailable_message()):
+                return {'status': 'completed', 'message': unavailable, 'products': []}
+            return {'status':'completed', 'message':self._policy_messages(answer), 'products':[]}
         if kind == 'history_result':
             ref = answer.get('history_ref')
             if not isinstance(ref, str) or not self.history_results or ref != next(reversed(self.history_results)):
@@ -376,11 +782,52 @@ class PiProductRuntime:
                 raise AppError(422, 'PI_EVIDENCE_MISSING', '请先查询真实菜谱')
             dishes = [self.dishes[ref] for ref in dict.fromkeys(refs)][:5]
             candidates = [{'dish_id': dish['dish_id'], 'name': dish['name']} for dish in dishes]
-            lines = ['可以考虑以下菜品，请选一道后再准备采购清单：'] if dishes else ['已查询到菜谱，但本次没有选定展示结果。' if self.dishes else '本次没有查到匹配菜谱。']
+            lines = ['可以考虑以下菜品，请选一道后再准备采购清单：'] if dishes else ['已查询到菜谱，但本次没有选定展示结果。' if self.dishes else ('尚未取得可展示的规范菜谱引用。' if self.runtime_summary['graph_tool_attempts'] else '本次没有查到匹配菜谱。')]
             lines.extend(f"{index + 1}. {dish['name']}" for index, dish in enumerate(dishes))
             if dishes:
                 lines.append('尚未选定或加购；食材供给会在准备清单时核对，价格和库存为模拟数据。')
             return {'status': 'completed', 'message': '\n'.join(lines), 'products': [], 'dish_candidates': candidates}
+        if kind == 'recipe_facts':
+            refs, ingredient_ids = answer.get('dish_refs'), answer.get('ingredient_ids', [])
+            if (not isinstance(refs, list) or any(not isinstance(ref, str) or ref not in self.dishes for ref in refs)
+                    or not isinstance(ingredient_ids, list) or any(not isinstance(identity, str) for identity in ingredient_ids)):
+                raise AppError(422, 'PI_UNKNOWN_REFERENCE', '菜谱事实必须来自本次查询的菜谱和食材')
+            if not self.dishes_searched:
+                raise AppError(422, 'PI_EVIDENCE_MISSING', '请先查询真实菜谱')
+            dishes = [self.dishes[ref] for ref in dict.fromkeys(refs)][:5]
+            used = {item['ingredient_id'] for dish in dishes for item in [*dish['required_items'], *dish['optional_items']]} | {identity for dish in dishes for identity in dish['pantry_items']}
+            if set(ingredient_ids)-used:
+                raise AppError(422, 'PI_UNKNOWN_REFERENCE', '食材不属于本次选定的菜谱事实')
+            corpus = json.loads((get_settings().root_dir/'data/fixtures/ingredients.json').read_text())
+            names = {row['ingredient_id']:row['name_zh'] for row in corpus['ingredients']}
+            lines = ['菜谱基准用量（不是采购包装数）：'] if dishes else ['本次未取得选定菜谱的可核对事实。']
+            for dish in dishes:
+                required = '、'.join(names[item['ingredient_id']]+' '+ ' '.join(
+                    f"{item['quantity_'+unit]:g}{unit}" for unit in ('g','ml','pc') if 'quantity_'+unit in item) for item in dish['required_items'])
+                lines.append(f"{dish['name']}：基准{dish['base_people']}人；必需食材 {required}；来源 recipes.json/{dish['dish_id']}。")
+                optional = []
+                for item in dish['optional_items']:
+                    quantity = ' '.join(f"{item['quantity_'+unit]:g}{unit}" for unit in ('g', 'ml', 'pc') if 'quantity_'+unit in item)
+                    optional.append(names[item['ingredient_id']] + (' ' + quantity if quantity else '（用量未记录）'))
+                lines.append('可选食材：' + ('、'.join(optional) if optional else '来源未记录可选项') + '；不默认纳入采购。')
+                if dish['pantry_items']:
+                    lines.append('基础调料：'+'、'.join(names[identity] for identity in dish['pantry_items'])+'；数量未记录，家庭已有量未知。')
+            if len(dishes)>1:
+                shared = set.intersection(*({item['ingredient_id'] for item in dish['required_items']} for dish in dishes))
+                lines.append('共用必需食材：'+('、'.join(names[identity] for identity in sorted(shared)) if shared else '当前这几道菜没有共用必需食材记录')+'。')
+            products = {}
+            from app.services.dish_service import DishService
+            for dish in dishes:
+                # This union is only for the read-only fact lookup. Purchase
+                # requirements still use the original required/pantry records.
+                candidates = DishService(self.catalog).candidates({**dish, 'required_items':[*dish['required_items'], *dish['optional_items']]})
+                for identity in ingredient_ids:
+                    for product in candidates.get(identity, []):
+                        products[product['sku_id']] = product
+            if ingredient_ids:
+                lines.append('指定食材的当前采购候选（仅信息查询，尚未选定或加购）：')
+                lines.append(self._facts(list(products.values())))
+            return {'status':'completed','message':'\n'.join(lines),'products':list(products.values())}
         if kind == 'purchase_plan':
             if self.comparison_requested:
                 raise AppError(422, 'COMPARISON_SELECTION_REQUIRED', '请先展示比较候选并由用户选定')
@@ -435,6 +882,6 @@ class PiProductRuntime:
         return '\n'.join(lines)
 
     def _close(self, status: str) -> dict[str, Any]:
-        explanation = {'stopped': '已停止本次查询。', 'deadline': '已达到 30 秒查询时限，未继续探索。', 'tool_budget': '已达到 5 轮工具查询上限，未继续探索。'}[status]
+        explanation = {'stopped': '已停止本次查询。', 'deadline': '已达到 15 秒查询时限，未继续探索。', 'tool_budget': '已达到 5 轮工具查询上限，未继续探索。'}[status]
         products = list(self.products.values())[:5]
         return {'status': status, 'message': explanation + ('\n' + self._facts(products) if products else ''), 'products': products}

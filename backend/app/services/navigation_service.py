@@ -4,6 +4,8 @@ No business write is authorized here. Destination roles re-read their own facts.
 """
 import hashlib
 import json
+import logging
+import time
 from uuid import uuid4
 from sqlalchemy import select, update
 from app.core.errors import AppError
@@ -55,7 +57,7 @@ def read_opening(db, owner_id, session_id):
     result = {**opening, 'handoff': None}
     if opening.get('accepted_request_id'):
         route = json.loads(receipt(db, session_id, opening['accepted_request_id']).result_json)
-        if route['authorized_role'] == opening['role']:
+        if route.get('criteria_version') == CRITERIA_VERSION and route['authorized_role'] == opening['role']:
             result['handoff'] = {key: route[key] for key in ('routing_request_id', 'original_message', 'selected_object')}
     return result
 
@@ -73,6 +75,19 @@ def receipt(db, session_id, request_id):
     return db.get(GuideCommandReceipt, (session_id, 'route:' + request_id))
 
 
+def completed_execution(db, session_id, request_id, role):
+    """Only a durable terminal result can survive a legacy navigation contract."""
+    if role == 'keke':
+        from app.models.guide import GuideTurnReceipt
+        from app.services.guide_run_service import TERMINAL
+        row = db.scalar(select(GuideTurnReceipt).where(GuideTurnReceipt.session_id == session_id, GuideTurnReceipt.request_id == request_id))
+        return row is not None and row.status in TERMINAL and row.result_json is not None
+    if role == 'momo':
+        row = db.get(GuideCommandReceipt, (session_id, 'momo:' + request_id))
+        return row is not None and json.loads(row.result_json)['status'] in ('completed', 'failed')
+    return False
+
+
 def decide_route(db, owner_id, session_id, body):
     session = lock_session(db, owner_id, session_id)
     digest = hashlib.sha256(json.dumps(body, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
@@ -82,6 +97,14 @@ def decide_route(db, owner_id, session_id, body):
             db.rollback()
             raise AppError(409, 'IDEMPOTENCY_CONFLICT', '同一文字请求标识对应不同内容')
         result = json.loads(prior.result_json)
+        if result.get('criteria_version') != CRITERIA_VERSION:
+            if not completed_execution(db, session_id, body['request_id'], result['authorized_role']):
+                db.rollback()
+                raise AppError(409, 'STALE_NAVIGATION', '旧版导航请求已失效，请重新说明需求')
+            # Preserve the stored original metadata for the business digest,
+            # while projecting no old page-changing or continuation instruction.
+            result = {**result, 'status': 'ready', 'show_prompt': False,
+                      'continue_original': False, 'capability': None, 'legacy_replay': True}
         db.rollback()
         return result
     opening = current(session, body['opening_id'])
@@ -102,32 +125,30 @@ def decide_route(db, owner_id, session_id, body):
     result = {'routing_request_id': body['request_id'], 'opening_id': opening['opening_id'], 'original_message': body['message'],
               'source_role': body['role'], 'target_role': body['role'], 'selected_object': body.get('selected_object'),
               'capability': None, 'authorized_role': None, 'show_prompt': False, 'continue_original': False, 'criteria_version': CRITERIA_VERSION, 'anchor': list(session_anchor(db, session))}
-    try:
-        choice, raw = judge(state)
-        result['provider_output'] = raw
-        target = 'momo' if choice == 'momo' else 'keke'
-        if choice == 'clarify':
-            result.update(status='clarify', message='这次是想选购商品，还是处理已经下单的订单？')
-        elif choice == 'return_keke':
-            result.update(status='navigation', target_role='keke', message='已回到选购页面。')
-            opening['role'] = 'keke'
-        elif choice.startswith('return_keke_'):
-            result.update(status='navigation', target_role='keke', authorized_role='keke',
-                          capability=choice.removeprefix('return_keke_'), continue_original=True,
-                          message='已回到选购页面，继续你的原请求。')
-            opening['role'] = 'keke'
-        else:
-            capability = choice.removeprefix('keke_') if target == 'keke' else None
-            result.update(target_role=target, capability=capability)
-            if target == body['role']:
-                result.update(status='ready', authorized_role=target)
+    if body['role'] == 'momo':
+        result.update(status='ready', authorized_role='momo', entry_judgment={'outcome': 'not_attempted', 'elapsed_ms': None, 'reason': 'momo_direct'})
+    else:
+        started_at = time.monotonic()
+        try:
+            choice, raw = judge(state)
+            result['provider_output'] = raw
+            result['entry_judgment'] = {'outcome': choice, 'elapsed_ms': (time.monotonic() - started_at) * 1000, 'reason': None}
+            if choice == 'yes':
+                result.update(status='switch', target_role='momo', show_prompt=not opening['prompt_displayed'],
+                              message='这件事可以交给墨墨。要切换吗？')
             else:
-                result.update(status='switch', show_prompt=not opening['prompt_displayed'], message='这件事可以交给墨墨。要切换吗？' if target == 'momo' else '这件事可以交给可可。要回到选购吗？')
-    except KevUnavailable as exc:
-        result.update(status='unavailable', message='职责判断暂时不可用。你可以使用角色按钮手动选择，继续这条原请求。', provider_error=str(exc))
+                result.update(status='ready', authorized_role='keke')
+        except KevUnavailable as exc:
+            from app.services.guide_run_service import safe_failure_diagnostic
+            logging.getLogger(__name__).warning(
+                'Kev entry fallback session_id=%s request_id=%s causes=%s',
+                session_id, body['request_id'], safe_failure_diagnostic(exc),
+            )
+            result.update(status='ready', authorized_role='keke', provider_error=exc.reason,
+                          entry_judgment={'outcome': exc.outcome, 'elapsed_ms': (time.monotonic() - started_at) * 1000, 'reason': exc.reason})
     opening['accepted_request_id'] = body['request_id'] if result['continue_original'] else None
     opening['latest_request_id'] = body['request_id']
-    opening['pending_request_id'] = body['request_id'] if result['status'] in ('switch', 'unavailable') else None
+    opening['pending_request_id'] = body['request_id'] if result['status'] == 'switch' else None
     save(session, opening)
     db.add(GuideCommandReceipt(session_id=session_id, request_id='route:' + body['request_id'], digest=digest, result_json=json.dumps(result, ensure_ascii=False)))
     db.commit()
@@ -152,13 +173,17 @@ def displayed(db, owner_id, session_id, opening_id, routing_request_id):
 def switch_role(db, owner_id, session_id, body):
     session = lock_session(db, owner_id, session_id)
     opening = current(session, body['opening_id'])
-    request_id = body.get('routing_request_id') or opening['pending_request_id'] or opening.get('accepted_request_id')
+    # A button without a route ID chooses a page only. Never recover old text
+    # implicitly from either pending or already accepted handoff metadata.
+    request_id = body.get('routing_request_id')
     handoff = None
     if request_id:
         if request_id != (opening['pending_request_id'] or opening.get('accepted_request_id')) or request_id != opening['latest_request_id']:
             raise AppError(409, 'STALE_NAVIGATION', '原请求已经失效，请重新说明需求')
         row = receipt(db, session_id, request_id)
         route = json.loads(row.result_json)
+        if route.get('criteria_version') != CRITERIA_VERSION:
+            raise AppError(409, 'STALE_NAVIGATION', '旧版导航请求已失效，请重新说明需求')
         if route['anchor'] != list(session_anchor(db, session)):
             opening['pending_request_id'] = None
             save(session, opening)
@@ -169,7 +194,7 @@ def switch_role(db, owner_id, session_id, body):
             opening['accepted_request_id'] = request_id
             row.result_json = json.dumps(route, ensure_ascii=False)
             handoff = {key: route[key] for key in ('routing_request_id', 'original_message', 'selected_object')}
-    if not body['accept']:
+    if not body['accept'] or request_id is None:
         opening['accepted_request_id'] = None
     if body['accept']:
         opening['role'] = body['target_role']
@@ -210,6 +235,8 @@ def authorize_text(db, owner_id, session_id, role, body):
     # accepted but never admitted handoff must not start in a different opening.
     from app.models.guide import GuideTurnReceipt
     admitted = db.scalar(select(GuideTurnReceipt).where(GuideTurnReceipt.session_id == session_id, GuideTurnReceipt.request_id == route_id)) if role == 'keke' else db.get(GuideCommandReceipt, (session_id, 'momo:' + route_id))
+    if result.get('criteria_version') != CRITERIA_VERSION and not completed_execution(db, session_id, route_id, role):
+        raise AppError(409, 'STALE_NAVIGATION', '旧版导航请求已失效，请重新说明需求')
     if admitted is None:
         opening = current(session)
         if opening['opening_id'] != result['opening_id'] or opening['role'] != role:

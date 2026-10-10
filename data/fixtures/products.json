@@ -1551,9 +1551,7 @@
       "category_id": "snack",
       "image_path": null,
       "image_status": "placeholder",
-      "ingredient_ids": [
-        "potato"
-      ],
+      "ingredient_ids": [],
       "metadata": {
         "catalog_batch": "snack-selection-v1",
         "family_id": "potato_chips",
@@ -1676,9 +1674,7 @@
       "category_id": "snack",
       "image_path": null,
       "image_status": "placeholder",
-      "ingredient_ids": [
-        "potato"
-      ],
+      "ingredient_ids": [],
       "metadata": {
         "catalog_batch": "next-snack-v2",
         "family_id": "potato_chips",
@@ -1824,7 +1820,113 @@
         "fixture_version": "next-activity-v1",
         "provenance": "TASK08 bounded demo fixture; not verified merchant or nutrition data"
       }
+    },
+    {
+      "sku_id": "demo:shrimp-200g",
+      "name": "Demo Shrimp 200g",
+      "name_zh": "演示虾仁200克",
+      "category_id": "seafood",
+      "brand": "演示品牌",
+      "source": "demo",
+      "review_status": "approved",
+      "image_path": null,
+      "image_status": "placeholder",
+      "spec_quantity": 200,
+      "spec_unit": "g",
+      "ingredient_ids": [
+        "shrimp"
+      ],
+      "usage_tags": [
+        "炒饭",
+        "家常"
+      ],
+      "product_type": "shrimp",
+      "metadata": {
+        "catalog_batch": "optimization-demo-v1",
+        "simulation": {
+          "price": true,
+          "inventory": true
+        },
+        "returnable": false,
+        "return_policy_source": "Ceres 模拟商品规则"
+      }
+    },
+    {
+      "sku_id": "demo:synthetic-case-water-12x550ml",
+      "name": "Synthetic demo drinking water case 12 x 550ml",
+      "name_zh": "合成演示饮用水整箱 12×550毫升",
+      "product_type": "water",
+      "spec_quantity": 6600,
+      "usage_tags": [
+        "饮料",
+        "饮用水",
+        "箱装"
+      ],
+      "metadata": {
+        "type_label": "饮用水",
+        "packaging": "bottle",
+        "pack_count": 12,
+        "item_quantity": 550,
+        "item_unit": "ml",
+        "selling_unit": "case",
+        "selling_unit_source": "Ceres2 T02 synthetic demo specification v1; not a merchant or nutrition claim",
+        "catalog_batch": "integration-shopping-demo-v1",
+        "provenance": "Ceres2 T02 synthetic demo specification v1; not a merchant or nutrition claim",
+        "simulation": {
+          "product": true,
+          "price": true,
+          "inventory": true
+        }
+      },
+      "brand": "合成演示品牌",
+      "category_id": "beverage",
+      "review_status": "approved",
+      "source": "demo",
+      "spec_unit": "ml",
+      "ingredient_ids": [],
+      "image_path": null,
+      "image_status": "placeholder"
+    },
+    {
+      "sku_id": "demo:synthetic-sugar-free-tea-500ml",
+      "name": "Synthetic demo sugar-free tea 500ml",
+      "name_zh": "合成演示无糖茶 500毫升",
+      "product_type": "tea",
+      "spec_quantity": 500,
+      "usage_tags": [
+        "饮料",
+        "茶",
+        "无糖"
+      ],
+      "metadata": {
+        "type_label": "茶饮",
+        "packaging": "bottle",
+        "pack_count": 1,
+        "item_quantity": 500,
+        "item_unit": "ml",
+        "attribute_evidence": {
+          "sugar_free": {
+            "value": true,
+            "source": "Ceres2 T02 synthetic demo specification v1; not a merchant or nutrition claim"
+          }
+        },
+        "catalog_batch": "integration-shopping-demo-v1",
+        "provenance": "Ceres2 T02 synthetic demo specification v1; not a merchant or nutrition claim",
+        "simulation": {
+          "product": true,
+          "price": true,
+          "inventory": true
+        }
+      },
+      "brand": "合成演示品牌",
+      "category_id": "beverage",
+      "review_status": "approved",
+      "source": "demo",
+      "spec_unit": "ml",
+      "ingredient_ids": [],
+      "image_path": null,
+      "image_status": "placeholder"
     }
   ],
-  "version": "v1"
+  "version": "integration-shopping-demo-v1"
 }

@@ -1,0 +1,13 @@
+{
+  "product_pin": "6ba93b2b66a004fdfae1d7106d5f29a0512ddfd6",
+  "merge_commit": "3ecf15e8fbdb9099a30e3c16793f70251a8dfa3c",
+  "scopes": [
+    "backend",
+    "runtime",
+    "frontend",
+    "data"
+  ],
+  "changed_paths": [],
+  "verification": "Git source comparison only; merger ran no tests",
+  "remaining": "postmerge minimum, actual BGE evidence, final integration/browser/user gates"
+}

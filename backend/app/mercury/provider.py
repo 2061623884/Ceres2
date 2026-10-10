@@ -19,8 +19,8 @@ class QueryChatClient:
             try:
                 if self.cancelled:
                     raise TimeoutError('Query cancelled')
-                request = {'model': settings.llm_model, 'messages': messages, 'tools': tools,
-                    'tool_choice': 'auto', 'temperature': 0.2}
+                request = dict(model=settings.llm_model, messages=messages,
+                    tools=tools, tool_choice='auto', temperature=0.2)
                 thinking = official_deepseek_thinking_body(settings.openai_base_url)
                 if thinking is not None:
                     request['extra_body'] = thinking

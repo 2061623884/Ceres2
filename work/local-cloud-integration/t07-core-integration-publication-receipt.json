@@ -1,0 +1,10 @@
+{
+  "branch": "ceres2/local-cloud-integration-20261007",
+  "remote_commit": "5564ff1d6fe1916c9042c5cffabdbfdbb8cae2e7",
+  "local_commit": "15c0ad69a54312d82932875e6d4a3b1bcba404e4",
+  "tree": "25b07fa5bdfe7ffe93603cd9cb466c95f5c958ae",
+  "verified": true,
+  "binary_fixture_blobs_verified": 3,
+  "manifest_blob_verified": true,
+  "scope": "T07 core stage; full T07 Mercury wiring and final integration acceptance pending"
+}

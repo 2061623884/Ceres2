@@ -1,0 +1,50 @@
+{
+  "entry": "work/local-cloud-integration/local-acceptance-20261008/start-local-frontend.mjs",
+  "entry_sha256": "a5b7ced29b49ab592992b2d991a8c4c226cfda8d7c554603659d0fe1ca7a031d",
+  "node": {
+    "path": "/home/amax/.nvm/versions/node/v22.19.0/bin/node",
+    "version": "v22.19.0"
+  },
+  "previous_port_pairs": [
+    {
+      "backend": 8013,
+      "backend_listener_pid": 3633840,
+      "frontend": 8444,
+      "frontend_listener_pid": 3414992,
+      "action": "read-only preflight; no request, no process stopped"
+    },
+    {
+      "backend": 8014,
+      "backend_listener_pid": 3633868,
+      "frontend": 8445,
+      "frontend_listener_pid": 3589534,
+      "action": "read-only preflight; no request, no process stopped"
+    }
+  ],
+  "selected_ports": {
+    "backend_proxy_target": "http://127.0.0.1:8015",
+    "frontend_listen": "127.0.0.1:8446",
+    "preflight_free": true
+  },
+  "static_proxy_targets": {
+    "/api": "http://127.0.0.1:8015",
+    "/media": "http://127.0.0.1:8015"
+  },
+  "request": {
+    "method": "GET",
+    "url": "http://127.0.0.1:8446/",
+    "http_status": 200,
+    "html_bytes": 1054,
+    "root_mount_present": true,
+    "backend_requests": 0,
+    "api_or_media_requests": 0
+  },
+  "process": {
+    "pid": 1010288,
+    "pgid": 1010288,
+    "exit_code": 0,
+    "owned_group_stopped": true,
+    "ports_free_after_cleanup": true
+  },
+  "scope": "frontend entry/HTML only; backend 8015 was not started or contacted; no product Vite config change"
+}

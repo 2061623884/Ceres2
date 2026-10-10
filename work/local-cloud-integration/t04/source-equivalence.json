@@ -1,0 +1,8 @@
+{
+  "tested_delivery": "4cf49a72f1a6e07c94204a02f1220ad054d03b24",
+  "canonical_merge": "e0f57cd450d07810a74556b9478f76918b83aaf8",
+  "conflicts": false,
+  "t04_runtime_guide_drift": [],
+  "t06a_knowledge_dish_drift_from_277c110": [],
+  "meaning": "Disjoint owner source sets preserved exactly; fixed coexistence postmerge requested separately"
+}

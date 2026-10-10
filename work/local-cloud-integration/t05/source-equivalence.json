@@ -1,0 +1,8 @@
+{
+  "delivery_pin": "4278eea1fc8a546b0fbf316110a229040c0f9dc8",
+  "reviewed_production_pin": "656cfef8e0c0a5cd23d812c3e4840b64cb4c8495",
+  "merge_pin": "a871400c2bccfcb6f80f4a5b9c5f38128b6f32a1",
+  "merge_conflicts": false,
+  "frontend_and_t05_harness_diff": [],
+  "browser_gate": "BLOCKED; DOM and public HTTP do not establish browser acceptance"
+}

@@ -1,0 +1,10 @@
+{
+  "final_head": "c1a99cf27f54647bce32b9d07c4511bdd7a65941",
+  "final_label": "t08b-reviewed-final-affected",
+  "build_head": "eebb326d14c2a6f8b91279c3da8ff82aa883f0e1",
+  "typecheck_head": "0955bd8fdf82feddcfe6a1671e0f2087602ca733",
+  "same_runtime_source": true,
+  "same_built_artifacts": true,
+  "source_drift": [],
+  "harness_drift": []
+}

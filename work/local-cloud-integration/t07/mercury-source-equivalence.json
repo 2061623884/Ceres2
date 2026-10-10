@@ -1,0 +1,13 @@
+{
+  "tested_product": "79a7efffadaeac3706dc54db2066f6ababcb6848",
+  "delivery": "24ee4d03268cfd16b9a171acc7fe6dced465768c",
+  "merge": "46167988f686c54851670115277b6a6e6a20937e",
+  "scope": [
+    "backend",
+    "runtime",
+    "frontend",
+    "data"
+  ],
+  "changed_paths": [],
+  "meaning": "Git source equivalence only; postmerge focused validation requested separately"
+}

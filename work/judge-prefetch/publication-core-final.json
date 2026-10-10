@@ -1,0 +1,15 @@
+{
+  "repository": "2061623884/Ceres2",
+  "branch": "ceres2/judge-prefetch-rebuild-20261007",
+  "remote_commit": "88310f00836d29362e33384ffd959e9939e31a42",
+  "previous_remote": "70a9f8c68ff99de7eb9b062dc1262d287e48b26e",
+  "local_commit": "56f0e6f1d4e1e42d4e574f09df55fde0dce8615f",
+  "tree": "c916518853289f246e64b1ccdac609f9599f42d7",
+  "tree_equality_verified": true,
+  "remote_head_verified": true,
+  "scope": "Verified standalone core release. Comparison support is a later independently tested/reviewed artifact; real-provider, local frontend/browser and user acceptance remain open.",
+  "verification_date_utc": "2026-10-07",
+  "remote_commit_url": "https://github.com/2061623884/Ceres2/commit/88310f00836d29362e33384ffd959e9939e31a42",
+  "verification_owner": "Main integration coordinator",
+  "evidence": "Authorized GitHub connector verified remote HEAD and exact full tree equality. The final 558-test core source/harness was unchanged, and independent core documentation reviews were clear."
+}

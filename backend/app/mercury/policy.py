@@ -1,32 +1,60 @@
-"""Static, versioned query policy facts; no demo database dependency."""
-# Rules selectively carried from the user's Mercury seed; all fulfillment remains simulated.
-POLICIES = [
-    ('P-REF-01', 'refund', '未发货订单退款',
-     '未发货订单可申请整单模拟退款；已发货或已签收的订单不支持仅退款，签收后可查询退货资格。',
-     '退款,取消,不想要,未发货,仅退款'),
-    ('P-RET-01', 'return', '签收后退货',
-     '签收后 7 天内，可退货商品可按单明细整行申请模拟退货退款。超过七天或标记不可退货的商品不符合该规则；签收时间或商品可退货标记未知时，不能确认资格。',
-     '退货,七天,7天,签收'),
-    ('P-RET-02', 'return', '不支持退货的商品',
-     '生鲜等标注“不可退货”的商品不支持退货；规则未知时不能确认符合资格。',
-     '生鲜,水果,不能退,不支持退货,不可退'),
-    ('P-DEL-01', 'delivery', '模拟配送信息',
-     '模拟配送进度以订单业务记录为准，缺少物流记录时不能推测送达时间；没有真实履约。',
-     '配送,送达,多久送到,几点到,延迟,还没到'),
-]
+"""Versioned hybrid policy evidence; no order qualification or mutation authority."""
+import json
+import sqlite3
+from app.core.config import get_settings
+from app.core.errors import AppError
+from app.knowledge.corpus import manifest_revision
 
 
-def search_policies(query, category=None):
-    rows = [row for row in POLICIES if category is None or row[1] == category]
-    scored = [(sum(keyword in query for keyword in row[4].split(',')), row) for row in rows]
-    scored.sort(key=lambda pair: -pair[0])
-    hits = [row for score, row in scored if score][:3]
-    if not hits and category:
-        hits = rows
-    return {'ok': True, 'data': [{
-        **dict(zip(('policy_id', 'category', 'title', 'content'), row[:4])),
-        'source': {'name': 'Ceres 模拟售后规则', 'version': '2026-10-06', 'policy_id': row[0]},
-    } for row in hits]}
+def source_snapshot():
+    root = get_settings().root_dir
+    names = ("products.json", "recipes.json", "ingredients.json", "policies.json", "knowledge-provenance.json")
+    try:
+        files = {name: (root / "data/fixtures" / name).read_bytes() for name in names}
+        # A busy/missing index is unavailable; never spend another DB wait budget.
+        with sqlite3.connect(f"file:{root / 'data/indexes/hybrid.sqlite3'}?mode=ro", uri=True, timeout=0) as db:
+            manifest = json.loads(db.execute("SELECT content FROM manifest").fetchone()[0])
+        corpus = json.loads(files["policies.json"])
+        source = {"source_name": corpus["source_name"], "source_version": corpus["version"]}
+    except (OSError, sqlite3.Error, ValueError, TypeError, KeyError) as exc:
+        raise AppError(503, "KNOWLEDGE_UNAVAILABLE", "政策来源或索引不可用，请检查本地检索构建记录") from exc
+    from app.knowledge.hybrid import validate_manifest, StaleIndexError
+    try:
+        validate_manifest(manifest, files)
+    except StaleIndexError as exc:
+        raise AppError(503, 'KNOWLEDGE_STALE', '知识索引与当前来源或检索实现版本不一致，请重新构建索引') from exc
+    return {**source,
+            "source_revision": manifest["files"]["policies.json"],
+            "index_revision": manifest_revision(manifest)}
+
+
+CATEGORIES = ('price', 'stock', 'delivery', 'order', 'refund', 'fulfillment', 'quality', 'return', 'safety', 'human')
+
+
+def search_policies(query, category=None, *, snapshot=None, deadline=None, should_stop=None):
+    import time
+    from app.services.knowledge_service import knowledge, check_budget
+    if deadline is None:
+        deadline = time.monotonic() + 30
+    check_budget(deadline, should_stop)
+    acquired = source_snapshot()
+    if snapshot is not None and snapshot != acquired:
+        raise AppError(503, 'KNOWLEDGE_STALE', '政策来源已变化，请重新查询')
+    retrieval = knowledge.search(query, 'policy', limit=3, category=category,
+                                 deadline=deadline, should_stop=should_stop,
+                                 expected_index_revision=acquired['index_revision'])
+    revision = manifest_revision(retrieval['manifest'])
+    if revision != acquired['index_revision'] or source_snapshot() != acquired:
+        raise AppError(503, 'KNOWLEDGE_STALE', '政策来源与检索快照不一致，请重新查询')
+    check_budget(deadline, should_stop)
+    data = []
+    for hit in retrieval['hits']:
+        document = hit['document']
+        data.append({'policy_id': document['id'], 'category': document['category'],
+                     'title': document['title'], 'content': document['text'],
+                     'source': {'name': document['source']['name'],
+                                'version': document['source']['version'], 'policy_id': document['id']}})
+    return {'ok': True, 'data': data, **acquired, 'retrieval': retrieval}
 
 
 def policy_summary(data):
@@ -37,4 +65,3 @@ def policy_summary(data):
         f"{item['source']['policy_id']}（版本 {item['source']['version']}）"
         for item in data)
     return facts + '；以上是一般政策，具体订单资格尚未核实；未提交任何申请。'
-

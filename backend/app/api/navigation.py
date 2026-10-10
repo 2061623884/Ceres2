@@ -1,14 +1,13 @@
 """Public persisted role/opening contract. Navigation never performs business work."""
-from typing import Literal
 from fastapi import APIRouter, Depends, Request, Response
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.core.identity import get_or_create_owner
+from app.schemas.navigation import Role, RouteDecision, SelectedObject, SwitchRequest
 from app.services import navigation_service as service
 
 router = APIRouter(prefix='/api/v1/navigation/sessions/{session_id}', tags=['navigation'])
-Role = Literal['keke', 'momo']
 
 
 class Strict(BaseModel):
@@ -17,11 +16,6 @@ class Strict(BaseModel):
 
 class OpenRequest(Strict):
     role: Role
-
-
-class SelectedObject(Strict):
-    kind: Literal['product', 'order']
-    id: str = Field(min_length=1, max_length=100)
 
 
 class RouteRequest(Strict):
@@ -36,13 +30,6 @@ class RouteRequest(Strict):
 class DisplayRequest(Strict):
     opening_id: str
     routing_request_id: str
-
-
-class SwitchRequest(Strict):
-    opening_id: str
-    target_role: Role
-    accept: bool
-    routing_request_id: str | None = None
 
 
 def owner(request: Request, response: Response, db: Session = Depends(get_db)):
@@ -64,7 +51,7 @@ def close_chat(session_id: str, opening_id: str, owner_id=Depends(owner), db: Se
     return service.close_chat(db, owner_id, session_id, opening_id)
 
 
-@router.post('/routes')
+@router.post('/routes', response_model=RouteDecision)
 def route_text(session_id: str, body: RouteRequest, owner_id=Depends(owner), db: Session = Depends(get_db)):
     return service.decide_route(db, owner_id, session_id, body.model_dump())
 

@@ -1,0 +1,14 @@
+{
+  "remote_commit": "99bdcc03de6cd26a70f31d2a16cc77b94e12d0f9",
+  "local_commit": "d9981f3ad0a46b684144e9f3769090a0c24e5994",
+  "tree": "47af6713701ebf40f7d6a6e7be390db48f42e041",
+  "branch": "ceres2/judge-prefetch-rebuild-20261007",
+  "verified": true,
+  "phase": "test harness correction; 02-04 pending",
+  "repository": "https://github.com/2061623884/Ceres2",
+  "remote_commit_url": "https://github.com/2061623884/Ceres2/commit/99bdcc03de6cd26a70f31d2a16cc77b94e12d0f9",
+  "verification_date_utc": "2026-10-07",
+  "verification_owner": "Main integration coordinator",
+  "evidence": "Authorized GitHub connector read integration branch HEAD and exact commit tree; equals local harness/docs checkpoint. All 244 accepted product/test source hashes remain unchanged.",
+  "scope": "Harness and documentation only. Current guard matches final real-worker/loopback and no-network predicate proof; old enforcement limitations remain explicit. Ticket 02 implementation and 03/04 dependencies remain open. This is the next integration publication base, not a product-acceptance expansion."
+}

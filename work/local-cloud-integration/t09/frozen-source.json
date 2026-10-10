@@ -1,0 +1,17 @@
+{
+  "candidate": "81b02f956298361cf9044ee289c0821a8275fab8",
+  "baseline": "37c98400e7152b89e4a58f02fff3bceaa73b0eac",
+  "backend_runtime_source": "c1a99cf27f54647bce32b9d07c4511bdd7a65941",
+  "frontend_source": "4278eea1fc8a546b0fbf316110a229040c0f9dc8",
+  "backend_runtime_diff": [],
+  "frontend_diff": [],
+  "merge_conflicts": false,
+  "state": "Historical full-test baseline now complete:746passed/5skipped; skipped cases separately executed same-pin. Final reviewed narrow successor is recorded in final-source-map.json.",
+  "helper_status": "Cleanup P2 fixed in8e6be36, both delta axes closed, packaged final-path4passed at4cb670b.",
+  "open_acceptance": [
+    "actual browser blocked by environment",
+    "real provider not run",
+    "user acceptance not run"
+  ],
+  "final_product_merge": "f963017587b3eab30965ffcd3aab90fcc3852f3e"
+}

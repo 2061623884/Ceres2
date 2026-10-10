@@ -1,0 +1,46 @@
+{
+  "pins": {
+    "full_baseline": {
+      "commit": "81b02f956298361cf9044ee289c0821a8275fab8",
+      "tree": "6f3dc063bb55ad10b5a51c720d8fff94f29a6a5d",
+      "directory_trees": {
+        "backend": "607ca257ae35104dafbd9459b7a9dcbc3c7cadfe",
+        "runtime": "aaf61cb45507bef77ec44ea59f7511a35f733187",
+        "frontend": "da55b910b5e275ae7d841b675f98c050101b30fa",
+        "data": "52e972349a86df1e5e8f7d6e734760adede503c0"
+      }
+    },
+    "tested_product_correction": {
+      "commit": "3a9fedeae8f01053dba2abc2d6bc36daef125133",
+      "tree": "0c4a66aa733e58b1b2dc6e3af9b18d1c1f60c4d8",
+      "directory_trees": {
+        "backend": "b99923b1a4352e3bb6f73d03197c97c85f30571b",
+        "runtime": "aaf61cb45507bef77ec44ea59f7511a35f733187",
+        "frontend": "da55b910b5e275ae7d841b675f98c050101b30fa",
+        "data": "52e972349a86df1e5e8f7d6e734760adede503c0"
+      }
+    },
+    "final_product_merge": {
+      "commit": "f963017587b3eab30965ffcd3aab90fcc3852f3e",
+      "tree": "e16cc2d7e36b35578a72a7c613b339b8593139f4",
+      "directory_trees": {
+        "backend": "b99923b1a4352e3bb6f73d03197c97c85f30571b",
+        "runtime": "aaf61cb45507bef77ec44ea59f7511a35f733187",
+        "frontend": "da55b910b5e275ae7d841b675f98c050101b30fa",
+        "data": "52e972349a86df1e5e8f7d6e734760adede503c0"
+      }
+    }
+  },
+  "final_vs_tested_correction_product_diff": [],
+  "baseline_to_final_product_delta": [
+    "backend/app/services/comparison_service.py",
+    "backend/app/services/pi_product_runtime.py",
+    "backend/app/services/product_constraints.py",
+    "backend/app/services/product_question_service.py",
+    "backend/app/services/purchase_service.py",
+    "backend/tests/test_final_runtime_tail_public.py"
+  ],
+  "helper_external_source": "8e6be367986d35afe6211642cb81172347844d0f",
+  "helper_packaged_test_pin": "4cb670b0eb7847b8337e3a86cae7a3398e3f1715",
+  "meaning": "Full suite belongs to baseline; narrow successor has183 affected plus final merge4, not a claimed second full suite. Documentation-only publication successors preserve these directory trees."
+}

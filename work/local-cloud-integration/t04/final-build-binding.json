@@ -1,0 +1,9 @@
+{
+  "tested_head": "4cf49a72f1a6e07c94204a02f1220ad054d03b24",
+  "tested_exit": 0,
+  "build_head": "0c77e59f36649dc27e98e1c90552fc8ecf0c4ab1",
+  "runtime_source_identical": true,
+  "build_artifacts_identical": true,
+  "source_changes_during_test": [],
+  "harness_changes_during_test": []
+}

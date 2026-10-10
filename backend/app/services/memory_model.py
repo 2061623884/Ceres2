@@ -24,10 +24,10 @@ def _call(model, prompt, source):
         raise ValueError('Independent memory model is not configured')
     with OpenAI(base_url=settings.openai_base_url, api_key=settings.openai_api_key,
                 timeout=20, max_retries=0) as client:
-        request = {'model': model,
-            'messages': [{'role':'system','content':prompt},
-                         {'role':'user','content':json.dumps(source,ensure_ascii=False)}],
-            'response_format': {'type':'json_object'}, 'temperature': 0}
+        request = dict(model=model,
+            messages=[{'role':'system','content':prompt},
+                      {'role':'user','content':json.dumps(source,ensure_ascii=False)}],
+            response_format={'type':'json_object'}, temperature=0)
         thinking = official_deepseek_thinking_body(settings.openai_base_url)
         if thinking is not None:
             request['extra_body'] = thinking

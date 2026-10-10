@@ -1,0 +1,86 @@
+{
+  "review_scope": "Committed core documentation/evidence only; excludes untracked comparison CLI/test/document drafts and new support captures",
+  "commit": "a1ef364813c327585716ba2628914ee53b2f7895",
+  "tree": "a83701ee80517afe0e4a0a4250762ad94d44b569",
+  "head_at_review_end": "a1ef364813c327585716ba2628914ee53b2f7895",
+  "core_commit": "d6a40886926bf203b53c52db27d2177b1b3dcb80",
+  "core_tree": "2fad3a1c8e74593dc19ee929211be0d35a323938",
+  "source_count": 248,
+  "source_manifest_sha256": "7c86cf268f5f4d7055626d6db1e3970d23735bd313ed148f638ede0a02c4368f",
+  "source_matches_tested_core": true,
+  "source_matches_prior_spec_pin": true,
+  "product_diff_from_core": [],
+  "reviewed_file_sha256": {
+    "AGENTS.md": "f6069547dd856b28573321b460e7d6b97c227552c82e070c1002e75715832c12",
+    "README.md": "69cdeb810d3e111c8350166991c9767fbfa4e85212e8d411ad083bbfbbc13ce6",
+    "PROJECT.md": "4de50f125999340dd9677b7526b24c55b2ee5851a668ed894a2ce45274af9e00",
+    "docs/JUDGE-PREFETCH-HANDOFF.md": "fde068ed91bf7d347d56d0a6f850a00e43c8c9b6d38183a0c293008c61c64afd",
+    "docs/REBUILD-DECISIONS.md": "b62618b1f72224048aad586b79c1525705b72f31895c6451da5dee23d3cfd8ca",
+    "docs/plans/ceres2-judge-prefetch-spec.md": "0cc5fb728701c49ac91b1e2925bcca6d73ea757da1bedcca61de66e23fe69760",
+    "tasks/ceres2-judge-prefetch.md": "03cc120a1b096215c6dae120afa8a8c9091a5e6d2385be8762a75e553a26966c",
+    "tasks/ceres2-judge-prefetch-01-role-entry.md": "b859b6d709db9e5f43d120aa5ba9b7b2f629914337a963f37aa1b8cf4640b26f",
+    "tasks/ceres2-judge-prefetch-02-policy-evidence.md": "f6ac84118e81c1a70c2accc6e65504f0d64df4d1fe898b5be655588fbc96287d",
+    "tasks/ceres2-judge-prefetch-03-query-reuse.md": "3173e24ca0b4cff802121c6aa35120f50f31ca7eff3f6f5cd415d20af14e67bc",
+    "tasks/ceres2-judge-prefetch-04-candidate-evidence.md": "88021fef8a4387b27c4c1fec1db362a9814307d125bcf3a9632e616010401f51",
+    "work/judge-prefetch-rebuild/04-core-verification.md": "fa811dea9852b4da4c2e505b64c556d7f248da848dc0379c584a1c42e5ed627d",
+    "work/judge-prefetch-rebuild/04-core-final-source.json": "e07f7696d07646d0e91d8482bf0a2a6a837b57080e272d6d16370102511d429f",
+    "work/judge-prefetch-rebuild/04-core-verification-history.json": "79c42cf69c1eae3b718bd6696a31d2467df0fa5d4fd96877785619938c03a67d",
+    "work/judge-prefetch/publication-query-reuse-core.json": "68bd53b9cd8db69089035e08c52ef23ce129fb300e05c3dcdca5a92d40a9658b"
+  },
+  "reviewed_working_files_match_commit": true,
+  "harness_matches_tested_core": true,
+  "raw_evidence_checks": [
+    {
+      "label": "04-independent-offline-install",
+      "record_path": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/04-core-verification/work/judge-prefetch-rebuild/evidence/04-independent-offline-install/record.json",
+      "record_hash_matches": true,
+      "output_hash_matches": true,
+      "exit_code": 0,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": []
+    },
+    {
+      "label": "04-final-dependencies",
+      "record_path": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/04-core-verification/work/judge-prefetch-rebuild/evidence/04-final-dependencies/record.json",
+      "record_hash_matches": true,
+      "output_hash_matches": true,
+      "exit_code": 0,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": []
+    },
+    {
+      "label": "04-final-pi-build",
+      "record_path": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/04-core-verification/work/judge-prefetch-rebuild/evidence/04-final-pi-build/record.json",
+      "record_hash_matches": true,
+      "output_hash_matches": true,
+      "exit_code": 0,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": []
+    },
+    {
+      "label": "04-final-guard-proof",
+      "record_path": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/04-core-verification/work/judge-prefetch-rebuild/evidence/04-final-guard-proof/record.json",
+      "record_hash_matches": true,
+      "output_hash_matches": true,
+      "exit_code": 0,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": []
+    },
+    {
+      "label": "04-final-backend-full",
+      "record_path": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/worktrees/04-core-verification/work/judge-prefetch-rebuild/evidence/04-final-backend-full/record.json",
+      "record_hash_matches": true,
+      "output_hash_matches": true,
+      "exit_code": 0,
+      "source_changes_during_run": [],
+      "harness_changes_during_run": []
+    }
+  ],
+  "full_suite_guard_audit": {
+    "unique_node_launch_pids": 617,
+    "pi_worker_launches": 581,
+    "unmatched_guard_loaded_pids": 0,
+    "unexpected_blocks": 0
+  },
+  "review_execution": "Only source, git metadata and evidence reads/hashes. No test/build/install/provider execution; no shared repository edits."
+}

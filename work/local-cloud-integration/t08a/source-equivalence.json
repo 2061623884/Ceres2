@@ -1,0 +1,7 @@
+{
+  "tested_pin": "cb412dbf2643a4b886225a5b48f0410ee14b3a4a",
+  "merge_pin": "a60b6b56cddd97bc38d198764b66cecd0b76e518",
+  "conflicts": false,
+  "evaluation_and_test_path_drift": [],
+  "meaning": "Evaluation files unchanged; runtime includes separately verified T06-B, postmerge checks pending"
+}

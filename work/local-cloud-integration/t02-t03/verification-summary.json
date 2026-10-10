@@ -1,0 +1,234 @@
+[
+  {
+    "label": "t02-final-shopping-affected-green",
+    "head": "6e82cd9afb593cb9e84b91af8c4ddea4be4918bc",
+    "command": [
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_foundation_http.py",
+      "tests/test_integration_shopping_public.py",
+      "tests/test_next_drinks_public.py",
+      "tests/test_final_review_constraints_public.py",
+      "tests/test_comparison_public.py",
+      "tests/test_comparison_safety.py",
+      "tests/test_next_activity_public.py",
+      "-q",
+      "-p",
+      "pytest_asyncio.plugin"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/Ceres2_T02/backend",
+    "exit_code": 0,
+    "elapsed_seconds": 145.563,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "dafc3db310bfe09c6e33927cf5c01d43600037032ab28bf07ae42731cfba6bd9",
+    "output_tail": "..................................................................       [100%]\n66 passed in 141.35s (0:02:21)\n"
+  },
+  {
+    "label": "t02-t03-combined-affected",
+    "head": "8950b085753cbdc8bdf53b6d223e9d3c1d865f02",
+    "command": [
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_integration_native_finish_public.py",
+      "tests/test_integration_shopping_budget_public.py",
+      "tests/test_guide_deadline_contract.py",
+      "tests/test_judge_policy_safety_public.py",
+      "tests/test_guide_clarification_context.py",
+      "tests/test_guide_semantics.py",
+      "tests/test_foundation_http.py",
+      "tests/test_integration_shopping_public.py",
+      "tests/test_next_drinks_public.py",
+      "tests/test_final_review_constraints_public.py",
+      "tests/test_comparison_public.py",
+      "tests/test_comparison_safety.py",
+      "tests/test_next_activity_public.py",
+      "-q",
+      "-p",
+      "pytest_asyncio.plugin"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T03-native/backend",
+    "exit_code": 0,
+    "elapsed_seconds": 248.086,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "4560cf84821249327cb7e3070df86bbdecb9ed998bd2339d10d253bb99f3edf0",
+    "output_tail": "........................................................................ [ 59%]\n..................................................                       [100%]\n122 passed in 237.79s (0:03:57)\n"
+  },
+  {
+    "label": "t02-t03-combined-build",
+    "head": "8950b085753cbdc8bdf53b6d223e9d3c1d865f02",
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T03-native/runtime/pi",
+    "exit_code": 0,
+    "elapsed_seconds": 8.774,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "08fca79c43291b9ecbc53b232036788c1c487a37bace56351b0d98dad19a5bbe",
+    "output_tail": "\n> ceres2-pi-runtime@0.1.0 build\n> tsc\n\n"
+  },
+  {
+    "label": "t02-t03-combined-typecheck",
+    "head": "8950b085753cbdc8bdf53b6d223e9d3c1d865f02",
+    "command": [
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T03-native/runtime/pi",
+    "exit_code": 0,
+    "elapsed_seconds": 9.573,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "651b0a258b136c74e548dc30bbcacbae5c265e0a83467f09c7fd9462c4b7d749",
+    "output_tail": "\n> ceres2-pi-runtime@0.1.0 typecheck\n> tsc --noEmit\n\n"
+  },
+  {
+    "label": "t03-optional-recipe-facts-red",
+    "head": "a881022406727064f514797286010b069a309a37",
+    "command": [
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_integration_native_finish_public.py::test_recipe_optional_facts_preserve_unknown_amount_without_procurement",
+      "-q",
+      "-p",
+      "pytest_asyncio.plugin"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T03-native/backend",
+    "exit_code": 1,
+    "elapsed_seconds": 8.683,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "dac084783c1ef69f4dda328db3bc9042f9411320d71e2bb0c8704ce13b1e0b0b",
+    "output_tail": "anqie-chao-dan。\\n基础调料：食用油、盐、糖；数量未记录，家庭已有量未知。'\n\ntests/test_integration_native_finish_public.py:144: AssertionError\n=========================== short test summary info ============================\nFAILED tests/test_integration_native_finish_public.py::test_recipe_optional_facts_preserve_unknown_amount_without_procurement[True-False]\nFAILED tests/test_integration_native_finish_public.py::test_recipe_optional_facts_preserve_unknown_amount_without_procurement[False-False]\n2 failed, 1 passed in 7.09s\n"
+  },
+  {
+    "label": "t03-optional-reference-red",
+    "head": "b27304c1b8ea2fbf24c88ff439a80cd5ecdc9ffc",
+    "command": [
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_integration_native_finish_public.py::test_recipe_optional_facts_preserve_unknown_amount_without_procurement",
+      "-q",
+      "-p",
+      "pytest_asyncio.plugin"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T03-native/backend",
+    "exit_code": 1,
+    "elapsed_seconds": 9.766,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "aebece6c210020603de62bae2e7dd06b2689957287f73735a6f4cfd7a4118715",
+    "output_tail": "anqie-chao-dan。\\n基础调料：食用油、盐、糖；数量未记录，家庭已有量未知。'\n\ntests/test_integration_native_finish_public.py:146: AssertionError\n=========================== short test summary info ============================\nFAILED tests/test_integration_native_finish_public.py::test_recipe_optional_facts_preserve_unknown_amount_without_procurement[True-False]\nFAILED tests/test_integration_native_finish_public.py::test_recipe_optional_facts_preserve_unknown_amount_without_procurement[False-False]\n2 failed, 1 passed in 8.14s\n"
+  },
+  {
+    "label": "t03-inapplicable-reference-red",
+    "head": "d09b57be3f8e95b8d7d8e8d1d71df2b187c60928",
+    "command": [
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_integration_native_finish_public.py::test_native_finish_rejects_references_inapplicable_to_primary_result",
+      "-q",
+      "-p",
+      "pytest_asyncio.plugin"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T03-native/backend",
+    "exit_code": 1,
+    "elapsed_seconds": 13.244,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "2ecfce9d0ae0ba0cdc5427c68c43c12dba20092a267e66c61707b6f471fd493e",
+    "output_tail": "== short test summary info ============================\nFAILED tests/test_integration_native_finish_public.py::test_native_finish_rejects_references_inapplicable_to_primary_result[waiting-extra0]\nFAILED tests/test_integration_native_finish_public.py::test_native_finish_rejects_references_inapplicable_to_primary_result[status-extra1]\nFAILED tests/test_integration_native_finish_public.py::test_native_finish_rejects_references_inapplicable_to_primary_result[policy_result-extra2]\n3 failed in 11.81s\n"
+  },
+  {
+    "label": "t03-reference-review-green",
+    "head": "09ed3a3b54a0831b2774a5338cd0c5cb703c9e88",
+    "command": [
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_integration_native_finish_public.py",
+      "tests/test_judge_policy_safety_public.py",
+      "tests/test_guide_clarification_context.py",
+      "-q",
+      "-p",
+      "pytest_asyncio.plugin"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T03-native/backend",
+    "exit_code": 0,
+    "elapsed_seconds": 108.746,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "e72b7c3a9997e6125baf642050cb599e898770872b935c2045995b554efda3ec",
+    "output_tail": "..............................................                           [100%]\n46 passed in 103.87s (0:01:43)\n"
+  },
+  {
+    "label": "combined-postmerge-runtime-install",
+    "head": "4fd13b340ff959b7e389ebd4b9dde234b8fd2b92",
+    "command": [
+      "npm",
+      "ci",
+      "--offline",
+      "--ignore-scripts",
+      "--no-audit",
+      "--no-fund",
+      "--cache",
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/test-evidence/npm-cache"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-combined-4fd13b3/runtime/pi",
+    "exit_code": 0,
+    "elapsed_seconds": 7.785,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "529c42935c6360df04be91ac9ad97ac76a0006fa141d5e23925adcc1180d9d92",
+    "output_tail": "npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead\n\nadded 87 packages in 8s\n"
+  },
+  {
+    "label": "combined-postmerge-runtime-build",
+    "head": "4fd13b340ff959b7e389ebd4b9dde234b8fd2b92",
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-combined-4fd13b3/runtime/pi",
+    "exit_code": 0,
+    "elapsed_seconds": 9.039,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "03876ec067a278753b37ec940822d11ea787acbae40a19b44b09ac924f683225",
+    "output_tail": "\n> ceres2-pi-runtime@0.1.0 build\n> tsc\n\n"
+  },
+  {
+    "label": "combined-postmerge-minimum",
+    "head": "4fd13b340ff959b7e389ebd4b9dde234b8fd2b92",
+    "command": [
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_integration_shopping_public.py",
+      "tests/test_integration_native_finish_public.py",
+      "tests/test_integration_shopping_budget_public.py",
+      "tests/test_merge_mercury_policy_public.py",
+      "-q",
+      "-p",
+      "pytest_asyncio.plugin"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-combined-4fd13b3/backend",
+    "exit_code": 0,
+    "elapsed_seconds": 48.31,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "cbcbe5b9e861b13935e74260256057a880e4c3efb12795480586f8e60149f84c",
+    "output_tail": ".....................................                                    [100%]\n37 passed in 45.43s\n"
+  }
+]

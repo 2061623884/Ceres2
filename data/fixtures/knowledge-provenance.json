@@ -1,0 +1,58 @@
+{
+  "version": "integration-shopping-demo-v1",
+  "origin": {
+    "repository": "2061623884/Ceres",
+    "commit": "e24debf670db02a86cb79c40933b901827db8a55",
+    "files": {
+      "chinese-dishes-v1.json": "97f0928669ebdcd4e948f6749f482374eb6b45d2f68aabead1f34c8945e118cf",
+      "ingredient-catalog.json": "8fb2abcc823c576d34d78a24cd90f31836b24ab6c7a4745bfd5a0c569d651139"
+    }
+  },
+  "selected_recipe_ids": [
+    "dish-fanqie-chao-dan",
+    "dish-dan-chao-fan",
+    "dish-yangzhou-chao-fan",
+    "dish-qingjiao-rousi",
+    "dish-gongbao-jiding",
+    "dish-suanla-tudousi",
+    "dish-huiguo-rou",
+    "dish-jiajiao-chaodan"
+  ],
+  "added_demo_sku_ids": [
+    "demo:shrimp-200g"
+  ],
+  "ingredient_classification_corrections": [
+    {
+      "ingredient_id": "egg",
+      "from": "dairy",
+      "to": "egg",
+      "reason": "Eggs are not milk products; retail shelf placement must not become a food-class claim."
+    }
+  ],
+  "procurement_mapping_corrections": [
+    {
+      "sku_id": "demo:snack-original-potato-chips-70g-bag",
+      "removed_ingredient_id": "potato",
+      "reason": "A ready-to-eat potato chip does not fulfill a raw potato recipe requirement."
+    },
+    {
+      "sku_id": "demo:snack-original-potato-chips-35g-bag",
+      "removed_ingredient_id": "potato",
+      "reason": "A ready-to-eat potato chip does not fulfill a raw potato recipe requirement."
+    }
+  ],
+  "business_data_mode": "demo",
+  "scope": "Static recipe and ingredient selection only; no old runtime state or indexes.",
+  "integration_shopping_demo": {
+    "source": "Ceres2 T02 synthetic demo specification v1; not a merchant or nutrition claim",
+    "added_sku_ids": [
+      "demo:synthetic-case-water-12x550ml",
+      "demo:synthetic-sugar-free-tea-500ml"
+    ],
+    "preserved_negative_sku_ids": [
+      "demo:cn-nongfu-water-550ml-12bottle",
+      "demo:green-tea-500ml"
+    ],
+    "scope": "Exactly two explicitly synthetic demo definitions and Offers. Existing pack count does not establish case selling unit; existing tea has no verified sugar-free evidence."
+  }
+}

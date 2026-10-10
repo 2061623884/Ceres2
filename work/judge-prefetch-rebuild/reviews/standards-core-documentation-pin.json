@@ -1,0 +1,133 @@
+{
+  "captured_at_utc": "2026-10-07T08:06:22.218238+00:00",
+  "worktree": "/workspace/scratch/0c1b4cfa2ef3/ceres2_rebuild_20261007/Ceres2",
+  "base": "d6a40886926bf203b53c52db27d2177b1b3dcb80",
+  "head": "a1ef364813c327585716ba2628914ee53b2f7895",
+  "tree": "a83701ee80517afe0e4a0a4250762ad94d44b569",
+  "documentation_evidence_diff_sha256": "f7ef3f8f5423769985e479be78031e2afaf4448566fd93b55b5a31f41426ecc3",
+  "reviewed_file_sha256": {
+    "AGENTS.md": "f6069547dd856b28573321b460e7d6b97c227552c82e070c1002e75715832c12",
+    "PROJECT.md": "4de50f125999340dd9677b7526b24c55b2ee5851a668ed894a2ce45274af9e00",
+    "README.md": "69cdeb810d3e111c8350166991c9767fbfa4e85212e8d411ad083bbfbbc13ce6",
+    "docs/JUDGE-PREFETCH-HANDOFF.md": "fde068ed91bf7d347d56d0a6f850a00e43c8c9b6d38183a0c293008c61c64afd",
+    "docs/REBUILD-DECISIONS.md": "b62618b1f72224048aad586b79c1525705b72f31895c6451da5dee23d3cfd8ca",
+    "docs/agents/issue-tracker.md": "72cd07f952143aa3d6a75c1886838a79f613ce142f54c5afe254901981191330",
+    "docs/recovery/CERES2-WORKSPACE.md": "06121a1498a5885ac7e3576469090185f2924016d51cb56b67ad9e0811563851",
+    "tasks/ceres2-judge-prefetch-03-query-reuse.md": "3173e24ca0b4cff802121c6aa35120f50f31ca7eff3f6f5cd415d20af14e67bc",
+    "tasks/ceres2-judge-prefetch-04-candidate-evidence.md": "88021fef8a4387b27c4c1fec1db362a9814307d125bcf3a9632e616010401f51",
+    "tasks/ceres2-judge-prefetch.md": "03cc120a1b096215c6dae120afa8a8c9091a5e6d2385be8762a75e553a26966c",
+    "work/judge-prefetch-rebuild/03-query-reuse-final-source.json": "b54c24848554701fc7ccf92edd862444816ebfca51e5f7283e8c46224fa2e790",
+    "work/judge-prefetch-rebuild/03-query-reuse-verification-history.json": "8eca743012f91a12167f372adf08213ef2c798049a3062c40eabf872e47cb5e6",
+    "work/judge-prefetch-rebuild/03-query-reuse-verification.md": "8e0fff54701487f8727ff052ab9fddb2650b0dc8bfac8237a81a7e25ddedd7f2",
+    "work/judge-prefetch-rebuild/04-core-final-source.json": "e07f7696d07646d0e91d8482bf0a2a6a837b57080e272d6d16370102511d429f",
+    "work/judge-prefetch-rebuild/04-core-verification-history.json": "79c42cf69c1eae3b718bd6696a31d2467df0fa5d4fd96877785619938c03a67d",
+    "work/judge-prefetch-rebuild/04-core-verification.md": "fa811dea9852b4da4c2e505b64c556d7f248da848dc0379c584a1c42e5ed627d",
+    "work/judge-prefetch-rebuild/reviews/spec-core-final-rereview-source-pin.json": "0731843ab3b5b3cccfe604e20c69ff8556c1f64e7eb988b5c6c867af428ea457",
+    "work/judge-prefetch-rebuild/reviews/spec-core-final-rereview.md": "e3fdcb9628f0d86e154da23165953a3609c2da873a38c917a89d006d12d05ce9",
+    "work/judge-prefetch-rebuild/reviews/spec-core-final-source-pin.json": "1a27777a4bdf2870462806770a66a5a9c5e8aea4c2e1b651b1bda7c27a5d4b4f",
+    "work/judge-prefetch-rebuild/reviews/spec-core-final.md": "53eabe12a74f7869e5ebd3f0127cc1510e03c0696ae1ff532fabd55e12d5cab7",
+    "work/judge-prefetch-rebuild/reviews/standards-core-final-pin.json": "64bf06e4149c3ddcb47839b66e8dedeaf4b6e4d4f5b22bf9ca6c6b68c32cdc47",
+    "work/judge-prefetch-rebuild/reviews/standards-core-final-rereview-pin.json": "4574014cab3f2bf19f8696d603630b75e5e65fb51df85bc286ffabf128cac22f",
+    "work/judge-prefetch-rebuild/reviews/standards-core-final-rereview.md": "49630f576743ce085c27504736b933948ebf3a1eb4798baee9d2b33cdabacfe3",
+    "work/judge-prefetch-rebuild/reviews/standards-core-final.md": "671cf20ac8efd42cf0d8db5c9efde429453aaacf204ee4e983b361c9f25dbd83",
+    "work/judge-prefetch/publication-query-reuse-core.json": "68bd53b9cd8db69089035e08c52ef23ce129fb300e05c3dcdca5a92d40a9658b"
+  },
+  "workspace_entry_sha256": "21bc9c98634ff17e376ccdcb96a5663abe9b84f728b3033dab713dc731eae382",
+  "workspace_agents_sha256": "8d702bc44a61f990c9b026364895851b24f3686892bd11e1ed86ed22d7d6ba83",
+  "source_and_harness_count": 252,
+  "source_and_harness_mismatches": [],
+  "raw_capture_audits": [
+    {
+      "label": "04-independent-offline-install",
+      "record_hash_matches": true,
+      "output_hash_matches": true,
+      "exit_matches": true,
+      "source_before_matches": true,
+      "source_after_matches": true,
+      "harness_before_matches": true,
+      "harness_after_matches": true,
+      "output_end": "1.1\n + xxhash==4.0.1\n + zstandard==0.25.0\nnpm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead\n\nadded 87 packages in 3s\n"
+    },
+    {
+      "label": "04-final-dependencies",
+      "record_hash_matches": true,
+      "output_hash_matches": true,
+      "exit_matches": true,
+      "source_before_matches": true,
+      "source_after_matches": true,
+      "harness_before_matches": true,
+      "harness_after_matches": true,
+      "output_end": "erification/runtime/pi\n+-- @earendil-works/pi-agent-core@1.0.3\n+-- @earendil-works/pi-ai@1.0.3\n+-- @types/node@22.19.0\n+-- typebox@1.3.27\n`-- typescript@5.9.3\n\n"
+    },
+    {
+      "label": "04-final-pi-build",
+      "record_hash_matches": true,
+      "output_hash_matches": true,
+      "exit_matches": true,
+      "source_before_matches": true,
+      "source_after_matches": true,
+      "harness_before_matches": true,
+      "harness_after_matches": true,
+      "output_end": "\n> ceres2-pi-runtime@0.1.0 typecheck\n> tsc --noEmit\n\n\n> ceres2-pi-runtime@0.1.0 build\n> tsc\n\n"
+    },
+    {
+      "label": "04-final-guard-proof",
+      "record_hash_matches": true,
+      "output_hash_matches": true,
+      "exit_matches": true,
+      "source_before_matches": true,
+      "source_after_matches": true,
+      "harness_before_matches": true,
+      "harness_after_matches": true,
+      "output_end": "...                                                                      [100%]\n3 passed in 4.13s\n"
+    },
+    {
+      "label": "04-final-backend-full",
+      "record_hash_matches": true,
+      "output_hash_matches": true,
+      "exit_matches": true,
+      "source_before_matches": true,
+      "source_after_matches": true,
+      "harness_before_matches": true,
+      "harness_after_matches": true,
+      "output_end": "........................................ [ 90%]\n......................................................                   [100%]\n558 passed in 738.36s (0:12:18)\n"
+    }
+  ],
+  "sensitive_pattern_matches": [],
+  "excluded": "Untracked comparison CLI, tests, docs and their evidence; no acceptance conclusion for them.",
+  "derived_full_guard_audit": {
+    "launches": 617,
+    "pi_worker_launches": 581,
+    "launched_pids_missing_guard": [],
+    "event_counts": {
+      "loaded": 617
+    }
+  },
+  "current_dist_matches_recorded_end": {
+    "runtime/pi/dist/general-claim.js": true,
+    "runtime/pi/dist/official-deepseek.js": true,
+    "runtime/pi/dist/prompt-modules.js": true,
+    "runtime/pi/dist/result-expression.js": true,
+    "runtime/pi/dist/worker.js": true
+  },
+  "manifest_digest_matches": true,
+  "review_pin_audit": [
+    {
+      "name": "spec-core-final-rereview-source-pin.json",
+      "hash_matches": true,
+      "source_map_matches": true
+    },
+    {
+      "name": "standards-core-final-rereview-pin.json",
+      "hash_matches": true,
+      "source_map_matches": true
+    }
+  ],
+  "public_link_file_check": [],
+  "finish_check": {
+    "at_utc": "2026-10-07T08:08:11.896345+00:00",
+    "head": "a1ef364813c327585716ba2628914ee53b2f7895",
+    "tracked_diff_empty": true,
+    "reviewed_files_drift": []
+  }
+}

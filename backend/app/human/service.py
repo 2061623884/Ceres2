@@ -34,11 +34,34 @@ def ticket_view(db, ticket):
     summary = None if order is None else {'order_id': order.order_id, 'status': order.status,
         'total_fen': order.total_fen, 'items': [{'name': item['name'], 'quantity': item['quantity']}
                                               for item in json.loads(order.snapshot_json)['items']]}
+    applications, photos = ticket_evidence(db, ticket, case.owner_id)
     return {'ticket_id': ticket.ticket_id, 'case_id': case.case_id, 'owner_id': case.owner_id,
         'order_id': ticket.order_id, 'order_summary': summary, 'reason': ticket.reason,
         'summary': ticket.summary, 'status': ticket.status, 'generation': ticket.generation,
         'version': ticket.version, 'history': json.loads(ticket.history_json),
-        'messages': json.loads(ticket.messages_json)}
+        'messages': json.loads(ticket.messages_json),
+        'photos': [{'photo_id':photo.photo_id, 'content_type':photo.content_type} for photo in photos],
+        'applications': [json.loads(row.result_json) for row in applications]}
+
+
+def ticket_evidence(db, ticket, owner_id):
+    """Only explicitly linked confirmed applications and their immutable photos."""
+    from app.mercury.aftersales_models import AfterSalesPhoto, AfterSalesReceipt, AfterSalesApplication, AfterSalesProposal
+    applications = db.scalars(select(AfterSalesReceipt).join(AfterSalesApplication,
+        AfterSalesApplication.application_id == AfterSalesReceipt.application_id).join(AfterSalesProposal,
+        AfterSalesProposal.proposal_id == AfterSalesApplication.proposal_id).where(
+        AfterSalesReceipt.case_id == ticket.case_id, AfterSalesReceipt.owner_id == owner_id,
+        AfterSalesApplication.case_id == ticket.case_id, AfterSalesApplication.owner_id == owner_id,
+        AfterSalesApplication.order_id == ticket.order_id,
+        AfterSalesApplication.human_ticket_id == ticket.ticket_id,
+        AfterSalesProposal.responsibility_generation == ticket.generation - 1)).all()
+    # Refund/return receipts created before photo support do not contain photo_ids.
+    photo_ids = {photo_id for receipt in applications
+                 for photo_id in json.loads(receipt.result_json).get('photo_ids', [])}
+    photos = db.scalars(select(AfterSalesPhoto).where(
+        AfterSalesPhoto.photo_id.in_(photo_ids), AfterSalesPhoto.owner_id == owner_id,
+        AfterSalesPhoto.case_id == ticket.case_id, AfterSalesPhoto.order_id == ticket.order_id)).all()
+    return applications, photos
 
 
 def create_ticket(db, case, summary, reason):

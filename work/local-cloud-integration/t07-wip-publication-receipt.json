@@ -1,0 +1,8 @@
+{
+  "branch": "ceres2/local-cloud-t07-wip-20261007",
+  "remote_commit": "34cd1d2b194d83209923beb239666680068acf0b",
+  "local_commit": "6709dc91667801f60471709572cea5b63b9fe28d",
+  "tree": "854f69c17714972587a318ec7a00bbfd29a0b92e",
+  "verified": true,
+  "scope": "Incomplete first focused GREEN checkpoint, not integrated acceptance"
+}

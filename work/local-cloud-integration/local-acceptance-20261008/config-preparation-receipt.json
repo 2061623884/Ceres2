@@ -1,0 +1,12 @@
+{
+  "source_commit": "170fac0bc75fcc855897b073337ba218abeb5b7d",
+  "prepared_at_utc": "2026-10-08T07:07:13.578993+00:00",
+  "action": "blank-config-created",
+  "path": ".env",
+  "created_mode": "0600",
+  "created_template_sha256": "47746a00564086a3ef1bb0bb19a07c872bbba1aac1d28e390764c8a19d3508c2",
+  "tester_report_sha256": "0328ac58d770785380f81541b0f9dd07fb64b66d3a2014c6a10eea95a01b6b3c",
+  "sequence": "After all Tester checks and process cleanup; the report describes the prior configuration-absent test state.",
+  "configuration_values": "No credentials or models selected by the agent; user fills approved configuration locally.",
+  "execution": "No API server, model, GraphRAG build or MemoryWorker started by this preparation."
+}

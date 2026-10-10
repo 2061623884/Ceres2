@@ -1,5 +1,6 @@
 """Single-dish recipe facts and deterministic sale-package demand."""
 import json
+import hashlib
 from math import ceil
 from sqlalchemy import select
 from app.core.config import get_settings
@@ -18,6 +19,27 @@ class DishService:
 
     def search(self, query):
         return [dish for dish in recipes() if any(query in name for name in [dish['name'], *dish['aliases']])]
+
+    def graph_search(self, query, method='local'):
+        from app.services.knowledge_service import knowledge, check_budget
+        if self.catalog.deadline is None:
+            raise AppError(422, 'GRAPH_DEADLINE_REQUIRED', '显式图查询需要当前请求时限')
+        check_budget(self.catalog.deadline, self.catalog.should_stop)
+        graph = knowledge.graph(query, method=method, deadline=self.catalog.deadline,
+                                should_stop=self.catalog.should_stop)
+        folder = get_settings().root_dir / 'data/fixtures'
+        from app.knowledge.corpus import FIXTURE_NAMES
+        files = {name: (folder / name).read_bytes() for name in FIXTURE_NAMES}
+        if graph['manifest']['files'] != {name: hashlib.sha256(raw).hexdigest() for name, raw in files.items()}:
+            raise AppError(503, 'KNOWLEDGE_STALE', '图查询来源已变化，请重新查询')
+        current = {dish['dish_id']: dish for dish in json.loads(files['recipes.json'])['dishes']}
+        identities = [fact['id'].removeprefix('recipe:') for fact in graph['canonical_facts'] if fact['type'] == 'RECIPE']
+        if any(identity not in current for identity in identities):
+            raise AppError(503, 'KNOWLEDGE_STALE', '图菜谱不属于当前规范来源')
+        check_budget(self.catalog.deadline, self.catalog.should_stop)
+        # Graph selects identities; current canonical fixtures own all recipe facts.
+        # Optional records stay read-only and do not enter requirements().
+        return [current[identity] for identity in dict.fromkeys(identities)], graph
 
     def candidates(self, dish):
         ingredients = [row['ingredient_id'] for row in dish['required_items']] + dish['pantry_items']

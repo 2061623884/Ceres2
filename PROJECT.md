@@ -1,3 +1,43 @@
+# Ceres2：本机后续开发（当前）
+
+更新：2026-10-09。用户已认可[Kev质量改进规格](docs/plans/ceres2-kev-quality-followup-spec.md)、公共API/SSE、评测CLI、实际浏览器三个测试入口，以及[十票依赖](docs/plans/ceres2-kev-quality-followup-tickets.md)。当前按to-spec → to-tickets → implement-spec执行，唯一进度入口为[04总TASK](tasks/ceres2-local-followup-04-real-evaluation-feedback.md)。保持工作树`Ceres2-integration-20261008`和分支`codex/ceres2-local-followup-20261008`；本轮不合并、不推送、不部署、不改原工程或GPU1既有Kev服务。
+
+01已留下真实Kev导航、政策预取/Pi回复及浏览器建议切换后原文交接的[分层证据](work/local-followup/04/kev-followup-20261009/KEV-NAVIGATION-POLICY-RESULTS.md)。技术门槛和后继释放以TASK记录为准；浏览器采集器失败、全局计数归因限制和未测项均保留。[新100基线](work/local-followup/04/kev-followup-20261009/02-RESULTS.md)已实际执行；用户人工标签、产品修复、图质量/15秒对照、综合体验及本人验收仍未完成。原缺Kev的66/30/4仅属于下面前次版本，不作为补齐环境的新结论。
+
+## 前次真实评测与发布记录
+
+更新：2026-10-09。入口为[本机 TASK](tasks/ceres2-local-followup.md)与[方案](docs/plans/ceres2-local-followup-spec.md)，分支`codex/ceres2-local-followup-20261008`、起点`170fac0bc75fcc855897b073337ba218abeb5b7d`。739评测工具29项及原双轴完成后，在00b397使用用户授权的原amax DeepSeek Flash配置实际尝试100次；business66/30/4、core三次全通过11/20、15秒100/100。[真实任务报告](work/local-followup/04/real-model-20261008/REAL-TASK-EVALUATION.md)和[组件/Memory/Firefox报告](work/local-followup/04/real-model-20261008/REAL-COMPONENT-VERIFICATION.md)分层留证。产品源码未改，旧全量752/4与环境补验保留原pin。实测后driver/harness窄修最终源码cbca，4008组合35项与最后签名5项分别留证、不加总，最终两轴复审完成；旧100未重跑或重评分。当前收尾交接及常规发布，之后用户审阅；商品漏匹配、澄清/plan、Kev及真实Guide图任务按[04](tasks/ceres2-local-followup-04-real-evaluation-feedback.md#后续实施顺序与可观察交付)推进，订单后端维持模拟闭环。
+
+用户最新明确要求复用原amax `.env`模型配置真实执行、补报告并推送本分支；不合并约定继续。五票任务图与唯一状态在TASK。主模型/官方图/提取与合成Dream已实测；Kev仍缺、100正式任务Graph调用0，完整Guide浏览器、自然度/有用性人工标注及本人验收未完成。不得以零critical观察或组件180秒预算通过宣称整体验收。原配置/运行数据不修改，后续本地开发仍在新工作树，旧优化分支保留快照。
+
+## 九票集成发布时记录
+
+更新：2026-10-07。当前执行入口为[九票总 TASK](tasks/ceres2-local-cloud-integration.md)与[本轮规格](docs/plans/ceres2-local-cloud-integration-spec.md)。九票技术实现、前端适配、受控验证及两轴修复闭环完成；整体仍为待验收：实际浏览器 BLOCKED，真实 provider／真实图 LLM 质量与用户本人验收 NOT RUN。下一步按[本地交接](docs/LOCAL-CLOUD-INTEGRATION-HANDOFF.md)在独立 worktree 补齐这些门槛，不动原 main、53 项 dirty 或旧运行数据，不部署。
+
+已核实代码交付／checkout目标：[远端 `90c8eab89397ee85454ce9b909206ffed7552e3e`](https://github.com/2061623884/Ceres2/tree/90c8eab89397ee85454ce9b909206ffed7552e3e)，对应本地 `2135db13f8ac8f0aa5c38bd87f5059131f18252e`，tree `9872cda48df31d8af3178a26f836812fa7e4d6b0`；[最终代码发布回执](work/local-cloud-integration/final-integration-publication-receipt.json)。产品来源固定 `f963017587b3eab30965ffcd3aab90fcc3852f3e`；后继仅更新文档，不改变产品。
+
+验证边界：`81b02f9` backend 全量 746 passed / 5 skipped，知识补证在同 pin；`3a9fede` 最终修复 183 受影响例；`f963017` 合入最小 4 例与 runtime build。不同 pin／重叠数字不相加，不声称最终 pin 重跑全量。远端 statuses `[]`、Actions 0、无 workflow，CI 未配置，并非通过。详见[最终技术报告](work/local-cloud-integration/t09/FINAL-VERIFICATION.md)。
+
+## 以下均为历史阶段原文
+
+下方内容原样保留来源与当时证据。其中“四票为当前”“前端由用户本地独自负责／云端排除前端”“无 remote”等时点描述不覆盖上面的九票集成入口与本轮授权；历史通过不继承为本轮验收。
+
+---
+
+# Ceres2：角色判断与政策预取云端重建
+
+更新：2026-10-07。当前执行入口为 [judge-prefetch 总 TASK](tasks/ceres2-judge-prefetch.md) 与 [规格](docs/plans/ceres2-judge-prefetch-spec.md)。用户已批准从真实 GitHub `4bed9c891261e382122d424825b649989ea92c92` 新实现四票，使用 implement-spec、TDD、Agent Team、可追溯提交及分支推送；功能依赖保持 01 → 02 → 03 → 04。规划／基线及源码 WIP 已发布并核实。01 已完成同版云端实现、480 backend（专项 149 为其重叠子集）、Pi typecheck/build、依赖检查及独立两轴复审，云端技术门槛释放给 02；01 整体保持待验收，真实 provider、用户本地前端／浏览器与本人验收仍开放。01 里程碑已核实发布为远端 `19822b146637fbf9cbba75dcf499984d393a4605`；[发布映射](work/judge-prefetch/publication-role-entry-final.json)。02 已完成同版云端实现、524 backend（专项 44 为其重叠子集）、独立 guard proof、Pi typecheck/build、依赖及两轴复审；[报告](work/judge-prefetch-rebuild/02-policy-evidence-verification.md)。02 里程碑已核实发布为 `e434e1b5419dfadec9db65dea13b63974a9d701e`；[映射](work/judge-prefetch/publication-policy-evidence-final.json)。03 已完成 152 项云端专项（含重叠 34 复用／安全用例）、依赖／Pi build／guard 与核心两轴复审，见[报告](work/judge-prefetch-rebuild/03-query-reuse-verification.md)。03 核心已核实发布为 `70a9f8c68ff99de7eb9b062dc1262d287e48b26e`；[映射](work/judge-prefetch/publication-query-reuse-core.json)。01–03 均保持待验收；04 已在独立冻结核心完成一次 **558 backend** 全量，依赖、Pi build/typecheck 与 guard／isolation 同版通过；[最终核心报告](work/judge-prefetch-rebuild/04-core-verification.md)。核心文档／证据两轴审查无阻塞；独立 comparison 支持另有 22 项通过及两轴审阅，见[报告](work/judge-prefetch-rebuild/04-comparison-support-verification.md)。受控云端交付完成，真实对照、前端／浏览器及本人验收仍开放。
+
+[执行决定](docs/REBUILD-DECISIONS.md) 固定授权时序、服务端兼容契约、共享文件所有权、官方 DeepSeek thinking 有界支持项、Prompt 来源、TDD 与分层证据要求。云端负责后端/runtime 与交接；前端由用户本地实现，typed UI／真实浏览器和本人验收条目保留待验收。旧 `f45c4ff` 不可得源码／测试、`0c752a2` 成绩和本地补丁成绩均不继承。
+
+[真实基线与来源记录](work/judge-prefetch/rebuild-bootstrap.md) 保留已发布 commit/tree 与源码 manifest；[参考源码清单](docs/references/ceres2-rebuild-reference-sources.md) 单独记录只读外部来源，参考项目不是运行依赖或当前实现权威。规划／功能里程碑只有在提交、授权分支发布、远端完整 SHA 与精确 tree 一致性核实后才报告已发布；connector 发布若生成不同 SHA，保留本地／远端提交映射回执。
+
+当前写入分工：01–03 核心已冻结，04 维护最终同版证据和交接，新增核心缺陷退回原票最小修复；导航回归须单独协调，不并行改同一文件；专职 Tester 独占安装和验证命令；集成者独占 TASK／PROJECT 当前状态、合并和提交；前端文件由用户本地负责。每票实际状态只在总 TASK 与各票维护；[规划发布映射](work/judge-prefetch/publication-planning.json)保留可 checkout 的远端提交。
+
+以下为历史阶段原文，保留其业务来源和当时证据；其中“当前主线”“无 remote”“禁止推送”“仅某批票据”等时点描述不覆盖本段最新执行授权，也不构成本轮通过证明。
+
+---
+
 # Ceres2：下一阶段完整购物体验
 
 更新：2026-10-06。当前工程主线为[下一阶段体验总 TASK](tasks/ceres2-next-experience.md)：已批准 10 个纵向切片，按依赖并行 TDD 连续实施，最终做 Standards／Spec 两轴审查。01–09已有受控技术交付；最终双轴审查问题已修复并通过独立复审；同一冻结0c752a2完整426backend、37受控DOM、build/strict检查与OS restart1/1通过，01–09受控门槛恢复。10仍待验收，外部真实模型／浏览器／语言／holdout／V3比较／本人验收未闭合。历史失败及旧成绩保留，不称整体已验收。07真实语言效果及成本改善未验证，Prompt长度增加如实保留。精确候选、历史失败与分层证据见总TASK；未宣称真实provider／真实浏览器／本人验收通过。

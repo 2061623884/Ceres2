@@ -1,0 +1,91 @@
+{
+  "scope": "Final frozen comparison runner/test/document plus associated curated evidence; read-only source/evidence inspection",
+  "head": "56f0e6f1d4e1e42d4e574f09df55fde0dce8615f",
+  "tree": "c916518853289f246e64b1ccdac609f9599f42d7",
+  "main": "4bed9c891261e382122d424825b649989ea92c92",
+  "owner_confirmed_artifact_sha256": {
+    "work/judge-prefetch-rebuild/live_compare.py": "ec4deeba2a98c2f028f7316b733d42507cc449466b5517688291465fd15cd8e5",
+    "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+    "work/judge-prefetch-rebuild/LIVE-COMPARE.md": "bcaa110e4bb2a92e6be08643a6c453f96a8a35e30e882f8149f7574f9ff2ca51"
+  },
+  "reviewed_artifact_sha256": {
+    "work/judge-prefetch-rebuild/live_compare.py": "ec4deeba2a98c2f028f7316b733d42507cc449466b5517688291465fd15cd8e5",
+    "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+    "work/judge-prefetch-rebuild/LIVE-COMPARE.md": "bcaa110e4bb2a92e6be08643a6c453f96a8a35e30e882f8149f7574f9ff2ca51"
+  },
+  "core_source_count": 248,
+  "core_source_map_equal": true,
+  "core_source_manifest_sha256": "7c86cf268f5f4d7055626d6db1e3970d23735bd313ed148f638ede0a02c4368f",
+  "product_diff_from_frozen_core": [],
+  "evidence_sha256": {
+    "work/judge-prefetch-rebuild/04-comparison-support-final-source.json": "1d2a4cc59efa0d46d9e4b790756f8f1d8e1607459cba830042c0a9b8814c3889",
+    "work/judge-prefetch-rebuild/04-comparison-support-history.json": "a4e9fdfbc773d10a8e330a7d4f4cf4258a5fb9f1a4f5f577942683ce615772e4",
+    "work/judge-prefetch-rebuild/04-comparison-support-verification.md": "e78dcc5377c7de89f3d049d7bf0b73bc812280ccbd0b9997c5427f3d600c2949"
+  },
+  "final_checks": [
+    {
+      "label": "04-compare-alias-green-01",
+      "record_sha256": "13cf838a650a8a76a6e8c100f001ec90a75323f8cb983cfb521597e6739aac8e",
+      "output_sha256": "b2dddd16a199997dd4f19c3a4bdc0bbac50d09b059ab3d8873d9a15167354a28",
+      "runner_source_before": {
+        "work/judge-prefetch-rebuild/live_compare.py": "ec4deeba2a98c2f028f7316b733d42507cc449466b5517688291465fd15cd8e5",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "work/judge-prefetch-rebuild/LIVE-COMPARE.md": "db7959514629a1bc1654bd5af622c14ea7b6050dca0d0c0ed52a46ae7f471d3b"
+      },
+      "runner_source_after": {
+        "work/judge-prefetch-rebuild/live_compare.py": "ec4deeba2a98c2f028f7316b733d42507cc449466b5517688291465fd15cd8e5",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "work/judge-prefetch-rebuild/LIVE-COMPARE.md": "db7959514629a1bc1654bd5af622c14ea7b6050dca0d0c0ed52a46ae7f471d3b"
+      },
+      "runner_test_matches_reviewed": true,
+      "exit_code": 0,
+      "source_changes": [],
+      "harness_changes": [],
+      "last_output_line": "2 passed in 10.32s",
+      "record_matches_curated_audit": true,
+      "output_matches_curated_audit": true
+    },
+    {
+      "label": "04-compare-final-full-02",
+      "record_sha256": "eca165c7b36a7ea8f50fd6fbf8d59d48d54a249061b35c0c83b079fee07ad18a",
+      "output_sha256": "cba309e68dda34de02f362ebb15c81821a96162ada61fa0f4947dd3a3d47f7c2",
+      "runner_source_before": {
+        "work/judge-prefetch-rebuild/live_compare.py": "ec4deeba2a98c2f028f7316b733d42507cc449466b5517688291465fd15cd8e5",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "work/judge-prefetch-rebuild/LIVE-COMPARE.md": "db7959514629a1bc1654bd5af622c14ea7b6050dca0d0c0ed52a46ae7f471d3b"
+      },
+      "runner_source_after": {
+        "work/judge-prefetch-rebuild/live_compare.py": "ec4deeba2a98c2f028f7316b733d42507cc449466b5517688291465fd15cd8e5",
+        "work/judge-prefetch-rebuild/verification_tests/test_live_compare.py": "96a2027125a3facd302dda44ed1917bc110ef7a72c1cc0d565d483b4d62f6fa9",
+        "work/judge-prefetch-rebuild/LIVE-COMPARE.md": "db7959514629a1bc1654bd5af622c14ea7b6050dca0d0c0ed52a46ae7f471d3b"
+      },
+      "runner_test_matches_reviewed": true,
+      "exit_code": 0,
+      "source_changes": [],
+      "harness_changes": [],
+      "last_output_line": "22 passed in 20.18s",
+      "record_matches_curated_audit": true,
+      "output_matches_curated_audit": true
+    }
+  ],
+  "scope_note": "LIVE-COMPARE.md was finalized after the 22-case run; its reviewed hash is a documentation pin, not a test-executed artifact. Prior 21-case evidence is superseded for the alias fix.",
+  "execution": "No tests, builds, installations, application/provider invocations or product edits performed.",
+  "artifact_drift_at_review_end": [],
+  "final_document_delta": {
+    "prior_sha256": "6e26be880aa8b0bc42189a7632b46d6bda1988fcb4a75c19076cffd8b3324731",
+    "current_sha256": "bcaa110e4bb2a92e6be08643a6c453f96a8a35e30e882f8149f7574f9ff2ca51",
+    "exact_delta_verified_by_prior_hash_reconstruction": true,
+    "change": "Two unavailable raw-capture links replaced by an explicit local-only note and the existing three curated evidence entrypoints. No other document change.",
+    "tester_post_test_documentation": {
+      "path": "work/judge-prefetch-rebuild/LIVE-COMPARE.md",
+      "sha256": "bcaa110e4bb2a92e6be08643a6c453f96a8a35e30e882f8149f7574f9ff2ca51",
+      "note": "Documentation-only changes after final22/affected2 captures; final doc labels bulk raw evidence as local-only. Original captured doc hash retained. Review separate, no rerun implied.",
+      "superseded_post_test_doc_sha256": "6e26be880aa8b0bc42189a7632b46d6bda1988fcb4a75c19076cffd8b3324731"
+    }
+  },
+  "prior_evidence_sha256_before_documentation_delta": {
+    "work/judge-prefetch-rebuild/04-comparison-support-final-source.json": "6f46636034438e2e74622fbbe0b7e5b1076f1cb7f157a791047453ae1e7a7b9f",
+    "work/judge-prefetch-rebuild/04-comparison-support-history.json": "a4e9fdfbc773d10a8e330a7d4f4cf4258a5fb9f1a4f5f577942683ce615772e4",
+    "work/judge-prefetch-rebuild/04-comparison-support-verification.md": "9a83ae659a31ada46dd31310ba6fff45600ea34e55185f8f51afd8462f84c4f5"
+  }
+}

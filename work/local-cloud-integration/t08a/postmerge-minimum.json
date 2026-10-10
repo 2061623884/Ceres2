@@ -1,0 +1,21 @@
+{
+  "label": "t08a-postmerge-minimum",
+  "head": "a60b6b56cddd97bc38d198764b66cecd0b76e518",
+  "command": [
+    "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/test_integration_evaluation_export.py",
+    "tests/test_integration_evaluation_annotations.py",
+    "-q",
+    "-p",
+    "pytest_asyncio.plugin"
+  ],
+  "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/verify-t08a-merge-a60b6b5/backend",
+  "exit_code": 0,
+  "elapsed_seconds": 4.473,
+  "source_changes_during_run": [],
+  "harness_changes_during_run": [],
+  "raw_record_sha256": "7fdb8110734630b20427e699349962b46b17d5d4a7e53a2a5aa012ea0923e90e",
+  "output_tail": "...........                                                              [100%]\n11 passed in 3.73s\n"
+}

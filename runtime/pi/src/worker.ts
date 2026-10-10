@@ -1,18 +1,21 @@
 /** A bounded actual Pi Agent. Business facts and authority stay in Python. */
 import { createHash } from 'node:crypto';
+import { readFileSync, readdirSync } from 'node:fs';
 import { createInterface } from 'node:readline';
 import { Agent, type AgentTool } from '@earendil-works/pi-agent-core';
 import { streamSimple } from '@earendil-works/pi-ai/api/openai-completions';
 import type { Model } from '@earendil-works/pi-ai';
 import { Type } from 'typebox';
-import { GENERAL_CLAIM_PROMPT } from './general-claim.js';
+import { GENERAL_CLAIM_PROMPT, INTERIM_CLAIM_PROMPT } from './general-claim.js';
 import { officialDeepSeekSampling } from './official-deepseek.js';
-import { composePrompt, selectTools, type PromptModules, type TurnContext } from './prompt-modules.js';
+import { observeProviderUsage, type ObservedUsage } from './provider-observation.js';
+import { composePrompt, selectTools, type GuideRequestKind, type PromptModules, type TurnContext } from './prompt-modules.js';
 
 interface Start {
   type: 'start'; run_id: string; sequence: number; message: string; categories: Array<{ id: string; name_zh: string }>;
   model: { id: string; baseUrl: string; apiKey: string };
   context: TurnContext;
+  policyEvidence: Record<string, unknown> | null;
   promptModules: PromptModules;
   maxToolRounds: number; timeoutMs: number;
 }
@@ -90,7 +93,43 @@ async function run(start: Start) {
   let status = 'completed';
   let errorCode: string | undefined;
   let validator: Agent | undefined;
-  let shoppingContext = false;
+  let requestKind: GuideRequestKind | undefined;
+  let finalAnswer: string | undefined;
+  let interimChecks: Promise<void> = Promise.resolve();
+  let interimNumber = 0;
+  const buildFiles = readdirSync(new URL('.', import.meta.url)).filter(name=>name.endsWith('.js')).sort();
+  const build = buildFiles.map(name=>[name,createHash('sha256').update(readFileSync(new URL(name, import.meta.url))).digest('hex')]);
+  send({type:'event',event:{type:'runtime_version',
+    build_revision:createHash('sha256').update(JSON.stringify(build)).digest('hex'),build_scope:'worker_disk_at_start',
+    prompt_revision:createHash('sha256').update(JSON.stringify([start.promptModules,GENERAL_CLAIM_PROMPT,INTERIM_CLAIM_PROMPT])).digest('hex')}});
+  type Stage = 'primary_pi' | 'general_audit' | 'interim_audit';
+  type Call = {call_id:string;stage:Stage;started:number;ended:boolean;usage:ObservedUsage|null};
+  let providerNumber=0;
+  const currentCalls = new Map<Stage,Call>();
+  const endCall = (call:Call,status:string) => {
+    if(call.ended) return;
+    call.ended=true;
+    send({type:'event',event:{type:'provider_call_end',call_id:call.call_id,stage:call.stage,status,
+      duration_ms:performance.now()-call.started,usage:call.usage,cost:null}});
+  };
+  const finishProvider = (stage:Stage,status:string) => {
+    const call=currentCalls.get(stage);
+    if(call) endCall(call,status);
+  };
+  const observedFetch = (stage:Stage): typeof globalThis.fetch => async (...args) => {
+    const call:Call={call_id:`${runId}:provider:${++providerNumber}`,stage,started:performance.now(),ended:false,usage:null};
+    currentCalls.set(stage,call);
+    send({type:'event',event:{type:'provider_call_start',call_id:call.call_id,stage,
+      model:start.model.id,provider_host:new URL(start.model.baseUrl).hostname}});
+    try {
+      const response=await providerFetch(...args);
+      if(!response.ok || !response.body) {
+        endCall(call,response.ok?'empty_response':'http_error');
+        return response;
+      }
+      return observeProviderUsage(response,usage=>{call.usage=usage;});
+    } catch(error) { endCall(call,'transport_error'); throw error; }
+  };
   const model: Model<'openai-completions'> = {
     id: start.model.id, name: start.model.id, api: 'openai-completions', provider: 'ceres',
     baseUrl: start.model.baseUrl, reasoning: false, input: ['text'],
@@ -98,6 +137,7 @@ async function run(start: Start) {
     contextWindow: 32768, maxTokens: 1536,
   };
   const remote = async (name: string, id: string, args: unknown, signal?: AbortSignal) => {
+    await interimChecks;
     const result = await new Promise<unknown>((resolve, reject) => {
       const abort = () => { waiting.delete(id); reject(new Error('aborted')); };
       if (signal?.aborted) return abort();
@@ -105,10 +145,32 @@ async function run(start: Start) {
       waiting.set(id, value => { signal?.removeEventListener('abort', abort); resolve(value); });
       send({ type: 'tool_call', id, name, arguments: args, round: toolRounds + 1 });
     });
-    if (name === 'guide_request' && ['new_goal', 'continue', 'amend'].includes((result as {kind:string}).kind)) shoppingContext = true;
+    if (name === 'guide_request') requestKind = (result as {kind:GuideRequestKind}).kind;
     return { content: [{ type: 'text' as const, text: JSON.stringify(result) }], details: result };
   };
   const tools: AgentTool[] = [
+    { name:'finish_response', label:'完成当前回复',
+      description:'End this same run with validated reference fields. Call alone after guide_request and all needed evidence. Python validates references and renders facts; this never authorizes a purchase or application.',
+      parameters:Type.Object({
+        status:Type.Union([Type.Literal('completed'),Type.Literal('waiting')]),
+        answer_kind:Type.Optional(Type.Union(['products','comparison','policy_result','purchase_plan','exploration','question_selection','history_result','memory_result','dish_candidates','recipe_facts','general_explanation','status','role_boundary'].map(value=>Type.Literal(value)))),
+        product_refs:Type.Optional(Type.Array(Type.String())),
+        dish_refs:Type.Optional(Type.Array(Type.String())),
+        ingredient_ids:Type.Optional(Type.Array(Type.String())),
+        policy_ref:Type.Optional(Type.String()),
+        policy_refs:Type.Optional(Type.Array(Type.String(),{minItems:1})),
+        role_boundary:Type.Optional(Type.Boolean()),
+        proposal_ref:Type.Optional(Type.String()), exploration_ref:Type.Optional(Type.String()),
+        selection_ref:Type.Optional(Type.String()), history_ref:Type.Optional(Type.String()),
+        memory_ref:Type.Optional(Type.String()), general_ref:Type.Optional(Type.String()),
+        clarification_slot:Type.Optional(Type.Union(['target','packaging','brand','budget'].map(value=>Type.Literal(value)))),
+      },{additionalProperties:false}),
+      execute:async(_id,args,signal)=>{
+        if(requestKind === undefined || signal?.aborted || status !== 'completed' || errorCode) throw new Error('Completion is not available');
+        finalAnswer=JSON.stringify(args);
+        return {content:[{type:'text',text:'Response references supplied for host validation.'}],details:{final_response:true}};
+      },
+    },
     { name: 'guide_request', label: '登记当前请求', description: 'Classify this user message once, before product tools. question preserves shopping work; progress reads status; continue keeps goal; new_goal explicitly replaces goal; amend records explicit new conditions; stop only stops current processing; abandon ends the shopping task without changing cart. This never authorizes cart or order writes.', parameters: Type.Object({ kind: Type.Union(['question','progress','continue','new_goal','amend','stop','abandon'].map(value => Type.Literal(value))), goal: Type.Optional(Type.String({minLength:1,maxLength:8000})), conditions: Type.Optional(Type.Record(Type.String(), Type.Unknown())) }, {additionalProperties:false}), execute: (id, args, signal) => remote('guide_request', id, args, signal) },
     { name: 'validate_general_text', label: '核对普通解释', description: 'For unrelated general knowledge only, submit proposed short messages once. Uses the same configured model to check merchant/execution claims within this run deadline. Return only the resulting general_ref in your final answer. No merchant facts or execution receipts are authorized.', parameters: Type.Object({messages:Type.Array(Type.String({minLength:1}),{minItems:1})},{additionalProperties:false}), execute: async (id, args, signal) => {
       const reserved = await remote('validate_general_text', id, args, signal);
@@ -119,12 +181,12 @@ async function run(start: Start) {
         streamFn: (_model, context, options) => {
           beginProviderCall();
           const samplingParams = officialDeepSeekSampling(start.model.baseUrl, options?.samplingParams);
-          return streamSimple(model, context, {
-            ...options, apiKey: start.model.apiKey, maxTokens: 256, fetch: providerFetch,
-            ...(samplingParams ? { samplingParams } : {}),
+          return streamSimple(model, context, {...options, apiKey:start.model.apiKey,maxTokens:256,fetch:observedFetch('general_audit'),
+            ...(samplingParams ? {samplingParams} : {}),
           });
         },
       });
+      validator.subscribe(event=>{if(event.type==='message_end' && event.message.role==='assistant') finishProvider('general_audit',event.message.stopReason);});
       const abort = () => validator?.abort();
       signal?.addEventListener('abort',abort,{once:true});
       send({type:'event',event:{type:'general_validation_start',model_calls:1}});
@@ -152,12 +214,13 @@ async function run(start: Start) {
       return {content:[{type:'text' as const,text:JSON.stringify(result)}],details:result};
     } },
     { name: 'search_products', label: '查询商品', description: 'Search the current store catalog by query and/or a category_id from the supplied category list. Read-only; returns scoped refs.', parameters: Type.Object({ query: Type.Optional(Type.String({ minLength: 1, maxLength: 100 })), category_id: Type.Optional(Type.String({ minLength: 1, maxLength: 32 })) }, { additionalProperties: false, minProperties: 1 }), execute: (id, args, signal) => remote('search_products', id, args, signal) },
-    { name: 'search_after_sales_policy', label: '查询一般售后政策', description: 'Read authoritative general refund/return policy without selecting an order. Finish with policy_result and this policy_ref. Does not determine order eligibility or submit an application.', parameters:Type.Object({query:Type.String({minLength:1}),category:Type.Optional(Type.Union([Type.Literal('refund'),Type.Literal('return')]))},{additionalProperties:false}), execute:(id,args,signal)=>remote('search_after_sales_policy',id,args,signal) },
+    { name: 'search_after_sales_policy', label: '查询一般售后政策', description: 'Read authoritative general refund/return policy without selecting an order. Success or empty returns complete evidence and a real policy_ref; final results may use policy_ref or policy_refs for multiple scopes. A failed lookup returns outcome:error without a ref; continue the other request parts, or finish policy_result without policy_ref/policy_refs for a host-rendered actual failure. Does not determine order eligibility or submit an application.', parameters:Type.Object({query:Type.String({minLength:1}),category:Type.Optional(Type.Union([Type.Literal('price'),Type.Literal('stock'),Type.Literal('delivery'),Type.Literal('order'),Type.Literal('refund'),Type.Literal('fulfillment'),Type.Literal('quality'),Type.Literal('return'),Type.Literal('safety'),Type.Literal('human')]))},{additionalProperties:false}), execute:(id,args,signal)=>remote('search_after_sales_policy',id,args,signal) },
     { name: 'history_command', label: '查看或选定历史采购', description: 'List historical source plans before selecting. Ambiguous last time must list, never guess. select requires a source_task_id explicitly named in current user message or unique named historical goal. Interpret ordinary prose effective shopping memories from list into typed memory_defaults (people, budget_fen, exclusions), with all effective non-reference shopping memory ID/revision refs. Current task explicit conditions override defaults. Never infer price, stock, approval or cart. If interpretation is uncertain, clarify instead. Finish history_result with latest history_ref.', parameters:Type.Object({action:Type.Union([Type.Literal('list'),Type.Literal('select')]),source_task_id:Type.Optional(Type.String()),memory_defaults:Type.Optional(Type.Object({people:Type.Optional(Type.Integer({minimum:1})),budget_fen:Type.Optional(Type.Integer({minimum:0})),exclusions:Type.Optional(Type.Array(Type.String()))},{additionalProperties:false})),memory_refs:Type.Optional(Type.Array(Type.Object({memory_id:Type.String(),revision:Type.Integer({minimum:1})},{additionalProperties:false})))},{additionalProperties:false}), execute:(id,args,signal)=>remote('history_command',id,args,signal) },
     { name: 'memory_command', label: '处理明确记忆指令', description: 'Only current explicit user save/list/update/delete instructions. source_quote must quote that instruction exactly. Read-only list may resolve real references, followed by at most one save/update/delete. Ambiguous matches require clarification. Return only the latest memory_ref. shopping domain is Keke only, aftersales Momo only, communication relevant to both. Recall never grants business authority. Return memory_result with host memory_ref. list is explicit full owned memory management; update/delete require real memory_id and revision from prior results.', parameters: Type.Object({action:Type.Union(['save','list','update','delete'].map(v=>Type.Literal(v))),category:Type.Optional(Type.Union(['user','feedback','project','reference'].map(v=>Type.Literal(v)))),domain:Type.Optional(Type.Union(['shopping','aftersales','communication'].map(v=>Type.Literal(v)))),key:Type.Optional(Type.String({minLength:1,maxLength:100})),content:Type.Optional(Type.String({minLength:1,maxLength:2000})),source_quote:Type.Optional(Type.String({minLength:1,maxLength:4000})),memory_id:Type.Optional(Type.String({minLength:1,maxLength:80})),expected_revision:Type.Optional(Type.Integer({minimum:1})),expires_at:Type.Optional(Type.Union([Type.String(),Type.Null()])),reference_url:Type.Optional(Type.Union([Type.String({minLength:1,maxLength:2000}),Type.Null()]))},{additionalProperties:false}), execute:(id,args,signal)=>remote('memory_command',id,args,signal) },
     { name: 'select_question_products', label: '选定已展示商品与数量', description: 'Answer the current products/quantity question using its exact question_id and option_ids. Only explicitly selected products; omit quantity if unknown, so the host asks just that missing information. Never adds to cart. Finish question_selection with returned selection_ref.', parameters:Type.Object({question_id:Type.String({minLength:1}),selections:Type.Array(Type.Object({option_id:Type.String({minLength:1}),quantity:Type.Optional(Type.Integer({minimum:1}))},{additionalProperties:false}),{minItems:1})},{additionalProperties:false}), execute:(id,args,signal)=>remote('select_question_products',id,args,signal) },
     { name: 'explore_products', label: '查看真实选购方向', description: 'Explore actual constrained supply. Generic cross-type requests get one type question; specific product_type goes straight to products. Finish with answer_kind exploration and the returned exploration_ref. Never selects or adds to cart.', parameters:Type.Object({category_id:Type.String({minLength:1}),product_type:Type.Optional(Type.String()),query:Type.Optional(Type.String()),answer_question_id:Type.Optional(Type.String())},{additionalProperties:false}), execute:(id,args,signal)=>remote('explore_products',id,args,signal) },
     { name: 'compare_products', label: '比较商品', description: 'For a category comparison, call this once. Use only the product refs returned here; do not follow with search_products or another compare_products call. Query alone never selects or purchases.', parameters:Type.Object({query:Type.Optional(Type.String()), category_id:Type.Optional(Type.String()), brand:Type.Optional(Type.String()), packaging:Type.Optional(Type.String()), pack_count_mode:Type.Optional(Type.Union([Type.Literal('single'),Type.Literal('multi')]))},{additionalProperties:false}), execute:(id,args,signal)=>remote('compare_products',id,args,signal) },
+    { name: 'search_recipe_relations', label: '显式查询菜谱图关系', description: 'Explicit optional GraphRAG relation lookup only. Use for requested recipe relation exploration, not ordinary product, policy, or known recipe facts. Returns scoped dish refs and separate model selection/canonical facts. Error is not empty or proof of absent relationships. Never authorizes shopping, substitution, nutrition, or allergy safety.', parameters:Type.Object({query:Type.String({minLength:1}),method:Type.Optional(Type.Union([Type.Literal('local'),Type.Literal('global')]))},{additionalProperties:false}), execute:(id,args,signal)=>remote('search_recipe_relations',id,args,signal) },
     { name: 'search_dishes', label: '查询菜谱', description: 'Look up dish suggestions or a user-selected recipe and actual ingredient SKU candidates. Pantry has unknown amounts, not presumed at home.', parameters:Type.Object({query:Type.String({minLength:1})},{additionalProperties:false}), execute:(id,args,signal)=>remote('search_dishes',id,args,signal) },
     { name: 'propose_dish', label: '准备菜品清单', description: 'Prepare the selected recipe. operation append is only for an explicitly selected additional dish. update preserves all other groups; group_id must identify the existing target when ambiguous. Omit people if user did not specify it; host preserves existing explicit people and SKU selections. selections maps ingredient IDs to actual queried candidate SKU IDs explicitly selected by user. Never confirms cart.', parameters:Type.Object({dish_ref:Type.String({minLength:1}), operation:Type.Optional(Type.Union([Type.Literal('append'),Type.Literal('update')])), group_id:Type.Optional(Type.String({minLength:1})), people:Type.Optional(Type.Integer({minimum:1})), selections:Type.Optional(Type.Record(Type.String(),Type.String()))},{additionalProperties:false}), execute:(id,args,signal)=>remote('propose_dish',id,args,signal) },
     { name: 'propose_purchase', label: '准备采购清单', description: 'Only after the user explicitly selects this concrete product and positive sale-package count. Prepare a plan using a current search ref; never adds to cart. Do not propose merely recommended or related products. Return proposal_ref as purchase_plan final answer.', parameters: Type.Object({ref:Type.String({minLength:1}),quantity:Type.Integer({minimum:1})},{additionalProperties:false}), execute:(id,args,signal)=>remote('propose_purchase',id,args,signal) },
@@ -166,26 +229,25 @@ async function run(start: Start) {
   const agent = new Agent({
     initialState: {
       model, thinkingLevel: 'off', tools,
-      systemPrompt: composePrompt(start.promptModules, start.context, start.context.capability),
+      systemPrompt: composePrompt(start.promptModules, start.context),
     },
     streamFn: (_model, context, options) => {
       beginProviderCall();
-      const samplingParams = officialDeepSeekSampling(start.model.baseUrl, {
-        ...options?.samplingParams, response_format: { type: 'json_object' },
-      });
+      const toolSampling = {...options?.samplingParams, tool_choice:'auto'};
+      const samplingParams = officialDeepSeekSampling(start.model.baseUrl, toolSampling) ?? toolSampling;
       return streamSimple(model, context, {
-        ...options, apiKey: start.model.apiKey, maxTokens: 1536, fetch: providerFetch,
-        ...(samplingParams ? { samplingParams } : {}),
+        ...options, apiKey: start.model.apiKey, maxTokens: 1536, fetch: observedFetch('primary_pi'),
+        samplingParams,
       });
     },
     prepareRequest: ({context}) => {
-      const capability = shoppingContext ? 'exploration' : start.context.capability;
-      const selected = selectTools(tools, capability);
-      const prompt = composePrompt(start.promptModules, start.context, capability);
+      const selected = selectTools(tools, requestKind);
+      const prompt = composePrompt(start.promptModules, start.context, requestKind);
       return {context: {tools:selected, messages:context.messages.map((message,index) => index === 0 && message.role === 'system' ? {...message,content:prompt,toolsAdded:selected} : message)}};
     },
     toolExecution: 'sequential',
     finishTurn: ({ toolResults }) => {
+      if (finalAnswer !== undefined) return {action:'end'};
       if (toolResults.length > 0) toolRounds += 1;
       if (toolRounds >= Math.min(5, start.maxToolRounds)) {
         status = 'tool_budget';
@@ -193,7 +255,7 @@ async function run(start: Start) {
       }
     },
   });
-  const timer = setTimeout(() => { status = 'deadline'; agent.abort(); validator?.abort(); }, Math.min(30000, start.timeoutMs));
+  const timer = setTimeout(() => { status = 'deadline'; agent.abort(); validator?.abort(); }, Math.min(15000, start.timeoutMs));
   agent.subscribe(event => {
     // These are actual SDK lifecycle events, projected without hidden thinking,
     // provider credentials, or unvalidated assistant prose.
@@ -205,9 +267,74 @@ async function run(start: Start) {
       } });
     }
     if (event.type === 'message_end' && event.message.role === 'assistant') {
+      finishProvider('primary_pi',event.message.stopReason);
+      const calls = event.message.content.filter(block=>block.type==='toolCall');
+      if(calls.some(block=>block.name==='finish_response') && calls.length !== 1) {
+        errorCode='PI_TOOL_INVALID'; agent.abort();
+      }
       for (const block of event.message.content) {
         if (block.type === 'toolCall' && !tools.some(tool => tool.name === block.name)) {
           errorCode = 'PI_TOOL_FORBIDDEN'; agent.abort();
+        }
+      }
+      // Only ordinary public text accompanying a non-final tool turn can be
+      // proposed. Thinking blocks and completion prose are never candidates.
+      if (!errorCode && event.message.stopReason !== 'error' && event.message.stopReason !== 'aborted' && calls.some(block=>block.name!=='finish_response')) {
+        const raw = event.message.content.filter(block=>block.type==='text').map(block=>block.text).join('').trim();
+        let candidate: string | undefined;
+        if (raw.startsWith('{') || raw.startsWith('[')) {
+          try {
+            const value = JSON.parse(raw);
+            if (value && Object.keys(value).length === 1 && typeof value.interim_message === 'string' && value.interim_message.trim()) candidate=value.interim_message.trim();
+          } catch (error) {
+            send({type:'event',event:{type:'interim_candidate_rejected',diagnostic:diagnostic(error)}});
+          }
+        } else if (raw) candidate=raw;
+        if (candidate) {
+          const text=candidate;
+          const messageId=`${runId}:interim:${++interimNumber}`;
+          const auditId=`${runId}:interim-audit:${interimNumber}`;
+          interimChecks=interimChecks.then(async()=>{
+            if (status!=='completed' || errorCode) return;
+            const startedAt=performance.now();
+            let usage: ObservedUsage | null=null;
+            let approved=false;
+            let outcome: 'approved' | 'rejected' | 'error'='error';
+            let auditDiagnostic: ReturnType<typeof diagnostic> | null=null;
+            send({type:'event',event:{type:'interim_audit_start',audit_id:auditId,message_id:messageId,model:start.model.id}});
+            validator=new Agent({
+              initialState:{model,thinkingLevel:'off',tools:[],systemPrompt:INTERIM_CLAIM_PROMPT},
+              streamFn:(_model,context,options)=>{
+                beginProviderCall();
+                const samplingParams=officialDeepSeekSampling(start.model.baseUrl,options?.samplingParams);
+                return streamSimple(model,context,{...options,apiKey:start.model.apiKey,maxTokens:256,fetch:observedFetch('interim_audit'),...(samplingParams?{samplingParams}:{})});
+              },
+            });
+            validator.subscribe(event=>{if(event.type==='message_end' && event.message.role==='assistant') finishProvider('interim_audit',event.message.stopReason);});
+            try {
+              await validator.prompt(JSON.stringify([text]));
+              const last=[...validator.state.messages].reverse().find(message=>message.role==='assistant');
+              usage=currentCalls.get('interim_audit')?.usage ?? null;
+              if (!last || last.role!=='assistant' || last.stopReason==='error' || last.stopReason==='aborted') {
+                const cause=new Error(last?.role==='assistant'?last.errorMessage:validator.state.errorMessage);
+                cause.name=last?.role==='assistant' && last.stopReason==='aborted'?'AbortError':'ProviderError';
+                throw cause;
+              }
+              const verdict=JSON.parse(last.content.filter(block=>block.type==='text').map(block=>block.text).join(''));
+              if (!verdict || Object.keys(verdict).length!==3 || ['merchant_claims','execution_claims','private_content'].some(key=>typeof verdict[key]!=='boolean')) {
+                throw new TypeError('Invalid interim audit verdict schema');
+              }
+              approved=verdict.merchant_claims===false && verdict.execution_claims===false && verdict.private_content===false;
+              outcome=approved?'approved':'rejected';
+            } catch (error) {
+              // Optional recovery remains fail-closed, but retain the same
+              // bounded causal diagnostics as other runtime failures.
+              auditDiagnostic=diagnostic(error);
+            }
+            finally { validator=undefined; }
+            send({type:'event',event:{type:'interim_audit_end',audit_id:auditId,message_id:messageId,approved,outcome,diagnostic:auditDiagnostic,model:start.model.id,duration_ms:performance.now()-startedAt,usage,cost:null}});
+            if(approved && status==='completed' && !errorCode) send({type:'interim_message',message_id:messageId,text,approved:true});
+          });
         }
       }
     }
@@ -216,9 +343,20 @@ async function run(start: Start) {
     }
   });
   try {
-    await agent.prompt(start.message);
+    if (start.policyEvidence) {
+      // Acquired host facts are a lower-priority data message. No model tool
+      // call occurred, so this must never masquerade as a tool result.
+      await agent.prompt([
+        {role: 'user', content: [{type: 'text', text: 'CERES_POLICY_EVIDENCE\n' + JSON.stringify(start.policyEvidence)}], timestamp: Date.now()},
+        {role: 'user', content: [{type: 'text', text: start.message}], timestamp: Date.now()},
+      ]);
+    } else {
+      await agent.prompt(start.message);
+    }
+    await interimChecks;
     if (errorCode) return sendError(errorCode, new Error(errorCode));
     if (status !== 'completed') return send({ type: 'result', status });
+    if (finalAnswer !== undefined) return send({type:'result',status,answer:finalAnswer});
     const last = [...agent.state.messages].reverse().find(message => message.role === 'assistant');
     if (!last || last.role !== 'assistant' || last.stopReason === 'error' || last.stopReason === 'aborted') {
       const cause = new Error(last?.role === 'assistant' ? last.errorMessage : agent.state.errorMessage);

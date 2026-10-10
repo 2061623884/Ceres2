@@ -1,0 +1,44 @@
+[
+  {
+    "label": "t08-export-annotations-red",
+    "head": "b25e3c80ee26984f12ae98492ee2ae7bd6323735",
+    "command": [
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_integration_evaluation_export.py",
+      "tests/test_integration_evaluation_annotations.py",
+      "-q",
+      "-p",
+      "pytest_asyncio.plugin"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T08-export/backend",
+    "exit_code": 1,
+    "elapsed_seconds": 2.384,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "6705b51fe86e49124e8697e12b018aed3208ae403ceb31e6c7fd954ca67b0aa4",
+    "output_tail": "============ short test summary info ============================\nFAILED tests/test_integration_evaluation_export.py::test_export_cli_owner_summary_unknown_and_provenance\nFAILED tests/test_integration_evaluation_export.py::test_export_cli_requires_explicit_owner\nFAILED tests/test_integration_evaluation_annotations.py::test_annotation_explicit_labels_and_unreviewed_failure\nFAILED tests/test_integration_evaluation_annotations.py::test_annotation_requires_explicit_owner\n4 failed, 7 passed in 1.56s\n"
+  },
+  {
+    "label": "t08-export-annotations-green",
+    "head": "cb412dbf2643a4b886225a5b48f0410ee14b3a4a",
+    "command": [
+      "/workspace/scratch/0c1b4cfa2ef3/ceres2_t07_aftersales/.venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_integration_evaluation_export.py",
+      "tests/test_integration_evaluation_annotations.py",
+      "-q",
+      "-p",
+      "pytest_asyncio.plugin"
+    ],
+    "cwd": "/workspace/scratch/0c1b4cfa2ef3/ceres2_integration_20261007/T08-export/backend",
+    "exit_code": 0,
+    "elapsed_seconds": 11.317,
+    "source_changes_during_run": [],
+    "harness_changes_during_run": [],
+    "raw_record_sha256": "c46a345deedb8b9bb29c0f6b3e761afd1a020e072a13e84aa63385dd6666bab9",
+    "output_tail": "...........                                                              [100%]\n11 passed in 8.74s\n"
+  }
+]

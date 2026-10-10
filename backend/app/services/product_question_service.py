@@ -6,7 +6,7 @@ from sqlalchemy import select
 from app.core.errors import AppError
 from app.models.guide import GuideMessage, GuideTask
 from app.services.catalog_service import CatalogService
-from app.services.product_constraints import drink_filter_values, drink_filter_mismatch
+from app.services.product_constraints import drink_filter_values, product_filter_mismatch, product_type_matches, packaging_matches, offer_mismatch
 from app.services.pi_product_turn_service import owned_session, session_anchor
 
 
@@ -15,8 +15,9 @@ def supply_fingerprint(products):
 
 
 class ProductQuestionService:
-    def __init__(self, db, owner_id):
+    def __init__(self, db, owner_id, *, deadline=None, should_stop=None):
         self.db, self.owner_id = db, owner_id
+        self.deadline, self.should_stop = deadline, should_stop
 
     def explore(self, session_id, arguments):
         session = owned_session(self.db, self.owner_id, session_id)
@@ -36,10 +37,11 @@ class ProductQuestionService:
         task = self.db.get(GuideTask, anchor[1])
         conditions = json.loads(task.conditions_json)
         store_id = session.supply_store_id or json.loads(session.entry_context_json)['store_id']
-        catalog = CatalogService(self.db, store_id)
+        catalog = CatalogService(self.db, store_id, deadline=self.deadline, should_stop=self.should_stop)
+        category = conditions.get('category_id') or (arguments.get('category_id') if conditions.get('activity_id') else arguments['category_id'])
         products, page, safety_reasons = [], 1, set()
         while True:
-            rows, total = catalog.search_products(category_id=arguments.get('category_id') if conditions.get('activity_id') else arguments['category_id'], q=conditions.get('query') or arguments.get('query'), page=page, page_size=100)
+            rows, total = catalog.search_products(category_id=category, q=conditions.get('query') or arguments.get('query'), page=page, page_size=100)
             for product in rows:
                 from app.services.activity_service import activity_mismatch
                 if activity_mismatch(product, conditions):
@@ -49,17 +51,15 @@ class ProductQuestionService:
                 if safety_reason:
                     safety_reasons.add(safety_reason)
                     continue
-                if drink_filter_mismatch(product, conditions):
+                if product_filter_mismatch(product, conditions):
                     continue
-                if not product['sellable'] or product['available_qty'] < conditions.get('quantity', 1):
+                if offer_mismatch(product, conditions):
                     continue
-                if conditions.get('budget_fen') is not None and product['price_fen'] * conditions.get('quantity', 1) > conditions['budget_fen']:
-                    continue
-                if (conditions.get('product_type') or arguments.get('product_type')) and product['product_type'] != (conditions.get('product_type') or arguments.get('product_type')):
+                if (conditions.get('product_type') or arguments.get('product_type')) and not product_type_matches(product['product_type'], conditions.get('product_type') or arguments.get('product_type')):
                     continue
                 if conditions.get('brand') and product['brand'] != conditions['brand']:
                     continue
-                if conditions.get('packaging') and product['metadata'].get('packaging') != conditions['packaging']:
+                if conditions.get('packaging') and not packaging_matches(product['metadata'], conditions['packaging']):
                     continue
                 packs = product['metadata'].get('pack_count')
                 if conditions.get('pack_count_mode') == 'single' and packs != 1:
@@ -76,11 +76,11 @@ class ProductQuestionService:
         types = {p['product_type']:p['metadata'].get('type_label') for p in products if p['product_type'] and p['metadata'].get('type_label')}
         kind = 'category' if not conditions.get('activity_id') and not arguments.get('product_type') and len(types) > 1 else 'products'
         options = [{'option_id':f'option-{uuid4().hex}', 'label':label, 'value':value} for value, label in sorted(types.items())] if kind == 'category' else [{'option_id':f'option-{uuid4().hex}', 'label':p['name_zh'] or p['name'], 'value':p['sku_id'], 'product':p} for p in products]
-        question = ('想看哪类饮品？' if arguments.get('category_id') == 'beverage' else '想看哪类零食？') if kind == 'category' else '请选择商品和销售包装数量，选定后再核对清单。'
+        question = ('想看哪类饮品？' if category == 'beverage' else '想看哪类零食？') if kind == 'category' else '请选择商品和销售包装数量，选定后再核对清单。'
         if not products:
             question = '当前条件下没有可售的匹配商品。' + ''.join(sorted(safety_reasons)) + '原条件已保留；你可以告诉我是否调整预算或其他可调整条件。'
         filters = []
-        if arguments.get('category_id') == 'beverage' and kind == 'products':
+        if category == 'beverage' and kind == 'products':
             labels = {'brand':'品牌', 'flavor':'口味', 'packaging':'包装', 'spec':'规格'}
             for attribute, label in labels.items():
                 values = []
@@ -111,7 +111,7 @@ class ProductQuestionService:
         exploration = {key:value for key,value in exploration.items() if key not in ('answered_question_id', 'answered_option_ids')}
         return {**exploration, 'question_id':message_id, 'session_id':session_id, 'task_id':anchor[1], 'session_version':anchor[0], 'state_version':anchor[2], 'status':'active', 'selected_option_ids':[]}
 
-    def projection(self, session_id):
+    def projection(self, session_id, *, refresh_supply=True):
         session = owned_session(self.db, self.owner_id, session_id)
         anchor = session_anchor(self.db, session)
         rows = self.db.scalars(select(GuideMessage).where(GuideMessage.session_id == session_id, GuideMessage.owner_id == self.owner_id, GuideMessage.kind == 'question').order_by(GuideMessage.sequence)).all()
@@ -121,7 +121,7 @@ class ProductQuestionService:
             question = {key:value for key,value in saved.items() if key not in ('products', 'arguments', 'supply_fingerprint')}
             if question['status'] == 'active' and (question['session_version'], question['task_id'], question['state_version']) != anchor:
                 question['status'] = 'stale'
-            if question['status'] == 'active':
+            if question['status'] == 'active' and refresh_supply:
                 fresh = self.explore(session_id, saved['arguments'])
                 if fresh['supply_fingerprint'] != saved['supply_fingerprint']:
                     question['status'] = 'stale'
@@ -199,7 +199,8 @@ class ProductQuestionService:
         self.db.add(GuideMessage(message_id=assistant_id, session_id=session_id, owner_id=self.owner_id, task_id=task.task_id, sequence=sequence+2, role='assistant', kind=kind, content=content, request_id=body['request_id']))
         self.db.flush()
         from app.api.guide import projection
-        result = projection(self.db, session, include_messages=True)
+        result = projection(self.db, session, include_messages=True,
+                            deadline=self.deadline, should_stop=self.should_stop)
         self.db.add(GuideCommandReceipt(session_id=session_id, request_id=body['request_id'], digest=digest, result_json=json.dumps(result, ensure_ascii=False)))
         return result
 

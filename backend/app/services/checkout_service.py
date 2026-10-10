@@ -2,7 +2,7 @@
 import json
 from datetime import datetime, timezone
 from uuid import uuid4
-from sqlalchemy import delete
+from sqlalchemy import delete, update
 from app.core.errors import AppError
 from app.models.cart import Cart, CartItem
 from app.models.catalog import CatalogProduct
@@ -124,3 +124,19 @@ class CheckoutService:
         if order is None:
             raise AppError(404, 'NOT_FOUND', '订单不存在')
         return self._order(order)
+
+    def advance_demo(self, order_id, expected_version, status):
+        previous = 'submitted' if status == 'shipped' else 'shipped'
+        change = {'status': status, 'version': SimulatedOrder.version+1}
+        if status == 'delivered':
+            change['delivered_at'] = datetime.now(timezone.utc)
+        changed = self.db.execute(update(SimulatedOrder).where(
+            SimulatedOrder.order_id == order_id, SimulatedOrder.owner_id == self.owner_id,
+            SimulatedOrder.version == expected_version, SimulatedOrder.status == previous,
+        ).values(**change))
+        if changed.rowcount != 1:
+            self.db.rollback()
+            self.get_order(order_id)  # retain the owner-scoped not-found contract
+            raise AppError(409, 'ORDER_STATE_CHANGED', '订单状态已变化，请刷新；模拟状态只能依次推进配送、签收')
+        self.db.commit()
+        return self.get_order(order_id)

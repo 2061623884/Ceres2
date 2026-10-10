@@ -51,6 +51,16 @@
 
 采用 single-context：按需维护根目录 `GLOSSARY.md` 和 `docs/adr/`，读取规则见 `docs/agents/domain.md`。
 
+## 当前本机后续阶段（2026-10-08）
+
+用户最新明确要求“调用amax上.env里面的模型配置进行真实执行测评，补全报告，最后推送”。本次允许专职Tester只读原工程`.env`的模型/provider及当前角色判断服务配置，导入本树隔离进程或Git忽略的独立配置；不复制原DB、索引、会话、checkpoint或其他运行状态，不输出凭据。主会话完成真实报告和本地提交后可常规推送`codex/ceres2-local-followup-20261008`至`2061623884/Ceres2`并读回核实，不允许merge/rebase/cherry-pick/force push或部署。该明确授权替代下面本轮先前“禁止旧凭据/推送”在上述有限范围内的约定；Tester独占验证、独立验收正文隔离和原工程只读保持适用。
+
+当前本地任务为 `tasks/ceres2-local-followup.md`，工作树 `Ceres2-integration-20261008`、分支 `codex/ceres2-local-followup-20261008`，起点 `170fac0`。用户要求按implement-spec完成、完成后不合并先审阅，并加强测试/评测、参考Ceres1固定72bb1b9；此前完成后合并约定已撤销。implement-spec内部合并步骤改为本分支唯一文件owner实施，不执行merge/rebase/cherry-pick/force push或部署。本轮初始AGENTS曾禁止推送与迁入凭据，现按上一段明确限定的新授权执行；原项目禁止修改，发布由主会话唯一协调。下段历史发布授权不扩大本次范围。Tester独占验证、两轴独立只读与保留原main现场/旧运行数据继续适用，53项为前次冻结记录。旧九票owner不作为新任务活跃句柄，具体范围由本机主会话分配。
+
+## 上一轮集成阶段说明（2026-10-07）
+
+当前任务为 `tasks/ceres2-local-cloud-integration.md` 的九票集成；本轮用户已授权选择性集成、前端适配与主会话通过授权工具发布独立集成/WIP分支。下节“仅16票”“新Git无remote”描述先前重建时点，仅这两项范围/状态已由本轮规格替代；其原文保留用于历史溯源。此说明不授权worker shell push、main合并、部署或覆盖原工程，也不改变Tester独占执行、Python业务权威、隔离和唯一文件所有权规则。
+
 ## 干净重建硬边界
 
 - `../archive/` 与 `../reference/` 只读；禁止 runtime import、PYTHONPATH、配置、构建或符号链接依赖其中内容。新工程单独安装依赖，不借旧 node_modules/.venv。
